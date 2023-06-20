@@ -42,7 +42,7 @@
     "skipClient": false,
     "skipFakeData": false,
     "skipUserManagement": false,
-    "testFrameworks": ["cypress", "gatling", "cucumber"],
+    "testFrameworks": ["cypress", "gatling"],
     "websocket": false,
     "withAdminUi": true
   }
