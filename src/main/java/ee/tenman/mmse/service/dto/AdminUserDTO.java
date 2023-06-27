@@ -3,7 +3,11 @@ package ee.tenman.mmse.service.dto;
 import ee.tenman.mmse.config.Constants;
 import ee.tenman.mmse.domain.Authority;
 import ee.tenman.mmse.domain.User;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Size;
+
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Set;

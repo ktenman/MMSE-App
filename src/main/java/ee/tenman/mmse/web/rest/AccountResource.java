@@ -7,17 +7,25 @@ import ee.tenman.mmse.service.MailService;
 import ee.tenman.mmse.service.UserService;
 import ee.tenman.mmse.service.dto.AdminUserDTO;
 import ee.tenman.mmse.service.dto.PasswordChangeDTO;
-import ee.tenman.mmse.web.rest.errors.*;
+import ee.tenman.mmse.web.rest.errors.EmailAlreadyUsedException;
+import ee.tenman.mmse.web.rest.errors.InvalidPasswordException;
+import ee.tenman.mmse.web.rest.errors.LoginAlreadyUsedException;
 import ee.tenman.mmse.web.rest.vm.KeyAndPasswordVM;
 import ee.tenman.mmse.web.rest.vm.ManagedUserVM;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import java.util.*;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
+
+import java.util.Optional;
 
 /**
  * REST controller for managing the current user's account.

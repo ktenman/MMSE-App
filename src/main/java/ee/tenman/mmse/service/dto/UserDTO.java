@@ -1,6 +1,7 @@
 package ee.tenman.mmse.service.dto;
 
 import ee.tenman.mmse.domain.User;
+
 import java.io.Serializable;
 
 /**

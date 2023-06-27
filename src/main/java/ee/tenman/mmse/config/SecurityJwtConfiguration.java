@@ -1,13 +1,8 @@
 package ee.tenman.mmse.config;
 
-import static ee.tenman.mmse.security.SecurityUtils.AUTHORITIES_KEY;
-import static ee.tenman.mmse.security.SecurityUtils.JWT_ALGORITHM;
-
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
 import ee.tenman.mmse.management.SecurityMetersService;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -17,6 +12,12 @@ import org.springframework.security.oauth2.jwt.NimbusJwtDecoder;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.security.oauth2.server.resource.authentication.JwtAuthenticationConverter;
 import org.springframework.security.oauth2.server.resource.authentication.JwtGrantedAuthoritiesConverter;
+
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
+
+import static ee.tenman.mmse.security.SecurityUtils.AUTHORITIES_KEY;
+import static ee.tenman.mmse.security.SecurityUtils.JWT_ALGORITHM;
 
 @Configuration
 public class SecurityJwtConfiguration {

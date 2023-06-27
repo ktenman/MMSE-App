@@ -1,0 +1,51 @@
+<div>
+  <h2>
+    <span id="metrics-page-heading" mmseTranslate="metrics.title" data-cy="metricsPageHeading">Application Metrics</span>
+
+    <button class="btn btn-primary float-end" (click)="refresh()">
+      <fa-icon icon="sync"></fa-icon> <span mmseTranslate="metrics.refresh.button">Refresh</span>
+    </button>
+  </h2>
+
+  <h3 mmseTranslate="metrics.jvm.title">JVM Metrics</h3>
+
+  <div class="row" *ngIf="metrics && !updatingMetrics">
+    <mmse-jvm-memory class="col-md-4" [updating]="updatingMetrics" [jvmMemoryMetrics]="metrics.jvm"></mmse-jvm-memory>
+
+    <mmse-jvm-threads class="col-md-4" [threads]="threads"></mmse-jvm-threads>
+
+    <mmse-metrics-system class="col-md-4" [updating]="updatingMetrics" [systemMetrics]="metrics.processMetrics"></mmse-metrics-system>
+  </div>
+
+  <mmse-metrics-garbagecollector
+    *ngIf="metrics && metricsKeyExists('garbageCollector')"
+    [updating]="updatingMetrics"
+    [garbageCollectorMetrics]="metrics.garbageCollector"
+  ></mmse-metrics-garbagecollector>
+
+  <div class="well well-lg" *ngIf="updatingMetrics" mmseTranslate="metrics.updating">Updating...</div>
+
+  <mmse-metrics-request
+    *ngIf="metrics && metricsKeyExists('http.server.requests')"
+    [updating]="updatingMetrics"
+    [requestMetrics]="metrics['http.server.requests']"
+  ></mmse-metrics-request>
+
+  <mmse-metrics-endpoints-requests
+    *ngIf="metrics && metricsKeyExists('services')"
+    [updating]="updatingMetrics"
+    [endpointsRequestsMetrics]="metrics.services"
+  ></mmse-metrics-endpoints-requests>
+
+  <mmse-metrics-cache
+    *ngIf="metrics && metricsKeyExists('cache')"
+    [updating]="updatingMetrics"
+    [cacheMetrics]="metrics.cache"
+  ></mmse-metrics-cache>
+
+  <mmse-metrics-datasource
+    *ngIf="metrics && metricsKeyExistsAndObjectNotEmpty('databases')"
+    [updating]="updatingMetrics"
+    [datasourceMetrics]="metrics.databases"
+  ></mmse-metrics-datasource>
+</div>

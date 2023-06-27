@@ -10,8 +10,8 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
-import { lighthouse, pa11y, prepareAudit } from 'cypress-audit';
+import {existsSync, mkdirSync, writeFileSync} from 'fs';
+import {lighthouse, pa11y, prepareAudit} from 'cypress-audit';
 
 export default async (on: Cypress.PluginEvents, config: Cypress.PluginConfigOptions) => {
   on('before:browser:launch', (browser, launchOptions) => {
