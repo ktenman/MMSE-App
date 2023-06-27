@@ -1,63 +1,65 @@
-import { computed, defineComponent, inject, ref, Ref } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { Component, OnInit } from '@angular/core';
+import { finalize, map } from 'rxjs/operators';
 
-import { orderAndFilterBy } from '@/shared/computables';
-import LogsService from './logs.service';
+import SharedModule from 'app/shared/shared.module';
+import { FormsModule } from '@angular/forms';
+import { SortDirective, SortByDirective } from 'app/shared/sort';
+import { Log, LoggersResponse, Level } from './log.model';
+import { LogsService } from './logs.service';
 
-export default defineComponent({
-  compatConfig: { MODE: 3 },
-  name: 'JhiLogs',
-  setup() {
-    const logsService = inject('logsService', () => new LogsService(), true);
+@Component({
+  standalone: true,
+  selector: 'mmse-logs',
+  templateUrl: './logs.component.html',
+  imports: [SharedModule, FormsModule, SortDirective, SortByDirective],
+})
+export default class LogsComponent implements OnInit {
+  loggers?: Log[];
+  filteredAndOrderedLoggers?: Log[];
+  isLoading = false;
+  filter = '';
+  orderProp: keyof Log = 'name';
+  ascending = true;
 
-    const loggers: Ref<any[]> = ref([]);
-    const filtered = ref('');
-    const orderProp = ref('name');
-    const reverse = ref(false);
-    const filteredLoggers = computed(() =>
-      orderAndFilterBy(loggers.value, {
-        filterByTerm: filtered.value,
-        orderByProp: orderProp.value,
-        reverse: reverse.value,
-      })
-    );
+  constructor(private logsService: LogsService) {}
 
-    return {
-      logsService,
-      loggers,
-      filtered,
-      orderProp,
-      reverse,
-      filteredLoggers,
-      t$: useI18n().t,
-    };
-  },
-  mounted() {
-    this.init();
-  },
-  methods: {
-    init(): void {
-      this.logsService.findAll().then(response => {
-        this.extractLoggers(response);
-      });
-    },
-    updateLevel(name: string, level: string): void {
-      this.logsService.changeLevel(name, level).then(() => {
-        this.init();
-      });
-    },
-    changeOrder(orderProp: string): void {
-      this.orderProp = orderProp;
-      this.reverse = !this.reverse;
-    },
-    extractLoggers(response) {
-      this.loggers = [];
-      if (response.data) {
-        for (const key of Object.keys(response.data.loggers)) {
-          const logger = response.data.loggers[key];
-          this.loggers.push({ name: key, level: logger.effectiveLevel });
-        }
+  ngOnInit(): void {
+    this.findAndExtractLoggers();
+  }
+
+  changeLevel(name: string, level: Level): void {
+    this.logsService.changeLevel(name, level).subscribe(() => this.findAndExtractLoggers());
+  }
+
+  filterAndSort(): void {
+    this.filteredAndOrderedLoggers = this.loggers!.filter(
+      logger => !this.filter || logger.name.toLowerCase().includes(this.filter.toLowerCase())
+    ).sort((a, b) => {
+      if (a[this.orderProp] < b[this.orderProp]) {
+        return this.ascending ? -1 : 1;
+      } else if (a[this.orderProp] > b[this.orderProp]) {
+        return this.ascending ? 1 : -1;
+      } else if (this.orderProp === 'level') {
+        return a.name < b.name ? -1 : 1;
       }
-    },
-  },
-});
+      return 0;
+    });
+  }
+
+  private findAndExtractLoggers(): void {
+    this.isLoading = true;
+    this.logsService
+      .findAll()
+      .pipe(
+        finalize(() => {
+          this.filterAndSort();
+          this.isLoading = false;
+        })
+      )
+      .subscribe({
+        next: (response: LoggersResponse) =>
+          (this.loggers = Object.entries(response.loggers).map(([key, logger]) => new Log(key, logger.effectiveLevel))),
+        error: () => (this.loggers = []),
+      });
+  }
+}

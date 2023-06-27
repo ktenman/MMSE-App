@@ -1,41 +1,26 @@
-import { defineComponent, inject, onMounted, ref, Ref } from 'vue';
-import { useI18n } from 'vue-i18n';
-import LoginService from '@/account/login.service';
-import ActivateService from './activate.service';
-import { useRoute } from 'vue-router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, RouterModule } from '@angular/router';
+import { mergeMap } from 'rxjs/operators';
 
-export default defineComponent({
-  compatConfig: { MODE: 3 },
-  setup() {
-    const activateService = inject('activateService', () => new ActivateService(), true);
-    const loginService = inject<LoginService>('loginService');
-    const route = useRoute();
+import SharedModule from 'app/shared/shared.module';
+import { ActivateService } from './activate.service';
 
-    const success: Ref<boolean> = ref(false);
-    const error: Ref<boolean> = ref(false);
+@Component({
+  selector: 'mmse-activate',
+  standalone: true,
+  imports: [SharedModule, RouterModule],
+  templateUrl: './activate.component.html',
+})
+export default class ActivateComponent implements OnInit {
+  error = false;
+  success = false;
 
-    onMounted(async () => {
-      const key = Array.isArray(route.query.key) ? route.query.key[0] : route.query.key;
-      try {
-        await activateService.activateAccount(key);
-        success.value = true;
-        error.value = false;
-      } catch {
-        error.value = true;
-        success.value = false;
-      }
+  constructor(private activateService: ActivateService, private route: ActivatedRoute) {}
+
+  ngOnInit(): void {
+    this.route.queryParams.pipe(mergeMap(params => this.activateService.get(params.key))).subscribe({
+      next: () => (this.success = true),
+      error: () => (this.error = true),
     });
-
-    const openLogin = () => {
-      loginService.openLogin();
-    };
-
-    return {
-      activateService,
-      openLogin,
-      success,
-      error,
-      t$: useI18n().t,
-    };
-  },
-});
+  }
+}

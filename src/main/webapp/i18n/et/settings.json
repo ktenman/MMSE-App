@@ -1,6 +1,6 @@
 {
   "settings": {
-    "title": "Kasutaja [<strong>{ username }</strong>] sätted",
+    "title": "Kasutaja [<strong>{{username}}</strong>] sätted",
     "form": {
       "firstname": "Eesnimi",
       "firstname.placeholder": "Teie eesnimi",

@@ -85,7 +85,7 @@
     "ribbon": {
       "dev": "Arendus"
     },
-    "item-count": "Näitame { first } - { second } (kokku { total })."
+    "item-count": "Näitame {{first}} - {{second}} (kokku {{total}})."
   },
   "entity": {
     "action": {
@@ -98,7 +98,7 @@
       "open": "Ava",
       "save": "Salvesta",
       "view": "Vaata",
-      "show": "Show { otherEntity }"
+      "show": "Show {{otherEntity}}"
     },
     "detail": {
       "field": "Väli",
@@ -109,13 +109,13 @@
     },
     "validation": {
       "required": "See väli on kohustuslik.",
-      "minlength": "Selle välja pikkus peab olema vähemalt { min } sümbolit.",
-      "maxlength": "Selle välja pikkus ei tohi olla üle { max } sümboli.",
-      "min": "Selle välja väärtus peab olema vähemalt { min }.",
-      "max": "Selle välja väärtus ei tohi olla suurem kui { max }.",
-      "minbytes": "Selles väljas peab olema vähemalt { min } baiti.",
-      "maxbytes": "Selles väljas ei tohi olla üle { max } baidi.",
-      "pattern": "Selle välja väärtus peab vastama mallile { pattern }.",
+      "minlength": "Selle välja pikkus peab olema vähemalt {{ min }} sümbolit.",
+      "maxlength": "Selle välja pikkus ei tohi olla üle {{ max }} sümboli.",
+      "min": "Selle välja väärtus peab olema vähemalt {{ min }}.",
+      "max": "Selle välja väärtus ei tohi olla suurem kui {{ max }}.",
+      "minbytes": "Selles väljas peab olema vähemalt {{ min }} baiti.",
+      "maxbytes": "Selles väljas ei tohi olla üle {{ max }} baidi.",
+      "pattern": "Selle välja väärtus peab vastama mallile {{ pattern }}.",
       "number": "Selle välja väärtus peab olema number.",
       "datetimelocal": "Selles väljas peab olema kuupäev ja kellaaeg."
     },
@@ -129,17 +129,17 @@
     "internalServerError": "Serveri sisemine viga",
     "server.not.reachable": "Server pole kättesaadav",
     "url.not.found": "Ei leitud",
-    "NotNull": "Väli { fieldName } ei tohi olla tühi!",
-    "Size": "Välja { fieldName } väärtus ei vasta min/max väärtuse nõuetele!",
+    "NotNull": "Väli {{ fieldName }} ei tohi olla tühi!",
+    "Size": "Välja {{ fieldName }} väärtus ei vasta min/max väärtuse nõuetele!",
     "userexists": "Kasutajanimi on juba kasutuses!",
     "emailexists": "E-posti aadress on juba kasutuses!",
-    "idexists": "Uue { entityName } ID välja väärtus peab olema tühi",
+    "idexists": "Uue {{ entityName }} ID välja väärtus peab olema tühi",
     "idnull": "Vigane ID",
     "idinvalid": "Invalid Id",
     "idnotfound": "ID cannot be found",
     "file": {
       "could.not.extract": "Ei saanud faili eraldada",
-      "not.image": "Ootasime, et fail on pilt, aga faili tüüp on \"{ fileType }\""
+      "not.image": "Ootasime, et fail on pilt, aga faili tüüp on \"{{ fileType }}\""
     }
   },
   "footer": "See on teie jalus"

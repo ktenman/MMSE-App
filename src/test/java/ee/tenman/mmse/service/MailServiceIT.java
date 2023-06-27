@@ -40,7 +40,6 @@ class MailServiceIT {
 
     private static final String[] languages = {
         "en",
-        "fr",
         "et",
         // jhipster-needle-i18n-language-constant - JHipster will add/remove languages in this array
     };

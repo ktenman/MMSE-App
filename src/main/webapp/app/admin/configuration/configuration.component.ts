@@ -1,67 +1,40 @@
-import { computed, defineComponent, inject, ref, Ref } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { Component, OnInit } from '@angular/core';
 
-import { orderAndFilterBy } from '@/shared/computables';
-import ConfigurationService from './configuration.service';
+import SharedModule from 'app/shared/shared.module';
+import { FormsModule } from '@angular/forms';
+import { SortDirective, SortByDirective } from 'app/shared/sort';
+import { ConfigurationService } from './configuration.service';
+import { Bean, PropertySource } from './configuration.model';
 
-export default defineComponent({
-  compatConfig: { MODE: 3 },
-  name: 'JhiConfiguration',
-  setup() {
-    const configurationService = inject('configurationService', () => new ConfigurationService(), true);
+@Component({
+  standalone: true,
+  selector: 'mmse-configuration',
+  templateUrl: './configuration.component.html',
+  imports: [SharedModule, FormsModule, SortDirective, SortByDirective],
+})
+export default class ConfigurationComponent implements OnInit {
+  allBeans!: Bean[];
+  beans: Bean[] = [];
+  beansFilter = '';
+  beansAscending = true;
+  propertySources: PropertySource[] = [];
 
-    const orderProp = ref('prefix');
-    const reverse = ref(false);
-    const allConfiguration: Ref<any> = ref({});
-    const configuration: Ref<any[]> = ref([]);
-    const configKeys: Ref<any[]> = ref([]);
-    const filtered = ref('');
+  constructor(private configurationService: ConfigurationService) {}
 
-    const filteredConfiguration = computed(() =>
-      orderAndFilterBy(configuration.value, {
-        filterByTerm: filtered.value,
-        orderByProp: orderProp.value,
-        reverse: reverse.value,
-      })
-    );
+  ngOnInit(): void {
+    this.configurationService.getBeans().subscribe(beans => {
+      this.allBeans = beans;
+      this.filterAndSortBeans();
+    });
 
-    return {
-      configurationService,
-      orderProp,
-      reverse,
-      allConfiguration,
-      configuration,
-      configKeys,
-      filtered,
-      filteredConfiguration,
-      t$: useI18n().t,
-    };
-  },
-  mounted() {
-    this.init();
-  },
-  methods: {
-    init(): void {
-      this.configurationService.loadConfiguration().then(res => {
-        this.configuration = res;
+    this.configurationService.getPropertySources().subscribe(propertySources => (this.propertySources = propertySources));
+  }
 
-        for (const config of this.configuration) {
-          if (config.properties !== undefined) {
-            this.configKeys.push(Object.keys(config.properties));
-          }
-        }
-      });
-
-      this.configurationService.loadEnvConfiguration().then(res => {
-        this.allConfiguration = res;
-      });
-    },
-    changeOrder(prop: string): void {
-      this.orderProp = prop;
-      this.reverse = !this.reverse;
-    },
-    keys(dict: any): string[] {
-      return dict === undefined ? [] : Object.keys(dict);
-    },
-  },
-});
+  filterAndSortBeans(): void {
+    const beansAscendingValue = this.beansAscending ? -1 : 1;
+    const beansAscendingValueReverse = this.beansAscending ? 1 : -1;
+    this.beans = this.allBeans
+      .filter(bean => !this.beansFilter || bean.prefix.toLowerCase().includes(this.beansFilter.toLowerCase()))
+      .sort((a, b) => (a.prefix < b.prefix ? beansAscendingValue : beansAscendingValueReverse));
+  }
+}

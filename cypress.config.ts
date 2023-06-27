@@ -12,7 +12,7 @@ export default defineConfig({
   retries: 2,
   env: {
     authenticationUrl: '/api/authenticate',
-    jwtStorageName: 'jhi-authenticationToken',
+    jwtStorageName: 'mmse-authenticationToken',
   },
   e2e: {
     // We've imported your old cypress plugins here.

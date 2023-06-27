@@ -1,6 +1,6 @@
 {
   "sessions": {
-    "title": "Kasutaja [<strong>{ username }</strong>] aktiivsed sessioonid",
+    "title": "Kasutaja [<strong>{{username}}</strong>] aktiivsed sessioonid",
     "table": {
       "ipaddress": "IP aadress",
       "useragent": "Veebilehitseja",

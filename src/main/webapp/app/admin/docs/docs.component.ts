@@ -1,6 +1,9 @@
-import { defineComponent } from 'vue';
+import { Component } from '@angular/core';
 
-export default defineComponent({
-  compatConfig: { MODE: 3 },
-  name: 'JhiDocs',
-});
+@Component({
+  standalone: true,
+  selector: 'mmse-docs',
+  templateUrl: './docs.component.html',
+  styleUrls: ['./docs.component.scss'],
+})
+export default class DocsComponent {}
