@@ -1,8 +1,8 @@
-import {inject, TestBed} from '@angular/core/testing';
-import {MissingTranslationHandler, TranslateModule, TranslateService} from '@ngx-translate/core';
-import {missingTranslationHandler} from '../../config/translation.config';
+import { inject, TestBed } from '@angular/core/testing';
+import { TranslateModule, TranslateService, MissingTranslationHandler } from '@ngx-translate/core';
+import { missingTranslationHandler } from '../../config/translation.config';
 
-import {Alert, AlertService} from './alert.service';
+import { Alert, AlertService } from './alert.service';
 
 describe('Alert service test', () => {
   describe('Alert Service Test', () => {

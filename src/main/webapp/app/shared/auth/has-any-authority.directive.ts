@@ -1,8 +1,8 @@
-import {Directive, Input, OnDestroy, TemplateRef, ViewContainerRef} from '@angular/core';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
+import { Directive, Input, TemplateRef, ViewContainerRef, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
-import {AccountService} from 'app/core/auth/account.service';
+import { AccountService } from 'app/core/auth/account.service';
 
 /**
  * @whatItDoes Conditionally includes an HTML element if current user has any

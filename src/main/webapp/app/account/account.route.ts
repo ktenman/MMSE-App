@@ -1,4 +1,4 @@
-import {Routes} from '@angular/router';
+import { Routes } from '@angular/router';
 
 import activateRoute from './activate/activate.route';
 import passwordRoute from './password/password.route';

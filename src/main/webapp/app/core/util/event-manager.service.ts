@@ -1,6 +1,6 @@
-import {Injectable} from '@angular/core';
-import {Observable, Observer, Subscription} from 'rxjs';
-import {filter, share} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { Observable, Observer, Subscription } from 'rxjs';
+import { filter, share } from 'rxjs/operators';
 
 export class EventWithContent<T> {
   constructor(public name: string, public content: T) {}

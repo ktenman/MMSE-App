@@ -1,11 +1,11 @@
-import {Component, OnInit} from '@angular/core';
-import {FormControl, FormGroup, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
-import {ActivatedRoute} from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { FormGroup, FormControl, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 
 import SharedModule from 'app/shared/shared.module';
-import {LANGUAGES} from 'app/config/language.constants';
-import {IUser} from '../user-management.model';
-import {UserManagementService} from '../service/user-management.service';
+import { LANGUAGES } from 'app/config/language.constants';
+import { IUser } from '../user-management.model';
+import { UserManagementService } from '../service/user-management.service';
 
 const userTemplate = {} as IUser;
 

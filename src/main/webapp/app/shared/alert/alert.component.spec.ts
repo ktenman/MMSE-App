@@ -1,10 +1,10 @@
 jest.mock('app/core/util/alert.service');
 
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
 
-import {AlertService} from 'app/core/util/alert.service';
+import { AlertService } from 'app/core/util/alert.service';
 
-import {AlertComponent} from './alert.component';
+import { AlertComponent } from './alert.component';
 
 describe('Alert Component', () => {
   let comp: AlertComponent;

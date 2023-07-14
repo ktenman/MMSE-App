@@ -1,5 +1,5 @@
-import {ParamMap} from '@angular/router';
-import {Subject} from 'rxjs';
+import { ParamMap } from '@angular/router';
+import { Subject } from 'rxjs';
 
 export interface IFilterOptions {
   readonly filterChanges: Subject<FilterOption[]>;

@@ -1,9 +1,9 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {ActivatedRoute} from '@angular/router';
-import {of} from 'rxjs';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { ActivatedRoute } from '@angular/router';
+import { of } from 'rxjs';
 
-import {Authority} from 'app/config/authority.constants';
-import {User} from '../user-management.model';
+import { Authority } from 'app/config/authority.constants';
+import { User } from '../user-management.model';
 
 import UserManagementDetailComponent from './user-management-detail.component';
 

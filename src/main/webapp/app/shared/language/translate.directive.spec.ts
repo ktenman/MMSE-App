@@ -1,6 +1,6 @@
-import {Component} from '@angular/core';
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {TranslateModule, TranslateService} from '@ngx-translate/core';
+import { Component } from '@angular/core';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { TranslateModule, TranslateService } from '@ngx-translate/core';
 
 import TranslateDirective from './translate.directive';
 

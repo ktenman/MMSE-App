@@ -1,8 +1,8 @@
-import {AfterViewInit, Component, ElementRef, ViewChild} from '@angular/core';
-import {FormBuilder, FormsModule, ReactiveFormsModule, Validators} from '@angular/forms';
+import { Component, AfterViewInit, ElementRef, ViewChild } from '@angular/core';
+import { FormBuilder, FormsModule, ReactiveFormsModule, Validators } from '@angular/forms';
 import SharedModule from 'app/shared/shared.module';
 
-import {PasswordResetInitService} from './password-reset-init.service';
+import { PasswordResetInitService } from './password-reset-init.service';
 
 @Component({
   selector: 'mmse-password-reset-init',

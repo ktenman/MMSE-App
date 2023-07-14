@@ -4,10 +4,7 @@ import ee.tenman.mmse.domain.TestEntity;
 import ee.tenman.mmse.domain.User;
 import ee.tenman.mmse.service.dto.TestEntityDTO;
 import ee.tenman.mmse.service.dto.UserDTO;
-import org.mapstruct.BeanMapping;
-import org.mapstruct.Mapper;
-import org.mapstruct.Mapping;
-import org.mapstruct.Named;
+import org.mapstruct.*;
 
 /**
  * Mapper for the entity {@link TestEntity} and its DTO {@link TestEntityDTO}.

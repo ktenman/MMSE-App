@@ -1,10 +1,10 @@
-import {Component, OnInit, Renderer2, RendererFactory2} from '@angular/core';
-import {LangChangeEvent, TranslateService} from '@ngx-translate/core';
+import { Component, OnInit, RendererFactory2, Renderer2 } from '@angular/core';
+import { TranslateService, LangChangeEvent } from '@ngx-translate/core';
 import dayjs from 'dayjs/esm';
 
-import {AccountService} from 'app/core/auth/account.service';
-import {AppPageTitleStrategy} from 'app/app-page-title-strategy';
-import {Router} from '@angular/router';
+import { AccountService } from 'app/core/auth/account.service';
+import { AppPageTitleStrategy } from 'app/app-page-title-strategy';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'mmse-main',

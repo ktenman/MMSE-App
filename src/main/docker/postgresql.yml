@@ -3,14 +3,14 @@ name: mmse-app
 services:
   postgresql:
     image: postgres:15.3
-    volumes:
-      - ~/volumes/jhipster/MMSE-App/postgresql/:/var/lib/postgresql/data/
+#    volumes:
+#       - ~/volumes/jhipster/MMSE-App/postgresql/:/var/lib/postgresql/data/
     environment:
       - POSTGRES_USER=MMSE-App
       - POSTGRES_PASSWORD=
       - POSTGRES_HOST_AUTH_METHOD=trust
     healthcheck:
-      test: [ 'CMD-SHELL', 'pg_isready -U $${POSTGRES_USER}' ]
+      test: ['CMD-SHELL', 'pg_isready -U $${POSTGRES_USER}']
       interval: 5s
       timeout: 5s
       retries: 10

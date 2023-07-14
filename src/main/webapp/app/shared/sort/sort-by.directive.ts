@@ -1,8 +1,8 @@
-import {AfterContentInit, ContentChild, Directive, Host, HostListener, Input, OnDestroy} from '@angular/core';
-import {Subject} from 'rxjs';
-import {takeUntil} from 'rxjs/operators';
-import {FaIconComponent} from '@fortawesome/angular-fontawesome';
-import {faSort, faSortDown, faSortUp, IconDefinition} from '@fortawesome/free-solid-svg-icons';
+import { AfterContentInit, ContentChild, Directive, Host, HostListener, Input, OnDestroy } from '@angular/core';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { FaIconComponent } from '@fortawesome/angular-fontawesome';
+import { faSort, faSortDown, faSortUp, IconDefinition } from '@fortawesome/free-solid-svg-icons';
 
 import SortDirective from './sort.directive';
 

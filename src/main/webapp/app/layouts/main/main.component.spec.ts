@@ -1,18 +1,18 @@
 jest.mock('app/core/auth/account.service');
 
-import {ComponentFixture, fakeAsync, TestBed, tick, waitForAsync} from '@angular/core/testing';
-import {Router, TitleStrategy} from '@angular/router';
-import {Title} from '@angular/platform-browser';
-import {RouterTestingModule} from '@angular/router/testing';
-import {DOCUMENT} from '@angular/common';
-import {Component} from '@angular/core';
-import {of} from 'rxjs';
-import {LangChangeEvent, TranslateModule, TranslateService} from '@ngx-translate/core';
+import { waitForAsync, ComponentFixture, TestBed, fakeAsync, tick } from '@angular/core/testing';
+import { Router, TitleStrategy } from '@angular/router';
+import { Title } from '@angular/platform-browser';
+import { RouterTestingModule } from '@angular/router/testing';
+import { DOCUMENT } from '@angular/common';
+import { Component } from '@angular/core';
+import { of } from 'rxjs';
+import { TranslateModule, TranslateService, LangChangeEvent } from '@ngx-translate/core';
 
-import {AccountService} from 'app/core/auth/account.service';
+import { AccountService } from 'app/core/auth/account.service';
 
 import MainComponent from './main.component';
-import {AppPageTitleStrategy} from 'app/app-page-title-strategy';
+import { AppPageTitleStrategy } from 'app/app-page-title-strategy';
 
 describe('MainComponent', () => {
   let comp: MainComponent;

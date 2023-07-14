@@ -1,8 +1,8 @@
-import {ChangeDetectionStrategy, Component, OnInit} from '@angular/core';
-import {NgbActiveModal} from '@ng-bootstrap/ng-bootstrap';
+import { ChangeDetectionStrategy, Component, OnInit } from '@angular/core';
+import { NgbActiveModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
-import {Thread, ThreadState} from 'app/admin/metrics/metrics.model';
+import { Thread, ThreadState } from 'app/admin/metrics/metrics.model';
 
 @Component({
   standalone: true,

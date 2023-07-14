@@ -1,18 +1,19 @@
-import {Component, OnInit} from '@angular/core';
-import {ActivatedRoute, Router, RouterModule} from '@angular/router';
-import {HttpHeaders, HttpResponse} from '@angular/common/http';
-import {combineLatest} from 'rxjs';
-import {NgbModal} from '@ng-bootstrap/ng-bootstrap';
+import { Component, OnInit } from '@angular/core';
+import { RouterModule } from '@angular/router';
+import { HttpResponse, HttpHeaders } from '@angular/common/http';
+import { ActivatedRoute, Router } from '@angular/router';
+import { combineLatest } from 'rxjs';
+import { NgbModal } from '@ng-bootstrap/ng-bootstrap';
 
 import SharedModule from 'app/shared/shared.module';
-import {SortByDirective, SortDirective} from 'app/shared/sort';
-import {ITEMS_PER_PAGE} from 'app/config/pagination.constants';
-import {ASC, DESC, SORT} from 'app/config/navigation.constants';
-import {ItemCountComponent} from 'app/shared/pagination';
-import {AccountService} from 'app/core/auth/account.service';
-import {Account} from 'app/core/auth/account.model';
-import {UserManagementService} from '../service/user-management.service';
-import {User} from '../user-management.model';
+import { SortDirective, SortByDirective } from 'app/shared/sort';
+import { ITEMS_PER_PAGE } from 'app/config/pagination.constants';
+import { ASC, DESC, SORT } from 'app/config/navigation.constants';
+import { ItemCountComponent } from 'app/shared/pagination';
+import { AccountService } from 'app/core/auth/account.service';
+import { Account } from 'app/core/auth/account.model';
+import { UserManagementService } from '../service/user-management.service';
+import { User } from '../user-management.model';
 import UserManagementDeleteDialogComponent from '../delete/user-management-delete-dialog.component';
 
 @Component({

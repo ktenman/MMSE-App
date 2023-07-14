@@ -1,11 +1,11 @@
-import {Injectable} from '@angular/core';
-import {HttpClient} from '@angular/common/http';
-import {Observable} from 'rxjs';
-import {map} from 'rxjs/operators';
+import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
 
-import {Login} from 'app/login/login.model';
-import {StateStorageService} from './state-storage.service';
-import {ApplicationConfigService} from '../config/application-config.service';
+import { Login } from 'app/login/login.model';
+import { StateStorageService } from './state-storage.service';
+import { ApplicationConfigService } from '../config/application-config.service';
 
 type JwtToken = {
   id_token: string;

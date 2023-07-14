@@ -1,9 +1,9 @@
-import {TestBed} from '@angular/core/testing';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import {RegisterService} from './register.service';
-import {ApplicationConfigService} from 'app/core/config/application-config.service';
-import {Registration} from './register.model';
+import { RegisterService } from './register.service';
+import { ApplicationConfigService } from 'app/core/config/application-config.service';
+import { Registration } from './register.model';
 
 describe('RegisterService Service', () => {
   let service: RegisterService;

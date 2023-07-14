@@ -1,10 +1,10 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {of} from 'rxjs';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { of } from 'rxjs';
 
 import MetricsComponent from './metrics.component';
-import {MetricsService} from './metrics.service';
-import {Metrics} from './metrics.model';
+import { MetricsService } from './metrics.service';
+import { Metrics } from './metrics.model';
 
 describe('MetricsComponent', () => {
   let comp: MetricsComponent;

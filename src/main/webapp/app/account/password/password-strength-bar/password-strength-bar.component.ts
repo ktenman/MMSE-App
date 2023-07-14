@@ -1,4 +1,4 @@
-import {Component, ElementRef, Input, Renderer2} from '@angular/core';
+import { Component, ElementRef, Input, Renderer2 } from '@angular/core';
 
 import SharedModule from 'app/shared/shared.module';
 

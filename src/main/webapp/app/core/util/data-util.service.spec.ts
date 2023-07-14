@@ -1,6 +1,6 @@
-import {TestBed} from '@angular/core/testing';
+import { TestBed } from '@angular/core/testing';
 
-import {DataUtils} from './data-util.service';
+import { DataUtils } from './data-util.service';
 
 describe('Data Utils Service Test', () => {
   let service: DataUtils;

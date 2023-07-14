@@ -1,0 +1,125 @@
+<div>
+  <h2 id="page-heading" data-cy="UserAnswerHeading">
+    <span mmseTranslate="mmseApp.userAnswer.home.title">User Answers</span>
+
+    <div class="d-flex justify-content-end">
+      <button class="btn btn-info me-2" (click)="load()" [disabled]="isLoading">
+        <fa-icon icon="sync" [spin]="isLoading"></fa-icon>
+        <span mmseTranslate="mmseApp.userAnswer.home.refreshListLabel">Refresh list</span>
+      </button>
+
+      <button
+        id="jh-create-entity"
+        data-cy="entityCreateButton"
+        class="btn btn-primary jh-create-entity create-user-answer"
+        [routerLink]="['/user-answer/new']"
+      >
+        <fa-icon icon="plus"></fa-icon>
+        <span mmseTranslate="mmseApp.userAnswer.home.createLabel"> Create a new User Answer </span>
+      </button>
+    </div>
+  </h2>
+
+  <mmse-alert-error></mmse-alert-error>
+
+  <mmse-alert></mmse-alert>
+
+  <div class="alert alert-warning" id="no-result" *ngIf="userAnswers?.length === 0">
+    <span mmseTranslate="mmseApp.userAnswer.home.notFound">No User Answers found</span>
+  </div>
+
+  <div class="table-responsive table-entities" id="entities" *ngIf="userAnswers && userAnswers.length > 0">
+    <table class="table table-striped" aria-describedby="page-heading">
+      <thead>
+        <tr mmseSort [(predicate)]="predicate" [(ascending)]="ascending" (sortChange)="navigateToWithComponentValues()">
+          <th scope="col" mmseSortBy="id">
+            <div class="d-flex">
+              <span mmseTranslate="global.field.id">ID</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" mmseSortBy="answerText">
+            <div class="d-flex">
+              <span mmseTranslate="mmseApp.userAnswer.answerText">Answer Text</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" mmseSortBy="createdAt">
+            <div class="d-flex">
+              <span mmseTranslate="mmseApp.userAnswer.createdAt">Created At</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" mmseSortBy="updatedAt">
+            <div class="d-flex">
+              <span mmseTranslate="mmseApp.userAnswer.updatedAt">Updated At</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" mmseSortBy="questionId">
+            <div class="d-flex">
+              <span mmseTranslate="mmseApp.userAnswer.questionId">Question Id</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col" mmseSortBy="testEntity.id">
+            <div class="d-flex">
+              <span mmseTranslate="mmseApp.userAnswer.testEntity">Test Entity</span>
+              <fa-icon class="p-1" icon="sort"></fa-icon>
+            </div>
+          </th>
+          <th scope="col"></th>
+        </tr>
+      </thead>
+      <tbody
+        infinite-scroll
+        (scrolled)="loadPage(page + 1)"
+        [infiniteScrollDisabled]="page - 1 >= links['last']"
+        [infiniteScrollDistance]="0"
+      >
+        <tr *ngFor="let userAnswer of userAnswers; trackBy: trackId" data-cy="entityTable">
+          <td>
+            <a [routerLink]="['/user-answer', userAnswer.id, 'view']">{{ userAnswer.id }}</a>
+          </td>
+          <td>{{ userAnswer.answerText }}</td>
+          <td>{{ userAnswer.createdAt | formatMediumDatetime }}</td>
+          <td>{{ userAnswer.updatedAt | formatMediumDatetime }}</td>
+          <td mmseTranslate="{{ 'mmseApp.QuestionId.' + userAnswer.questionId }}">{{ userAnswer.questionId }}</td>
+          <td>
+            <div *ngIf="userAnswer.testEntity">
+              <a [routerLink]="['/test-entity', userAnswer.testEntity.id, 'view']">{{ userAnswer.testEntity.id }}</a>
+            </div>
+          </td>
+          <td class="text-end">
+            <div class="btn-group">
+              <button
+                type="submit"
+                [routerLink]="['/user-answer', userAnswer.id, 'view']"
+                class="btn btn-info btn-sm"
+                data-cy="entityDetailsButton"
+              >
+                <fa-icon icon="eye"></fa-icon>
+                <span class="d-none d-md-inline" mmseTranslate="entity.action.view">View</span>
+              </button>
+
+              <button
+                type="submit"
+                [routerLink]="['/user-answer', userAnswer.id, 'edit']"
+                class="btn btn-primary btn-sm"
+                data-cy="entityEditButton"
+              >
+                <fa-icon icon="pencil-alt"></fa-icon>
+                <span class="d-none d-md-inline" mmseTranslate="entity.action.edit">Edit</span>
+              </button>
+
+              <button type="submit" (click)="delete(userAnswer)" class="btn btn-danger btn-sm" data-cy="entityDeleteButton">
+                <fa-icon icon="times"></fa-icon>
+                <span class="d-none d-md-inline" mmseTranslate="entity.action.delete">Delete</span>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</div>

@@ -1,10 +1,10 @@
-import {TestBed} from '@angular/core/testing';
-import {HttpErrorResponse} from '@angular/common/http';
-import {HttpClientTestingModule, HttpTestingController} from '@angular/common/http/testing';
+import { TestBed } from '@angular/core/testing';
+import { HttpErrorResponse } from '@angular/common/http';
+import { HttpClientTestingModule, HttpTestingController } from '@angular/common/http/testing';
 
-import {IUser, User} from './user.model';
+import { User, IUser } from './user.model';
 
-import {UserService} from './user.service';
+import { UserService } from './user.service';
 
 describe('User Service', () => {
   let service: UserService;

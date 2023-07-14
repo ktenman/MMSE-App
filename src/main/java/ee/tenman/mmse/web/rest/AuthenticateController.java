@@ -1,9 +1,15 @@
 package ee.tenman.mmse.web.rest;
 
+import static ee.tenman.mmse.security.SecurityUtils.AUTHORITIES_KEY;
+import static ee.tenman.mmse.security.SecurityUtils.JWT_ALGORITHM;
+
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ee.tenman.mmse.web.rest.vm.LoginVM;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.stream.Collectors;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
@@ -19,18 +25,7 @@ import org.springframework.security.oauth2.jwt.JwsHeader;
 import org.springframework.security.oauth2.jwt.JwtClaimsSet;
 import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.stream.Collectors;
-
-import static ee.tenman.mmse.security.SecurityUtils.AUTHORITIES_KEY;
-import static ee.tenman.mmse.security.SecurityUtils.JWT_ALGORITHM;
+import org.springframework.web.bind.annotation.*;
 
 /**
  * Controller to authenticate users.

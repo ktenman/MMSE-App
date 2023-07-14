@@ -1,5 +1,5 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {TranslateModule} from '@ngx-translate/core';
+import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
+import { TranslateModule } from '@ngx-translate/core';
 
 import TranslateDirective from 'app/shared/language/translate.directive';
 

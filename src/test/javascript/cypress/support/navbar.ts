@@ -2,15 +2,15 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 
 import {
-  accountMenuSelector,
+  navbarSelector,
   adminMenuSelector,
-  entityItemSelector,
+  accountMenuSelector,
+  registerItemSelector,
   loginItemSelector,
   logoutItemSelector,
-  navbarSelector,
-  passwordItemSelector,
-  registerItemSelector,
   settingsItemSelector,
+  passwordItemSelector,
+  entityItemSelector,
 } from './commands';
 
 Cypress.Commands.add('clickOnLoginItem', () => {

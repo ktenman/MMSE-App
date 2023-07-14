@@ -1,9 +1,9 @@
-import {ComponentFixture, TestBed, waitForAsync} from '@angular/core/testing';
-import {HttpClientTestingModule} from '@angular/common/http/testing';
-import {of} from 'rxjs';
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing';
+import { HttpClientTestingModule } from '@angular/common/http/testing';
+import { of } from 'rxjs';
 
-import {ProfileInfo} from 'app/layouts/profiles/profile-info.model';
-import {ProfileService} from 'app/layouts/profiles/profile.service';
+import { ProfileInfo } from 'app/layouts/profiles/profile-info.model';
+import { ProfileService } from 'app/layouts/profiles/profile.service';
 
 import PageRibbonComponent from './page-ribbon.component';
 

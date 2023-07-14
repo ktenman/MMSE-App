@@ -1,11 +1,11 @@
 import {
-  classInvalid,
-  classValid,
+  usernameRegisterSelector,
   emailRegisterSelector,
   firstPasswordRegisterSelector,
   secondPasswordRegisterSelector,
   submitRegisterSelector,
-  usernameRegisterSelector,
+  classInvalid,
+  classValid,
 } from '../../support/commands';
 
 describe('/account/register', () => {

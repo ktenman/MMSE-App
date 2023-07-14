@@ -1,10 +1,10 @@
 import {
-  classInvalid,
-  classValid,
-  confirmPasswordSelector,
   currentPasswordSelector,
   newPasswordSelector,
+  confirmPasswordSelector,
   submitPasswordSelector,
+  classInvalid,
+  classValid,
 } from '../../support/commands';
 
 describe('/account/password', () => {

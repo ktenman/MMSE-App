@@ -1,7 +1,6 @@
 package ee.tenman.mmse.service.dto;
 
-import jakarta.validation.constraints.NotNull;
-
+import jakarta.validation.constraints.*;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
