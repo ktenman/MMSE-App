@@ -1,0 +1,27 @@
+{
+  "mmseApp": {
+    "testEntity": {
+      "home": {
+        "title": "Test Entities",
+        "refreshListLabel": "Värskenda nimekirja",
+        "createLabel": "Lisa uus Test Entity",
+        "createOrEditLabel": "Lisa või muuda Test Entity",
+        "notFound": "Ei leitud ühtegi Test Entities"
+      },
+      "created": "Uus Test Entity on loodud identifikaatoriga {{ param }}",
+      "updated": "Test Entity identifikaatoriga {{ param }} on muudetud",
+      "deleted": "Test Entity identifikaatoriga {{ param }} on kustutatud",
+      "delete": {
+        "question": "Kas olete kindel, et soovite kustutada Test Entity {{ id }}?"
+      },
+      "detail": {
+        "title": "Test Entity"
+      },
+      "id": "ID",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "score": "Score",
+      "user": "User"
+    }
+  }
+}
