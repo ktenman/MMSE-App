@@ -50,10 +50,10 @@ describe('UserAnswer Management Update Component', () => {
   describe('ngOnInit', () => {
     it('Should call TestEntity query and add missing value', () => {
       const userAnswer: IUserAnswer = { id: 456 };
-      const testEntity: ITestEntity = { id: 66286 };
+      const testEntity: ITestEntity = { id: 8065 };
       userAnswer.testEntity = testEntity;
 
-      const testEntityCollection: ITestEntity[] = [{ id: 74598 }];
+      const testEntityCollection: ITestEntity[] = [{ id: 9108 }];
       jest.spyOn(testEntityService, 'query').mockReturnValue(of(new HttpResponse({ body: testEntityCollection })));
       const additionalTestEntities = [testEntity];
       const expectedCollection: ITestEntity[] = [...additionalTestEntities, ...testEntityCollection];
@@ -72,7 +72,7 @@ describe('UserAnswer Management Update Component', () => {
 
     it('Should update editForm', () => {
       const userAnswer: IUserAnswer = { id: 456 };
-      const testEntity: ITestEntity = { id: 24614 };
+      const testEntity: ITestEntity = { id: 23208 };
       userAnswer.testEntity = testEntity;
 
       activatedRoute.data = of({ userAnswer });

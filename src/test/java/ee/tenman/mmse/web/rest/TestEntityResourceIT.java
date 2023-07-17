@@ -239,7 +239,7 @@ class TestEntityResourceIT {
         int databaseSizeBeforeUpdate = testEntityRepository.findAll().size();
 
         // Update the testEntity
-        TestEntity updatedTestEntity = testEntityRepository.findById(testEntity.getId()).get();
+        TestEntity updatedTestEntity = testEntityRepository.findById(testEntity.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedTestEntity are not directly saved in db
         em.detach(updatedTestEntity);
         updatedTestEntity.createdAt(UPDATED_CREATED_AT).updatedAt(UPDATED_UPDATED_AT).score(UPDATED_SCORE);
@@ -339,7 +339,7 @@ class TestEntityResourceIT {
         TestEntity partialUpdatedTestEntity = new TestEntity();
         partialUpdatedTestEntity.setId(testEntity.getId());
 
-        partialUpdatedTestEntity.updatedAt(UPDATED_UPDATED_AT);
+        partialUpdatedTestEntity.createdAt(UPDATED_CREATED_AT).score(UPDATED_SCORE);
 
         restTestEntityMockMvc
             .perform(
@@ -353,9 +353,9 @@ class TestEntityResourceIT {
         List<TestEntity> testEntityList = testEntityRepository.findAll();
         assertThat(testEntityList).hasSize(databaseSizeBeforeUpdate);
         TestEntity testTestEntity = testEntityList.get(testEntityList.size() - 1);
-        assertThat(testTestEntity.getCreatedAt()).isEqualTo(DEFAULT_CREATED_AT);
-        assertThat(testTestEntity.getUpdatedAt()).isEqualTo(UPDATED_UPDATED_AT);
-        assertThat(testTestEntity.getScore()).isEqualTo(DEFAULT_SCORE);
+        assertThat(testTestEntity.getCreatedAt()).isEqualTo(UPDATED_CREATED_AT);
+        assertThat(testTestEntity.getUpdatedAt()).isEqualTo(DEFAULT_UPDATED_AT);
+        assertThat(testTestEntity.getScore()).isEqualTo(UPDATED_SCORE);
     }
 
     @Test

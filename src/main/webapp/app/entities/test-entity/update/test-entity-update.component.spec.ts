@@ -51,10 +51,10 @@ describe('TestEntity Management Update Component', () => {
   describe('ngOnInit', () => {
     it('Should call User query and add missing value', () => {
       const testEntity: ITestEntity = { id: 456 };
-      const user: IUser = { id: 74470 };
+      const user: IUser = { id: 24402 };
       testEntity.user = user;
 
-      const userCollection: IUser[] = [{ id: 90852 }];
+      const userCollection: IUser[] = [{ id: 29770 }];
       jest.spyOn(userService, 'query').mockReturnValue(of(new HttpResponse({ body: userCollection })));
       const additionalUsers = [user];
       const expectedCollection: IUser[] = [...additionalUsers, ...userCollection];
@@ -73,7 +73,7 @@ describe('TestEntity Management Update Component', () => {
 
     it('Should update editForm', () => {
       const testEntity: ITestEntity = { id: 456 };
-      const user: IUser = { id: 24641 };
+      const user: IUser = { id: 8074 };
       testEntity.user = user;
 
       activatedRoute.data = of({ testEntity });

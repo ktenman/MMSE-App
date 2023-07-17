@@ -15,7 +15,7 @@ describe('UserAnswer e2e test', () => {
   const userAnswerPageUrlPattern = new RegExp('/user-answer(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'user';
   const password = Cypress.env('E2E_PASSWORD') ?? 'user';
-  // const userAnswerSample = {"createdAt":"2023-07-14T11:57:34.458Z","questionId":"FIRST"};
+  // const userAnswerSample = {"createdAt":"2023-07-13T21:56:00.400Z","questionId":"FIRST"};
 
   let userAnswer;
   // let testEntity;
@@ -30,7 +30,7 @@ describe('UserAnswer e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/test-entities',
-      body: {"createdAt":"2023-06-30T17:03:08.329Z","updatedAt":"2023-07-01T03:23:59.496Z","score":82879},
+      body: {"createdAt":"2023-06-30T16:26:29.273Z","updatedAt":"2023-06-30T23:15:33.466Z","score":21433},
     }).then(({ body }) => {
       testEntity = body;
     });
@@ -213,16 +213,16 @@ describe('UserAnswer e2e test', () => {
     });
 
     it.skip('should create an instance of UserAnswer', () => {
-      cy.get(`[data-cy="answerText"]`).type('XML');
-      cy.get(`[data-cy="answerText"]`).should('have.value', 'XML');
+      cy.get(`[data-cy="answerText"]`).type('Assurance Chicken Tandem');
+      cy.get(`[data-cy="answerText"]`).should('have.value', 'Assurance Chicken Tandem');
 
-      cy.get(`[data-cy="createdAt"]`).type('2023-07-13T21:56');
+      cy.get(`[data-cy="createdAt"]`).type('2023-07-14T03:26');
       cy.get(`[data-cy="createdAt"]`).blur();
-      cy.get(`[data-cy="createdAt"]`).should('have.value', '2023-07-13T21:56');
+      cy.get(`[data-cy="createdAt"]`).should('have.value', '2023-07-14T03:26');
 
-      cy.get(`[data-cy="updatedAt"]`).type('2023-07-14T07:14');
+      cy.get(`[data-cy="updatedAt"]`).type('2023-07-13T15:58');
       cy.get(`[data-cy="updatedAt"]`).blur();
-      cy.get(`[data-cy="updatedAt"]`).should('have.value', '2023-07-14T07:14');
+      cy.get(`[data-cy="updatedAt"]`).should('have.value', '2023-07-13T15:58');
 
       cy.get(`[data-cy="questionId"]`).select('FIRST');
 

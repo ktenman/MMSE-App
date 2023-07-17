@@ -249,7 +249,7 @@ class UserAnswerResourceIT {
         int databaseSizeBeforeUpdate = userAnswerRepository.findAll().size();
 
         // Update the userAnswer
-        UserAnswer updatedUserAnswer = userAnswerRepository.findById(userAnswer.getId()).get();
+        UserAnswer updatedUserAnswer = userAnswerRepository.findById(userAnswer.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedUserAnswer are not directly saved in db
         em.detach(updatedUserAnswer);
         updatedUserAnswer
@@ -354,7 +354,7 @@ class UserAnswerResourceIT {
         UserAnswer partialUpdatedUserAnswer = new UserAnswer();
         partialUpdatedUserAnswer.setId(userAnswer.getId());
 
-        partialUpdatedUserAnswer.createdAt(UPDATED_CREATED_AT);
+        partialUpdatedUserAnswer.answerText(UPDATED_ANSWER_TEXT).updatedAt(UPDATED_UPDATED_AT).questionId(UPDATED_QUESTION_ID);
 
         restUserAnswerMockMvc
             .perform(
@@ -368,10 +368,10 @@ class UserAnswerResourceIT {
         List<UserAnswer> userAnswerList = userAnswerRepository.findAll();
         assertThat(userAnswerList).hasSize(databaseSizeBeforeUpdate);
         UserAnswer testUserAnswer = userAnswerList.get(userAnswerList.size() - 1);
-        assertThat(testUserAnswer.getAnswerText()).isEqualTo(DEFAULT_ANSWER_TEXT);
-        assertThat(testUserAnswer.getCreatedAt()).isEqualTo(UPDATED_CREATED_AT);
-        assertThat(testUserAnswer.getUpdatedAt()).isEqualTo(DEFAULT_UPDATED_AT);
-        assertThat(testUserAnswer.getQuestionId()).isEqualTo(DEFAULT_QUESTION_ID);
+        assertThat(testUserAnswer.getAnswerText()).isEqualTo(UPDATED_ANSWER_TEXT);
+        assertThat(testUserAnswer.getCreatedAt()).isEqualTo(DEFAULT_CREATED_AT);
+        assertThat(testUserAnswer.getUpdatedAt()).isEqualTo(UPDATED_UPDATED_AT);
+        assertThat(testUserAnswer.getQuestionId()).isEqualTo(UPDATED_QUESTION_ID);
     }
 
     @Test
