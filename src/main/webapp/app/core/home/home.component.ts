@@ -7,10 +7,8 @@ export default defineComponent({
   compatConfig: {MODE: 3},
   setup() {
     const loginService = inject<LoginService>('loginService');
-
     const authenticated = inject<ComputedRef<boolean>>('authenticated');
     const username = inject<ComputedRef<string>>('currentUsername');
-
     const openLogin = () => {
       loginService.openLogin();
     };

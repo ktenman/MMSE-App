@@ -28,6 +28,18 @@ const validations = {
   },
 };
 
+async function saveAccount(settingsAccount: any) {
+  try {
+    await axios.post('api/account', settingsAccount);
+    return { success: 'OK' };
+  } catch (ex) {
+    if (ex.response.status === 400 && ex.response.data.type === EMAIL_ALREADY_USED_TYPE) {
+      return { errorEmailExists: 'ERROR' };
+    }
+    return { error: 'ERROR' };
+  }
+}
+
 export default defineComponent({
   compatConfig: { MODE: 3 },
   name: 'Settings',
@@ -54,24 +66,11 @@ export default defineComponent({
     };
   },
   methods: {
-    save() {
-      this.error = null;
-      this.errorEmailExists = null;
-      return axios
-        .post('api/account', this.settingsAccount)
-        .then(() => {
-          this.error = null;
-          this.success = 'OK';
-          this.errorEmailExists = null;
-        })
-        .catch(ex => {
-          this.success = null;
-          this.error = 'ERROR';
-          if (ex.response.status === 400 && ex.response.data.type === EMAIL_ALREADY_USED_TYPE) {
-            this.errorEmailExists = 'ERROR';
-            this.error = null;
-          }
-        });
+    async save() {
+      const result = await saveAccount(this.settingsAccount);
+      this.success = result.success || null;
+      this.error = result.error || null;
+      this.errorEmailExists = result.errorEmailExists || null;
     },
   },
 });

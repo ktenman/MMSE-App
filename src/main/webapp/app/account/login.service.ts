@@ -1,7 +1,11 @@
-export default class LoginService {
-  private emit: (event: string, ...args: any[]) => void;
+interface Emitter {
+  emit: (event: string, ...args: any[]) => void;
+}
 
-  constructor({ emit }: { emit: (event: string, ...args: any[]) => void }) {
+export default class LoginService {
+  private readonly emit: Emitter['emit'];
+
+  constructor({ emit }: Emitter) {
     this.emit = emit;
   }
 
