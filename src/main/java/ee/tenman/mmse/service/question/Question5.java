@@ -5,6 +5,7 @@ import ee.tenman.mmse.domain.enumeration.QuestionId;
 import java.time.Month;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.List;
 
 public class Question5 implements Question {
     private final QuestionId questionId = QuestionId.QUESTION_5;
@@ -14,6 +15,11 @@ public class Question5 implements Question {
     @Override
     public String getQuestionText() {
         return this.questionText;
+    }
+
+    @Override
+    public String getImage() {
+        return null;
     }
 
     @Override
@@ -58,6 +64,11 @@ public class Question5 implements Question {
     @Override
     public QuestionId getQuestionId() {
         return this.questionId;
+    }
+
+    @Override
+    public List<String> getAnswerOptions() {
+        return null;
     }
 }
 
