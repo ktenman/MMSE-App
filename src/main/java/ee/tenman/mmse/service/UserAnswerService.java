@@ -4,13 +4,14 @@ import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.repository.UserAnswerRepository;
 import ee.tenman.mmse.service.dto.UserAnswerDTO;
 import ee.tenman.mmse.service.mapper.UserAnswerMapper;
-import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+
+import java.util.Optional;
 
 /**
  * Service Implementation for managing {@link UserAnswer}.

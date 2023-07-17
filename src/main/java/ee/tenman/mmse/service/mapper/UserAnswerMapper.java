@@ -4,7 +4,10 @@ import ee.tenman.mmse.domain.TestEntity;
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.service.dto.TestEntityDTO;
 import ee.tenman.mmse.service.dto.UserAnswerDTO;
-import org.mapstruct.*;
+import org.mapstruct.BeanMapping;
+import org.mapstruct.Mapper;
+import org.mapstruct.Mapping;
+import org.mapstruct.Named;
 
 /**
  * Mapper for the entity {@link UserAnswer} and its DTO {@link UserAnswerDTO}.

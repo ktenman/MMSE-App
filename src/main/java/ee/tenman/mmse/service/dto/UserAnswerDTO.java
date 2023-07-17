@@ -1,7 +1,8 @@
 package ee.tenman.mmse.service.dto;
 
 import ee.tenman.mmse.domain.enumeration.QuestionId;
-import jakarta.validation.constraints.*;
+import jakarta.validation.constraints.NotNull;
+
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;

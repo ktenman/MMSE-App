@@ -1,6 +1,6 @@
 package ee.tenman.mmse.config;
 
-import ee.tenman.mmse.security.*;
+import ee.tenman.mmse.security.AuthoritiesConstants;
 import ee.tenman.mmse.web.filter.SpaWebFilter;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
