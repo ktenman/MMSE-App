@@ -8,11 +8,11 @@
         "createOrEditLabel": "Lisa või muuda Test Entity",
         "notFound": "Ei leitud ühtegi Test Entities"
       },
-      "created": "Uus Test Entity on loodud identifikaatoriga {{ param }}",
-      "updated": "Test Entity identifikaatoriga {{ param }} on muudetud",
-      "deleted": "Test Entity identifikaatoriga {{ param }} on kustutatud",
+      "created": "Uus Test Entity on loodud identifikaatoriga { param }",
+      "updated": "Test Entity identifikaatoriga { param } on muudetud",
+      "deleted": "Test Entity identifikaatoriga { param } on kustutatud",
       "delete": {
-        "question": "Kas olete kindel, et soovite kustutada Test Entity {{ id }}?"
+        "question": "Kas olete kindel, et soovite kustutada Test Entity { id }?"
       },
       "detail": {
         "title": "Test Entity"

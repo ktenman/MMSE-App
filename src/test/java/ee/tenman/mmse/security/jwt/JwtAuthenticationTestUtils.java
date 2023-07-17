@@ -1,9 +1,17 @@
 package ee.tenman.mmse.security.jwt;
 
+import static ee.tenman.mmse.security.SecurityUtils.AUTHORITIES_KEY;
+import static ee.tenman.mmse.security.SecurityUtils.JWT_ALGORITHM;
+
 import com.nimbusds.jose.jwk.source.ImmutableSecret;
 import com.nimbusds.jose.util.Base64;
 import io.micrometer.core.instrument.MeterRegistry;
 import io.micrometer.core.instrument.simple.SimpleMeterRegistry;
+import java.time.Instant;
+import java.util.Collections;
+import javax.crypto.Mac;
+import javax.crypto.SecretKey;
+import javax.crypto.spec.SecretKeySpec;
 import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.codec.Hex;
 import org.springframework.security.oauth2.jwt.JwsHeader;
@@ -12,15 +20,6 @@ import org.springframework.security.oauth2.jwt.JwtEncoder;
 import org.springframework.security.oauth2.jwt.JwtEncoderParameters;
 import org.springframework.security.oauth2.jwt.NimbusJwtEncoder;
 import org.springframework.web.servlet.handler.HandlerMappingIntrospector;
-
-import javax.crypto.Mac;
-import javax.crypto.SecretKey;
-import javax.crypto.spec.SecretKeySpec;
-import java.time.Instant;
-import java.util.Collections;
-
-import static ee.tenman.mmse.security.SecurityUtils.AUTHORITIES_KEY;
-import static ee.tenman.mmse.security.SecurityUtils.JWT_ALGORITHM;
 
 public class JwtAuthenticationTestUtils {
 

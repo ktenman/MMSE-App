@@ -1,35 +1,26 @@
 {
   "compilerOptions": {
-    "baseUrl": "src/main/webapp/",
-    "outDir": "./target/classes/static/",
-    "forceConsistentCasingInFileNames": true,
-    "strict": true,
-    "strictNullChecks": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "sourceMap": true,
-    "declaration": false,
-    "downlevelIteration": true,
-    "experimentalDecorators": true,
-    "moduleResolution": "node",
-    "importHelpers": true,
+    "baseUrl": "src/main/webapp/app",
+    "outDir": "target/out-tsc/dist",
+    "target": "es5",
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
-    "useDefineForClassFields": false,
-    "target": "es2022",
-    "module": "es2020",
-    "types": [],
-    "lib": ["es2018", "dom"]
+    "module": "esnext",
+    "moduleResolution": "node",
+    "sourceMap": true,
+    "emitDecoratorMetadata": true,
+    "experimentalDecorators": true,
+    "lib": ["es7", "dom"],
+    "paths": {
+      "@/*": ["*"]
+    },
+    "types": ["node"],
+    "importHelpers": false,
+    "allowJs": true
   },
-  "references": [
-    {
-      "path": "tsconfig.spec.json"
-    }
-  ],
-  "angularCompilerOptions": {
-    "strictInjectionParameters": true,
-    "strictInputAccessModifiers": true,
-    "strictTemplates": true,
-    "preserveWhitespaces": true
-  }
+  "vueCompilerOptions": {
+    "target": 3.3
+  },
+  "include": ["src/main/webapp/app"],
+  "exclude": ["node_modules"]
 }

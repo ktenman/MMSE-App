@@ -1,5 +1,10 @@
 package ee.tenman.mmse.web.rest;
 
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 import ee.tenman.mmse.IntegrationTest;
 import ee.tenman.mmse.domain.TestEntity;
 import ee.tenman.mmse.domain.UserAnswer;
@@ -8,6 +13,11 @@ import ee.tenman.mmse.repository.UserAnswerRepository;
 import ee.tenman.mmse.service.dto.UserAnswerDTO;
 import ee.tenman.mmse.service.mapper.UserAnswerMapper;
 import jakarta.persistence.EntityManager;
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,23 +26,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 /**
  * Integration tests for the {@link UserAnswerResource} REST controller.
@@ -51,8 +44,8 @@ class UserAnswerResourceIT {
     private static final Instant DEFAULT_UPDATED_AT = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_UPDATED_AT = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
-    private static final QuestionId DEFAULT_QUESTION_ID = QuestionId.QUESTION_1;
-    private static final QuestionId UPDATED_QUESTION_ID = QuestionId.QUESTION_1;
+    private static final QuestionId DEFAULT_QUESTION_ID = QuestionId.FIRST;
+    private static final QuestionId UPDATED_QUESTION_ID = QuestionId.FIRST;
 
     private static final String ENTITY_API_URL = "/api/user-answers";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -256,7 +249,7 @@ class UserAnswerResourceIT {
         int databaseSizeBeforeUpdate = userAnswerRepository.findAll().size();
 
         // Update the userAnswer
-        UserAnswer updatedUserAnswer = userAnswerRepository.findById(userAnswer.getId()).get();
+        UserAnswer updatedUserAnswer = userAnswerRepository.findById(userAnswer.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedUserAnswer are not directly saved in db
         em.detach(updatedUserAnswer);
         updatedUserAnswer
@@ -361,7 +354,7 @@ class UserAnswerResourceIT {
         UserAnswer partialUpdatedUserAnswer = new UserAnswer();
         partialUpdatedUserAnswer.setId(userAnswer.getId());
 
-        partialUpdatedUserAnswer.createdAt(UPDATED_CREATED_AT);
+        partialUpdatedUserAnswer.createdAt(UPDATED_CREATED_AT).questionId(UPDATED_QUESTION_ID);
 
         restUserAnswerMockMvc
             .perform(
@@ -378,7 +371,7 @@ class UserAnswerResourceIT {
         assertThat(testUserAnswer.getAnswerText()).isEqualTo(DEFAULT_ANSWER_TEXT);
         assertThat(testUserAnswer.getCreatedAt()).isEqualTo(UPDATED_CREATED_AT);
         assertThat(testUserAnswer.getUpdatedAt()).isEqualTo(DEFAULT_UPDATED_AT);
-        assertThat(testUserAnswer.getQuestionId()).isEqualTo(DEFAULT_QUESTION_ID);
+        assertThat(testUserAnswer.getQuestionId()).isEqualTo(UPDATED_QUESTION_ID);
     }
 
     @Test

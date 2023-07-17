@@ -15,7 +15,7 @@ describe('TestEntity e2e test', () => {
   const testEntityPageUrlPattern = new RegExp('/test-entity(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'user';
   const password = Cypress.env('E2E_PASSWORD') ?? 'user';
-  // const testEntitySample = {"createdAt":"2023-07-01T05:04:08.226Z"};
+  // const testEntitySample = {"createdAt":"2023-07-01T09:48:51.071Z"};
 
   let testEntity;
   // let user;
@@ -30,7 +30,7 @@ describe('TestEntity e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/users',
-      body: {"login":"modulo cum","firstName":"Dana","lastName":"Gusikowski"},
+      body: {"login":"Northwest teal","firstName":"Silas","lastName":"Brown"},
     }).then(({ body }) => {
       user = body;
     });
@@ -213,16 +213,16 @@ describe('TestEntity e2e test', () => {
     });
 
     it.skip('should create an instance of TestEntity', () => {
-      cy.get(`[data-cy="createdAt"]`).type('2023-07-01T05:39');
+      cy.get(`[data-cy="createdAt"]`).type('2023-07-01T01:35');
       cy.get(`[data-cy="createdAt"]`).blur();
-      cy.get(`[data-cy="createdAt"]`).should('have.value', '2023-07-01T05:39');
+      cy.get(`[data-cy="createdAt"]`).should('have.value', '2023-07-01T01:35');
 
-      cy.get(`[data-cy="updatedAt"]`).type('2023-06-30T19:20');
+      cy.get(`[data-cy="updatedAt"]`).type('2023-06-30T14:08');
       cy.get(`[data-cy="updatedAt"]`).blur();
-      cy.get(`[data-cy="updatedAt"]`).should('have.value', '2023-06-30T19:20');
+      cy.get(`[data-cy="updatedAt"]`).should('have.value', '2023-06-30T14:08');
 
-      cy.get(`[data-cy="score"]`).type('79417');
-      cy.get(`[data-cy="score"]`).should('have.value', '79417');
+      cy.get(`[data-cy="score"]`).type('10532');
+      cy.get(`[data-cy="score"]`).should('have.value', '10532');
 
       cy.get(`[data-cy="user"]`).select(1);
 

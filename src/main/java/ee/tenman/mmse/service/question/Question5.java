@@ -9,7 +9,6 @@ import java.util.List;
 
 public class Question5 implements Question {
     private final QuestionId questionId = QuestionId.QUESTION_5;
-    private final int score = 1;
     private final String questionText = "What is the current season?";
 
     @Override

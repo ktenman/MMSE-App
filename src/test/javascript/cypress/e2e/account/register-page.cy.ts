@@ -8,9 +8,9 @@ import {
   classValid,
 } from '../../support/commands';
 
-describe('/account/register', () => {
+describe('/register', () => {
   beforeEach(() => {
-    cy.visit('/account/register');
+    cy.visit('/register');
   });
 
   beforeEach(() => {
@@ -20,7 +20,7 @@ describe('/account/register', () => {
   it('should be accessible through menu', () => {
     cy.visit('');
     cy.clickOnRegisterItem();
-    cy.url().should('match', /\/account\/register$/);
+    cy.url().should('match', /\/register$/);
   });
 
   it('should load the register page', () => {
@@ -73,12 +73,13 @@ describe('/account/register', () => {
     cy.get(firstPasswordRegisterSelector).should('have.class', classValid);
     cy.get(secondPasswordRegisterSelector).should('have.class', classInvalid);
     cy.get(secondPasswordRegisterSelector).type('otherPassword');
-    cy.get(submitRegisterSelector).should('be.disabled');
+    cy.get(secondPasswordRegisterSelector).blur();
+    cy.get(secondPasswordRegisterSelector).should('have.class', classInvalid);
   });
 
   it('register a valid user', () => {
-    const randomEmail = 'Rhiannon4@hotmail.com';
-    const randomUsername = 'Rodger_Hoeger44';
+    const randomEmail = 'Mollie83@gmail.com';
+    const randomUsername = 'Genevieve25';
     cy.get(usernameRegisterSelector).type(randomUsername);
     cy.get(emailRegisterSelector).type(randomEmail);
     cy.get(firstPasswordRegisterSelector).type('jondoe');

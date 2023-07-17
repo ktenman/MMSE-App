@@ -1,18 +1,17 @@
 package ee.tenman.mmse.service.mapper;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import ee.tenman.mmse.domain.User;
 import ee.tenman.mmse.service.dto.AdminUserDTO;
 import ee.tenman.mmse.service.dto.UserDTO;
-import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-
 import java.util.ArrayList;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
-
-import static org.assertj.core.api.Assertions.assertThat;
+import org.apache.commons.lang3.RandomStringUtils;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
 /**
  * Unit tests for {@link UserMapper}.

@@ -15,7 +15,7 @@ describe('UserAnswer e2e test', () => {
   const userAnswerPageUrlPattern = new RegExp('/user-answer(\\?.*)?$');
   const username = Cypress.env('E2E_USERNAME') ?? 'user';
   const password = Cypress.env('E2E_PASSWORD') ?? 'user';
-  // const userAnswerSample = {"createdAt":"2023-07-14T11:57:34.458Z","questionId":"FIRST"};
+  // const userAnswerSample = {"createdAt":"2023-07-14T06:37:06.712Z","questionId":"FIRST"};
 
   let userAnswer;
   // let testEntity;
@@ -30,7 +30,7 @@ describe('UserAnswer e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/test-entities',
-      body: {"createdAt":"2023-06-30T17:03:08.329Z","updatedAt":"2023-07-01T03:23:59.496Z","score":82879},
+      body: {"createdAt":"2023-07-01T05:01:18.363Z","updatedAt":"2023-07-01T00:44:54.064Z","score":8761},
     }).then(({ body }) => {
       testEntity = body;
     });
@@ -213,16 +213,16 @@ describe('UserAnswer e2e test', () => {
     });
 
     it.skip('should create an instance of UserAnswer', () => {
-      cy.get(`[data-cy="answerText"]`).type('XML');
-      cy.get(`[data-cy="answerText"]`).should('have.value', 'XML');
+      cy.get(`[data-cy="answerText"]`).type('Hybrid withdrawal rem');
+      cy.get(`[data-cy="answerText"]`).should('have.value', 'Hybrid withdrawal rem');
 
-      cy.get(`[data-cy="createdAt"]`).type('2023-07-13T21:56');
+      cy.get(`[data-cy="createdAt"]`).type('2023-07-14T02:13');
       cy.get(`[data-cy="createdAt"]`).blur();
-      cy.get(`[data-cy="createdAt"]`).should('have.value', '2023-07-13T21:56');
+      cy.get(`[data-cy="createdAt"]`).should('have.value', '2023-07-14T02:13');
 
-      cy.get(`[data-cy="updatedAt"]`).type('2023-07-14T07:14');
+      cy.get(`[data-cy="updatedAt"]`).type('2023-07-14T10:08');
       cy.get(`[data-cy="updatedAt"]`).blur();
-      cy.get(`[data-cy="updatedAt"]`).should('have.value', '2023-07-14T07:14');
+      cy.get(`[data-cy="updatedAt"]`).should('have.value', '2023-07-14T10:08');
 
       cy.get(`[data-cy="questionId"]`).select('FIRST');
 

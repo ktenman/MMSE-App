@@ -1,24 +1,18 @@
 package ee.tenman.mmse.security.jwt;
 
+import static ee.tenman.mmse.security.jwt.JwtAuthenticationTestUtils.*;
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.http.HttpHeaders.AUTHORIZATION;
+
 import io.micrometer.core.instrument.Counter;
 import io.micrometer.core.instrument.MeterRegistry;
+import java.util.Collection;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-
-import java.util.Collection;
-
-import static ee.tenman.mmse.security.jwt.JwtAuthenticationTestUtils.BEARER;
-import static ee.tenman.mmse.security.jwt.JwtAuthenticationTestUtils.createExpiredToken;
-import static ee.tenman.mmse.security.jwt.JwtAuthenticationTestUtils.createInvalidToken;
-import static ee.tenman.mmse.security.jwt.JwtAuthenticationTestUtils.createSignedInvalidJwt;
-import static ee.tenman.mmse.security.jwt.JwtAuthenticationTestUtils.createTokenWithDifferentSignature;
-import static ee.tenman.mmse.security.jwt.JwtAuthenticationTestUtils.createValidToken;
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.http.HttpHeaders.AUTHORIZATION;
 
 @AutoConfigureMockMvc
 @AuthenticationIntegrationTest

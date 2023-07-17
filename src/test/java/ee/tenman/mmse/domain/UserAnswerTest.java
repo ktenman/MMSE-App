@@ -1,9 +1,9 @@
 package ee.tenman.mmse.domain;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import ee.tenman.mmse.web.rest.TestUtil;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class UserAnswerTest {
 

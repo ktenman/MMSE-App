@@ -1,7 +1,7 @@
 {
   "logs": {
     "title": "Logid",
-    "nbloggers": "Kokku on {{ total }} logijat.",
+    "nbloggers": "Kokku on { total } logijat.",
     "filter": "Filter",
     "table": {
       "name": "Nimi",

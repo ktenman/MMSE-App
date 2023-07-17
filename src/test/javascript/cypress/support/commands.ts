@@ -74,13 +74,10 @@ export const configurationPageHeadingSelector = '[data-cy="configurationPageHead
 // End Specific Selector Attributes for Cypress
 // ***********************************************
 
-export const classInvalid = 'ng-invalid';
-
-export const classValid = 'ng-valid';
-
+export const classInvalid = 'invalid';
+export const classValid = 'valid';
 Cypress.Commands.add('authenticatedRequest', data => {
-  const jwtToken = sessionStorage.getItem(Cypress.env('jwtStorageName'));
-  const bearerToken = jwtToken && JSON.parse(jwtToken);
+  const bearerToken = sessionStorage.getItem(Cypress.env('jwtStorageName'));
   if (bearerToken) {
     return cy.request({
       ...data,
@@ -106,7 +103,7 @@ Cypress.Commands.add('login', (username: string, password: string) => {
         body: { username, password },
         url: Cypress.env('authenticationUrl'),
       }).then(({ body: { id_token } }) => {
-        sessionStorage.setItem(Cypress.env('jwtStorageName'), JSON.stringify(id_token));
+        sessionStorage.setItem(Cypress.env('jwtStorageName'), id_token);
       });
     },
     {

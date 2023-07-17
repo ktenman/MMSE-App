@@ -1,9 +1,6 @@
-import { Component } from '@angular/core';
+import {defineComponent} from 'vue';
 
-@Component({
-  standalone: true,
-  selector: 'mmse-docs',
-  templateUrl: './docs.component.html',
-  styleUrls: ['./docs.component.scss'],
-})
-export default class DocsComponent {}
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'MmseDocs',
+});

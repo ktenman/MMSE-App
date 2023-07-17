@@ -6,11 +6,11 @@
       "createLabel": "Lisa uus kasutaja",
       "createOrEditLabel": "Lisa või muuda kasutaja"
     },
-    "created": "Loodi uus kasutaja identifikaatoriga {{ param }}",
-    "updated": "Identifikaatoriga {{ param }} kasutaja on muudetud",
-    "deleted": "Identifikaatoriga {{ param }} kasutaja on kustutatud",
+    "created": "Loodi uus kasutaja identifikaatoriga { param }",
+    "updated": "Identifikaatoriga { param } kasutaja on muudetud",
+    "deleted": "Identifikaatoriga { param } kasutaja on kustutatud",
     "delete": {
-      "question": "Kas olete kindel, et soovite kasutaja {{ login }} kustutada?"
+      "question": "Kas olete kindel, et soovite kasutaja { login } kustutada?"
     },
     "detail": {
       "title": "Kasutaja"

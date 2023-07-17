@@ -1,63 +1,133 @@
-import { Component, OnInit, ChangeDetectionStrategy, ChangeDetectorRef } from '@angular/core';
-import { combineLatest } from 'rxjs';
+import { defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import numeral from 'numeral';
 
-import SharedModule from 'app/shared/shared.module';
-import { MetricsService } from './metrics.service';
-import { Metrics, Thread } from './metrics.model';
-import { JvmMemoryComponent } from './blocks/jvm-memory/jvm-memory.component';
-import { JvmThreadsComponent } from './blocks/jvm-threads/jvm-threads.component';
-import { MetricsCacheComponent } from './blocks/metrics-cache/metrics-cache.component';
-import { MetricsDatasourceComponent } from './blocks/metrics-datasource/metrics-datasource.component';
-import { MetricsEndpointsRequestsComponent } from './blocks/metrics-endpoints-requests/metrics-endpoints-requests.component';
-import { MetricsGarbageCollectorComponent } from './blocks/metrics-garbagecollector/metrics-garbagecollector.component';
-import { MetricsModalThreadsComponent } from './blocks/metrics-modal-threads/metrics-modal-threads.component';
-import { MetricsRequestComponent } from './blocks/metrics-request/metrics-request.component';
-import { MetricsSystemComponent } from './blocks/metrics-system/metrics-system.component';
+import { useDateFormat } from '@/shared/composables';
+import MmseMetricsModal from './metrics-modal.vue';
+import MetricsService from './metrics.service';
 
-@Component({
-  standalone: true,
-  selector: 'mmse-metrics',
-  templateUrl: './metrics.component.html',
-  changeDetection: ChangeDetectionStrategy.OnPush,
-  imports: [
-    SharedModule,
-    JvmMemoryComponent,
-    JvmThreadsComponent,
-    MetricsCacheComponent,
-    MetricsDatasourceComponent,
-    MetricsEndpointsRequestsComponent,
-    MetricsGarbageCollectorComponent,
-    MetricsModalThreadsComponent,
-    MetricsRequestComponent,
-    MetricsSystemComponent,
-  ],
-})
-export default class MetricsComponent implements OnInit {
-  metrics?: Metrics;
-  threads?: Thread[];
-  updatingMetrics = true;
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  name: 'MmseMetrics',
+  components: {
+    'metrics-modal': MmseMetricsModal,
+  },
+  setup() {
+    const { formatDate } = useDateFormat();
+    const metricsService = inject('metricsService', () => new MetricsService(), true);
 
-  constructor(private metricsService: MetricsService, private changeDetector: ChangeDetectorRef) {}
+    const metrics: Ref<any> = ref({});
+    const threadData: Ref<any> = ref(null);
+    const threadStats: Ref<any> = ref({});
+    const updatingMetrics = ref(true);
 
-  ngOnInit(): void {
+    return {
+      metricsService,
+      metrics,
+      threadData,
+      threadStats,
+      updatingMetrics,
+      formatDate,
+      t$: useI18n().t,
+    };
+  },
+  mounted(): void {
     this.refresh();
-  }
+  },
+  methods: {
+    refresh() {
+      return this.metricsService
+        .getMetrics()
+        .then(resultsMetrics => {
+          this.metrics = resultsMetrics.data;
+          this.metricsService
+            .retrieveThreadDump()
+            .then(res => {
+              this.updatingMetrics = true;
+              this.threadData = res.data.threads;
 
-  refresh(): void {
-    this.updatingMetrics = true;
-    combineLatest([this.metricsService.getMetrics(), this.metricsService.threadDump()]).subscribe(([metrics, threadDump]) => {
-      this.metrics = metrics;
-      this.threads = threadDump.threads;
-      this.updatingMetrics = false;
-      this.changeDetector.markForCheck();
-    });
-  }
+              this.threadStats = {
+                threadDumpRunnable: 0,
+                threadDumpWaiting: 0,
+                threadDumpTimedWaiting: 0,
+                threadDumpBlocked: 0,
+                threadDumpAll: 0,
+              };
 
-  metricsKeyExists(key: keyof Metrics): boolean {
-    return Boolean(this.metrics?.[key]);
-  }
+              this.threadData.forEach(value => {
+                if (value.threadState === 'RUNNABLE') {
+                  this.threadStats.threadDumpRunnable += 1;
+                } else if (value.threadState === 'WAITING') {
+                  this.threadStats.threadDumpWaiting += 1;
+                } else if (value.threadState === 'TIMED_WAITING') {
+                  this.threadStats.threadDumpTimedWaiting += 1;
+                } else if (value.threadState === 'BLOCKED') {
+                  this.threadStats.threadDumpBlocked += 1;
+                }
+              });
 
-  metricsKeyExistsAndObjectNotEmpty(key: keyof Metrics): boolean {
-    return Boolean(this.metrics?.[key] && JSON.stringify(this.metrics[key]) !== '{}');
-  }
-}
+              this.threadStats.threadDumpAll =
+                this.threadStats.threadDumpRunnable +
+                this.threadStats.threadDumpWaiting +
+                this.threadStats.threadDumpTimedWaiting +
+                this.threadStats.threadDumpBlocked;
+
+              this.updatingMetrics = false;
+            })
+            .catch(() => {
+              this.updatingMetrics = true;
+            });
+        })
+        .catch(() => {
+          this.updatingMetrics = true;
+        });
+    },
+    openModal(): void {
+      if ((<any>this.$refs.metricsModal).show) {
+        (<any>this.$refs.metricsModal).show();
+      }
+    },
+    filterNaN(input: any): any {
+      if (isNaN(input)) {
+        return 0;
+      }
+      return input;
+    },
+    formatNumber1(value: any): any {
+      return numeral(value).format('0,0');
+    },
+    formatNumber2(value: any): any {
+      return numeral(value).format('0,00');
+    },
+    convertMillisecondsToDuration(ms) {
+      const times = {
+        year: 31557600000,
+        month: 2629746000,
+        day: 86400000,
+        hour: 3600000,
+        minute: 60000,
+        second: 1000,
+      };
+      let time_string = '';
+      let plural = '';
+      for (const key in times) {
+        if (Math.floor(ms / times[key]) > 0) {
+          if (Math.floor(ms / times[key]) > 1) {
+            plural = 's';
+          } else {
+            plural = '';
+          }
+          time_string += `${Math.floor(ms / times[key])} ${key}${plural} `;
+          ms = ms - times[key] * Math.floor(ms / times[key]);
+        }
+      }
+      return time_string;
+    },
+    isObjectExisting(metrics: any, key: string): boolean {
+      return metrics && metrics[key];
+    },
+    isObjectExistingAndNotEmpty(metrics: any, key: string): boolean {
+      return this.isObjectExisting(metrics, key) && JSON.stringify(metrics[key]) !== '{}';
+    },
+  },
+});

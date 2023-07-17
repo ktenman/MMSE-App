@@ -1,26 +1,41 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, RouterModule } from '@angular/router';
-import { mergeMap } from 'rxjs/operators';
+import {defineComponent, inject, onMounted, ref, Ref} from 'vue';
+import {useI18n} from 'vue-i18n';
+import LoginService from '@/account/login.service';
+import ActivateService from './activate.service';
+import {useRoute} from 'vue-router';
 
-import SharedModule from 'app/shared/shared.module';
-import { ActivateService } from './activate.service';
+export default defineComponent({
+  compatConfig: { MODE: 3 },
+  setup() {
+    const activateService = inject('activateService', () => new ActivateService(), true);
+    const loginService = inject<LoginService>('loginService');
+    const route = useRoute();
 
-@Component({
-  selector: 'mmse-activate',
-  standalone: true,
-  imports: [SharedModule, RouterModule],
-  templateUrl: './activate.component.html',
-})
-export default class ActivateComponent implements OnInit {
-  error = false;
-  success = false;
+    const success: Ref<boolean> = ref(false);
+    const error: Ref<boolean> = ref(false);
 
-  constructor(private activateService: ActivateService, private route: ActivatedRoute) {}
-
-  ngOnInit(): void {
-    this.route.queryParams.pipe(mergeMap(params => this.activateService.get(params.key))).subscribe({
-      next: () => (this.success = true),
-      error: () => (this.error = true),
+    onMounted(async () => {
+      const key = Array.isArray(route.query.key) ? route.query.key[0] : route.query.key;
+      try {
+        await activateService.activateAccount(key);
+        success.value = true;
+        error.value = false;
+      } catch {
+        error.value = true;
+        success.value = false;
+      }
     });
-  }
-}
+
+    const openLogin = () => {
+      loginService.openLogin();
+    };
+
+    return {
+      activateService,
+      openLogin,
+      success,
+      error,
+      t$: useI18n().t,
+    };
+  },
+});

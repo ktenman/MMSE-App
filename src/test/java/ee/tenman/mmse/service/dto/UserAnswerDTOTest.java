@@ -1,9 +1,9 @@
 package ee.tenman.mmse.service.dto;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import ee.tenman.mmse.web.rest.TestUtil;
 import org.junit.jupiter.api.Test;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class UserAnswerDTOTest {
 

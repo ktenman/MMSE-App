@@ -8,11 +8,11 @@
         "createOrEditLabel": "Lisa või muuda User Answer",
         "notFound": "Ei leitud ühtegi User Answers"
       },
-      "created": "Uus User Answer on loodud identifikaatoriga {{ param }}",
-      "updated": "User Answer identifikaatoriga {{ param }} on muudetud",
-      "deleted": "User Answer identifikaatoriga {{ param }} on kustutatud",
+      "created": "Uus User Answer on loodud identifikaatoriga { param }",
+      "updated": "User Answer identifikaatoriga { param } on muudetud",
+      "deleted": "User Answer identifikaatoriga { param } on kustutatud",
       "delete": {
-        "question": "Kas olete kindel, et soovite kustutada User Answer {{ id }}?"
+        "question": "Kas olete kindel, et soovite kustutada User Answer { id }?"
       },
       "detail": {
         "title": "User Answer"

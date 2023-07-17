@@ -47,6 +47,7 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
     private static final String FIELD_ERRORS_KEY = "fieldErrors";
     private static final String MESSAGE_KEY = "message";
     private static final String PATH_KEY = "path";
+    private static final boolean CASUAL_CHAIN_ENABLED = false;
 
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
@@ -249,7 +250,7 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
 
     private boolean isCasualChainEnabled() {
         // Customize as per the needs
-        return false;
+        return CASUAL_CHAIN_ENABLED;
     }
 
     private boolean containsPackageName(String message) {

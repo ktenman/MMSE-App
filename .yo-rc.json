@@ -5,7 +5,7 @@
     "baseName": "MMSE-App",
     "buildTool": "maven",
     "cacheProvider": "no",
-    "clientFramework": "angular",
+    "clientFramework": "vue",
     "clientTheme": "none",
     "creationTimestamp": 1687256070109,
     "cypressAudit": true,
