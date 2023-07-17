@@ -1,7 +1,7 @@
 {
   "home": {
-    "title": "Tere tulemast, Java Hipster!",
-    "subtitle": "See on teie avaleht",
+    "title": "Mini-Mental State Examination",
+    "subtitle": "",
     "logged": {
       "message": "Olete sisse logitud kasutajana \"{ username }\"."
     },

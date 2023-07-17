@@ -23,43 +23,6 @@
         </div>
       </div>
 
-      <p v-text="t$('home.question')"></p>
-
-      <ul>
-        <li><a href="https://www.jhipster.tech/" target="_blank" rel="noopener noreferrer" v-text="t$('home.link.homepage')"></a></li>
-        <li>
-          <a
-            href="http://stackoverflow.com/tags/jhipster/info"
-            target="_blank"
-            rel="noopener noreferrer"
-            v-text="t$('home.link.stackoverflow')"
-          ></a>
-        </li>
-        <li>
-          <a
-            href="https://github.com/jhipster/generator-jhipster/issues?state=open"
-            target="_blank"
-            rel="noopener noreferrer"
-            v-text="t$('home.link.bugtracker')"
-          ></a>
-        </li>
-        <li>
-          <a
-            href="https://gitter.im/jhipster/generator-jhipster"
-            target="_blank"
-            rel="noopener noreferrer"
-            v-text="t$('home.link.chat')"
-          ></a>
-        </li>
-        <li>
-          <a href="https://twitter.com/jhipster" target="_blank" rel="noopener noreferrer" v-text="t$('home.link.follow')"></a>
-        </li>
-      </ul>
-
-      <p>
-        <span v-text="t$('home.like')"></span>
-        <a href="https://github.com/jhipster/generator-jhipster" target="_blank" rel="noopener noreferrer" v-text="t$('home.github')"></a>!
-      </p>
     </div>
   </div>
 </template>
