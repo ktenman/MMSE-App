@@ -53,7 +53,7 @@ class Question7Test {
 
     @Test
     void testGetAnswerOptions() {
-        List<String> expectedAnswerOptions = List.of("Ball", "Car", "Man");
+        List<String> expectedAnswerOptions = List.of(AnswerOption.CAR.name(), AnswerOption.BALL.name(), AnswerOption.MAN.name());
 
         assertThat(question7.getAnswerOptions()).containsExactlyInAnyOrderElementsOf(expectedAnswerOptions);
     }
