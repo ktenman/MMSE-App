@@ -25,7 +25,7 @@ class Question5Test {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {1, 2, 12})
+    @ValueSource(ints = { 1, 2, 12 })
     void testIsAnswerCorrect_whenWinter(int month) {
         LocalDateTime localDateTime = LocalDateTime.of(2023, month, 1, 0, 0);
         userAnswer.setCreatedAt(localDateTime.toInstant(ZoneOffset.UTC));
@@ -34,7 +34,7 @@ class Question5Test {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {3, 4, 5})
+    @ValueSource(ints = { 3, 4, 5 })
     void testIsAnswerCorrect_whenSpring(int month) {
         LocalDateTime localDateTime = LocalDateTime.of(2023, month, 1, 0, 0);
         userAnswer.setCreatedAt(localDateTime.toInstant(ZoneOffset.UTC));
@@ -43,7 +43,7 @@ class Question5Test {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {6, 7, 8})
+    @ValueSource(ints = { 6, 7, 8 })
     void testIsAnswerCorrect_whenSummer(int month) {
         LocalDateTime localDateTime = LocalDateTime.of(2023, month, 1, 0, 0);
         userAnswer.setCreatedAt(localDateTime.toInstant(ZoneOffset.UTC));
@@ -52,7 +52,7 @@ class Question5Test {
     }
 
     @ParameterizedTest
-    @ValueSource(ints = {9, 10, 11})
+    @ValueSource(ints = { 9, 10, 11 })
     void testIsAnswerCorrect_whenAutumn(int month) {
         LocalDateTime localDateTime = LocalDateTime.of(2023, month, 1, 0, 0);
         userAnswer.setCreatedAt(localDateTime.toInstant(ZoneOffset.UTC));

@@ -10,6 +10,7 @@ import java.util.Map;
 
 @Service
 public class QuizService {
+
     private Map<QuestionId, Question> questions;
 
     @Autowired

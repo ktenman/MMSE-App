@@ -22,7 +22,6 @@
           <router-link class="alert-link" to="/register" v-text="t$('global.messages.info.register.link')"></router-link>
         </div>
       </div>
-
     </div>
   </div>
 </template>

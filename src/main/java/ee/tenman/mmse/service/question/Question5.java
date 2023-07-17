@@ -1,4 +1,5 @@
 package ee.tenman.mmse.service.question;
+
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
 
@@ -8,6 +9,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 public class Question5 implements Question {
+
     private final QuestionId questionId = QuestionId.QUESTION_5;
     private final String questionText = "What is the current season?";
 
@@ -65,4 +67,3 @@ public class Question5 implements Question {
         return null;
     }
 }
-

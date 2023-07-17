@@ -13,6 +13,6 @@ bracketSameLine: false
 
 # java rules:
 overrides:
-  - files: "*.java"
+  - files: '*.java'
     options:
       tabWidth: 4

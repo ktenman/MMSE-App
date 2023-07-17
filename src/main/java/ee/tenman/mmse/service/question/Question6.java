@@ -10,6 +10,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 public class Question6 implements Question {
+
     private final QuestionId questionId = QuestionId.QUESTION_6;
     private final String questionText = "Please look at these three images. What is the name of the first object?";
 
@@ -37,9 +38,6 @@ public class Question6 implements Question {
     public List<String> getAnswerOptions() {
         List<AnswerOption> answerOptions = Arrays.asList(AnswerOption.BALL, AnswerOption.CAR, AnswerOption.MAN);
         Collections.shuffle(answerOptions);
-        return answerOptions.stream()
-            .map(Enum::name)
-            .collect(Collectors.toList());
+        return answerOptions.stream().map(Enum::name).collect(Collectors.toList());
     }
 }
-

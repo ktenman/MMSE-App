@@ -28,14 +28,14 @@ class Question3Test {
     }
 
     @ParameterizedTest
-    @EnumSource(value = Month.class, mode = EnumSource.Mode.INCLUDE, names = {"JANUARY"})
+    @EnumSource(value = Month.class, mode = EnumSource.Mode.INCLUDE, names = { "JANUARY" })
     void testIsAnswerCorrect_whenTrue(Month month) {
         userAnswer.setAnswerText(month.name());
         assertThat(question3.isAnswerCorrect(userAnswer)).isTrue();
     }
 
     @ParameterizedTest
-    @EnumSource(value = Month.class, mode = EnumSource.Mode.EXCLUDE, names = {"JANUARY"})
+    @EnumSource(value = Month.class, mode = EnumSource.Mode.EXCLUDE, names = { "JANUARY" })
     void testIsAnswerCorrect_whenFalse(Month month) {
         userAnswer.setAnswerText(month.name());
         assertThat(question3.isAnswerCorrect(userAnswer)).isFalse();

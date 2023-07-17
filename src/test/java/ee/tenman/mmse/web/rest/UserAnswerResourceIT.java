@@ -52,7 +52,7 @@ class UserAnswerResourceIT {
     private static final Instant UPDATED_UPDATED_AT = Instant.now().truncatedTo(ChronoUnit.MILLIS);
 
     private static final QuestionId DEFAULT_QUESTION_ID = QuestionId.QUESTION_1;
-    private static final QuestionId UPDATED_QUESTION_ID =  QuestionId.QUESTION_1;
+    private static final QuestionId UPDATED_QUESTION_ID = QuestionId.QUESTION_1;
 
     private static final String ENTITY_API_URL = "/api/user-answers";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";

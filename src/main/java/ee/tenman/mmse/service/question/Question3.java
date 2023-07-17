@@ -9,6 +9,7 @@ import java.time.ZonedDateTime;
 import java.util.List;
 
 public class Question3 implements Question {
+
     private final QuestionId questionId = QuestionId.QUESTION_3;
     private final String questionText = "What is the current month?";
 

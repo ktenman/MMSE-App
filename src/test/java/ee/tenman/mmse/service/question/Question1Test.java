@@ -30,7 +30,7 @@ class Question1Test {
     }
 
     @ParameterizedTest
-    @EnumSource(value = DayOfWeek.class, mode = EnumSource.Mode.INCLUDE, names = {"SUNDAY"})
+    @EnumSource(value = DayOfWeek.class, mode = EnumSource.Mode.INCLUDE, names = { "SUNDAY" })
     void testIsAnswerCorrect_whenTrue(DayOfWeek dayOfWeek) {
         userAnswer.setAnswerText(dayOfWeek.name());
 
@@ -38,7 +38,7 @@ class Question1Test {
     }
 
     @ParameterizedTest
-    @EnumSource(value = DayOfWeek.class, mode = EnumSource.Mode.EXCLUDE, names = {"SUNDAY"})
+    @EnumSource(value = DayOfWeek.class, mode = EnumSource.Mode.EXCLUDE, names = { "SUNDAY" })
     void testIsAnswerCorrect_whenFalse(DayOfWeek dayOfWeek) {
         userAnswer.setAnswerText(dayOfWeek.name());
 

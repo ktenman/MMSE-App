@@ -51,4 +51,3 @@ class Question2Test {
         assertThat(question2.getQuestionId()).isEqualTo(QuestionId.QUESTION_2);
     }
 }
-

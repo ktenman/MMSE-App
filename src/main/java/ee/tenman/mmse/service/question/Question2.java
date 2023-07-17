@@ -10,6 +10,7 @@ import java.time.format.DateTimeParseException;
 import java.util.List;
 
 public class Question2 implements Question {
+
     private final QuestionId questionId = QuestionId.QUESTION_2;
     private final String questionText = "What is the current date?";
 

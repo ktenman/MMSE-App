@@ -31,5 +31,4 @@ public interface Question {
     default int getScore() {
         return 1;
     }
-
 }
