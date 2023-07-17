@@ -4,6 +4,7 @@ package ee.tenman.mmse.domain.enumeration;
  * The QuestionId enumeration.
  */
 public enum QuestionId {
+    FIRST,
     QUESTION_1,
     QUESTION_2,
     QUESTION_3,
@@ -21,5 +22,5 @@ public enum QuestionId {
     QUESTION_15,
     QUESTION_16,
     QUESTION_17,
-    QUESTION_18,
+    QUESTION_18
 }
