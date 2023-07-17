@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 public class Question6 implements Question {
     private final QuestionId questionId = QuestionId.QUESTION_6;
-    private final int score = 1;
     private final String questionText = "Please look at these three images. What is the name of the first object?";
 
     @Override
@@ -22,11 +21,6 @@ public class Question6 implements Question {
     @Override
     public String getImage() {
         return convertImageToBase64("images/ball-car-man.png");
-    }
-
-    @Override
-    public int getScore() {
-        return this.score;
     }
 
     @Override

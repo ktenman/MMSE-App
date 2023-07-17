@@ -26,13 +26,13 @@ class Question2Test {
 
     @Test
     void testIsAnswerCorrect_whenTrue() {
-        userAnswer.setAnswerText("1");
+        userAnswer.setAnswerText("2023-01-01");
         assertThat(question2.isAnswerCorrect(userAnswer)).isTrue();
     }
 
     @Test
     void testIsAnswerCorrect_whenFalse() {
-        userAnswer.setAnswerText("2");
+        userAnswer.setAnswerText("2023-01-02");
         assertThat(question2.isAnswerCorrect(userAnswer)).isFalse();
     }
 
@@ -43,7 +43,7 @@ class Question2Test {
 
     @Test
     void testGetQuestionText() {
-        assertThat(question2.getQuestionText()).isEqualTo("What is the current date (day of the month)?");
+        assertThat(question2.getQuestionText()).isEqualTo("What is the current date?");
     }
 
     @Test

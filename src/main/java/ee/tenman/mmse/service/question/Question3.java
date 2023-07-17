@@ -10,7 +10,6 @@ import java.util.List;
 
 public class Question3 implements Question {
     private final QuestionId questionId = QuestionId.QUESTION_3;
-    private final int score = 1;
     private final String questionText = "What is the current month?";
 
     @Override
@@ -21,11 +20,6 @@ public class Question3 implements Question {
     @Override
     public String getImage() {
         return null;
-    }
-
-    @Override
-    public int getScore() {
-        return this.score;
     }
 
     @Override

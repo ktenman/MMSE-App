@@ -13,7 +13,6 @@ import java.util.List;
 public interface Question {
     String getQuestionText();
     String getImage();
-    int getScore();
     boolean isAnswerCorrect(UserAnswer userAnswer);
     QuestionId getQuestionId();
     List<String> getAnswerOptions();
@@ -27,6 +26,10 @@ public interface Question {
             // handle exception
         }
         return null;
+    }
+
+    default int getScore() {
+        return 1;
     }
 
 }

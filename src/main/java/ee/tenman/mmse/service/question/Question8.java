@@ -11,7 +11,6 @@ import java.util.stream.Collectors;
 
 public class Question8 implements Question {
     private final QuestionId questionId = QuestionId.QUESTION_8;
-    private final int score = 1;
     private final String questionText = "What is the name of the third object?";
 
     @Override
@@ -22,11 +21,6 @@ public class Question8 implements Question {
     @Override
     public String getImage() {
         return convertImageToBase64("images/ball-car-man.png");
-    }
-
-    @Override
-    public int getScore() {
-        return this.score;
     }
 
     @Override

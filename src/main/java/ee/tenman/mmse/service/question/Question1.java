@@ -10,7 +10,6 @@ import java.util.List;
 
 public class Question1 implements Question {
     private final QuestionId questionId = QuestionId.QUESTION_1;
-    private final int score = 1;
     private final String questionText = "What is the current day of the week?";
 
     @Override
@@ -21,11 +20,6 @@ public class Question1 implements Question {
     @Override
     public String getImage() {
         return null;
-    }
-
-    @Override
-    public int getScore() {
-        return this.score;
     }
 
     @Override

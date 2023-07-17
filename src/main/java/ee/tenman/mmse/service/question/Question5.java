@@ -23,11 +23,6 @@ public class Question5 implements Question {
     }
 
     @Override
-    public int getScore() {
-        return this.score;
-    }
-
-    @Override
     public boolean isAnswerCorrect(UserAnswer userAnswer) {
         ZonedDateTime zonedDateTime = userAnswer.getCreatedAt().atZone(ZoneId.systemDefault());
         Month month = Month.from(zonedDateTime);
