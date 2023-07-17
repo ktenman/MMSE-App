@@ -1,0 +1,28 @@
+{
+  "mmseApp": {
+    "userAnswer": {
+      "home": {
+        "title": "User Answers",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new User Answer",
+        "createOrEditLabel": "Create or edit a User Answer",
+        "notFound": "No User Answers found"
+      },
+      "created": "A new User Answer is created with identifier {{ param }}",
+      "updated": "A User Answer is updated with identifier {{ param }}",
+      "deleted": "A User Answer is deleted with identifier {{ param }}",
+      "delete": {
+        "question": "Are you sure you want to delete User Answer {{ id }}?"
+      },
+      "detail": {
+        "title": "User Answer"
+      },
+      "id": "ID",
+      "answerText": "Answer Text",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "questionId": "Question Id",
+      "testEntity": "Test Entity"
+    }
+  }
+}

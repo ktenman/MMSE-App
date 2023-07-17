@@ -1,0 +1,24 @@
+<form *ngIf="testEntity" name="deleteForm" (ngSubmit)="confirmDelete(testEntity.id!)">
+  <div class="modal-header">
+    <h4 class="modal-title" data-cy="testEntityDeleteDialogHeading" mmseTranslate="entity.delete.title">Confirm delete operation</h4>
+
+    <button type="button" class="btn-close" data-dismiss="modal" aria-hidden="true" (click)="cancel()">&times;</button>
+  </div>
+
+  <div class="modal-body">
+    <mmse-alert-error></mmse-alert-error>
+    <p id="mmse-delete-testEntity-heading" mmseTranslate="mmseApp.testEntity.delete.question" [translateValues]="{ id: testEntity.id }">
+      Are you sure you want to delete Test Entity {{ testEntity.id }}?
+    </p>
+  </div>
+
+  <div class="modal-footer">
+    <button type="button" class="btn btn-secondary" data-dismiss="modal" (click)="cancel()">
+      <fa-icon icon="ban"></fa-icon>&nbsp;<span mmseTranslate="entity.action.cancel">Cancel</span>
+    </button>
+
+    <button id="mmse-confirm-delete-testEntity" data-cy="entityConfirmDeleteButton" type="submit" class="btn btn-danger">
+      <fa-icon icon="times"></fa-icon>&nbsp;<span mmseTranslate="entity.action.delete">Delete</span>
+    </button>
+  </div>
+</form>
