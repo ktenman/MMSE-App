@@ -1,14 +1,13 @@
 package ee.tenman.mmse.service.question;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.AnswerOption;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-
-import java.util.List;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class Question7Test {
 

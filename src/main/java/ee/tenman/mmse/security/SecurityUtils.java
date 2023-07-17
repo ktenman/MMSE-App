@@ -21,7 +21,8 @@ public final class SecurityUtils {
 
     public static final String AUTHORITIES_KEY = "auth";
 
-    private SecurityUtils() {}
+    private SecurityUtils() {
+    }
 
     /**
      * Get the login of the current user.

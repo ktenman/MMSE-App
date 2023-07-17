@@ -1,7 +1,7 @@
-import {ref} from 'vue';
-import {useIntersectionObserver} from '@vueuse/core';
+import { ref } from 'vue';
+import { useIntersectionObserver } from '@vueuse/core';
 
-export function useInfiniteScroll(callback: Function) {
+export function useInfiniteScroll(callback: () => void) {
   const infiniteScrollEl = ref<HTMLElement>(null);
 
   const intersectionObserver = useIntersectionObserver(

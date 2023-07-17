@@ -1,15 +1,15 @@
-import { computed, defineComponent, inject, ref, Ref } from 'vue';
-import { useI18n } from 'vue-i18n';
+import {computed, defineComponent, inject, ref, Ref} from 'vue';
+import {useI18n} from 'vue-i18n';
 import LoginService from '@/account/login.service';
 import type AccountService from '@/account/account.service';
 import languages from '@/shared/config/languages';
 import EntitiesMenu from '@/entities/entities-menu.vue';
 
-import { useStore } from '@/store';
-import { useRouter } from 'vue-router';
+import {useStore} from '@/store';
+import {useRouter} from 'vue-router';
 
 export default defineComponent({
-  compatConfig: { MODE: 3 },
+  compatConfig: {MODE: 3},
   name: 'JhiNavbar',
   components: {
     'entities-menu': EntitiesMenu,
@@ -75,7 +75,7 @@ export default defineComponent({
     hasAnyAuthority(authorities: any): boolean {
       this.accountService.hasAnyAuthorityAndCheckAuth(authorities).then(value => {
         if (this.hasAnyAuthorityValues[authorities] !== value) {
-          this.hasAnyAuthorityValues = { ...this.hasAnyAuthorityValues, [authorities]: value };
+          this.hasAnyAuthorityValues = {...this.hasAnyAuthorityValues, [authorities]: value};
         }
       });
       return this.hasAnyAuthorityValues[authorities] ?? false;

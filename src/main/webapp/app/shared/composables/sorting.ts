@@ -1,4 +1,4 @@
-import {ref} from 'vue';
+import { ref } from 'vue';
 
 export function useSorting(defaultPropOrder = 'id', defaultReverse = false) {
   const propOrder = ref(defaultPropOrder);

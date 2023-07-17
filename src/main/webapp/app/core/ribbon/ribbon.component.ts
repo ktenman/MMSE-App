@@ -3,7 +3,7 @@ import {useI18n} from 'vue-i18n';
 import {useStore} from '@/store';
 
 export default defineComponent({
-  compatConfig: { MODE: 3 },
+  compatConfig: {MODE: 3},
   name: 'Ribbon',
   setup(prop) {
     const store = useStore();

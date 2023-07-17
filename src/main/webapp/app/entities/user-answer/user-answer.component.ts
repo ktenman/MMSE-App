@@ -1,14 +1,13 @@
-import {defineComponent, inject, onMounted, ref, Ref, watch, watchEffect} from 'vue';
-import {useI18n} from 'vue-i18n';
-
-import {IUserAnswer} from '@/shared/model/user-answer.model';
+import { defineComponent, inject, onMounted, ref, Ref, watch, watchEffect } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { IUserAnswer } from '@/shared/model/user-answer.model';
 import useDataUtils from '@/shared/data/data-utils.service';
-import {useDateFormat} from '@/shared/composables';
+import { useDateFormat } from '@/shared/composables';
 import UserAnswerService from './user-answer.service';
-import {useAlertService} from '@/shared/alert/alert.service';
-import {usePagination} from '@/shared/composables/pagination';
-import {useSorting} from '@/shared/composables/sorting';
-import {useInfiniteScroll} from '@/shared/composables/infinite-scroll';
+import { useAlertService } from '@/shared/alert/alert.service';
+import { usePagination } from '@/shared/composables/pagination';
+import { useSorting } from '@/shared/composables/sorting';
+import { useInfiniteScroll } from '@/shared/composables/infinite-scroll';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },

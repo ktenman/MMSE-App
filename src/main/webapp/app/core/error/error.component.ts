@@ -4,7 +4,7 @@ import LoginService from '@/account/login.service';
 import {useRoute} from 'vue-router';
 
 export default defineComponent({
-  compatConfig: { MODE: 3 },
+  compatConfig: {MODE: 3},
   name: 'Error',
   setup() {
     const loginService = inject<LoginService>('loginService');

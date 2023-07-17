@@ -60,6 +60,7 @@ public class PublicUserResource {
 
     /**
      * Gets a list of all roles.
+     *
      * @return a string list of all roles.
      */
     @GetMapping("/authorities")

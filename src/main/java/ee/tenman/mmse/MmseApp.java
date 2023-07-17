@@ -21,7 +21,7 @@ import java.util.Collection;
 import java.util.Optional;
 
 @SpringBootApplication
-@EnableConfigurationProperties({ LiquibaseProperties.class, ApplicationProperties.class })
+@EnableConfigurationProperties({LiquibaseProperties.class, ApplicationProperties.class})
 public class MmseApp {
 
     private static final Logger log = LoggerFactory.getLogger(MmseApp.class);
@@ -44,7 +44,7 @@ public class MmseApp {
         Collection<String> activeProfiles = Arrays.asList(env.getActiveProfiles());
         if (
             activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) &&
-            activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)
+                activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_PRODUCTION)
         ) {
             log.error(
                 "You have misconfigured your application! It should not run " + "with both the 'dev' and 'prod' profiles at the same time."
@@ -52,7 +52,7 @@ public class MmseApp {
         }
         if (
             activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_DEVELOPMENT) &&
-            activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_CLOUD)
+                activeProfiles.contains(JHipsterConstants.SPRING_PROFILE_CLOUD)
         ) {
             log.error(
                 "You have misconfigured your application! It should not " + "run with both the 'dev' and 'cloud' profiles at the same time."

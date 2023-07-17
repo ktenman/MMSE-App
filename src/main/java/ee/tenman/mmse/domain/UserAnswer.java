@@ -50,7 +50,7 @@ public class UserAnswer implements Serializable {
 
     @ManyToOne(optional = false)
     @NotNull
-    @JsonIgnoreProperties(value = { "user" }, allowSetters = true)
+    @JsonIgnoreProperties(value = {"user"}, allowSetters = true)
     private TestEntity testEntity;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

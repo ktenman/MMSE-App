@@ -79,7 +79,7 @@ public class UserAnswerResource {
     /**
      * {@code PUT  /user-answers/:id} : Updates an existing userAnswer.
      *
-     * @param id the id of the userAnswerDTO to save.
+     * @param id            the id of the userAnswerDTO to save.
      * @param userAnswerDTO the userAnswerDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated userAnswerDTO,
      * or with status {@code 400 (Bad Request)} if the userAnswerDTO is not valid,
@@ -113,7 +113,7 @@ public class UserAnswerResource {
     /**
      * {@code PATCH  /user-answers/:id} : Partial updates given fields of an existing userAnswer, field will ignore if it is null
      *
-     * @param id the id of the userAnswerDTO to save.
+     * @param id            the id of the userAnswerDTO to save.
      * @param userAnswerDTO the userAnswerDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated userAnswerDTO,
      * or with status {@code 400 (Bad Request)} if the userAnswerDTO is not valid,
@@ -121,7 +121,7 @@ public class UserAnswerResource {
      * or with status {@code 500 (Internal Server Error)} if the userAnswerDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/user-answers/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PatchMapping(value = "/user-answers/{id}", consumes = {"application/json", "application/merge-patch+json"})
     public ResponseEntity<UserAnswerDTO> partialUpdateUserAnswer(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody UserAnswerDTO userAnswerDTO

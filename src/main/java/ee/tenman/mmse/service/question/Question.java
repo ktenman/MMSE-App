@@ -12,9 +12,13 @@ import java.util.List;
 
 public interface Question {
     String getQuestionText();
+
     String getImage();
+
     boolean isAnswerCorrect(UserAnswer userAnswer);
+
     QuestionId getQuestionId();
+
     List<String> getAnswerOptions();
 
     default String convertImageToBase64(String imagePath) {

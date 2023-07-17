@@ -1,16 +1,15 @@
 package ee.tenman.mmse.service.question;
 
+import static org.assertj.core.api.Assertions.assertThat;
+
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.NullAndEmptySource;
-
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
-
-import static org.assertj.core.api.Assertions.assertThat;
 
 class Question4Test {
 

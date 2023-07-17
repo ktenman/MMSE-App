@@ -19,7 +19,8 @@
         </div>
         <div class="alert alert-warning" v-if="!authenticated">
           <span v-text="t$('global.messages.info.register.noaccount')"></span>&nbsp;
-          <router-link class="alert-link" to="/register" v-text="t$('global.messages.info.register.link')"></router-link>
+          <router-link class="alert-link" to="/register"
+                       v-text="t$('global.messages.info.register.link')"></router-link>
         </div>
       </div>
     </div>

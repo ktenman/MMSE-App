@@ -90,14 +90,15 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
     private ProblemDetailWithCause getProblemDetailWithCause(Throwable ex) {
         if (
             ex instanceof ee.tenman.mmse.service.EmailAlreadyUsedException ||
-            ex instanceof ee.tenman.mmse.service.UsernameAlreadyUsedException
+                ex instanceof ee.tenman.mmse.service.UsernameAlreadyUsedException
         ) {
             // return 201 - CREATED on purpose to not reveal information to potential attackers
             // see https://github.com/jhipster/generator-jhipster/issues/21731
             return ProblemDetailWithCauseBuilder.instance().withStatus(201).build();
         }
-        if (ex instanceof ee.tenman.mmse.service.InvalidPasswordException) return (ProblemDetailWithCause) new InvalidPasswordException()
-            .getBody();
+        if (ex instanceof ee.tenman.mmse.service.InvalidPasswordException)
+            return (ProblemDetailWithCause) new InvalidPasswordException()
+                .getBody();
 
         if (
             ex instanceof ErrorResponseException exp && exp.getBody() instanceof ProblemDetailWithCause
@@ -108,7 +109,8 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
     protected ProblemDetailWithCause customizeProblem(ProblemDetailWithCause problem, Throwable err, NativeWebRequest request) {
         if (problem.getStatus() <= 0) problem.setStatus(toStatus(err));
 
-        if (problem.getType() == null || problem.getType().equals(URI.create("about:blank"))) problem.setType(getMappedType(err));
+        if (problem.getType() == null || problem.getType().equals(URI.create("about:blank")))
+            problem.setType(getMappedType(err));
 
         // higher precedence to Custom/ResponseStatus types
         String title = extractTitle(err, problem.getStatus());
@@ -128,11 +130,12 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
             getMappedMessageKey(err) != null ? getMappedMessageKey(err) : "error.http." + problem.getStatus()
         );
 
-        if (problemProperties == null || !problemProperties.containsKey(PATH_KEY)) problem.setProperty(PATH_KEY, getPathValue(request));
+        if (problemProperties == null || !problemProperties.containsKey(PATH_KEY))
+            problem.setProperty(PATH_KEY, getPathValue(request));
 
         if (
             (err instanceof MethodArgumentNotValidException) &&
-            (problemProperties == null || !problemProperties.containsKey(FIELD_ERRORS_KEY))
+                (problemProperties == null || !problemProperties.containsKey(FIELD_ERRORS_KEY))
         ) problem.setProperty(FIELD_ERRORS_KEY, getFieldErrors((MethodArgumentNotValidException) err));
 
         problem.setCause(buildCause(err.getCause(), request).orElse(null));
@@ -195,7 +198,8 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
     }
 
     private String getMappedMessageKey(Throwable err) {
-        if (err instanceof MethodArgumentNotValidException) return ErrorConstants.ERR_VALIDATION; else if (
+        if (err instanceof MethodArgumentNotValidException) return ErrorConstants.ERR_VALIDATION;
+        else if (
             err instanceof ConcurrencyFailureException || err.getCause() != null && err.getCause() instanceof ConcurrencyFailureException
         ) return ErrorConstants.ERR_CONCURRENCY_FAILURE;
         return null;
@@ -232,12 +236,12 @@ public class ExceptionTranslator extends ResponseEntityExceptionHandler {
     private HttpHeaders buildHeaders(Throwable err, NativeWebRequest request) {
         return err instanceof BadRequestAlertException
             ? HeaderUtil.createFailureAlert(
-                applicationName,
-                true,
-                ((BadRequestAlertException) err).getEntityName(),
-                ((BadRequestAlertException) err).getErrorKey(),
-                ((BadRequestAlertException) err).getMessage()
-            )
+            applicationName,
+            true,
+            ((BadRequestAlertException) err).getEntityName(),
+            ((BadRequestAlertException) err).getErrorKey(),
+            ((BadRequestAlertException) err).getMessage()
+        )
             : null;
     }
 

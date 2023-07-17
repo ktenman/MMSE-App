@@ -6,7 +6,8 @@ import org.springframework.data.jpa.repository.config.EnableJpaRepositories;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 @Configuration
-@EnableJpaRepositories({ "ee.tenman.mmse.repository" })
+@EnableJpaRepositories({"ee.tenman.mmse.repository"})
 @EnableJpaAuditing(auditorAwareRef = "springSecurityAuditorAware")
 @EnableTransactionManagement
-public class DatabaseConfiguration {}
+public class DatabaseConfiguration {
+}

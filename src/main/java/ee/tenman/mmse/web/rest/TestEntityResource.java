@@ -80,7 +80,7 @@ public class TestEntityResource {
     /**
      * {@code PUT  /test-entities/:id} : Updates an existing testEntity.
      *
-     * @param id the id of the testEntityDTO to save.
+     * @param id            the id of the testEntityDTO to save.
      * @param testEntityDTO the testEntityDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated testEntityDTO,
      * or with status {@code 400 (Bad Request)} if the testEntityDTO is not valid,
@@ -114,7 +114,7 @@ public class TestEntityResource {
     /**
      * {@code PATCH  /test-entities/:id} : Partial updates given fields of an existing testEntity, field will ignore if it is null
      *
-     * @param id the id of the testEntityDTO to save.
+     * @param id            the id of the testEntityDTO to save.
      * @param testEntityDTO the testEntityDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated testEntityDTO,
      * or with status {@code 400 (Bad Request)} if the testEntityDTO is not valid,
@@ -122,7 +122,7 @@ public class TestEntityResource {
      * or with status {@code 500 (Internal Server Error)} if the testEntityDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/test-entities/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PatchMapping(value = "/test-entities/{id}", consumes = {"application/json", "application/merge-patch+json"})
     public ResponseEntity<TestEntityDTO> partialUpdateTestEntity(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody TestEntityDTO testEntityDTO
@@ -150,7 +150,7 @@ public class TestEntityResource {
     /**
      * {@code GET  /test-entities} : get all the testEntities.
      *
-     * @param pageable the pagination information.
+     * @param pageable  the pagination information.
      * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of testEntities in body.
      */

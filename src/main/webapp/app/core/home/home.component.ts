@@ -4,7 +4,7 @@ import {useI18n} from 'vue-i18n';
 import LoginService from '@/account/login.service';
 
 export default defineComponent({
-  compatConfig: { MODE: 3 },
+  compatConfig: {MODE: 3},
   setup() {
     const loginService = inject<LoginService>('loginService');
 
