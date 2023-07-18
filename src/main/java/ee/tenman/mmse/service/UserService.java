@@ -23,6 +23,7 @@ import java.time.Instant;
 import java.time.temporal.ChronoUnit;
 import java.util.HashSet;
 import java.util.List;
+import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -281,7 +282,7 @@ public class UserService {
     @Transactional(readOnly = true)
     public User getUserWithAuthorities() {
         return SecurityUtils.getCurrentUserLogin().flatMap(userRepository::findOneWithAuthoritiesByLogin)
-            .orElseThrow(() -> new RuntimeException("User not found"));
+            .orElseThrow(() -> new NoSuchElementException("User not found"));
     }
 
     /**

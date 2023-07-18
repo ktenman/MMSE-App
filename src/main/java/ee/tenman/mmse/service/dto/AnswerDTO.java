@@ -2,14 +2,12 @@ package ee.tenman.mmse.service.dto;
 
 import ee.tenman.mmse.domain.enumeration.QuestionId;
 import jakarta.validation.constraints.NotNull;
-import lombok.EqualsAndHashCode;
 
 import java.io.Serializable;
 import java.util.Objects;
 
 public class AnswerDTO implements Serializable {
 
-    @EqualsAndHashCode.Include
     private Long id;
 
     private String answerText;

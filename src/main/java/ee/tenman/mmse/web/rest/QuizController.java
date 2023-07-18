@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import java.util.NoSuchElementException;
 import java.util.Optional;
 
 @RestController
@@ -53,7 +54,7 @@ public class QuizController {
         Optional<QuestionId> nextQuestionId = getNextQuestionId(answerDTO.getQuestionId());
         if (nextQuestionId.isEmpty()) {
             User user = userService.getUserWithAuthorities();
-            TestEntity testEntity = testEntityRepository.findLatestByUserId(user.getId()).orElseThrow(() -> new RuntimeException("Test not found"));
+            TestEntity testEntity = testEntityRepository.findLatestByUserId(user.getId()).orElseThrow(() -> new NoSuchElementException("Test not found"));
             int calculateScore = quizService.calculateScore(testEntity.getId());
             testEntity.setScore(calculateScore);
             testEntityRepository.save(testEntity);
