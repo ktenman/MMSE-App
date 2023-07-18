@@ -100,6 +100,7 @@
     "bootstrap": "4.6.2",
     "bootstrap-vue": "2.23.1",
     "dayjs": "1.11.9",
+    "intersection-observer": "^0.12.2",
     "pinia": "2.1.4",
     "vue": "3.3.4",
     "vue-i18n": "9.2.2",

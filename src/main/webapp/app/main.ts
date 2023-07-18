@@ -19,6 +19,7 @@ import AccountService from './account/account.service';
 import '../content/scss/global.scss';
 import '../content/scss/vendor.scss';
 import TranslationService from '@/locale/translation.service';
+import 'intersection-observer';
 
 const pinia = createPinia();
 

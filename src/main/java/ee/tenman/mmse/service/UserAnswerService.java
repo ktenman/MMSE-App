@@ -1,12 +1,17 @@
 package ee.tenman.mmse.service;
 
+import ee.tenman.mmse.domain.TestEntity;
+import ee.tenman.mmse.domain.User;
 import ee.tenman.mmse.domain.UserAnswer;
+import ee.tenman.mmse.repository.TestEntityRepository;
 import ee.tenman.mmse.repository.UserAnswerRepository;
 import ee.tenman.mmse.service.dto.UserAnswerDTO;
 import ee.tenman.mmse.service.mapper.UserAnswerMapper;
+import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -22,14 +27,14 @@ public class UserAnswerService {
 
     private final Logger log = LoggerFactory.getLogger(UserAnswerService.class);
 
-    private final UserAnswerRepository userAnswerRepository;
-
-    private final UserAnswerMapper userAnswerMapper;
-
-    public UserAnswerService(UserAnswerRepository userAnswerRepository, UserAnswerMapper userAnswerMapper) {
-        this.userAnswerRepository = userAnswerRepository;
-        this.userAnswerMapper = userAnswerMapper;
-    }
+    @Resource
+    private UserAnswerRepository userAnswerRepository;
+    @Resource
+    private UserAnswerMapper userAnswerMapper;
+    @Resource
+    private TestEntityRepository testEntityRepository;
+    @Resource
+    private UserService userService;
 
     /**
      * Save a userAnswer.
@@ -110,4 +115,18 @@ public class UserAnswerService {
         log.debug("Request to delete UserAnswer : {}", id);
         userAnswerRepository.deleteById(id);
     }
+
+    public Optional<UserAnswer> getLatest() {
+        Optional<User> user = userService.findUserWithAuthorities();
+        if (user.isEmpty()) {
+            throw new RuntimeException("No logged in user found");
+        }
+        Long userId = user.get().getId();
+        Optional<TestEntity> latestTestEntity = testEntityRepository.findLatestByUserId(userId, PageRequest.of(0, 1)).stream().findFirst();
+
+        return latestTestEntity.flatMap(testEntity ->
+            userAnswerRepository.findLatestByTestEntityId(testEntity.getId(), PageRequest.of(0, 1)).stream().findFirst()
+        );
+    }
+
 }

@@ -1,13 +1,13 @@
-import { defineComponent, inject, onMounted, ref, Ref, watch, watchEffect } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { IUserAnswer } from '@/shared/model/user-answer.model';
+import {defineComponent, inject, onMounted, ref, Ref, watch} from 'vue';
+import {useI18n} from 'vue-i18n';
+import {IUserAnswer} from '@/shared/model/user-answer.model';
 import useDataUtils from '@/shared/data/data-utils.service';
-import { useDateFormat } from '@/shared/composables';
+import {useDateFormat} from '@/shared/composables';
 import UserAnswerService from './user-answer.service';
-import { useAlertService } from '@/shared/alert/alert.service';
-import { usePagination } from '@/shared/composables/pagination';
-import { useSorting } from '@/shared/composables/sorting';
-import { useInfiniteScroll } from '@/shared/composables/infinite-scroll';
+import {useAlertService} from '@/shared/alert/alert.service';
+import {usePagination} from '@/shared/composables/pagination';
+import {useSorting} from '@/shared/composables/sorting';
+import {useInfiniteScroll} from '@/shared/composables/useInfiniteScroll';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
@@ -27,14 +27,8 @@ export default defineComponent({
 
     const isFetching = ref(false);
 
-    // Use the composables
     const pagination = usePagination();
     const sorting = useSorting();
-    const infiniteScroll = useInfiniteScroll(() => {
-      if (!isFetching.value) {
-        pagination.page.value++;
-      }
-    });
 
     const clear = () => {
       pagination.page.value = 1;
@@ -92,25 +86,27 @@ export default defineComponent({
       }
     };
 
-    // Whenever order changes, reset the pagination
     watch([sorting.propOrder, sorting.reverse], () => {
       clear();
     });
 
-    // Whenever the data resets or page changes, switch to the new page.
     watch([userAnswers, pagination.page], async ([data, page], [_prevData, prevPage]) => {
       if (data.length === 0 || page !== prevPage) {
         await retrieveUserAnswers();
       }
     });
 
-    watchEffect(() => {
-      if (links.value.next) {
-        infiniteScroll.intersectionObserver.resume();
-      } else if (infiniteScroll.intersectionObserver.isActive) {
-        infiniteScroll.intersectionObserver.pause();
+    const checkScroll = () => {
+      const bottomOfWindow = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight >= document.documentElement.offsetHeight - 10;
+      if (bottomOfWindow) {
+        if (!isFetching.value) {
+          pagination.page.value++;
+          retrieveUserAnswers();
+        }
       }
-    });
+    }
+
+    useInfiniteScroll(checkScroll);
 
     return {
       userAnswers,
@@ -128,7 +124,6 @@ export default defineComponent({
       queryCount,
       ...pagination,
       ...sorting,
-      ...infiniteScroll,
       t$,
       ...dataUtils,
     };

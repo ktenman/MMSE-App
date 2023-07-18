@@ -42,4 +42,10 @@ public interface TestEntityRepository extends JpaRepository<TestEntity, Long> {
 
     @Query("select testEntity from TestEntity testEntity left join fetch testEntity.user where testEntity.id =:id")
     Optional<TestEntity> findOneWithToOneRelationships(@Param("id") Long id);
+
+    @Query("SELECT t FROM TestEntity t WHERE t.user.id = :userId ORDER BY t.createdAt DESC")
+    List<TestEntity> findLatestByUserId(@Param("userId") Long userId, Pageable pageable);
+    @Query("SELECT t FROM TestEntity t WHERE t.user.id = :userId ORDER BY t.createdAt DESC")
+    Optional<TestEntity> findLatestByUserId(@Param("userId") Long userId);
+
 }
