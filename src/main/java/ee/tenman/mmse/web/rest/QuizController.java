@@ -68,7 +68,6 @@ public class QuizController {
         }
     }
 
-
     @PostMapping("/answer")
     public ResponseEntity<?> saveAnswerAndGetNextQuestion(@RequestBody AnswerDTO answerDTO) {
         quizService.saveAnswer(answerDTO);
@@ -89,6 +88,10 @@ public class QuizController {
         return ResponseEntity.ok(nextQuestion);
     }
 
+    @PostMapping("/retake")
+    public Question retakeTest() {
+        return quizService.retakeTest();
+    }
 
     private Optional<QuestionId> getNextQuestionId(QuestionId currentQuestionId) {
         QuestionId[] questionIds = QuestionId.values();

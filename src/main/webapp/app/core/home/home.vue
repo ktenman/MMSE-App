@@ -9,8 +9,19 @@
 
       <div>
         <!-- Show quiz end message when quiz ends -->
-        <div v-if="quizEndMessage" class="alert alert-info">
-          {{ quizEndMessage }}
+
+        <div>
+          <div v-if="quizEndMessage" class="alert alert-info">
+            {{ quizEndMessage }}
+          </div>
+          <b-button
+            @click="retakeTest"
+            variant="primary"
+            class="mt-3"
+            v-if="!question"
+          >
+            Retake Test
+          </b-button>
         </div>
 
         <div v-if="question && authenticated">

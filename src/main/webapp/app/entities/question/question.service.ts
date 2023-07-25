@@ -13,5 +13,9 @@ export default class QuestionService {
     return axios.post<IQuestion | string>('/api/answer', answer).then(res => res.data);
   }
 
+  public retakeTest(): Promise<IQuestion | string> {
+    return axios.post<IQuestion | string>('/api/retake').then(res => res.data);
+  }
+
 }
 

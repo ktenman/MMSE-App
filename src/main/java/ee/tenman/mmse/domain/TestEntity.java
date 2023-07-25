@@ -31,7 +31,7 @@ public class TestEntity implements Serializable {
 
     @NotNull
     @Column(name = "created_at", nullable = false)
-    private Instant createdAt;
+    private Instant createdAt = Instant.now();
 
     @Column(name = "updated_at")
     private Instant updatedAt;
