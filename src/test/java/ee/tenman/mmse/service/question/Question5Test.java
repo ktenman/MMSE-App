@@ -1,15 +1,23 @@
 package ee.tenman.mmse.service.question;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+
+import java.time.DateTimeException;
+import java.time.LocalDateTime;
+import java.time.Month;
+import java.time.ZoneOffset;
+import java.util.Arrays;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
 
 class Question5Test {
 
@@ -80,5 +88,25 @@ class Question5Test {
     @Test
     void testGetQuestionId() {
         assertThat(question5.getQuestionId()).isEqualTo(QuestionId.QUESTION_5);
+    }
+
+    @Test
+    void testGetAnswerOptions() {
+        Set<String> expectedSeasons = new HashSet<>(Arrays.asList("SPRING", "SUMMER", "AUTUMN", "WINTER"));
+        List<String> answerOptions = question5.getAnswerOptions();
+        Set<String> actualSeasons = new HashSet<>(answerOptions);
+        assertThat(actualSeasons).isEqualTo(expectedSeasons);
+    }
+
+    @Test
+    void testGetSeasonFromMonth_shouldThrowException() {
+        assertThatExceptionOfType(DateTimeException.class)
+            .isThrownBy(() -> question5.getSeasonFromMonth(Month.of(13)))
+            .withMessage("Invalid value for MonthOfYear: 13");
+    }
+
+    @Test
+    void testGetImage() {
+        assertThat(question5.getImage()).isNull();
     }
 }
