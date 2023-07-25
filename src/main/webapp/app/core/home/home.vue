@@ -8,8 +8,14 @@
       <p class="lead" v-text="t$('home.subtitle')"></p>
 
       <div>
-        <div class="alert alert-success" v-if="authenticated">
-          <span v-if="username" v-text="t$('home.logged.message', { username: username })"></span>
+        <div v-if="question && authenticated">
+          <h2>{{ question.questionText }}</h2>
+          <div v-if="question.image">
+            <img :src="question.image" alt="Question image">
+          </div>
+          <div v-for="(option, index) in question.answerOptions" :key="index">
+            {{ option }}
+          </div>
         </div>
 
         <div class="alert alert-warning" v-if="!authenticated">
