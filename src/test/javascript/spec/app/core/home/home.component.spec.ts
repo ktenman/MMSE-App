@@ -2,8 +2,14 @@ import { vitest } from 'vitest';
 import { ref } from 'vue';
 import { shallowMount } from '@vue/test-utils';
 import Home from '../../../../../../main/webapp/app/core/home/home.vue';
-
 type HomeComponentType = InstanceType<typeof Home>;
+
+// mock axios
+vitest.mock('axios', () => ({
+  default: {
+    get: vitest.fn(() => Promise.resolve({ data: { id: 1, questionId: 'Sample Question' }})),  // replace with your own mock data
+  }
+}));
 
 describe('Home', () => {
   let home: HomeComponentType;
