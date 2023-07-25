@@ -26,6 +26,14 @@
               </b-button>
             </div>
           </div>
+
+          <b-button
+            @click="submitAnswer"
+            variant="primary"
+            class="mt-3"
+            :disabled="!selectedAnswer">
+          Next
+          </b-button>
         </div>
 
         <div class="alert alert-warning" v-if="!authenticated">

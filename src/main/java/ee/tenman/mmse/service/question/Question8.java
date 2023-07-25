@@ -3,12 +3,14 @@ package ee.tenman.mmse.service.question;
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.AnswerOption;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
+import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.stream.Collectors;
 
+@Component
 public class Question8 implements Question {
 
     private static final String QUESTION_TEXT =  "What is the name of the third object?";

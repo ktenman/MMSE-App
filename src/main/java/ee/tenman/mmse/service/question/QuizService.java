@@ -18,15 +18,20 @@ import java.util.Optional;
 @Service
 public class QuizService {
 
-    private Map<QuestionId, Question> questions;
-    private UserAnswerRepository userAnswerRepository;
-    private UserService userService;
-private TestEntityRepository testEntityRepository;
+    private final Map<QuestionId, Question> questions;
+    private final UserAnswerRepository userAnswerRepository;
+    private final UserService userService;
+    private final TestEntityRepository testEntityRepository;
+
     @Autowired
-    public QuizService(QuestionsConfig questionsConfig, UserAnswerRepository userAnswerRepository, UserService userService) {
+    public QuizService(QuestionsConfig questionsConfig,
+                       UserAnswerRepository userAnswerRepository,
+                       UserService userService,
+                       TestEntityRepository testEntityRepository) {
         this.questions = questionsConfig.getQuestions();
         this.userAnswerRepository = userAnswerRepository;
         this.userService = userService;
+        this.testEntityRepository = testEntityRepository;
     }
 
     public Question getQuestion(QuestionId questionId) {
@@ -54,7 +59,7 @@ private TestEntityRepository testEntityRepository;
         if (user.isEmpty()) {
             throw new RuntimeException("User not found");
         }
-        TestEntity testEntity = testEntityRepository.findLatestByUserId(user.get().getId()).orElseGet(() -> {
+        TestEntity testEntity = testEntityRepository.findFirstByUserIdOrderByCreatedAtDesc(user.get().getId()).orElseGet(() -> {
             TestEntity t = new TestEntity();
             t.setUser(user.get());
             return testEntityRepository.save(t);

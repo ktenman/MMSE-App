@@ -2,11 +2,13 @@ package ee.tenman.mmse.service.question;
 
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
+import org.springframework.stereotype.Component;
 
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.List;
 
+@Component
 public class Question4 implements Question {
 
     private static final String QUESTION_TEXT = "What is the current year?";

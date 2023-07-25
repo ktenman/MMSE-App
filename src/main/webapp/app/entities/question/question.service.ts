@@ -9,11 +9,8 @@ export default class QuestionService {
     return axios.get<IQuestion>(baseApiUrl).then(res => res.data);
   }
 
-  public submitAnswer(answer: IAnswer) {
-    return axios.post('/api/answer', answer).then(res => res.data).catch(err => {
-      console.error(err);
-      throw err;
-    });
+  public submitAnswer(answer: IAnswer): Promise<IQuestion | string> {
+    return axios.post<IQuestion | string>('/api/answer', answer).then(res => res.data);
   }
 
 }

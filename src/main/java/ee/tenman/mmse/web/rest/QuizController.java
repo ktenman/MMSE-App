@@ -54,7 +54,7 @@ public class QuizController {
         Optional<QuestionId> nextQuestionId = getNextQuestionId(answerDTO.getQuestionId());
         if (nextQuestionId.isEmpty()) {
             User user = userService.getUserWithAuthorities();
-            TestEntity testEntity = testEntityRepository.findLatestByUserId(user.getId()).orElseThrow(() -> new NoSuchElementException("Test not found"));
+            TestEntity testEntity = testEntityRepository.findFirstByUserIdOrderByCreatedAtDesc(user.getId()).orElseThrow(() -> new NoSuchElementException("Test not found"));
             int calculateScore = quizService.calculateScore(testEntity.getId());
             testEntity.setScore(calculateScore);
             testEntityRepository.save(testEntity);

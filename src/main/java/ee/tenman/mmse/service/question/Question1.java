@@ -2,6 +2,7 @@ package ee.tenman.mmse.service.question;
 
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
+import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
 import java.time.ZoneId;
@@ -11,6 +12,7 @@ import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
 
+@Component
 public class Question1 implements Question {
 
     private static final String QUESTION_TEXT = "What is the current day of the week?";
