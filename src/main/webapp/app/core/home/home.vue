@@ -13,8 +13,18 @@
           <div v-if="question.image">
             <img :src="question.image" alt="Question image">
           </div>
-          <div v-for="(option, index) in question.answerOptions" :key="index">
-            {{ option }}
+
+          <div class="row">
+            <div class="col-md-6" v-for="(option, index) in question.answerOptions" :key="index">
+              <b-button
+                :pressed="selectedAnswer === option"
+                variant="outline-primary"
+                @click="selectedAnswer = option"
+                class="w-100 p-3 mt-3 large-text capitalize"
+              >
+                {{ option.toLowerCase() }}
+              </b-button>
+            </div>
           </div>
         </div>
 
@@ -34,3 +44,12 @@
 </template>
 
 <script lang="ts" src="./home.component.ts"></script>
+<style scoped>
+.large-text {
+  font-size: 1.25em;
+}
+
+.capitalize {
+  text-transform: capitalize;
+}
+</style>

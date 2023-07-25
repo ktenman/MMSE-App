@@ -6,7 +6,10 @@ import ee.tenman.mmse.domain.enumeration.QuestionId;
 import java.time.DayOfWeek;
 import java.time.ZoneId;
 import java.time.ZonedDateTime;
+import java.util.Collections;
 import java.util.List;
+import java.util.stream.Collectors;
+import java.util.stream.Stream;
 
 public class Question1 implements Question {
 
@@ -37,6 +40,20 @@ public class Question1 implements Question {
 
     @Override
     public List<String> getAnswerOptions() {
-        return null;
+        // Get the current day of the week
+        ZonedDateTime zonedDateTime = ZonedDateTime.now(ZoneId.systemDefault());
+        String currentDayOfWeek = DayOfWeek.from(zonedDateTime).name();
+
+        // Prepare a list of three random days excluding the current day
+        List<String> daysOfWeek = Stream.of(DayOfWeek.values()).map(DayOfWeek::name).collect(Collectors.toList());
+        daysOfWeek.remove(currentDayOfWeek);
+        Collections.shuffle(daysOfWeek);
+        List<String> answerOptions = daysOfWeek.subList(0, 3);
+
+        // Add the current day to the list and shuffle again
+        answerOptions.add(currentDayOfWeek);
+        Collections.shuffle(answerOptions);
+
+        return answerOptions;
     }
 }
