@@ -10,12 +10,12 @@ import java.util.List;
 
 public class Question5 implements Question {
 
+    private static final String QUESTION_TEXT = "What is the current season?";
     private final QuestionId questionId = QuestionId.QUESTION_5;
-    private final String questionText = "What is the current season?";
 
     @Override
     public String getQuestionText() {
-        return this.questionText;
+        return QUESTION_TEXT;
     }
 
     @Override

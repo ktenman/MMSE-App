@@ -11,12 +11,12 @@ import java.util.stream.Collectors;
 
 public class Question6 implements Question {
 
+    private static final String QUESTION_TEXT = "Please look at these three images. What is the name of the first object?";
     private final QuestionId questionId = QuestionId.QUESTION_6;
-    private final String questionText = "Please look at these three images. What is the name of the first object?";
 
     @Override
     public String getQuestionText() {
-        return this.questionText;
+        return QUESTION_TEXT;
     }
 
     @Override

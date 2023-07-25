@@ -11,12 +11,12 @@ import java.util.stream.Collectors;
 
 public class Question7 implements Question {
 
+    private static final String QUESTION_TEXT = "What is the name of the second object?";
     private final QuestionId questionId = QuestionId.QUESTION_7;
-    private final String questionText = "What is the name of the second object?";
 
     @Override
     public String getQuestionText() {
-        return this.questionText;
+        return QUESTION_TEXT;
     }
 
     @Override

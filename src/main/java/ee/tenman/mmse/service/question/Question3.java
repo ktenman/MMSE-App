@@ -10,12 +10,12 @@ import java.util.List;
 
 public class Question3 implements Question {
 
+    private static final String QUESTION_TEXT = "What is the current month?";
     private final QuestionId questionId = QuestionId.QUESTION_3;
-    private final String questionText = "What is the current month?";
 
     @Override
     public String getQuestionText() {
-        return this.questionText;
+        return QUESTION_TEXT;
     }
 
     @Override

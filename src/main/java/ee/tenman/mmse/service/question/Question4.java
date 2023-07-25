@@ -9,12 +9,12 @@ import java.util.List;
 
 public class Question4 implements Question {
 
+    private static final String QUESTION_TEXT = "What is the current year?";
     private final QuestionId questionId = QuestionId.QUESTION_4;
-    private final String questionText = "What is the current year?";
 
     @Override
     public String getQuestionText() {
-        return this.questionText;
+        return QUESTION_TEXT;
     }
 
     @Override
