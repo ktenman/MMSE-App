@@ -1,4 +1,4 @@
-import {ComputedRef, defineComponent, inject, onMounted, ref} from 'vue';
+import {ComputedRef, defineComponent, inject, onMounted, ref, watch} from 'vue';
 import {useI18n} from 'vue-i18n';
 import LoginService from '@/account/login.service';
 import {IQuestion} from "@/shared/model/question.model";
@@ -15,6 +15,7 @@ export default defineComponent({
     const username = inject<ComputedRef<string>>('currentUsername');
     const question = ref<IQuestion | null>(null);
     const selectedAnswer = ref<string | null>(null);
+    const quizEndMessage = ref<string | null>(null);
 
     const openLogin = () => {
       loginService.openLogin();
@@ -27,18 +28,39 @@ export default defineComponent({
         const response = await questionService.submitAnswer(answer);
 
         if (typeof response === 'string') {
-          // Handle quiz end, maybe show the score to user and navigate to another page?
+          quizEndMessage.value = response;
+          question.value = null;
         } else {
-          // If the quiz is not ended, the response should contain the next question
           question.value = response;
-          selectedAnswer.value = null; // reset the selected answer
+          selectedAnswer.value = null;
         }
       }
     };
 
+    const loadQuestion = async () => {
+      const response = await questionService.getQuestion();
+
+      if (typeof response === 'string') {
+        // If the quiz has ended, the response should contain the message.
+        quizEndMessage.value = response;
+
+        // Clear the question ref
+        question.value = null;
+      } else {
+        // If the quiz is not ended, the response should contain the next question
+        question.value = response;
+      }
+    };
+
+    watch(authenticated, async (newVal, oldVal) => {
+      if (newVal === true) {
+        await loadQuestion();
+      }
+    });
+
     onMounted(async () => {
       if (authenticated.value) {
-        question.value = await questionService.getQuestion();
+        await loadQuestion();
       }
     });
 
@@ -49,7 +71,8 @@ export default defineComponent({
       t$: useI18n().t,
       question,
       selectedAnswer,
-      submitAnswer, // New line here
+      submitAnswer,
+      quizEndMessage,
     };
   },
 });

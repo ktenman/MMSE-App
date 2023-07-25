@@ -40,13 +40,34 @@ public class QuizController {
     }
 
     @GetMapping("/question")
-    public Question getNextQuestion() {
+    public ResponseEntity<?> getNextQuestion() {
         Optional<UserAnswer> latestUserAnswer = userAnswerService.getLatest();
-        return latestUserAnswer
-            .flatMap(answer -> getNextQuestionId(answer.getQuestionId()))
-            .map(quizService::getQuestion)
-            .orElseGet(quizService::getFirstQuestion);
+
+        if (latestUserAnswer.isPresent()) {
+            UserAnswer answer = latestUserAnswer.get();
+            Optional<QuestionId> nextQuestionId = getNextQuestionId(answer.getQuestionId());
+
+            if (nextQuestionId.isEmpty()) {
+                User user = userService.getUserWithAuthorities();
+                TestEntity testEntity = testEntityRepository.findFirstByUserIdOrderByCreatedAtDesc(user.getId()).orElseThrow(() -> new NoSuchElementException("Test not found"));
+                int calculateScore = quizService.calculateScore(testEntity.getId());
+                testEntity.setScore(calculateScore);
+                testEntityRepository.save(testEntity);
+
+                // Return a response indicating that the quiz has ended.
+                return ResponseEntity.ok().body("Quiz has ended. Your score is " + calculateScore);
+            }
+
+            // Continue the quiz with the next question
+            Question nextQuestion = quizService.getQuestion(nextQuestionId.get());
+            return ResponseEntity.ok(nextQuestion);
+        } else {
+            // If there's no latest user answer, this means the quiz has just started. Return the first question.
+            Question firstQuestion = quizService.getFirstQuestion();
+            return ResponseEntity.ok(firstQuestion);
+        }
     }
+
 
     @PostMapping("/answer")
     public ResponseEntity<?> saveAnswerAndGetNextQuestion(@RequestBody AnswerDTO answerDTO) {

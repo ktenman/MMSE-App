@@ -8,10 +8,15 @@
       <p class="lead" v-text="t$('home.subtitle')"></p>
 
       <div>
+        <!-- Show quiz end message when quiz ends -->
+        <div v-if="quizEndMessage" class="alert alert-info">
+          {{ quizEndMessage }}
+        </div>
+
         <div v-if="question && authenticated">
           <h2>{{ question.questionText }}</h2>
-          <div v-if="question.image">
-            <img :src="question.image" alt="Question image">
+          <div v-if="question.image" class="image-container">
+            <img :src="'data:image/png;base64,' + question.image" alt="Question image" class="question-image">
           </div>
 
           <div class="row">
@@ -32,7 +37,7 @@
             variant="primary"
             class="mt-3"
             :disabled="!selectedAnswer">
-          Next
+            Next
           </b-button>
         </div>
 
@@ -59,5 +64,17 @@
 
 .capitalize {
   text-transform: capitalize;
+}
+
+.image-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%; /* Adjust as needed */
+}
+
+.question-image {
+  max-width: 100%;
+  height: auto;
 }
 </style>

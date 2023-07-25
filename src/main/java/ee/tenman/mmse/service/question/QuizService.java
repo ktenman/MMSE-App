@@ -11,9 +11,11 @@ import ee.tenman.mmse.service.dto.AnswerDTO;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import java.util.Set;
 
 @Service
 public class QuizService {
@@ -41,14 +43,23 @@ public class QuizService {
     public int calculateScore(Long testEntityId) {
         List<UserAnswer> answers = userAnswerRepository.findByTestEntityIdOrderByCreatedAtDesc(testEntityId);
         int totalScore = 0;
+        Set<QuestionId> answeredQuestions = new HashSet<>();
+
         for (UserAnswer userAnswer : answers) {
             Question question = questions.get(userAnswer.getQuestionId());
+
+            if (answeredQuestions.contains(question.getQuestionId())) {
+                continue;
+            }
+
             if (question.isAnswerCorrect(userAnswer)) {
                 totalScore += question.getScore();
+                answeredQuestions.add(question.getQuestionId()); // mark the question as answered
             }
         }
         return totalScore;
     }
+
 
     public Question getFirstQuestion() {
         return new Question1();
