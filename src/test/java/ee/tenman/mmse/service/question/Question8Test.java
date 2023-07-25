@@ -1,13 +1,14 @@
 package ee.tenman.mmse.service.question;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.AnswerOption;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
-import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class Question8Test {
 
@@ -52,7 +53,11 @@ class Question8Test {
 
     @Test
     void testGetAnswerOptions() {
-        List<String> expectedAnswerOptions = List.of(AnswerOption.CAR.name(), AnswerOption.BALL.name(), AnswerOption.MAN.name());
+        List<String> expectedAnswerOptions = List.of(
+            AnswerOption.CAR.name(),
+            AnswerOption.BALL.name(),
+            AnswerOption.MAN.name(),
+            AnswerOption.TREE.name());
 
         assertThat(question8.getAnswerOptions()).containsExactlyInAnyOrderElementsOf(expectedAnswerOptions);
     }

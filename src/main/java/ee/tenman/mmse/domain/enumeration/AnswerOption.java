@@ -4,4 +4,5 @@ public enum AnswerOption {
     CAR,
     BALL,
     MAN,
+    TREE,
 }

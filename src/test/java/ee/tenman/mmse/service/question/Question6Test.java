@@ -1,14 +1,16 @@
 package ee.tenman.mmse.service.question;
 
-import static org.assertj.core.api.Assertions.assertThat;
-
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.AnswerOption;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
-import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import java.time.LocalDateTime;
+import java.time.ZoneOffset;
+import java.util.List;
+
+import static org.assertj.core.api.Assertions.assertThat;
 
 class Question6Test {
 
@@ -50,5 +52,16 @@ class Question6Test {
     @Test
     void testGetQuestionId() {
         assertThat(question6.getQuestionId()).isEqualTo(QuestionId.QUESTION_6);
+    }
+
+    @Test
+    void testGetAnswerOptions() {
+        List<String> expectedAnswerOptions = List.of(
+            AnswerOption.CAR.name(),
+            AnswerOption.BALL.name(),
+            AnswerOption.MAN.name(),
+            AnswerOption.TREE.name());
+
+        assertThat(question6.getAnswerOptions()).containsExactlyInAnyOrderElementsOf(expectedAnswerOptions);
     }
 }

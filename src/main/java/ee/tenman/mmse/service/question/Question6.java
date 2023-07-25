@@ -38,7 +38,7 @@ public class Question6 implements Question {
 
     @Override
     public List<String> getAnswerOptions() {
-        List<AnswerOption> answerOptions = Arrays.asList(AnswerOption.BALL, AnswerOption.CAR, AnswerOption.MAN);
+        List<AnswerOption> answerOptions = Arrays.asList(AnswerOption.BALL, AnswerOption.CAR, AnswerOption.MAN, AnswerOption.TREE);
         Collections.shuffle(answerOptions);
         return answerOptions.stream().map(Enum::name).collect(Collectors.toList());
     }

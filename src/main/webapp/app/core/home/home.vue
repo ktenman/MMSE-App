@@ -18,7 +18,7 @@
             @click="retakeTest"
             variant="primary"
             class="mt-3"
-            v-if="!question"
+            v-if="!question && authenticated"
           >
             Retake Test
           </b-button>
