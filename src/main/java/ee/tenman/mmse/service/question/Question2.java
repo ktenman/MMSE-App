@@ -2,7 +2,7 @@ package ee.tenman.mmse.service.question;
 
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
-import org.springframework.beans.factory.annotation.Autowired;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
 import java.time.Clock;
@@ -24,7 +24,7 @@ public class Question2 implements Question {
     private static final String QUESTION_TEXT = "What is the current date?";
     private final QuestionId questionId = QuestionId.QUESTION_2;
 
-    @Autowired
+    @Resource
     private Clock clock;
 
     @Override
