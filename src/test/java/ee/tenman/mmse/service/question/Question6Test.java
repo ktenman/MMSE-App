@@ -29,19 +29,14 @@ class Question6Test {
     void testIsAnswerCorrect_whenAnswerIsCorrect() {
         userAnswer.setAnswerText(AnswerOption.BALL.name());
 
-        assertThat(question6.isAnswerCorrect(userAnswer)).isTrue();
+        assertThat(question6.getScore(userAnswer)).isOne();
     }
 
     @Test
     void testIsAnswerCorrect_whenAnswerIsIncorrect() {
         userAnswer.setAnswerText(AnswerOption.CAR.name());
 
-        assertThat(question6.isAnswerCorrect(userAnswer)).isFalse();
-    }
-
-    @Test
-    void testGetScore() {
-        assertThat(question6.getScore()).isEqualTo(1);
+        assertThat(question6.getScore(userAnswer)).isZero();
     }
 
     @Test

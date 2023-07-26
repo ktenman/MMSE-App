@@ -37,7 +37,7 @@ class Question5Test {
         LocalDateTime localDateTime = LocalDateTime.of(2023, month, 1, 0, 0);
         userAnswer.setCreatedAt(localDateTime.toInstant(ZoneOffset.UTC));
         userAnswer.setAnswerText("WINTER");
-        assertThat(question5.isAnswerCorrect(userAnswer)).isTrue();
+        assertThat(question5.getScore(userAnswer)).isOne();
     }
 
     @ParameterizedTest
@@ -46,7 +46,7 @@ class Question5Test {
         LocalDateTime localDateTime = LocalDateTime.of(2023, month, 1, 0, 0);
         userAnswer.setCreatedAt(localDateTime.toInstant(ZoneOffset.UTC));
         userAnswer.setAnswerText("SPRING");
-        assertThat(question5.isAnswerCorrect(userAnswer)).isTrue();
+        assertThat(question5.getScore(userAnswer)).isOne();
     }
 
     @ParameterizedTest
@@ -55,7 +55,7 @@ class Question5Test {
         LocalDateTime localDateTime = LocalDateTime.of(2023, month, 1, 0, 0);
         userAnswer.setCreatedAt(localDateTime.toInstant(ZoneOffset.UTC));
         userAnswer.setAnswerText("SUMMER");
-        assertThat(question5.isAnswerCorrect(userAnswer)).isTrue();
+        assertThat(question5.getScore(userAnswer)).isOne();
     }
 
     @ParameterizedTest
@@ -64,7 +64,7 @@ class Question5Test {
         LocalDateTime localDateTime = LocalDateTime.of(2023, month, 1, 0, 0);
         userAnswer.setCreatedAt(localDateTime.toInstant(ZoneOffset.UTC));
         userAnswer.setAnswerText("AUTUMN");
-        assertThat(question5.isAnswerCorrect(userAnswer)).isTrue();
+        assertThat(question5.getScore(userAnswer)).isOne();
     }
 
     @Test
@@ -72,12 +72,7 @@ class Question5Test {
         LocalDateTime localDateTime = LocalDateTime.of(2023, 10, 1, 0, 0);
         userAnswer.setCreatedAt(localDateTime.toInstant(ZoneOffset.UTC));
         userAnswer.setAnswerText("WINTER");
-        assertThat(question5.isAnswerCorrect(userAnswer)).isFalse();
-    }
-
-    @Test
-    void testGetScore() {
-        assertThat(question5.getScore()).isEqualTo(1);
+        assertThat(question5.getScore(userAnswer)).isZero();
     }
 
     @Test

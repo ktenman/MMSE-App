@@ -2,6 +2,7 @@ package ee.tenman.mmse.service.question;
 
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
+import ee.tenman.mmse.domain.enumeration.QuestionType;
 import org.springframework.stereotype.Component;
 
 import java.time.DayOfWeek;
@@ -29,15 +30,13 @@ public class Question1 implements Question {
     }
 
     @Override
-    public boolean isAnswerCorrect(UserAnswer userAnswer) {
-        ZonedDateTime zonedDateTime = userAnswer.getCreatedAt().atZone(ZoneId.systemDefault());
-        String dayOfWeek = DayOfWeek.from(zonedDateTime).name();
-        return dayOfWeek.equalsIgnoreCase(userAnswer.getAnswerText());
+    public QuestionId getQuestionId() {
+        return this.questionId;
     }
 
     @Override
-    public QuestionId getQuestionId() {
-        return this.questionId;
+    public QuestionType getQuestionType() {
+        return QuestionType.MULTIPLE_CHOICE;
     }
 
     @Override
@@ -57,5 +56,12 @@ public class Question1 implements Question {
         Collections.shuffle(answerOptions);
 
         return answerOptions;
+    }
+
+    @Override
+    public int getScore(UserAnswer userAnswer) {
+        ZonedDateTime zonedDateTime = userAnswer.getCreatedAt().atZone(ZoneId.systemDefault());
+        String dayOfWeek = DayOfWeek.from(zonedDateTime).name();
+        return dayOfWeek.equalsIgnoreCase(userAnswer.getAnswerText()) ? 1 : 0;
     }
 }

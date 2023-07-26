@@ -41,20 +41,15 @@ class Question2Test {
     }
 
     @Test
-    void testIsAnswerCorrect_whenTrue() {
+    void testGetScore_whenCorrect() {
         userAnswer.setAnswerText("1st January 2023");
-        assertThat(question2.isAnswerCorrect(userAnswer)).isTrue();
+        assertThat(question2.getScore(userAnswer)).isOne();
     }
 
     @Test
-    void testIsAnswerCorrect_whenFalse() {
+    void testGetScore_whenWrong() {
         userAnswer.setAnswerText("2nd January 2023");
-        assertThat(question2.isAnswerCorrect(userAnswer)).isFalse();
-    }
-
-    @Test
-    void testGetScore() {
-        assertThat(question2.getScore()).isEqualTo(1);
+        assertThat(question2.getScore(userAnswer)).isZero();
     }
 
     @Test

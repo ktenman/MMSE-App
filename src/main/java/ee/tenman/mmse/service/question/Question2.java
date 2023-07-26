@@ -2,6 +2,7 @@ package ee.tenman.mmse.service.question;
 
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
+import ee.tenman.mmse.domain.enumeration.QuestionType;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
@@ -38,21 +39,13 @@ public class Question2 implements Question {
     }
 
     @Override
-    public boolean isAnswerCorrect(UserAnswer userAnswer) {
-        LocalDate localDate = userAnswer.getCreatedAt().atZone(ZoneId.systemDefault()).toLocalDate();
-        LocalDate userAnswerDate;
-        try {
-            String userAnswerText = userAnswer.getAnswerText().replaceAll("(st|nd|rd|th)", "");
-            userAnswerDate = LocalDate.parse(userAnswerText, DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.ENGLISH));
-        } catch (DateTimeParseException e) {
-            return false;
-        }
-        return localDate.equals(userAnswerDate);
+    public QuestionId getQuestionId() {
+        return this.questionId;
     }
 
     @Override
-    public QuestionId getQuestionId() {
-        return this.questionId;
+    public QuestionType getQuestionType() {
+        return QuestionType.MULTIPLE_CHOICE;
     }
 
     @Override
@@ -78,6 +71,19 @@ public class Question2 implements Question {
         Collections.shuffle(options);
 
         return options;
+    }
+
+    @Override
+    public int getScore(UserAnswer userAnswer) {
+        LocalDate localDate = userAnswer.getCreatedAt().atZone(ZoneId.systemDefault()).toLocalDate();
+        LocalDate userAnswerDate;
+        try {
+            String userAnswerText = userAnswer.getAnswerText().replaceAll("(st|nd|rd|th)", "");
+            userAnswerDate = LocalDate.parse(userAnswerText, DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.ENGLISH));
+        } catch (DateTimeParseException e) {
+            return 0;
+        }
+        return localDate.equals(userAnswerDate) ? 1 : 0;
     }
 
     private String formatToOrdinalDate(LocalDate date) {

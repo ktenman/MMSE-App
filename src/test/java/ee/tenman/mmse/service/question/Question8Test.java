@@ -3,6 +3,7 @@ package ee.tenman.mmse.service.question;
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.AnswerOption;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
+import ee.tenman.mmse.domain.enumeration.QuestionType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
@@ -26,19 +27,14 @@ class Question8Test {
     void testIsAnswerCorrect_whenAnswerIsCorrect() {
         userAnswer.setAnswerText(AnswerOption.MAN.name());
 
-        assertThat(question8.isAnswerCorrect(userAnswer)).isTrue();
+        assertThat(question8.getScore(userAnswer)).isOne();
     }
 
     @Test
     void testIsAnswerCorrect_whenAnswerIsIncorrect() {
         userAnswer.setAnswerText(AnswerOption.BALL.name());
 
-        assertThat(question8.isAnswerCorrect(userAnswer)).isFalse();
-    }
-
-    @Test
-    void testGetScore() {
-        assertThat(question8.getScore()).isEqualTo(1);
+        assertThat(question8.getScore(userAnswer)).isZero();
     }
 
     @Test
@@ -60,5 +56,10 @@ class Question8Test {
             AnswerOption.TREE.name());
 
         assertThat(question8.getAnswerOptions()).containsExactlyInAnyOrderElementsOf(expectedAnswerOptions);
+    }
+
+    @Test
+    void testQuestionType() {
+        assertThat(question8.getQuestionType()).isEqualTo(QuestionType.MULTIPLE_CHOICE);
     }
 }

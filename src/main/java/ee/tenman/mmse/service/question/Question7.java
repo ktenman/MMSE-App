@@ -3,6 +3,7 @@ package ee.tenman.mmse.service.question;
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.AnswerOption;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
+import ee.tenman.mmse.domain.enumeration.QuestionType;
 import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
@@ -27,13 +28,13 @@ public class Question7 implements Question {
     }
 
     @Override
-    public boolean isAnswerCorrect(UserAnswer userAnswer) {
-        return AnswerOption.valueOf(userAnswer.getAnswerText()) == AnswerOption.CAR;
+    public QuestionId getQuestionId() {
+        return this.questionId;
     }
 
     @Override
-    public QuestionId getQuestionId() {
-        return this.questionId;
+    public QuestionType getQuestionType() {
+        return QuestionType.MULTIPLE_CHOICE;
     }
 
     @Override
@@ -41,5 +42,10 @@ public class Question7 implements Question {
         List<AnswerOption> answerOptions = Arrays.asList(AnswerOption.BALL, AnswerOption.CAR, AnswerOption.MAN, AnswerOption.TREE);
         Collections.shuffle(answerOptions);
         return answerOptions.stream().map(Enum::name).collect(Collectors.toList());
+    }
+
+    @Override
+    public int getScore(UserAnswer userAnswer) {
+        return AnswerOption.valueOf(userAnswer.getAnswerText()) == AnswerOption.CAR ? 1 : 0;
     }
 }

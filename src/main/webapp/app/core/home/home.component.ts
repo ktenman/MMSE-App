@@ -1,14 +1,14 @@
 import {ComputedRef, defineComponent, inject, onMounted, ref, watch} from 'vue';
-
 import {useI18n} from 'vue-i18n';
 import LoginService from '@/account/login.service';
 import {IQuestion} from "@/shared/model/question.model";
 import QuestionService from "@/entities/question/question.service";
 import {Answer, IAnswer} from "@/shared/model/answer.model";
 import {QuestionId} from "@/shared/model/enumerations/question-id.model";
+import {QuestionType} from "@/shared/model/enumerations/question-type.model";
 
 export default defineComponent({
-  compatConfig: { MODE: 3 },
+  compatConfig: {MODE: 3},
   setup() {
     const [
       loginService,
@@ -16,6 +16,7 @@ export default defineComponent({
       username,
       question,
       selectedAnswer,
+      selectedAnswers,
       quizEndMessage
     ] = [
       inject<LoginService>('loginService'),
@@ -23,6 +24,7 @@ export default defineComponent({
       inject<ComputedRef<string>>('currentUsername'),
       ref<IQuestion | null>(null),
       ref<string | null>(null),
+      ref<Array<number | null>>([]),
       ref<string | null>(null)
     ];
 
@@ -30,12 +32,27 @@ export default defineComponent({
 
     const openLogin = () => loginService.openLogin();
 
-    const createAnswer = (selected: string, questionId: QuestionId): IAnswer =>
-      new Answer(selected, questionId);
+    const createAnswer = (selected: string | Array<number | null>, questionId: QuestionId): IAnswer => {
+      if (typeof selected === 'string') {
+        return new Answer(selected, questionId);
+      } else {
+        return new Answer(selected.join(','), questionId);
+      }
+    };
 
     const submitAnswer = async () => {
-      if (selectedAnswer.value && question.value) {
-        const answer = createAnswer(selectedAnswer.value, question.value.questionId as QuestionId);
+      if (question.value) {
+        let answer: IAnswer;
+
+        if (question.value.questionType === QuestionType.MULTIPLE_CHOICE && selectedAnswer.value) {
+          answer = createAnswer(selectedAnswer.value, question.value.questionId as QuestionId);
+        } else if (question.value.questionType === QuestionType.SUBTRACTION_TASK && selectedAnswers.value) {
+          answer = createAnswer(selectedAnswers.value, question.value.questionId as QuestionId);
+        } else {
+          // Neither condition met - possibly display an error message here
+          return;
+        }
+
         const response = await questionService.submitAnswer(answer);
 
         if (typeof response === 'string') {
@@ -43,10 +60,12 @@ export default defineComponent({
           question.value = null;
         } else {
           question.value = response;
+          selectedAnswers.value = [];
           selectedAnswer.value = null;
         }
       }
     };
+
 
     const retakeTest = async () => {
       const response = await questionService.retakeTest();
@@ -56,7 +75,7 @@ export default defineComponent({
       } else {
         question.value = response;
         quizEndMessage.value = null; // clear end message
-        selectedAnswer.value = null; // clear selected answer
+        selectedAnswers.value = []; // clear selected answer, initialize to empty array instead of null
       }
     };
 
@@ -92,6 +111,7 @@ export default defineComponent({
       t$: useI18n().t,
       question,
       selectedAnswer,
+      selectedAnswers,
       submitAnswer,
       quizEndMessage,
       retakeTest

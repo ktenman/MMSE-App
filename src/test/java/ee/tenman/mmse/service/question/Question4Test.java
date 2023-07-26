@@ -44,25 +44,20 @@ class Question4Test {
     @Test
     void testIsAnswerCorrect_whenTrue() {
         userAnswer.setAnswerText("2023");
-        assertThat(question4.isAnswerCorrect(userAnswer)).isTrue();
+        assertThat(question4.getScore(userAnswer)).isOne();
     }
 
     @ParameterizedTest
     @NullAndEmptySource
     void testIsAnswerCorrect_whenFalse(String answerText) {
         userAnswer.setAnswerText(answerText);
-        assertThat(question4.isAnswerCorrect(userAnswer)).isFalse();
+        assertThat(question4.getScore(userAnswer)).isZero();
     }
 
     @Test
     void testIsAnswerCorrect_whenFalse() {
         userAnswer.setAnswerText("2024");
-        assertThat(question4.isAnswerCorrect(userAnswer)).isFalse();
-    }
-
-    @Test
-    void testGetScore() {
-        assertThat(question4.getScore()).isEqualTo(1);
+        assertThat(question4.getScore(userAnswer)).isZero();
     }
 
     @Test

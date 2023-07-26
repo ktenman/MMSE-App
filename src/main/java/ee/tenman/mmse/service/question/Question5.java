@@ -2,6 +2,7 @@ package ee.tenman.mmse.service.question;
 
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
+import ee.tenman.mmse.domain.enumeration.QuestionType;
 import org.springframework.stereotype.Component;
 
 import java.time.Month;
@@ -41,17 +42,13 @@ public class Question5 implements Question {
     }
 
     @Override
-    public boolean isAnswerCorrect(UserAnswer userAnswer) {
-        ZonedDateTime zonedDateTime = userAnswer.getCreatedAt().atZone(ZoneId.systemDefault());
-        Month month = Month.from(zonedDateTime);
-        String season = getSeasonFromMonth(month);
-
-        return season.equalsIgnoreCase(userAnswer.getAnswerText());
+    public QuestionId getQuestionId() {
+        return this.questionId;
     }
 
     @Override
-    public QuestionId getQuestionId() {
-        return this.questionId;
+    public QuestionType getQuestionType() {
+        return QuestionType.MULTIPLE_CHOICE;
     }
 
     @Override
@@ -59,6 +56,15 @@ public class Question5 implements Question {
         List<String> answerOptions = Arrays.asList(SPRING, SUMMER, AUTUMN, WINTER);
         Collections.shuffle(answerOptions);
         return answerOptions;
+    }
+
+    @Override
+    public int getScore(UserAnswer userAnswer) {
+        ZonedDateTime zonedDateTime = userAnswer.getCreatedAt().atZone(ZoneId.systemDefault());
+        Month month = Month.from(zonedDateTime);
+        String season = getSeasonFromMonth(month);
+
+        return season.equalsIgnoreCase(userAnswer.getAnswerText()) ? 1 : 0;
     }
 
     String getSeasonFromMonth(Month month) {

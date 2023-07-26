@@ -24,14 +24,18 @@
           </b-button>
         </div>
 
+        <!-- Conditionally show multiple choice or input fields based on question type -->
         <div v-if="question && authenticated">
+
           <h2>{{ question.questionText }}</h2>
           <div v-if="question.image" class="image-container">
             <img :src="'data:image/png;base64,' + question.image" alt="Question image" class="question-image">
           </div>
 
-          <div class="row">
-            <div class="col-md-6" v-for="(option, index) in question.answerOptions" :key="index">
+          <!-- Render this div if question type is multiple choice -->
+          <div v-if="question.questionType === 'MULTIPLE_CHOICE'">
+            <div class="row">
+              <div class="col-md-6" v-for="(option, index) in question.answerOptions" :key="index">
               <b-button
                 :pressed="selectedAnswer === option"
                 variant="outline-primary"
@@ -40,6 +44,16 @@
               >
                 {{ option.toLowerCase() }}
               </b-button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Render this div if question type is subtraction task -->
+          <div v-if="question.questionType === 'SUBTRACTION_TASK'">
+            <div class="row">
+              <div class="col-md-6" v-for="(option, index) in question.answerOptions" :key="index">
+                <input type="number" :min="option.min" :max="option.max" v-model="selectedAnswers[index]" class="form-control">
+              </div>
             </div>
           </div>
 
@@ -47,10 +61,12 @@
             @click="submitAnswer"
             variant="primary"
             class="mt-3"
-            :disabled="!selectedAnswer">
+            :disabled="!selectedAnswers.every(answer => answer !== null)">
             Next
           </b-button>
+
         </div>
+
 
         <div class="alert alert-warning" v-if="!authenticated">
           <span v-text="t$('global.messages.info.authenticated.prefix')"></span>

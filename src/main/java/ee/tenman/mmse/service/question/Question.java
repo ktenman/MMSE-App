@@ -2,6 +2,7 @@ package ee.tenman.mmse.service.question;
 
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
+import ee.tenman.mmse.domain.enumeration.QuestionType;
 import org.apache.commons.compress.utils.IOUtils;
 
 import java.io.FileNotFoundException;
@@ -15,11 +16,11 @@ public interface Question {
 
     String getImage();
 
-    boolean isAnswerCorrect(UserAnswer userAnswer);
-
     QuestionId getQuestionId();
 
-    List<String> getAnswerOptions();
+    QuestionType getQuestionType();
+
+    List<?> getAnswerOptions();
 
     default String convertImageToBase64(String imagePath) {
         try {
@@ -36,7 +37,6 @@ public interface Question {
         return null;
     }
 
-    default int getScore() {
-        return 1;
-    }
+    int getScore(UserAnswer userAnswer);
+
 }

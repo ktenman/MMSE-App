@@ -34,23 +34,18 @@ class Question1Test {
 
     @ParameterizedTest
     @EnumSource(value = DayOfWeek.class, mode = EnumSource.Mode.INCLUDE, names = { "SUNDAY" })
-    void testIsAnswerCorrect_whenTrue(DayOfWeek dayOfWeek) {
+    void testGetScore_whenCorrect(DayOfWeek dayOfWeek) {
         userAnswer.setAnswerText(dayOfWeek.name());
 
-        assertThat(question1.isAnswerCorrect(userAnswer)).isTrue();
+        assertThat(question1.getScore(userAnswer)).isOne();
     }
 
     @ParameterizedTest
     @EnumSource(value = DayOfWeek.class, mode = EnumSource.Mode.EXCLUDE, names = { "SUNDAY" })
-    void testIsAnswerCorrect_whenFalse(DayOfWeek dayOfWeek) {
+    void testGetScore_whenIncorrect(DayOfWeek dayOfWeek) {
         userAnswer.setAnswerText(dayOfWeek.name());
 
-        assertThat(question1.isAnswerCorrect(userAnswer)).isFalse();
-    }
-
-    @Test
-    void testGetScore() {
-        assertThat(question1.getScore()).isEqualTo(1);
+        assertThat(question1.getScore(userAnswer)).isZero();
     }
 
     @Test

@@ -2,6 +2,7 @@ package ee.tenman.mmse.service.question;
 
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
+import ee.tenman.mmse.domain.enumeration.QuestionType;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
@@ -32,15 +33,13 @@ public class Question4 implements Question {
     }
 
     @Override
-    public boolean isAnswerCorrect(UserAnswer userAnswer) {
-        ZonedDateTime zonedDateTime = userAnswer.getCreatedAt().atZone(ZoneId.systemDefault());
-        int year = zonedDateTime.getYear();
-        return String.valueOf(year).equals(userAnswer.getAnswerText());
+    public QuestionId getQuestionId() {
+        return this.questionId;
     }
 
     @Override
-    public QuestionId getQuestionId() {
-        return this.questionId;
+    public QuestionType getQuestionType() {
+        return QuestionType.MULTIPLE_CHOICE;
     }
 
     @Override
@@ -53,5 +52,12 @@ public class Question4 implements Question {
         Collections.shuffle(answerOptions);
 
         return answerOptions;
+    }
+
+    @Override
+    public int getScore(UserAnswer userAnswer) {
+        ZonedDateTime zonedDateTime = userAnswer.getCreatedAt().atZone(ZoneId.systemDefault());
+        int year = zonedDateTime.getYear();
+        return String.valueOf(year).equals(userAnswer.getAnswerText()) ? 1 : 0;
     }
 }
