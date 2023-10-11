@@ -51,10 +51,8 @@ public class QuizService {
             if (answeredQuestions.contains(question.getQuestionId())) {
                 continue;
             }
-
-
-                totalScore += question.getScore(userAnswer);
-                answeredQuestions.add(question.getQuestionId()); // mark the question as answered
+            totalScore += question.getScore(userAnswer);
+            answeredQuestions.add(question.getQuestionId()); // mark the question as answered
         }
         return totalScore;
     }

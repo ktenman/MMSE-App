@@ -1,11 +1,11 @@
-import {ComputedRef, defineComponent, inject, onMounted, ref, watch} from 'vue';
-import {useI18n} from 'vue-i18n';
-import LoginService from '@/account/login.service';
-import {IQuestion} from "@/shared/model/question.model";
+import { ComputedRef, defineComponent, inject, onMounted, ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import LoginService from "@/account/login.service";
+import { IQuestion } from "@/shared/model/question.model";
 import QuestionService from "@/entities/question/question.service";
-import {Answer, IAnswer} from "@/shared/model/answer.model";
-import {QuestionId} from "@/shared/model/enumerations/question-id.model";
-import {QuestionType} from "@/shared/model/enumerations/question-type.model";
+import { Answer, IAnswer } from "@/shared/model/answer.model";
+import { QuestionId } from "@/shared/model/enumerations/question-id.model";
+import { QuestionType } from "@/shared/model/enumerations/question-type.model";
 
 export default defineComponent({
   compatConfig: {MODE: 3},
@@ -32,11 +32,11 @@ export default defineComponent({
 
     const openLogin = () => loginService.openLogin();
 
-    const createAnswer = (selected: string | Array<number | null>, questionId: QuestionId): IAnswer => {
-      if (typeof selected === 'string') {
-        return new Answer(selected, questionId);
+    const createAnswer = (answerText: string | Array<number | null>, questionId: QuestionId): IAnswer => {
+      if (typeof answerText === 'string') {
+        return new Answer(answerText, questionId);
       } else {
-        return new Answer(selected.join(','), questionId);
+        return new Answer(answerText.join(','), questionId);
       }
     };
 
@@ -44,7 +44,8 @@ export default defineComponent({
       if (question.value) {
         let answer: IAnswer;
 
-        if (question.value.questionType === QuestionType.MULTIPLE_CHOICE && selectedAnswer.value) {
+        if (question.value.questionType === QuestionType.MULTIPLE_CHOICE && selectedAnswer.value ||
+          question.value.questionType === QuestionType.TEXT_INPUT && selectedAnswers.value) {
           answer = createAnswer(selectedAnswer.value, question.value.questionId as QuestionId);
         } else if (question.value.questionType === QuestionType.SUBTRACTION_TASK && selectedAnswers.value) {
           answer = createAnswer(selectedAnswers.value, question.value.questionId as QuestionId);
@@ -65,7 +66,6 @@ export default defineComponent({
         }
       }
     };
-
 
     const retakeTest = async () => {
       const response = await questionService.retakeTest();

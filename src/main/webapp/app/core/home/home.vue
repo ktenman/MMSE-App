@@ -57,6 +57,14 @@
             </div>
           </div>
 
+          <div v-if="question.questionType === 'TEXT_INPUT'">
+            <div class="row">
+              <div class="col-md-6">
+                <input type="text" v-model="selectedAnswer" class="form-control">
+              </div>
+            </div>
+          </div>
+
           <b-button
             @click="submitAnswer"
             variant="primary"
