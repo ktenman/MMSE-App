@@ -51,7 +51,9 @@ class Question9Test {
             arguments("93,86,79,72,65,58", 5),
             arguments("100,93,86,79,72", 4),
             arguments("100,93,86,79,79", 3),
-            arguments("90,83,76,69,62", 0)
+            arguments("90,83,76,69,62", 0),
+            arguments("90,83,76,,62", 0),
+            arguments("93,83,76,,62", 1)
         );
     }
 
