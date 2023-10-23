@@ -1,27 +1,27 @@
-import {computed, defineComponent, inject, ref, Ref} from 'vue';
-import {useI18n} from 'vue-i18n';
+import { computed, defineComponent, inject, ref, Ref } from "vue";
+import { useI18n } from "vue-i18n";
 
-import {orderAndFilterBy} from '@/shared/computables';
-import ConfigurationService from './configuration.service';
+import { orderAndFilterBy } from "@/shared/computables";
+import ConfigurationService from "./configuration.service";
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
-  name: 'MmseConfiguration',
+  name: "MmseConfiguration",
   setup() {
-    const configurationService = inject('configurationService', () => new ConfigurationService(), true);
+    const configurationService = inject("configurationService", () => new ConfigurationService(), true);
 
-    const orderProp = ref('prefix');
+    const orderProp = ref("prefix");
     const reverse = ref(false);
     const allConfiguration: Ref<any> = ref({});
     const configuration: Ref<any[]> = ref([]);
     const configKeys: Ref<any[]> = ref([]);
-    const filtered = ref('');
+    const filtered = ref("");
 
     const filteredConfiguration = computed(() =>
       orderAndFilterBy(configuration.value, {
         filterByTerm: filtered.value,
         orderByProp: orderProp.value,
-        reverse: reverse.value,
+        reverse: reverse.value
       })
     );
 
@@ -34,7 +34,7 @@ export default defineComponent({
       configKeys,
       filtered,
       filteredConfiguration,
-      t$: useI18n().t,
+      t$: useI18n().t
     };
   },
   mounted() {
@@ -62,6 +62,6 @@ export default defineComponent({
     },
     keys(dict: any): string[] {
       return dict === undefined ? [] : Object.keys(dict);
-    },
-  },
+    }
+  }
 });

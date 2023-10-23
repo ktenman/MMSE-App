@@ -8,14 +8,17 @@
 
         <div class="alert alert-danger" role="alert" v-if="error" v-html="t$('register.messages.error.fail')"></div>
 
-        <div class="alert alert-danger" role="alert" v-if="errorUserExists" v-html="t$('register.messages.error.userexists')"></div>
+        <div class="alert alert-danger" role="alert" v-if="errorUserExists"
+             v-html="t$('register.messages.error.userexists')"></div>
 
-        <div class="alert alert-danger" role="alert" v-if="errorEmailExists" v-html="t$('register.messages.error.emailexists')"></div>
+        <div class="alert alert-danger" role="alert" v-if="errorEmailExists"
+             v-html="t$('register.messages.error.emailexists')"></div>
       </div>
     </div>
     <div class="row justify-content-center">
       <div class="col-md-8">
-        <form id="register-form" name="registerForm" role="form" v-on:submit.prevent="register()" v-if="!success" no-validate>
+        <form id="register-form" name="registerForm" role="form" v-on:submit.prevent="register()" v-if="!success"
+              no-validate>
           <div class="form-group">
             <label class="form-control-label" for="username" v-text="t$('global.form[\'username.label\']')"></label>
             <input
@@ -95,7 +98,8 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="form-control-label" for="firstPassword" v-text="t$('global.form[\'newpassword.label\']')"></label>
+            <label class="form-control-label" for="firstPassword"
+                   v-text="t$('global.form[\'newpassword.label\']')"></label>
             <input
               type="password"
               class="form-control"
@@ -128,7 +132,8 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="form-control-label" for="secondPassword" v-text="t$('global.form[\'confirmpassword.label\']')"></label>
+            <label class="form-control-label" for="secondPassword"
+                   v-text="t$('global.form[\'confirmpassword.label\']')"></label>
             <input
               type="password"
               class="form-control"

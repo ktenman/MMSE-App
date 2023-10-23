@@ -6,7 +6,9 @@
     {
       "fieldName": "createdAt",
       "fieldType": "Instant",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "updatedAt",
@@ -30,7 +32,9 @@
       "relationshipName": "user",
       "relationshipSide": "left",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"]
+      "relationshipValidateRules": [
+        "required"
+      ]
     }
   ],
   "searchEngine": "no",

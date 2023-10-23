@@ -25,7 +25,8 @@
         <div v-if="!keyMissing">
           <form v-if="!success" name="form" role="form" v-on:submit.prevent="finishReset()">
             <div class="form-group">
-              <label class="form-control-label" for="newPassword" v-text="t$('global.form[\'newpassword.label\']')"></label>
+              <label class="form-control-label" for="newPassword"
+                     v-text="t$('global.form[\'newpassword.label\']')"></label>
               <input
                 type="password"
                 class="form-control"
@@ -58,7 +59,8 @@
               </div>
             </div>
             <div class="form-group">
-              <label class="form-control-label" for="confirmPassword" v-text="t$('global.form[\'confirmpassword.label\']')"></label>
+              <label class="form-control-label" for="confirmPassword"
+                     v-text="t$('global.form[\'confirmpassword.label\']')"></label>
               <input
                 type="password"
                 class="form-control"

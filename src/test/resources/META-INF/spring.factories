@@ -1,2 +1,2 @@
-org.springframework.test.context.ContextCustomizerFactory = ee.tenman.mmse.\
+org.springframework.test.context.ContextCustomizerFactory=ee.tenman.mmse.\
     config.SqlTestContainersSpringContextCustomizerFactory

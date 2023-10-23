@@ -1,8 +1,8 @@
-import {defineComponent, ref, Ref} from 'vue';
-import {useI18n} from 'vue-i18n';
-import {useVuelidate} from '@vuelidate/core';
-import {email, maxLength, minLength, required} from '@vuelidate/validators';
-import axios from 'axios';
+import { defineComponent, ref, Ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { useVuelidate } from "@vuelidate/core";
+import { email, maxLength, minLength, required } from "@vuelidate/validators";
+import axios from "axios";
 
 const validations = {
   resetAccount: {
@@ -10,9 +10,9 @@ const validations = {
       required,
       minLength: minLength(5),
       maxLength: maxLength(254),
-      email,
-    },
-  },
+      email
+    }
+  }
 };
 
 interface ResetAccount {
@@ -21,13 +21,13 @@ interface ResetAccount {
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
-  name: 'ResetPasswordInit',
+  name: "ResetPasswordInit",
   validations,
   setup(prop) {
     const error: Ref<string> = ref(null);
     const success: Ref<boolean> = ref(false);
     const resetAccount: Ref<ResetAccount> = ref({
-      email: null,
+      email: null
     });
 
     return {
@@ -35,7 +35,7 @@ export default defineComponent({
       success,
       resetAccount,
       v$: useVuelidate(),
-      t$: useI18n().t,
+      t$: useI18n().t
     };
   },
   methods: {
@@ -43,18 +43,18 @@ export default defineComponent({
       this.error = null;
       this.success = false;
       await axios
-        .post('api/account/reset-password/init', this.resetAccount.email, {
+        .post("api/account/reset-password/init", this.resetAccount.email, {
           headers: {
-            'content-type': 'text/plain',
-          },
+            "content-type": "text/plain"
+          }
         })
         .then(() => {
           this.success = true;
         })
         .catch(() => {
           this.success = false;
-          this.error = 'ERROR';
+          this.error = "ERROR";
         });
-    },
-  },
+    }
+  }
 });

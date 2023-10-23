@@ -1,6 +1,6 @@
-import axios from 'axios';
+import axios from "axios";
 
-const baseApiUrl = 'api/users';
+const baseApiUrl = "api/users";
 
 export default class UserService {
   public retrieve(): Promise<any> {

@@ -13,14 +13,14 @@
       aria-expanded="false"
       aria-label="Toggle navigation"
     >
-      <font-awesome-icon icon="bars"/>
+      <font-awesome-icon icon="bars" />
     </b-navbar-toggle>
 
     <b-collapse is-nav id="header-tabs">
       <b-navbar-nav class="ml-auto">
         <b-nav-item to="/" exact>
           <span>
-            <font-awesome-icon icon="home"/>
+            <font-awesome-icon icon="home" />
             <span v-text="t$('global.menu.home')"></span>
           </span>
         </b-nav-item>
@@ -28,7 +28,7 @@
                              data-cy="entity">
           <template #button-content>
             <span class="navbar-dropdown-menu">
-              <font-awesome-icon icon="th-list"/>
+              <font-awesome-icon icon="th-list" />
               <span class="no-bold" v-text="t$('global.menu.entities.main')"></span>
             </span>
           </template>
@@ -46,38 +46,38 @@
         >
           <template #button-content>
             <span class="navbar-dropdown-menu">
-              <font-awesome-icon icon="users-cog"/>
+              <font-awesome-icon icon="users-cog" />
               <span class="no-bold" v-text="t$('global.menu.admin.main')"></span>
             </span>
           </template>
           <b-dropdown-item to="/admin/user-management" active-class="active">
-            <font-awesome-icon icon="users"/>
+            <font-awesome-icon icon="users" />
             <span v-text="t$('global.menu.admin.userManagement')"></span>
           </b-dropdown-item>
           <b-dropdown-item to="/admin/metrics" active-class="active">
-            <font-awesome-icon icon="tachometer-alt"/>
+            <font-awesome-icon icon="tachometer-alt" />
             <span v-text="t$('global.menu.admin.metrics')"></span>
           </b-dropdown-item>
           <b-dropdown-item to="/admin/health" active-class="active">
-            <font-awesome-icon icon="heart"/>
+            <font-awesome-icon icon="heart" />
             <span v-text="t$('global.menu.admin.health')"></span>
           </b-dropdown-item>
           <b-dropdown-item to="/admin/configuration" active-class="active">
-            <font-awesome-icon icon="cogs"/>
+            <font-awesome-icon icon="cogs" />
             <span v-text="t$('global.menu.admin.configuration')"></span>
           </b-dropdown-item>
           <b-dropdown-item to="/admin/logs" active-class="active">
-            <font-awesome-icon icon="tasks"/>
+            <font-awesome-icon icon="tasks" />
             <span v-text="t$('global.menu.admin.logs')"></span>
           </b-dropdown-item>
           <b-dropdown-item v-if="openAPIEnabled" to="/admin/docs" active-class="active">
-            <font-awesome-icon icon="book"/>
+            <font-awesome-icon icon="book" />
             <span v-text="t$('global.menu.admin.apidocs')"></span>
           </b-dropdown-item>
         </b-nav-item-dropdown>
         <b-nav-item-dropdown id="languagesnavBarDropdown" right v-if="languages && Object.keys(languages).length > 1">
           <template #button-content>
-            <font-awesome-icon icon="flag"/>
+            <font-awesome-icon icon="flag" />
             <span class="no-bold" v-text="t$('global.menu.language')"></span>
           </template>
           <b-dropdown-item
@@ -100,30 +100,30 @@
         >
           <template #button-content>
             <span class="navbar-dropdown-menu">
-              <font-awesome-icon icon="user"/>
+              <font-awesome-icon icon="user" />
               <span class="no-bold" v-text="t$('global.menu.account.main')"></span>
             </span>
           </template>
           <b-dropdown-item data-cy="settings" to="/account/settings" v-if="authenticated" active-class="active">
-            <font-awesome-icon icon="wrench"/>
+            <font-awesome-icon icon="wrench" />
             <span v-text="t$('global.menu.account.settings')"></span>
           </b-dropdown-item>
           <b-dropdown-item data-cy="passwordItem" to="/account/password" v-if="authenticated" active-class="active">
-            <font-awesome-icon icon="lock"/>
+            <font-awesome-icon icon="lock" />
             <span v-text="t$('global.menu.account.password')"></span>
           </b-dropdown-item>
           <b-dropdown-item data-cy="logout" v-if="authenticated" v-on:click="logout()" id="logout"
                            active-class="active">
-            <font-awesome-icon icon="sign-out-alt"/>
+            <font-awesome-icon icon="sign-out-alt" />
             <span v-text="t$('global.menu.account.logout')"></span>
           </b-dropdown-item>
           <b-dropdown-item data-cy="login" v-if="!authenticated" v-on:click="openLogin()" id="login"
                            active-class="active">
-            <font-awesome-icon icon="sign-in-alt"/>
+            <font-awesome-icon icon="sign-in-alt" />
             <span v-text="t$('global.menu.account.login')"></span>
           </b-dropdown-item>
           <b-dropdown-item data-cy="register" to="/register" id="register" v-if="!authenticated" active-class="active">
-            <font-awesome-icon icon="user-plus"/>
+            <font-awesome-icon icon="user-plus" />
             <span v-text="t$('global.menu.account.register')"></span>
           </b-dropdown-item>
         </b-nav-item-dropdown>

@@ -11,5 +11,6 @@ export class Question implements IQuestion {
     public questionText?: string,
     public answerOptions?: string[] | null,
     public image?: string | null
-  ) {}
+  ) {
+  }
 }

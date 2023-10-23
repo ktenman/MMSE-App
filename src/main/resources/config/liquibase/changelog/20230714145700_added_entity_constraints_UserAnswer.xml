@@ -13,6 +13,6 @@
                                  constraintName="fk_user_answer__test_entity_id"
                                  referencedColumnNames="id"
                                  referencedTableName="test_entity"
-                                 />
+        />
     </changeSet>
 </databaseChangeLog>

@@ -1,8 +1,8 @@
-import axios from 'axios';
+import axios from "axios";
 
 const TIMEOUT = 1000000;
 const onRequestSuccess = config => {
-  const token = localStorage.getItem('mmse-authenticationToken') || sessionStorage.getItem('mmse-authenticationToken');
+  const token = localStorage.getItem("mmse-authenticationToken") || sessionStorage.getItem("mmse-authenticationToken");
   if (token) {
     if (!config.headers) {
       config.headers = {};

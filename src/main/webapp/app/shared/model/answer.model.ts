@@ -1,4 +1,4 @@
-import {QuestionId} from "@/shared/model/enumerations/question-id.model";
+import { QuestionId } from "@/shared/model/enumerations/question-id.model";
 
 export interface IAnswer {
   answerText?: string;
@@ -9,5 +9,6 @@ export class Answer implements IAnswer {
   constructor(
     public answerText?: string,
     public questionId?: QuestionId
-  ) {}
+  ) {
+  }
 }

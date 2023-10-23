@@ -1,19 +1,19 @@
 <template>
   <div class="modal-body">
     <span class="badge badge-primary" v-on:click="threadDumpFilter = ''"
-      >All&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpData.threadDumpAll }}</span></span
+    >All&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpData.threadDumpAll }}</span></span
     >&nbsp;
     <span class="badge badge-success" v-on:click="threadDumpFilter = 'RUNNABLE'"
-      >Runnable&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpData.threadDumpRunnable }}</span></span
+    >Runnable&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpData.threadDumpRunnable }}</span></span
     >&nbsp;
     <span class="badge badge-info" v-on:click="threadDumpFilter = 'WAITING'"
-      >Waiting&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpData.threadDumpWaiting }}</span></span
+    >Waiting&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpData.threadDumpWaiting }}</span></span
     >&nbsp;
     <span class="badge badge-warning" v-on:click="threadDumpFilter = 'TIMED_WAITING'"
-      >Timed Waiting&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpData.threadDumpTimedWaiting }}</span></span
+    >Timed Waiting&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpData.threadDumpTimedWaiting }}</span></span
     >&nbsp;
     <span class="badge badge-danger" v-on:click="threadDumpFilter = 'BLOCKED'"
-      >Blocked&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpData.threadDumpBlocked }}</span></span
+    >Blocked&nbsp;<span class="badge badge-pill badge-default">{{ threadDumpData.threadDumpBlocked }}</span></span
     >&nbsp;
     <div class="mt-2">&nbsp;</div>
     Filter
@@ -31,8 +31,8 @@
         <div class="card-body">
           <div v-for="(st, key) of entry.stackTrace" :key="key" class="break">
             <samp
-              >{{ st.className }}.{{ st.methodName }}(<code>{{ st.fileName }}:{{ st.lineNumber }}</code
-              >)</samp
+            >{{ st.className }}.{{ st.methodName }}(<code>{{ st.fileName }}:{{ st.lineNumber }}</code
+            >)</samp
             >
             <span class="mt-1"></span>
           </div>
@@ -40,24 +40,24 @@
       </div>
       <table class="table table-sm table-responsive" aria-describedby="Metrics">
         <thead>
-          <tr>
-            <th v-text="t$('metrics.jvm.threads.dump.blockedtime')" scope="col"></th>
-            <th v-text="t$('metrics.jvm.threads.dump.blockedcount')" scope="col"></th>
-            <th v-text="t$('metrics.jvm.threads.dump.waitedtime')" scope="col"></th>
-            <th v-text="t$('metrics.jvm.threads.dump.waitedcount')" scope="col"></th>
-            <th v-text="t$('metrics.jvm.threads.dump.lockname')" scope="col"></th>
-          </tr>
+        <tr>
+          <th v-text="t$('metrics.jvm.threads.dump.blockedtime')" scope="col"></th>
+          <th v-text="t$('metrics.jvm.threads.dump.blockedcount')" scope="col"></th>
+          <th v-text="t$('metrics.jvm.threads.dump.waitedtime')" scope="col"></th>
+          <th v-text="t$('metrics.jvm.threads.dump.waitedcount')" scope="col"></th>
+          <th v-text="t$('metrics.jvm.threads.dump.lockname')" scope="col"></th>
+        </tr>
         </thead>
         <tbody>
-          <tr>
-            <td>{{ entry.blockedTime }}</td>
-            <td>{{ entry.blockedCount }}</td>
-            <td>{{ entry.waitedTime }}</td>
-            <td>{{ entry.waitedCount }}</td>
-            <td class="thread-dump-modal-lock" :title="entry.lockName">
-              <code>{{ entry.lockName }}</code>
-            </td>
-          </tr>
+        <tr>
+          <td>{{ entry.blockedTime }}</td>
+          <td>{{ entry.blockedCount }}</td>
+          <td>{{ entry.waitedTime }}</td>
+          <td>{{ entry.waitedCount }}</td>
+          <td class="thread-dump-modal-lock" :title="entry.lockName">
+            <code>{{ entry.lockName }}</code>
+          </td>
+        </tr>
         </tbody>
       </table>
     </div>

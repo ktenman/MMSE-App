@@ -8,7 +8,7 @@ import { QuestionId } from "@/shared/model/enumerations/question-id.model";
 import { QuestionType } from "@/shared/model/enumerations/question-type.model";
 
 export default defineComponent({
-  compatConfig: {MODE: 3},
+  compatConfig: { MODE: 3 },
   setup() {
     const [
       loginService,
@@ -19,9 +19,9 @@ export default defineComponent({
       selectedAnswers,
       quizEndMessage
     ] = [
-      inject<LoginService>('loginService'),
-      inject<ComputedRef<boolean>>('authenticated'),
-      inject<ComputedRef<string>>('currentUsername'),
+      inject<LoginService>("loginService"),
+      inject<ComputedRef<boolean>>("authenticated"),
+      inject<ComputedRef<string>>("currentUsername"),
       ref<IQuestion | null>(null),
       ref<string | null>(null),
       ref<Array<number | null>>([]),
@@ -33,10 +33,10 @@ export default defineComponent({
     const openLogin = () => loginService.openLogin();
 
     const createAnswer = (answerText: string | Array<number | null>, questionId: QuestionId): IAnswer => {
-      if (typeof answerText === 'string') {
+      if (typeof answerText === "string") {
         return new Answer(answerText, questionId);
       } else {
-        return new Answer(answerText.join(','), questionId);
+        return new Answer(answerText.join(","), questionId);
       }
     };
 
@@ -56,7 +56,7 @@ export default defineComponent({
 
         const response = await questionService.submitAnswer(answer);
 
-        if (typeof response === 'string') {
+        if (typeof response === "string") {
           quizEndMessage.value = response;
           question.value = null;
         } else {
@@ -70,7 +70,7 @@ export default defineComponent({
     const retakeTest = async () => {
       const response = await questionService.retakeTest();
 
-      if (typeof response === 'string') {
+      if (typeof response === "string") {
         quizEndMessage.value = response;
       } else {
         question.value = response;
@@ -82,7 +82,7 @@ export default defineComponent({
     const loadQuestion = async () => {
       const response = await questionService.getQuestion();
 
-      if (typeof response === 'string') {
+      if (typeof response === "string") {
         quizEndMessage.value = response;
         question.value = null;
       } else {
@@ -116,5 +116,5 @@ export default defineComponent({
       quizEndMessage,
       retakeTest
     };
-  },
+  }
 });

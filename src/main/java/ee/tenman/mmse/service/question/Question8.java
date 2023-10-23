@@ -14,7 +14,7 @@ import java.util.stream.Collectors;
 @Component
 public class Question8 implements Question {
 
-    private static final String QUESTION_TEXT =  "What is the name of the third object?";
+    private static final String QUESTION_TEXT = "What is the name of the third object?";
     private final QuestionId questionId = QuestionId.QUESTION_8;
 
     @Override

@@ -1,24 +1,24 @@
-import {computed, defineComponent, inject, ref, Ref} from 'vue';
-import {useI18n} from 'vue-i18n';
-import LoginService from '@/account/login.service';
-import type AccountService from '@/account/account.service';
-import languages from '@/shared/config/languages';
-import EntitiesMenu from '@/entities/entities-menu.vue';
+import { computed, defineComponent, inject, ref, Ref } from "vue";
+import { useI18n } from "vue-i18n";
+import LoginService from "@/account/login.service";
+import type AccountService from "@/account/account.service";
+import languages from "@/shared/config/languages";
+import EntitiesMenu from "@/entities/entities-menu.vue";
 
-import {useStore} from '@/store';
-import {useRouter} from 'vue-router';
+import { useStore } from "@/store";
+import { useRouter } from "vue-router";
 
 export default defineComponent({
-  compatConfig: {MODE: 3},
-  name: 'JhiNavbar',
+  compatConfig: { MODE: 3 },
+  name: "JhiNavbar",
   components: {
-    'entities-menu': EntitiesMenu,
+    "entities-menu": EntitiesMenu
   },
   setup() {
-    const loginService = inject<LoginService>('loginService');
-    const accountService = inject<AccountService>('accountService');
-    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
-    const changeLanguage = inject<(string) => Promise<void>>('changeLanguage');
+    const loginService = inject<LoginService>("loginService");
+    const accountService = inject<AccountService>("accountService");
+    const currentLanguage = inject("currentLanguage", () => computed(() => navigator.language ?? "en"), true);
+    const changeLanguage = inject<(string) => Promise<void>>("changeLanguage");
 
     const isActiveLanguage = (key: string) => {
       return key === currentLanguage.value;
@@ -27,11 +27,11 @@ export default defineComponent({
     const router = useRouter();
     const store = useStore();
 
-    const version = 'v' + VERSION;
+    const version = "v" + VERSION;
     const hasAnyAuthorityValues: Ref<any> = ref({});
 
-    const openAPIEnabled = computed(() => store.activeProfiles.indexOf('api-docs') > -1);
-    const inProduction = computed(() => store.activeProfiles.indexOf('prod') > -1);
+    const openAPIEnabled = computed(() => store.activeProfiles.indexOf("api-docs") > -1);
+    const inProduction = computed(() => store.activeProfiles.indexOf("prod") > -1);
     const authenticated = computed(() => store.authenticated);
 
     const openLogin = () => {
@@ -46,11 +46,11 @@ export default defineComponent({
     };
 
     const logout = async () => {
-      localStorage.removeItem('mmse-authenticationToken');
-      sessionStorage.removeItem('mmse-authenticationToken');
+      localStorage.removeItem("mmse-authenticationToken");
+      sessionStorage.removeItem("mmse-authenticationToken");
       store.logout();
-      if (router.currentRoute.value.path !== '/') {
-        router.push('/');
+      if (router.currentRoute.value.path !== "/") {
+        router.push("/");
       }
     };
 
@@ -68,17 +68,17 @@ export default defineComponent({
       openAPIEnabled,
       inProduction,
       authenticated,
-      t$: useI18n().t,
+      t$: useI18n().t
     };
   },
   methods: {
     hasAnyAuthority(authorities: any): boolean {
       this.accountService.hasAnyAuthorityAndCheckAuth(authorities).then(value => {
         if (this.hasAnyAuthorityValues[authorities] !== value) {
-          this.hasAnyAuthorityValues = {...this.hasAnyAuthorityValues, [authorities]: value};
+          this.hasAnyAuthorityValues = { ...this.hasAnyAuthorityValues, [authorities]: value };
         }
       });
       return this.hasAnyAuthorityValues[authorities] ?? false;
-    },
-  },
+    }
+  }
 });

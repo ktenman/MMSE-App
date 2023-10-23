@@ -1,7 +1,7 @@
-import axios from 'axios';
-import { Composer } from 'vue-i18n';
-import dayjs from 'dayjs';
-import languages from '@/shared/config/languages';
+import axios from "axios";
+import { Composer } from "vue-i18n";
+import dayjs from "dayjs";
+import languages from "@/shared/config/languages";
 
 export default class TranslationService {
   private i18n: Composer;
@@ -21,8 +21,8 @@ export default class TranslationService {
   public setLocale(lang: string) {
     dayjs.locale(lang);
     this.i18n.locale.value = lang;
-    axios.defaults.headers.common['Accept-Language'] = lang;
-    document.querySelector('html').setAttribute('lang', lang);
+    axios.defaults.headers.common["Accept-Language"] = lang;
+    document.querySelector("html").setAttribute("lang", lang);
   }
 
   public isLanguageSupported(lang: string) {
@@ -30,6 +30,6 @@ export default class TranslationService {
   }
 
   public getLocalStoreLanguage(): string | null {
-    return localStorage.getItem('currentLanguage');
+    return localStorage.getItem("currentLanguage");
   }
 }

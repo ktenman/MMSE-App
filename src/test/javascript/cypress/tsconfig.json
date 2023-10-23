@@ -5,7 +5,13 @@
     "sourceMap": false,
     "outDir": "../../../../target/cypress/out-tsc",
     "target": "es2018",
-    "types": ["cypress", "node"]
+    "types": [
+      "cypress",
+      "node"
+    ]
   },
-  "include": ["./../../../../cypress*.config.ts", "./**/*.ts"]
+  "include": [
+    "./../../../../cypress*.config.ts",
+    "./**/*.ts"
+  ]
 }

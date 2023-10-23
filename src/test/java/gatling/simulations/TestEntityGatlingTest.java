@@ -78,10 +78,10 @@ public class TestEntityGatlingTest extends Simulation {
                         .body(
                             StringBody(
                                 "{" +
-                                "\"createdAt\": \"2020-01-01T00:00:00.000Z\"" +
-                                ", \"updatedAt\": \"2020-01-01T00:00:00.000Z\"" +
-                                ", \"score\": 0" +
-                                "}"
+                                    "\"createdAt\": \"2020-01-01T00:00:00.000Z\"" +
+                                    ", \"updatedAt\": \"2020-01-01T00:00:00.000Z\"" +
+                                    ", \"score\": 0" +
+                                    "}"
                             )
                         )
                         .asJson()

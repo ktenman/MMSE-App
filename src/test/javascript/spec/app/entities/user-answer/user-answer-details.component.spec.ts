@@ -1,35 +1,35 @@
 /* tslint:disable max-line-length */
-import { vitest } from 'vitest';
-import { shallowMount, MountingOptions } from '@vue/test-utils';
-import sinon, { SinonStubbedInstance } from 'sinon';
-import { RouteLocation } from 'vue-router';
+import { vitest } from "vitest";
+import { MountingOptions, shallowMount } from "@vue/test-utils";
+import sinon, { SinonStubbedInstance } from "sinon";
+import { RouteLocation } from "vue-router";
 
-import UserAnswerDetails from '../../../../../../main/webapp/app/entities/user-answer/user-answer-details.vue';
-import UserAnswerService from '../../../../../../main/webapp/app/entities/user-answer/user-answer.service';
-import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
+import UserAnswerDetails from "../../../../../../main/webapp/app/entities/user-answer/user-answer-details.vue";
+import UserAnswerService from "../../../../../../main/webapp/app/entities/user-answer/user-answer.service";
+import AlertService from "../../../../../../main/webapp/app/shared/alert/alert.service";
 
 type UserAnswerDetailsComponentType = InstanceType<typeof UserAnswerDetails>;
 
 let route: Partial<RouteLocation>;
 const routerGoMock = vitest.fn();
 
-vitest.mock('vue-router', () => ({
+vitest.mock("vue-router", () => ({
   useRoute: () => route,
-  useRouter: () => ({ go: routerGoMock }),
+  useRouter: () => ({ go: routerGoMock })
 }));
 
 const userAnswerSample = { id: 123 };
 
-describe('Component Tests', () => {
+describe("Component Tests", () => {
   let alertService: AlertService;
 
   afterEach(() => {
     vitest.resetAllMocks();
   });
 
-  describe('UserAnswer Management Detail Component', () => {
+  describe("UserAnswer Management Detail Component", () => {
     let userAnswerServiceStub: SinonStubbedInstance<UserAnswerService>;
-    let mountOptions: MountingOptions<UserAnswerDetailsComponentType>['global'];
+    let mountOptions: MountingOptions<UserAnswerDetailsComponentType>["global"];
 
     beforeEach(() => {
       route = {};
@@ -38,30 +38,30 @@ describe('Component Tests', () => {
       alertService = new AlertService({
         i18n: { t: vitest.fn() } as any,
         bvToast: {
-          toast: vitest.fn(),
-        } as any,
+          toast: vitest.fn()
+        } as any
       });
 
       mountOptions = {
         stubs: {
-          'font-awesome-icon': true,
-          'router-link': true,
+          "font-awesome-icon": true,
+          "router-link": true
         },
         provide: {
           alertService,
-          userAnswerService: () => userAnswerServiceStub,
-        },
+          userAnswerService: () => userAnswerServiceStub
+        }
       };
     });
 
-    describe('Navigate to details', () => {
-      it('Should call load all on init', async () => {
+    describe("Navigate to details", () => {
+      it("Should call load all on init", async () => {
         // GIVEN
         userAnswerServiceStub.find.resolves(userAnswerSample);
         route = {
           params: {
-            userAnswerId: '' + 123,
-          },
+            userAnswerId: "" + 123
+          }
         };
         const wrapper = shallowMount(UserAnswerDetails, { global: mountOptions });
         const comp = wrapper.vm;
@@ -73,8 +73,8 @@ describe('Component Tests', () => {
       });
     });
 
-    describe('Previous state', () => {
-      it('Should go previous state', async () => {
+    describe("Previous state", () => {
+      it("Should go previous state", async () => {
         userAnswerServiceStub.find.resolves(userAnswerSample);
         const wrapper = shallowMount(UserAnswerDetails, { global: mountOptions });
         const comp = wrapper.vm;

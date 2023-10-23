@@ -1,28 +1,31 @@
 /* tslint:disable max-line-length */
-import { vitest } from 'vitest';
-import { shallowMount, MountingOptions } from '@vue/test-utils';
-import sinon, { SinonStubbedInstance } from 'sinon';
+import { vitest } from "vitest";
+import { MountingOptions, shallowMount } from "@vue/test-utils";
+import sinon, { SinonStubbedInstance } from "sinon";
 
-import UserAnswer from '../../../../../../main/webapp/app/entities/user-answer/user-answer.vue';
-import UserAnswerService from '../../../../../../main/webapp/app/entities/user-answer/user-answer.service';
-import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
+import UserAnswer from "../../../../../../main/webapp/app/entities/user-answer/user-answer.vue";
+import UserAnswerService from "../../../../../../main/webapp/app/entities/user-answer/user-answer.service";
+import AlertService from "../../../../../../main/webapp/app/shared/alert/alert.service";
 
 type UserAnswerComponentType = InstanceType<typeof UserAnswer>;
 
 const bModalStub = {
-  render: () => {},
-  methods: {
-    hide: () => {},
-    show: () => {},
+  render: () => {
   },
+  methods: {
+    hide: () => {
+    },
+    show: () => {
+    }
+  }
 };
 
-describe('Component Tests', () => {
+describe("Component Tests", () => {
   let alertService: AlertService;
 
-  describe('UserAnswer Management Component', () => {
+  describe("UserAnswer Management Component", () => {
     let userAnswerServiceStub: SinonStubbedInstance<UserAnswerService>;
-    let mountOptions: MountingOptions<UserAnswerComponentType>['global'];
+    let mountOptions: MountingOptions<UserAnswerComponentType>["global"];
 
     beforeEach(() => {
       userAnswerServiceStub = sinon.createStubInstance<UserAnswerService>(UserAnswerService);
@@ -31,8 +34,8 @@ describe('Component Tests', () => {
       alertService = new AlertService({
         i18n: { t: vitest.fn() } as any,
         bvToast: {
-          toast: vitest.fn(),
-        } as any,
+          toast: vitest.fn()
+        } as any
       });
 
       mountOptions = {
@@ -40,24 +43,24 @@ describe('Component Tests', () => {
           jhiItemCount: true,
           bPagination: true,
           bModal: bModalStub as any,
-          'font-awesome-icon': true,
-          'b-badge': true,
-          'jhi-sort-indicator': true,
-          'b-button': true,
-          'router-link': true,
+          "font-awesome-icon": true,
+          "b-badge": true,
+          "jhi-sort-indicator": true,
+          "b-button": true,
+          "router-link": true
         },
         directives: {
-          'b-modal': {},
+          "b-modal": {}
         },
         provide: {
           alertService,
-          userAnswerService: () => userAnswerServiceStub,
-        },
+          userAnswerService: () => userAnswerServiceStub
+        }
       };
     });
 
-    describe('Mount', () => {
-      it('Should call load all on init', async () => {
+    describe("Mount", () => {
+      it("Should call load all on init", async () => {
         // GIVEN
         userAnswerServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
 
@@ -71,7 +74,7 @@ describe('Component Tests', () => {
         expect(comp.userAnswers[0]).toEqual(expect.objectContaining({ id: 123 }));
       });
 
-      it('should calculate the sort attribute for an id', async () => {
+      it("should calculate the sort attribute for an id", async () => {
         // WHEN
         const wrapper = shallowMount(UserAnswer, { global: mountOptions });
         const comp = wrapper.vm;
@@ -79,11 +82,11 @@ describe('Component Tests', () => {
 
         // THEN
         expect(userAnswerServiceStub.retrieve.lastCall.firstArg).toMatchObject({
-          sort: ['id,asc'],
+          sort: ["id,asc"]
         });
       });
     });
-    describe('Handles', () => {
+    describe("Handles", () => {
       let comp: UserAnswerComponentType;
 
       beforeEach(async () => {
@@ -94,7 +97,7 @@ describe('Component Tests', () => {
         userAnswerServiceStub.retrieve.resolves({ headers: {}, data: [] });
       });
 
-      it('should load a page', async () => {
+      it("should load a page", async () => {
         // GIVEN
         userAnswerServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
 
@@ -107,7 +110,7 @@ describe('Component Tests', () => {
         expect(comp.userAnswers[0]).toEqual(expect.objectContaining({ id: 123 }));
       });
 
-      it('should re-initialize the page', async () => {
+      it("should re-initialize the page", async () => {
         // GIVEN
         comp.page = 2;
         await comp.$nextTick();
@@ -124,18 +127,18 @@ describe('Component Tests', () => {
         expect(comp.userAnswers[0]).toEqual(expect.objectContaining({ id: 123 }));
       });
 
-      it('should calculate the sort attribute for a non-id attribute', async () => {
+      it("should calculate the sort attribute for a non-id attribute", async () => {
         // WHEN
-        comp.propOrder = 'name';
+        comp.propOrder = "name";
         await comp.$nextTick();
 
         // THEN
         expect(userAnswerServiceStub.retrieve.lastCall.firstArg).toMatchObject({
-          sort: ['name,asc', 'id'],
+          sort: ["name,asc", "id"]
         });
       });
 
-      it('Should call delete service on confirmDelete', async () => {
+      it("Should call delete service on confirmDelete", async () => {
         // GIVEN
         userAnswerServiceStub.delete.resolves({});
 

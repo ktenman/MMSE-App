@@ -1,11 +1,11 @@
-import axios, { AxiosPromise } from 'axios';
+import axios, { AxiosPromise } from "axios";
 
 export default class MetricsService {
   public getMetrics(): AxiosPromise<any> {
-    return axios.get('management/jhimetrics');
+    return axios.get("management/jhimetrics");
   }
 
   public retrieveThreadDump(): AxiosPromise<any> {
-    return axios.get('management/threaddump');
+    return axios.get("management/threaddump");
   }
 }

@@ -1,32 +1,31 @@
 /* tslint:disable max-line-length */
-import axios from 'axios';
-import sinon from 'sinon';
-import dayjs from 'dayjs';
+import axios from "axios";
+import sinon from "sinon";
+import dayjs from "dayjs";
 
-import { DATE_TIME_FORMAT } from '../../../../../../main/webapp/app/shared/composables/date-format';
-import UserAnswerService from '../../../../../../main/webapp/app/entities/user-answer/user-answer.service';
-import { UserAnswer } from '../../../../../../main/webapp/app/shared/model/user-answer.model';
-import { QuestionId } from '@/shared/model/enumerations/question-id.model';
+import { DATE_TIME_FORMAT } from "../../../../../../main/webapp/app/shared/composables/date-format";
+import UserAnswerService from "../../../../../../main/webapp/app/entities/user-answer/user-answer.service";
+import { UserAnswer } from "../../../../../../main/webapp/app/shared/model/user-answer.model";
 
 const error = {
   response: {
     status: null,
     data: {
-      type: null,
-    },
-  },
+      type: null
+    }
+  }
 };
 
 const axiosStub = {
-  get: sinon.stub(axios, 'get'),
-  post: sinon.stub(axios, 'post'),
-  put: sinon.stub(axios, 'put'),
-  patch: sinon.stub(axios, 'patch'),
-  delete: sinon.stub(axios, 'delete'),
+  get: sinon.stub(axios, "get"),
+  post: sinon.stub(axios, "post"),
+  put: sinon.stub(axios, "put"),
+  patch: sinon.stub(axios, "patch"),
+  delete: sinon.stub(axios, "delete")
 };
 
-describe('Service Tests', () => {
-  describe('UserAnswer Service', () => {
+describe("Service Tests", () => {
+  describe("UserAnswer Service", () => {
     let service: UserAnswerService;
     let elemDefault;
     let currentDate: Date;
@@ -34,15 +33,15 @@ describe('Service Tests', () => {
     beforeEach(() => {
       service = new UserAnswerService();
       currentDate = new Date();
-      elemDefault = new UserAnswer(123, 'AAAAAAA', currentDate, currentDate, 'FIRST');
+      elemDefault = new UserAnswer(123, "AAAAAAA", currentDate, currentDate, "FIRST");
     });
 
-    describe('Service methods', () => {
-      it('should find an element', async () => {
+    describe("Service methods", () => {
+      it("should find an element", async () => {
         const returnedFromService = Object.assign(
           {
             createdAt: dayjs(currentDate).format(DATE_TIME_FORMAT),
-            updatedAt: dayjs(currentDate).format(DATE_TIME_FORMAT),
+            updatedAt: dayjs(currentDate).format(DATE_TIME_FORMAT)
           },
           elemDefault
         );
@@ -53,7 +52,7 @@ describe('Service Tests', () => {
         });
       });
 
-      it('should not find an element', async () => {
+      it("should not find an element", async () => {
         axiosStub.get.rejects(error);
         return service
           .find(123)
@@ -63,19 +62,19 @@ describe('Service Tests', () => {
           });
       });
 
-      it('should create a UserAnswer', async () => {
+      it("should create a UserAnswer", async () => {
         const returnedFromService = Object.assign(
           {
             id: 123,
             createdAt: dayjs(currentDate).format(DATE_TIME_FORMAT),
-            updatedAt: dayjs(currentDate).format(DATE_TIME_FORMAT),
+            updatedAt: dayjs(currentDate).format(DATE_TIME_FORMAT)
           },
           elemDefault
         );
         const expected = Object.assign(
           {
             createdAt: currentDate,
-            updatedAt: currentDate,
+            updatedAt: currentDate
           },
           returnedFromService
         );
@@ -86,7 +85,7 @@ describe('Service Tests', () => {
         });
       });
 
-      it('should not create a UserAnswer', async () => {
+      it("should not create a UserAnswer", async () => {
         axiosStub.post.rejects(error);
 
         return service
@@ -97,13 +96,13 @@ describe('Service Tests', () => {
           });
       });
 
-      it('should update a UserAnswer', async () => {
+      it("should update a UserAnswer", async () => {
         const returnedFromService = Object.assign(
           {
-            answerText: 'BBBBBB',
+            answerText: "BBBBBB",
             createdAt: dayjs(currentDate).format(DATE_TIME_FORMAT),
             updatedAt: dayjs(currentDate).format(DATE_TIME_FORMAT),
-            questionId: 'BBBBBB',
+            questionId: "BBBBBB"
           },
           elemDefault
         );
@@ -111,7 +110,7 @@ describe('Service Tests', () => {
         const expected = Object.assign(
           {
             createdAt: currentDate,
-            updatedAt: currentDate,
+            updatedAt: currentDate
           },
           returnedFromService
         );
@@ -122,7 +121,7 @@ describe('Service Tests', () => {
         });
       });
 
-      it('should not update a UserAnswer', async () => {
+      it("should not update a UserAnswer", async () => {
         axiosStub.put.rejects(error);
 
         return service
@@ -133,11 +132,11 @@ describe('Service Tests', () => {
           });
       });
 
-      it('should partial update a UserAnswer', async () => {
+      it("should partial update a UserAnswer", async () => {
         const patchObject = Object.assign(
           {
-            answerText: 'BBBBBB',
-            updatedAt: dayjs(currentDate).format(DATE_TIME_FORMAT),
+            answerText: "BBBBBB",
+            updatedAt: dayjs(currentDate).format(DATE_TIME_FORMAT)
           },
           new UserAnswer()
         );
@@ -146,7 +145,7 @@ describe('Service Tests', () => {
         const expected = Object.assign(
           {
             createdAt: currentDate,
-            updatedAt: currentDate,
+            updatedAt: currentDate
           },
           returnedFromService
         );
@@ -157,7 +156,7 @@ describe('Service Tests', () => {
         });
       });
 
-      it('should not partial update a UserAnswer', async () => {
+      it("should not partial update a UserAnswer", async () => {
         axiosStub.patch.rejects(error);
 
         return service
@@ -168,20 +167,20 @@ describe('Service Tests', () => {
           });
       });
 
-      it('should return a list of UserAnswer', async () => {
+      it("should return a list of UserAnswer", async () => {
         const returnedFromService = Object.assign(
           {
-            answerText: 'BBBBBB',
+            answerText: "BBBBBB",
             createdAt: dayjs(currentDate).format(DATE_TIME_FORMAT),
             updatedAt: dayjs(currentDate).format(DATE_TIME_FORMAT),
-            questionId: 'BBBBBB',
+            questionId: "BBBBBB"
           },
           elemDefault
         );
         const expected = Object.assign(
           {
             createdAt: currentDate,
-            updatedAt: currentDate,
+            updatedAt: currentDate
           },
           returnedFromService
         );
@@ -191,7 +190,7 @@ describe('Service Tests', () => {
         });
       });
 
-      it('should not return a list of UserAnswer', async () => {
+      it("should not return a list of UserAnswer", async () => {
         axiosStub.get.rejects(error);
 
         return service
@@ -202,14 +201,14 @@ describe('Service Tests', () => {
           });
       });
 
-      it('should delete a UserAnswer', async () => {
+      it("should delete a UserAnswer", async () => {
         axiosStub.delete.resolves({ ok: true });
         return service.delete(123).then(res => {
           expect(res.ok).toBeTruthy();
         });
       });
 
-      it('should not delete a UserAnswer', async () => {
+      it("should not delete a UserAnswer", async () => {
         axiosStub.delete.rejects(error);
 
         return service

@@ -1,6 +1,6 @@
 <template>
   <div id="footer" class="footer">
-<!--    <p v-text="copyright"></p>-->
+    <!--    <p v-text="copyright"></p>-->
   </div>
 </template>
 

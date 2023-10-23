@@ -1,28 +1,31 @@
 /* tslint:disable max-line-length */
-import { vitest } from 'vitest';
-import { shallowMount, MountingOptions } from '@vue/test-utils';
-import sinon, { SinonStubbedInstance } from 'sinon';
+import { vitest } from "vitest";
+import { MountingOptions, shallowMount } from "@vue/test-utils";
+import sinon, { SinonStubbedInstance } from "sinon";
 
-import TestEntity from '../../../../../../main/webapp/app/entities/test-entity/test-entity.vue';
-import TestEntityService from '../../../../../../main/webapp/app/entities/test-entity/test-entity.service';
-import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
+import TestEntity from "../../../../../../main/webapp/app/entities/test-entity/test-entity.vue";
+import TestEntityService from "../../../../../../main/webapp/app/entities/test-entity/test-entity.service";
+import AlertService from "../../../../../../main/webapp/app/shared/alert/alert.service";
 
 type TestEntityComponentType = InstanceType<typeof TestEntity>;
 
 const bModalStub = {
-  render: () => {},
-  methods: {
-    hide: () => {},
-    show: () => {},
+  render: () => {
   },
+  methods: {
+    hide: () => {
+    },
+    show: () => {
+    }
+  }
 };
 
-describe('Component Tests', () => {
+describe("Component Tests", () => {
   let alertService: AlertService;
 
-  describe('TestEntity Management Component', () => {
+  describe("TestEntity Management Component", () => {
     let testEntityServiceStub: SinonStubbedInstance<TestEntityService>;
-    let mountOptions: MountingOptions<TestEntityComponentType>['global'];
+    let mountOptions: MountingOptions<TestEntityComponentType>["global"];
 
     beforeEach(() => {
       testEntityServiceStub = sinon.createStubInstance<TestEntityService>(TestEntityService);
@@ -31,8 +34,8 @@ describe('Component Tests', () => {
       alertService = new AlertService({
         i18n: { t: vitest.fn() } as any,
         bvToast: {
-          toast: vitest.fn(),
-        } as any,
+          toast: vitest.fn()
+        } as any
       });
 
       mountOptions = {
@@ -40,24 +43,24 @@ describe('Component Tests', () => {
           jhiItemCount: true,
           bPagination: true,
           bModal: bModalStub as any,
-          'font-awesome-icon': true,
-          'b-badge': true,
-          'jhi-sort-indicator': true,
-          'b-button': true,
-          'router-link': true,
+          "font-awesome-icon": true,
+          "b-badge": true,
+          "jhi-sort-indicator": true,
+          "b-button": true,
+          "router-link": true
         },
         directives: {
-          'b-modal': {},
+          "b-modal": {}
         },
         provide: {
           alertService,
-          testEntityService: () => testEntityServiceStub,
-        },
+          testEntityService: () => testEntityServiceStub
+        }
       };
     });
 
-    describe('Mount', () => {
-      it('Should call load all on init', async () => {
+    describe("Mount", () => {
+      it("Should call load all on init", async () => {
         // GIVEN
         testEntityServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
 
@@ -71,7 +74,7 @@ describe('Component Tests', () => {
         expect(comp.testEntities[0]).toEqual(expect.objectContaining({ id: 123 }));
       });
 
-      it('should calculate the sort attribute for an id', async () => {
+      it("should calculate the sort attribute for an id", async () => {
         // WHEN
         const wrapper = shallowMount(TestEntity, { global: mountOptions });
         const comp = wrapper.vm;
@@ -79,11 +82,11 @@ describe('Component Tests', () => {
 
         // THEN
         expect(testEntityServiceStub.retrieve.lastCall.firstArg).toMatchObject({
-          sort: ['id,asc'],
+          sort: ["id,asc"]
         });
       });
     });
-    describe('Handles', () => {
+    describe("Handles", () => {
       let comp: TestEntityComponentType;
 
       beforeEach(async () => {
@@ -94,7 +97,7 @@ describe('Component Tests', () => {
         testEntityServiceStub.retrieve.resolves({ headers: {}, data: [] });
       });
 
-      it('should load a page', async () => {
+      it("should load a page", async () => {
         // GIVEN
         testEntityServiceStub.retrieve.resolves({ headers: {}, data: [{ id: 123 }] });
 
@@ -107,7 +110,7 @@ describe('Component Tests', () => {
         expect(comp.testEntities[0]).toEqual(expect.objectContaining({ id: 123 }));
       });
 
-      it('should re-initialize the page', async () => {
+      it("should re-initialize the page", async () => {
         // GIVEN
         comp.page = 2;
         await comp.$nextTick();
@@ -124,18 +127,18 @@ describe('Component Tests', () => {
         expect(comp.testEntities[0]).toEqual(expect.objectContaining({ id: 123 }));
       });
 
-      it('should calculate the sort attribute for a non-id attribute', async () => {
+      it("should calculate the sort attribute for a non-id attribute", async () => {
         // WHEN
-        comp.propOrder = 'name';
+        comp.propOrder = "name";
         await comp.$nextTick();
 
         // THEN
         expect(testEntityServiceStub.retrieve.lastCall.firstArg).toMatchObject({
-          sort: ['name,asc', 'id'],
+          sort: ["name,asc", "id"]
         });
       });
 
-      it('Should call delete service on confirmDelete', async () => {
+      it("Should call delete service on confirmDelete", async () => {
         // GIVEN
         testEntityServiceStub.delete.resolves({});
 

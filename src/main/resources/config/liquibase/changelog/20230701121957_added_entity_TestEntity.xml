@@ -1,10 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <databaseChangeLog
     xmlns="http://www.liquibase.org/xml/ns/dbchangelog"
-    xmlns:ext="http://www.liquibase.org/xml/ns/dbchangelog-ext"
     xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd
-                        http://www.liquibase.org/xml/ns/dbchangelog-ext http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-ext.xsd">
+    xsi:schemaLocation="http://www.liquibase.org/xml/ns/dbchangelog http://www.liquibase.org/xml/ns/dbchangelog/dbchangelog-latest.xsd">
 
     <!--
         Added the entity TestEntity.
@@ -15,16 +13,16 @@
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="created_at" type="${datetimeType}">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <column name="updated_at" type="${datetimeType}">
-                <constraints nullable="true" />
+                <constraints nullable="true"/>
             </column>
             <column name="score" type="integer">
-                <constraints nullable="true" />
+                <constraints nullable="true"/>
             </column>
             <column name="user_id" type="bigint">
-                <constraints nullable="false" />
+                <constraints nullable="false"/>
             </column>
             <!-- jhipster-needle-liquibase-add-column - JHipster will add columns here -->
         </createTable>
@@ -44,10 +42,10 @@
     -->
     <changeSet id="20230701121957-1-data" author="jhipster" context="faker">
         <loadData
-                  file="config/liquibase/fake-data/test_entity.csv"
-                  separator=";"
-                  tableName="test_entity"
-                  usePreparedStatements="true">
+            file="config/liquibase/fake-data/test_entity.csv"
+            separator=";"
+            tableName="test_entity"
+            usePreparedStatements="true">
             <column name="id" type="numeric"/>
             <column name="created_at" type="date"/>
             <column name="updated_at" type="date"/>

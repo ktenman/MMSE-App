@@ -1,5 +1,28 @@
 package ee.tenman.mmse.web.rest;
 
+import ee.tenman.mmse.IntegrationTest;
+import ee.tenman.mmse.domain.TestEntity;
+import ee.tenman.mmse.domain.UserAnswer;
+import ee.tenman.mmse.domain.enumeration.QuestionId;
+import ee.tenman.mmse.repository.UserAnswerRepository;
+import ee.tenman.mmse.service.dto.UserAnswerDTO;
+import ee.tenman.mmse.service.mapper.UserAnswerMapper;
+import jakarta.persistence.EntityManager;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
+import org.springframework.http.MediaType;
+import org.springframework.security.test.context.support.WithMockUser;
+import org.springframework.test.web.servlet.MockMvc;
+import org.springframework.transaction.annotation.Transactional;
+
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.Random;
+import java.util.concurrent.atomic.AtomicLong;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
@@ -10,28 +33,6 @@ import static org.springframework.test.web.servlet.request.MockMvcRequestBuilder
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import ee.tenman.mmse.IntegrationTest;
-import ee.tenman.mmse.domain.TestEntity;
-import ee.tenman.mmse.domain.UserAnswer;
-import ee.tenman.mmse.domain.enumeration.QuestionId;
-import ee.tenman.mmse.repository.UserAnswerRepository;
-import ee.tenman.mmse.service.dto.UserAnswerDTO;
-import ee.tenman.mmse.service.mapper.UserAnswerMapper;
-import jakarta.persistence.EntityManager;
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.Random;
-import java.util.concurrent.atomic.AtomicLong;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
-import org.springframework.http.MediaType;
-import org.springframework.security.test.context.support.WithMockUser;
-import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.transaction.annotation.Transactional;
 
 /**
  * Integration tests for the {@link UserAnswerResource} REST controller.
@@ -75,7 +76,7 @@ class UserAnswerResourceIT {
 
     /**
      * Create an entity for this test.
-     *
+     * <p>
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
@@ -100,7 +101,7 @@ class UserAnswerResourceIT {
 
     /**
      * Create an updated entity for this test.
-     *
+     * <p>
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */

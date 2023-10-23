@@ -6,7 +6,6 @@ import ee.tenman.mmse.domain.enumeration.QuestionType;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.Arrays;
 import java.util.List;
 
 @Component
@@ -38,7 +37,7 @@ public class Question10 implements Question {
 
     @Override
     public List<InputField> getAnswerOptions() {
-        return Arrays.asList();
+        return List.of();
     }
 
     @Override

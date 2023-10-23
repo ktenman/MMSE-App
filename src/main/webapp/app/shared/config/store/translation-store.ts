@@ -1,17 +1,17 @@
-import { defineStore } from 'pinia';
+import { defineStore } from "pinia";
 
 interface TranslationState {
   currentLanguage: string;
 }
 
-export const useTranslationStore = defineStore('translationStore', {
+export const useTranslationStore = defineStore("translationStore", {
   state: (): TranslationState => ({
-    currentLanguage: undefined,
+    currentLanguage: undefined
   }),
   actions: {
     setCurrentLanguage(newLanguage) {
       this.currentLanguage = newLanguage;
-      localStorage.setItem('currentLanguage', newLanguage);
-    },
-  },
+      localStorage.setItem("currentLanguage", newLanguage);
+    }
+  }
 });

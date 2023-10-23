@@ -1,4 +1,4 @@
-import { IUser } from '@/shared/model/user.model';
+import { IUser } from "@/shared/model/user.model";
 
 export interface ITestEntity {
   id?: number;
@@ -15,5 +15,6 @@ export class TestEntity implements ITestEntity {
     public updatedAt?: Date | null,
     public score?: number | null,
     public user?: IUser
-  ) {}
+  ) {
+  }
 }

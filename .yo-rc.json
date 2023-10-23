@@ -18,13 +18,19 @@
     "enableHibernateCache": false,
     "enableSwaggerCodegen": false,
     "enableTranslation": true,
-    "entities": ["TestEntity", "UserAnswer"],
+    "entities": [
+      "TestEntity",
+      "UserAnswer"
+    ],
     "entitySuffix": "",
     "gradleEnterpriseHost": null,
     "jhiPrefix": "mmse",
     "jhipsterVersion": "8.0.0-beta.1",
     "jwtSecretKey": "ZmNlMGIwYmVjODhhOTYzNGRhYjIwZjY3NjQ3MmYwZjVlMTJiODYxNTM4NTU2ZDliMzBhZjkwMTg5NGY4ZWE0MzM0NzZmMTQ2OTU2YzA1NWQxNTgzODk3NDNhNzRkMGYzZTMwZDIxMTE1ZmE1ZjhmODhmMjNmN2NjNmQ4NTQyNmI=",
-    "languages": ["en", "et"],
+    "languages": [
+      "en",
+      "et"
+    ],
     "lastLiquibaseTimestamp": 1689346620000,
     "messageBroker": false,
     "microfrontend": false,
@@ -43,7 +49,10 @@
     "skipClient": false,
     "skipFakeData": false,
     "skipUserManagement": false,
-    "testFrameworks": ["cypress", "gatling"],
+    "testFrameworks": [
+      "cypress",
+      "gatling"
+    ],
     "websocket": false,
     "withAdminUi": true
   }

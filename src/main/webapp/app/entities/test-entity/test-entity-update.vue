@@ -13,7 +13,8 @@
             <input type="text" class="form-control" id="id" name="id" v-model="testEntity.id" readonly />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="t$('mmseApp.testEntity.createdAt')" for="test-entity-createdAt"></label>
+            <label class="form-control-label" v-text="t$('mmseApp.testEntity.createdAt')"
+                   for="test-entity-createdAt"></label>
             <div class="d-flex">
               <input
                 id="test-entity-createdAt"
@@ -28,11 +29,13 @@
               />
             </div>
             <div v-if="v$.createdAt.$anyDirty && v$.createdAt.$invalid">
-              <small class="form-text text-danger" v-for="error of v$.createdAt.$errors" :key="error.$uid">{{ error.$message }}</small>
+              <small class="form-text text-danger" v-for="error of v$.createdAt.$errors"
+                     :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="t$('mmseApp.testEntity.updatedAt')" for="test-entity-updatedAt"></label>
+            <label class="form-control-label" v-text="t$('mmseApp.testEntity.updatedAt')"
+                   for="test-entity-updatedAt"></label>
             <div class="d-flex">
               <input
                 id="test-entity-updatedAt"
@@ -60,7 +63,8 @@
           </div>
           <div class="form-group">
             <label class="form-control-label" v-text="t$('mmseApp.testEntity.user')" for="test-entity-user"></label>
-            <select class="form-control" id="test-entity-user" data-cy="user" name="user" v-model="testEntity.user" required>
+            <select class="form-control" id="test-entity-user" data-cy="user" name="user" v-model="testEntity.user"
+                    required>
               <option v-if="!testEntity.user" v-bind:value="null" selected></option>
               <option
                 v-bind:value="testEntity.user && userOption.id === testEntity.user.id ? testEntity.user : userOption"
@@ -72,11 +76,13 @@
             </select>
           </div>
           <div v-if="v$.user.$anyDirty && v$.user.$invalid">
-            <small class="form-text text-danger" v-for="error of v$.user.$errors" :key="error.$uid">{{ error.$message }}</small>
+            <small class="form-text text-danger" v-for="error of v$.user.$errors" :key="error.$uid">{{ error.$message
+              }}</small>
           </div>
         </div>
         <div>
-          <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" v-on:click="previousState()">
+          <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary"
+                  v-on:click="previousState()">
             <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.cancel')"></span>
           </button>
           <button

@@ -78,11 +78,11 @@ public class UserAnswerGatlingTest extends Simulation {
                         .body(
                             StringBody(
                                 "{" +
-                                "\"answerText\": \"SAMPLE_TEXT\"" +
-                                ", \"createdAt\": \"2020-01-01T00:00:00.000Z\"" +
-                                ", \"updatedAt\": \"2020-01-01T00:00:00.000Z\"" +
-                                ", \"questionId\": \"FIRST\"" +
-                                "}"
+                                    "\"answerText\": \"SAMPLE_TEXT\"" +
+                                    ", \"createdAt\": \"2020-01-01T00:00:00.000Z\"" +
+                                    ", \"updatedAt\": \"2020-01-01T00:00:00.000Z\"" +
+                                    ", \"questionId\": \"FIRST\"" +
+                                    "}"
                             )
                         )
                         .asJson()

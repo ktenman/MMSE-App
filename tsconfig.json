@@ -10,17 +10,28 @@
     "sourceMap": true,
     "emitDecoratorMetadata": true,
     "experimentalDecorators": true,
-    "lib": ["es7", "dom"],
+    "lib": [
+      "es7",
+      "dom"
+    ],
     "paths": {
-      "@/*": ["*"]
+      "@/*": [
+        "*"
+      ]
     },
-    "types": ["node"],
+    "types": [
+      "node"
+    ],
     "importHelpers": false,
     "allowJs": true
   },
   "vueCompilerOptions": {
     "target": 3.3
   },
-  "include": ["src/main/webapp/app"],
-  "exclude": ["node_modules"]
+  "include": [
+    "src/main/webapp/app"
+  ],
+  "exclude": [
+    "node_modules"
+  ]
 }

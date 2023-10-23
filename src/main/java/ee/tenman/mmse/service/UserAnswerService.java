@@ -124,6 +124,10 @@ public class UserAnswerService {
         Long userId = user.get().getId();
         Optional<TestEntity> latestTestEntity = testEntityRepository.findLatestByUserId(userId, PageRequest.of(0, 1)).stream().findFirst();
 
+        if (latestTestEntity.isEmpty()) {
+            return Optional.empty();
+        }
+
         return latestTestEntity.flatMap(testEntity ->
             userAnswerRepository.findLatestByTestEntityId(testEntity.getId(), PageRequest.of(0, 1)).stream().findFirst()
         );

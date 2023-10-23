@@ -1,8 +1,8 @@
-import {ComputedRef, defineComponent, inject, ref, Ref} from 'vue';
-import {useI18n} from 'vue-i18n';
-import {useVuelidate} from '@vuelidate/core';
-import {maxLength, minLength, required, sameAs} from '@vuelidate/validators';
-import axios from 'axios';
+import { ComputedRef, defineComponent, inject, ref, Ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { useVuelidate } from "@vuelidate/core";
+import { maxLength, minLength, required, sameAs } from "@vuelidate/validators";
+import axios from "axios";
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
@@ -10,28 +10,28 @@ export default defineComponent({
     return {
       resetPassword: {
         currentPassword: {
-          required,
+          required
         },
         newPassword: {
           required,
           minLength: minLength(4),
-          maxLength: maxLength(254),
+          maxLength: maxLength(254)
         },
         confirmPassword: {
-          sameAsPassword: sameAs(this.resetPassword.newPassword),
-        },
-      },
+          sameAsPassword: sameAs(this.resetPassword.newPassword)
+        }
+      }
     };
   },
   setup() {
-    const username = inject<ComputedRef<string>>('currentUsername');
+    const username = inject<ComputedRef<string>>("currentUsername");
     const success: Ref<string> = ref(null);
     const error: Ref<string> = ref(null);
     const doNotMatch: Ref<string> = ref(null);
     const resetPassword: Ref<any> = ref({
       currentPassword: null,
       newPassword: null,
-      confirmPassword: null,
+      confirmPassword: null
     });
 
     return {
@@ -41,7 +41,7 @@ export default defineComponent({
       doNotMatch,
       resetPassword,
       v$: useVuelidate(),
-      t$: useI18n().t,
+      t$: useI18n().t
     };
   },
   methods: {
@@ -49,23 +49,23 @@ export default defineComponent({
       if (this.resetPassword.newPassword !== this.resetPassword.confirmPassword) {
         this.error = null;
         this.success = null;
-        this.doNotMatch = 'ERROR';
+        this.doNotMatch = "ERROR";
       } else {
         this.doNotMatch = null;
         axios
-          .post('api/account/change-password', {
+          .post("api/account/change-password", {
             currentPassword: this.resetPassword.currentPassword,
-            newPassword: this.resetPassword.newPassword,
+            newPassword: this.resetPassword.newPassword
           })
           .then(() => {
-            this.success = 'OK';
+            this.success = "OK";
             this.error = null;
           })
           .catch(() => {
             this.success = null;
-            this.error = 'ERROR';
+            this.error = "ERROR";
           });
       }
-    },
-  },
+    }
+  }
 });

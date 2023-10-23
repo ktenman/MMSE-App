@@ -26,11 +26,11 @@ class Question10Test {
 
     @ParameterizedTest
     @CsvSource({
-            "man ball car, 3",
-            "car ball man, 3",
-            "man dog ball, 2",
-            "dog cat bird, 0",
-            "MaN cAr bALL, 3"
+        "man ball car, 3",
+        "car ball man, 3",
+        "man dog ball, 2",
+        "dog cat bird, 0",
+        "MaN cAr bALL, 3"
     })
     void testGetScore(String answerText, int expectedScore) {
         userAnswer.setAnswerText(answerText);

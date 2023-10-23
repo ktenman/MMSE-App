@@ -1,20 +1,20 @@
-import { defineComponent, inject, ref, Ref } from 'vue';
-import { useI18n } from 'vue-i18n';
-import numeral from 'numeral';
+import { defineComponent, inject, ref, Ref } from "vue";
+import { useI18n } from "vue-i18n";
+import numeral from "numeral";
 
-import { useDateFormat } from '@/shared/composables';
-import MmseMetricsModal from './metrics-modal.vue';
-import MetricsService from './metrics.service';
+import { useDateFormat } from "@/shared/composables";
+import MmseMetricsModal from "./metrics-modal.vue";
+import MetricsService from "./metrics.service";
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
-  name: 'MmseMetrics',
+  name: "MmseMetrics",
   components: {
-    'metrics-modal': MmseMetricsModal,
+    "metrics-modal": MmseMetricsModal
   },
   setup() {
     const { formatDate } = useDateFormat();
-    const metricsService = inject('metricsService', () => new MetricsService(), true);
+    const metricsService = inject("metricsService", () => new MetricsService(), true);
 
     const metrics: Ref<any> = ref({});
     const threadData: Ref<any> = ref(null);
@@ -28,7 +28,7 @@ export default defineComponent({
       threadStats,
       updatingMetrics,
       formatDate,
-      t$: useI18n().t,
+      t$: useI18n().t
     };
   },
   mounted(): void {
@@ -51,17 +51,17 @@ export default defineComponent({
                 threadDumpWaiting: 0,
                 threadDumpTimedWaiting: 0,
                 threadDumpBlocked: 0,
-                threadDumpAll: 0,
+                threadDumpAll: 0
               };
 
               this.threadData.forEach(value => {
-                if (value.threadState === 'RUNNABLE') {
+                if (value.threadState === "RUNNABLE") {
                   this.threadStats.threadDumpRunnable += 1;
-                } else if (value.threadState === 'WAITING') {
+                } else if (value.threadState === "WAITING") {
                   this.threadStats.threadDumpWaiting += 1;
-                } else if (value.threadState === 'TIMED_WAITING') {
+                } else if (value.threadState === "TIMED_WAITING") {
                   this.threadStats.threadDumpTimedWaiting += 1;
-                } else if (value.threadState === 'BLOCKED') {
+                } else if (value.threadState === "BLOCKED") {
                   this.threadStats.threadDumpBlocked += 1;
                 }
               });
@@ -94,10 +94,10 @@ export default defineComponent({
       return input;
     },
     formatNumber1(value: any): any {
-      return numeral(value).format('0,0');
+      return numeral(value).format("0,0");
     },
     formatNumber2(value: any): any {
-      return numeral(value).format('0,00');
+      return numeral(value).format("0,00");
     },
     convertMillisecondsToDuration(ms) {
       const times = {
@@ -106,16 +106,16 @@ export default defineComponent({
         day: 86400000,
         hour: 3600000,
         minute: 60000,
-        second: 1000,
+        second: 1000
       };
-      let time_string = '';
-      let plural = '';
+      let time_string = "";
+      let plural = "";
       for (const key in times) {
         if (Math.floor(ms / times[key]) > 0) {
           if (Math.floor(ms / times[key]) > 1) {
-            plural = 's';
+            plural = "s";
           } else {
-            plural = '';
+            plural = "";
           }
           time_string += `${Math.floor(ms / times[key])} ${key}${plural} `;
           ms = ms - times[key] * Math.floor(ms / times[key]);
@@ -127,7 +127,7 @@ export default defineComponent({
       return metrics && metrics[key];
     },
     isObjectExistingAndNotEmpty(metrics: any, key: string): boolean {
-      return this.isObjectExisting(metrics, key) && JSON.stringify(metrics[key]) !== '{}';
-    },
-  },
+      return this.isObjectExisting(metrics, key) && JSON.stringify(metrics[key]) !== "{}";
+    }
+  }
 });

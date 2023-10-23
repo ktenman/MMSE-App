@@ -36,12 +36,14 @@
           <dd>
             <div v-if="userAnswer.testEntity">
               <router-link :to="{ name: 'TestEntityView', params: { testEntityId: userAnswer.testEntity.id } }">{{
-                userAnswer.testEntity.id
-              }}</router-link>
+                  userAnswer.testEntity.id
+                }}
+              </router-link>
             </div>
           </dd>
         </dl>
-        <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
+        <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info"
+                data-cy="entityDetailsBackButton">
           <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.back')"></span>
         </button>
         <router-link
@@ -51,7 +53,8 @@
           v-slot="{ navigate }"
         >
           <button @click="navigate" class="btn btn-primary">
-            <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.edit')"></span>
+            <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span
+            v-text="t$('entity.action.edit')"></span>
           </button>
         </router-link>
       </div>

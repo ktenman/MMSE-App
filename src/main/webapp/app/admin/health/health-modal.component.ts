@@ -1,19 +1,19 @@
-import { defineComponent, inject } from 'vue';
-import { useI18n } from 'vue-i18n';
-import HealthService from './health.service';
+import { defineComponent, inject } from "vue";
+import { useI18n } from "vue-i18n";
+import HealthService from "./health.service";
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
-  name: 'MmseHealthModal',
+  name: "MmseHealthModal",
   props: {
-    currentHealth: {},
+    currentHealth: {}
   },
   setup() {
-    const healthService = inject('healthService', () => new HealthService(), true);
+    const healthService = inject("healthService", () => new HealthService(), true);
 
     return {
       healthService,
-      t$: useI18n().t,
+      t$: useI18n().t
     };
   },
   methods: {
@@ -24,20 +24,20 @@ export default defineComponent({
       return this.healthService.getSubSystemName(name);
     },
     readableValue(value: any): string {
-      if (this.currentHealth.name === 'diskSpace') {
+      if (this.currentHealth.name === "diskSpace") {
         // Should display storage space in an human readable unit
         const val = value / 1073741824;
         if (val > 1) {
           // Value
-          return val.toFixed(2) + ' GB';
+          return val.toFixed(2) + " GB";
         }
-        return (value / 1048576).toFixed(2) + ' MB';
+        return (value / 1048576).toFixed(2) + " MB";
       }
 
-      if (typeof value === 'object') {
+      if (typeof value === "object") {
         return JSON.stringify(value);
       }
       return value.toString();
-    },
-  },
+    }
+  }
 });

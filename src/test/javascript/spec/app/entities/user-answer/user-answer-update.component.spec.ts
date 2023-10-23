@@ -1,34 +1,34 @@
 /* tslint:disable max-line-length */
-import { vitest } from 'vitest';
-import { shallowMount, MountingOptions } from '@vue/test-utils';
-import sinon, { SinonStubbedInstance } from 'sinon';
-import { RouteLocation } from 'vue-router';
+import { vitest } from "vitest";
+import { MountingOptions, shallowMount } from "@vue/test-utils";
+import sinon, { SinonStubbedInstance } from "sinon";
+import { RouteLocation } from "vue-router";
 
-import dayjs from 'dayjs';
-import { DATE_TIME_LONG_FORMAT } from '../../../../../../main/webapp/app/shared/composables/date-format';
-import UserAnswerUpdate from '../../../../../../main/webapp/app/entities/user-answer/user-answer-update.vue';
-import UserAnswerService from '../../../../../../main/webapp/app/entities/user-answer/user-answer.service';
-import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
+import dayjs from "dayjs";
+import { DATE_TIME_LONG_FORMAT } from "../../../../../../main/webapp/app/shared/composables/date-format";
+import UserAnswerUpdate from "../../../../../../main/webapp/app/entities/user-answer/user-answer-update.vue";
+import UserAnswerService from "../../../../../../main/webapp/app/entities/user-answer/user-answer.service";
+import AlertService from "../../../../../../main/webapp/app/shared/alert/alert.service";
 
-import TestEntityService from '../../../../../../main/webapp/app/entities/test-entity/test-entity.service';
+import TestEntityService from "../../../../../../main/webapp/app/entities/test-entity/test-entity.service";
 
 type UserAnswerUpdateComponentType = InstanceType<typeof UserAnswerUpdate>;
 
 let route: Partial<RouteLocation>;
 const routerGoMock = vitest.fn();
 
-vitest.mock('vue-router', () => ({
+vitest.mock("vue-router", () => ({
   useRoute: () => route,
-  useRouter: () => ({ go: routerGoMock }),
+  useRouter: () => ({ go: routerGoMock })
 }));
 
 const userAnswerSample = { id: 123 };
 
-describe('Component Tests', () => {
-  let mountOptions: MountingOptions<UserAnswerUpdateComponentType>['global'];
+describe("Component Tests", () => {
+  let mountOptions: MountingOptions<UserAnswerUpdateComponentType>["global"];
   let alertService: AlertService;
 
-  describe('UserAnswer Management Update Component', () => {
+  describe("UserAnswer Management Update Component", () => {
     let comp: UserAnswerUpdateComponentType;
     let userAnswerServiceStub: SinonStubbedInstance<UserAnswerService>;
 
@@ -39,26 +39,26 @@ describe('Component Tests', () => {
       alertService = new AlertService({
         i18n: { t: vitest.fn() } as any,
         bvToast: {
-          toast: vitest.fn(),
-        } as any,
+          toast: vitest.fn()
+        } as any
       });
 
       mountOptions = {
         stubs: {
-          'font-awesome-icon': true,
-          'b-input-group': true,
-          'b-input-group-prepend': true,
-          'b-form-datepicker': true,
-          'b-form-input': true,
+          "font-awesome-icon": true,
+          "b-input-group": true,
+          "b-input-group-prepend": true,
+          "b-form-datepicker": true,
+          "b-form-input": true
         },
         provide: {
           alertService,
           userAnswerService: () => userAnswerServiceStub,
           testEntityService: () =>
             sinon.createStubInstance<TestEntityService>(TestEntityService, {
-              retrieve: sinon.stub().resolves({}),
-            } as any),
-        },
+              retrieve: sinon.stub().resolves({})
+            } as any)
+        }
       };
     });
 
@@ -66,14 +66,14 @@ describe('Component Tests', () => {
       vitest.resetAllMocks();
     });
 
-    describe('load', () => {
+    describe("load", () => {
       beforeEach(() => {
         const wrapper = shallowMount(UserAnswerUpdate, { global: mountOptions });
         comp = wrapper.vm;
       });
-      it('Should convert date from string', () => {
+      it("Should convert date from string", () => {
         // GIVEN
-        const date = new Date('2019-10-15T11:42:02Z');
+        const date = new Date("2019-10-15T11:42:02Z");
 
         // WHEN
         const convertedDate = comp.convertDateTimeFromServer(date);
@@ -82,13 +82,13 @@ describe('Component Tests', () => {
         expect(convertedDate).toEqual(dayjs(date).format(DATE_TIME_LONG_FORMAT));
       });
 
-      it('Should not convert date if date is not present', () => {
+      it("Should not convert date if date is not present", () => {
         expect(comp.convertDateTimeFromServer(null)).toBeNull();
       });
     });
 
-    describe('save', () => {
-      it('Should call update service on save for existing entity', async () => {
+    describe("save", () => {
+      it("Should call update service on save for existing entity", async () => {
         // GIVEN
         const wrapper = shallowMount(UserAnswerUpdate, { global: mountOptions });
         comp = wrapper.vm;
@@ -104,7 +104,7 @@ describe('Component Tests', () => {
         expect(comp.isSaving).toEqual(false);
       });
 
-      it('Should call create service on save for new entity', async () => {
+      it("Should call create service on save for new entity", async () => {
         // GIVEN
         const entity = {};
         userAnswerServiceStub.create.resolves(entity);
@@ -122,8 +122,8 @@ describe('Component Tests', () => {
       });
     });
 
-    describe('Before route enter', () => {
-      it('Should retrieve data', async () => {
+    describe("Before route enter", () => {
+      it("Should retrieve data", async () => {
         // GIVEN
         userAnswerServiceStub.find.resolves(userAnswerSample);
         userAnswerServiceStub.retrieve.resolves([userAnswerSample]);
@@ -131,8 +131,8 @@ describe('Component Tests', () => {
         // WHEN
         route = {
           params: {
-            userAnswerId: '' + userAnswerSample.id,
-          },
+            userAnswerId: "" + userAnswerSample.id
+          }
         };
         const wrapper = shallowMount(UserAnswerUpdate, { global: mountOptions });
         comp = wrapper.vm;
@@ -143,8 +143,8 @@ describe('Component Tests', () => {
       });
     });
 
-    describe('Previous state', () => {
-      it('Should go previous state', async () => {
+    describe("Previous state", () => {
+      it("Should go previous state", async () => {
         userAnswerServiceStub.find.resolves(userAnswerSample);
         const wrapper = shallowMount(UserAnswerUpdate, { global: mountOptions });
         comp = wrapper.vm;

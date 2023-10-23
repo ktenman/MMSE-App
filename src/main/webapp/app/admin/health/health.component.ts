@@ -1,17 +1,17 @@
-import { defineComponent, inject, ref, Ref } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { defineComponent, inject, ref, Ref } from "vue";
+import { useI18n } from "vue-i18n";
 
-import HealthService from './health.service';
-import MmseHealthModal from './health-modal.vue';
+import HealthService from "./health.service";
+import MmseHealthModal from "./health-modal.vue";
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
-  name: 'MmseHealth',
+  name: "MmseHealth",
   components: {
-    'health-modal': MmseHealthModal,
+    "health-modal": MmseHealthModal
   },
   setup() {
-    const healthService = inject('healthService', () => new HealthService(), true);
+    const healthService = inject("healthService", () => new HealthService(), true);
 
     const healthData: Ref<any> = ref(null);
     const currentHealth: Ref<any> = ref(null);
@@ -22,7 +22,7 @@ export default defineComponent({
       healthData,
       currentHealth,
       updatingHealth,
-      t$: useI18n().t,
+      t$: useI18n().t
     };
   },
   mounted(): void {
@@ -33,10 +33,10 @@ export default defineComponent({
       return this.healthService.getBaseName(name);
     },
     getBadgeClass(statusState: any): string {
-      if (statusState === 'UP') {
-        return 'badge-success';
+      if (statusState === "UP") {
+        return "badge-success";
       }
-      return 'badge-danger';
+      return "badge-danger";
     },
     refresh(): void {
       this.updatingHealth = true;
@@ -59,6 +59,6 @@ export default defineComponent({
     },
     subSystemName(name: string): string {
       return this.healthService.getSubSystemName(name);
-    },
-  },
+    }
+  }
 });

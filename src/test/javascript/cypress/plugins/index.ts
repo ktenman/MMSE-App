@@ -10,20 +10,20 @@
 
 // This function is called when a project is opened or re-opened (e.g. due to
 // the project's config changing)
-import { existsSync, mkdirSync, writeFileSync } from 'fs';
-import { lighthouse, pa11y, prepareAudit } from 'cypress-audit';
+import { existsSync, mkdirSync, writeFileSync } from "fs";
+import { lighthouse, pa11y, prepareAudit } from "cypress-audit";
 
 export default async (on: Cypress.PluginEvents, config: Cypress.PluginConfigOptions) => {
-  on('before:browser:launch', (browser, launchOptions) => {
+  on("before:browser:launch", (browser, launchOptions) => {
     prepareAudit(launchOptions);
-    if (browser.name === 'chrome' && browser.isHeadless) {
-      launchOptions.args.push('--disable-gpu');
+    if (browser.name === "chrome" && browser.isHeadless) {
+      launchOptions.args.push("--disable-gpu");
       return launchOptions;
     }
   });
 
   // Allows logging with cy.task('log', 'message') or cy.task('table', object)
-  on('task', {
+  on("task", {
     log(message) {
       console.log(message);
       return null;
@@ -31,16 +31,16 @@ export default async (on: Cypress.PluginEvents, config: Cypress.PluginConfigOpti
     table(message) {
       console.table(message);
       return null;
-    },
+    }
   });
 
-  on('task', {
+  on("task", {
     lighthouse: lighthouse(async lighthouseReport => {
-      const { default: ReportGenerator } = await import('lighthouse/report/generator/report-generator');
-      !existsSync('target/cypress/') && mkdirSync('target/cypress/', { recursive: true });
-      writeFileSync('target/cypress/lhreport.html', ReportGenerator.generateReport(lighthouseReport.lhr, 'html'));
+      const { default: ReportGenerator } = await import("lighthouse/report/generator/report-generator");
+      !existsSync("target/cypress/") && mkdirSync("target/cypress/", { recursive: true });
+      writeFileSync("target/cypress/lhreport.html", ReportGenerator.generateReport(lighthouseReport.lhr, "html"));
     }),
-    pa11y: pa11y(),
+    pa11y: pa11y()
   });
   return config;
 };

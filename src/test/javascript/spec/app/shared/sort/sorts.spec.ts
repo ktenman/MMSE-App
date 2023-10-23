@@ -1,9 +1,9 @@
-import buildPaginationQueryOpts from '../../../../../../main/webapp/app/shared/sort/sorts';
+import buildPaginationQueryOpts from "../../../../../../main/webapp/app/shared/sort/sorts";
 
-describe('Sort', () => {
-  it('should return an empty string if there is no pagination', () => {
+describe("Sort", () => {
+  it("should return an empty string if there is no pagination", () => {
     const result = buildPaginationQueryOpts(undefined);
 
-    expect(result).toBe('');
+    expect(result).toBe("");
   });
 });

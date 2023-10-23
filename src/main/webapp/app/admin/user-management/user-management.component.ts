@@ -1,28 +1,28 @@
-import { ComputedRef, defineComponent, inject, Ref, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
-import UserManagementService from './user-management.service';
-import { useAlertService } from '@/shared/alert/alert.service';
+import { ComputedRef, defineComponent, inject, Ref, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import UserManagementService from "./user-management.service";
+import { useAlertService } from "@/shared/alert/alert.service";
 
-import { useDateFormat } from '@/shared/composables';
+import { useDateFormat } from "@/shared/composables";
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
-  name: 'MmseUserManagementComponent',
+  name: "MmseUserManagementComponent",
   mounted(): void {
     this.loadAll();
   },
   setup(prop) {
-    const alertService = inject('alertService', () => useAlertService(), true);
+    const alertService = inject("alertService", () => useAlertService(), true);
     const { formatDateShort: formatDate } = useDateFormat();
-    const userManagementService = inject('userManagementService', () => new UserManagementService(), true);
-    const username = inject<ComputedRef<string>>('currentUsername');
+    const userManagementService = inject("userManagementService", () => new UserManagementService(), true);
+    const username = inject<ComputedRef<string>>("currentUsername");
 
-    const error = ref('');
-    const success = ref('');
+    const error = ref("");
+    const success = ref("");
     const itemsPerPage = ref(20);
     const page = ref(1);
     const previousPage = ref(1);
-    const propOrder = ref('id');
+    const propOrder = ref("id");
     const reverse = ref(false);
     const isLoading = ref(false);
     const removeId: Ref<number> = ref(null);
@@ -47,7 +47,7 @@ export default defineComponent({
       username,
       totalItems,
       queryCount,
-      t$: useI18n().t,
+      t$: useI18n().t
     };
   },
   methods: {
@@ -57,12 +57,12 @@ export default defineComponent({
         .update(user)
         .then(() => {
           this.error = null;
-          this.success = 'OK';
+          this.success = "OK";
           this.loadAll();
         })
         .catch(() => {
           this.success = null;
-          this.error = 'ERROR';
+          this.error = "ERROR";
           user.activated = false;
         });
     },
@@ -73,12 +73,12 @@ export default defineComponent({
         .retrieve({
           sort: this.sort(),
           page: this.page - 1,
-          size: this.itemsPerPage,
+          size: this.itemsPerPage
         })
         .then(res => {
           this.isLoading = false;
           this.users = res.data;
-          this.totalItems = Number(res.headers['x-total-count']);
+          this.totalItems = Number(res.headers["x-total-count"]);
           this.queryCount = this.totalItems;
         })
         .catch(() => {
@@ -89,9 +89,9 @@ export default defineComponent({
       this.loadAll();
     },
     sort(): any {
-      const result = [this.propOrder + ',' + (this.reverse ? 'desc' : 'asc')];
-      if (this.propOrder !== 'id') {
-        result.push('id');
+      const result = [this.propOrder + "," + (this.reverse ? "desc" : "asc")];
+      if (this.propOrder !== "id") {
+        result.push("id");
       }
       return result;
     },
@@ -114,10 +114,10 @@ export default defineComponent({
         .remove(this.removeId)
         .then(res => {
           this.alertService.showInfo(
-            this.t$(res.headers['x-mmseapp-alert'].toString(), {
-              param: decodeURIComponent(res.headers['x-mmseapp-params'].replace(/\+/g, ' ')),
+            this.t$(res.headers["x-mmseapp-alert"].toString(), {
+              param: decodeURIComponent(res.headers["x-mmseapp-params"].replace(/\+/g, " "))
             }),
-            { variant: 'danger' }
+            { variant: "danger" }
           );
           this.removeId = null;
           this.loadAll();
@@ -137,6 +137,6 @@ export default defineComponent({
       if (<any>this.$refs.removeUser) {
         (<any>this.$refs.removeUser).hide();
       }
-    },
-  },
+    }
+  }
 });

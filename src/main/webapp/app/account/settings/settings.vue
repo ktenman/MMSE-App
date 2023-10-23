@@ -8,7 +8,8 @@
 
         <div class="alert alert-success" role="alert" v-if="success" v-html="t$('settings.messages.success')"></div>
 
-        <div class="alert alert-danger" role="alert" v-if="errorEmailExists" v-html="t$('register.messages.error.emailexists')"></div>
+        <div class="alert alert-danger" role="alert" v-if="errorEmailExists"
+             v-html="t$('register.messages.error.emailexists')"></div>
 
         <form name="form" id="settings-form" role="form" v-on:submit.prevent="save()" v-if="settingsAccount" novalidate>
           <div class="form-group">
@@ -118,8 +119,10 @@
           </div>
           <div class="form-group" v-if="languages && Object.keys(languages).length > 1">
             <label for="langKey" v-text="t$('settings.form.language')"></label>
-            <select class="form-control" id="langKey" name="langKey" v-model="settingsAccount.langKey" data-cy="langKey">
-              <option v-for="(language, key) in languages" :value="key" :key="`lang-${key}`">{{ language.name }}</option>
+            <select class="form-control" id="langKey" name="langKey" v-model="settingsAccount.langKey"
+                    data-cy="langKey">
+              <option v-for="(language, key) in languages" :value="key" :key="`lang-${key}`">{{ language.name }}
+              </option>
             </select>
           </div>
           <button

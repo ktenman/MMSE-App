@@ -10,7 +10,9 @@
     {
       "fieldName": "createdAt",
       "fieldType": "Instant",
-      "fieldValidateRules": ["required"]
+      "fieldValidateRules": [
+        "required"
+      ]
     },
     {
       "fieldName": "updatedAt",
@@ -38,7 +40,9 @@
       "relationshipName": "testEntity",
       "relationshipSide": "left",
       "relationshipType": "many-to-one",
-      "relationshipValidateRules": ["required"]
+      "relationshipValidateRules": [
+        "required"
+      ]
     }
   ],
   "searchEngine": "no",

@@ -1,16 +1,16 @@
-import {computed, defineComponent, inject, ref, Ref} from 'vue';
-import {useI18n} from 'vue-i18n';
-import {useVuelidate} from '@vuelidate/core';
-import {email, helpers, maxLength, minLength, required, sameAs} from '@vuelidate/validators';
-import LoginService from '@/account/login.service';
-import RegisterService from '@/account/register/register.service';
-import {EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE} from '@/constants';
+import { computed, defineComponent, inject, ref, Ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { useVuelidate } from "@vuelidate/core";
+import { email, helpers, maxLength, minLength, required, sameAs } from "@vuelidate/validators";
+import LoginService from "@/account/login.service";
+import RegisterService from "@/account/register/register.service";
+import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from "@/constants";
 
 const loginPattern = helpers.regex(/^[a-zA-Z0-9!$&*+=?^_`{|}~.-]+@[a-zA-Z0-9-]+(?:\\.[a-zA-Z0-9-]+)*$|^[_.@A-Za-z0-9-]+$/);
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
-  name: 'Register',
+  name: "Register",
   validations() {
     return {
       registerAccount: {
@@ -18,43 +18,43 @@ export default defineComponent({
           required,
           minLength: minLength(1),
           maxLength: maxLength(50),
-          pattern: loginPattern,
+          pattern: loginPattern
         },
         email: {
           required,
           minLength: minLength(5),
           maxLength: maxLength(254),
-          email,
+          email
         },
         password: {
           required,
           minLength: minLength(4),
-          maxLength: maxLength(254),
-        },
+          maxLength: maxLength(254)
+        }
       },
       confirmPassword: {
         required,
         minLength: minLength(4),
         maxLength: maxLength(50),
-        sameAsPassword: sameAs(this.registerAccount.password),
-      },
+        sameAsPassword: sameAs(this.registerAccount.password)
+      }
     };
   },
   setup(prop) {
-    const loginService = inject<LoginService>('loginService');
-    const registerService = inject('registerService', () => new RegisterService(), true);
-    const currentLanguage = inject('currentLanguage', () => computed(() => navigator.language ?? 'en'), true);
+    const loginService = inject<LoginService>("loginService");
+    const registerService = inject("registerService", () => new RegisterService(), true);
+    const currentLanguage = inject("currentLanguage", () => computed(() => navigator.language ?? "en"), true);
 
-    const error: Ref<string> = ref('');
-    const errorEmailExists: Ref<string> = ref('');
-    const errorUserExists: Ref<string> = ref('');
+    const error: Ref<string> = ref("");
+    const errorEmailExists: Ref<string> = ref("");
+    const errorUserExists: Ref<string> = ref("");
     const success: Ref<boolean> = ref(false);
 
     const confirmPassword: Ref<any> = ref(null);
     const registerAccount: Ref<any> = ref({
       login: undefined,
       email: undefined,
-      password: undefined,
+      password: undefined
     });
 
     const openLogin = () => {
@@ -72,7 +72,7 @@ export default defineComponent({
       confirmPassword,
       registerAccount,
       v$: useVuelidate(),
-      t$: useI18n().t,
+      t$: useI18n().t
     };
   },
   methods: {
@@ -89,13 +89,13 @@ export default defineComponent({
         .catch(error => {
           this.success = null;
           if (error.response.status === 400 && error.response.data.type === LOGIN_ALREADY_USED_TYPE) {
-            this.errorUserExists = 'ERROR';
+            this.errorUserExists = "ERROR";
           } else if (error.response.status === 400 && error.response.data.type === EMAIL_ALREADY_USED_TYPE) {
-            this.errorEmailExists = 'ERROR';
+            this.errorEmailExists = "ERROR";
           } else {
-            this.error = 'ERROR';
+            this.error = "ERROR";
           }
         });
-    },
-  },
+    }
+  }
 });

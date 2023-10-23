@@ -36,14 +36,14 @@
           <div v-if="question.questionType === 'MULTIPLE_CHOICE'">
             <div class="row">
               <div class="col-md-6" v-for="(option, index) in question.answerOptions" :key="index">
-              <b-button
-                :pressed="selectedAnswer === option"
-                variant="outline-primary"
-                @click="selectedAnswer = option"
-                class="w-100 p-3 mt-3 large-text capitalize"
-              >
-                {{ option.toLowerCase() }}
-              </b-button>
+                <b-button
+                  :pressed="selectedAnswer === option"
+                  variant="outline-primary"
+                  @click="selectedAnswer = option"
+                  class="w-100 p-3 mt-3 large-text capitalize"
+                >
+                  {{ option.toLowerCase() }}
+                </b-button>
               </div>
             </div>
           </div>
@@ -52,7 +52,8 @@
           <div v-if="question.questionType === 'SUBTRACTION_TASK'">
             <div class="row">
               <div class="col-md-6" v-for="(option, index) in question.answerOptions" :key="index">
-                <input type="number" :min="option.min" :max="option.max" v-model="selectedAnswers[index]" class="form-control">
+                <input type="number" :min="option.min" :max="option.max" v-model="selectedAnswers[index]"
+                       class="form-control">
               </div>
             </div>
           </div>

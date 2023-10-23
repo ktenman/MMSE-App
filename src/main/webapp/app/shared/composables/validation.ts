@@ -1,4 +1,14 @@
-import { decimal, helpers, required, sameAs, minLength, maxLength, minValue, maxValue, numeric } from '@vuelidate/validators';
+import {
+  decimal,
+  helpers,
+  maxLength,
+  maxValue,
+  minLength,
+  minValue,
+  numeric,
+  required,
+  sameAs
+} from "@vuelidate/validators";
 
 export const useValidation = () => {
   return {
@@ -9,6 +19,6 @@ export const useValidation = () => {
     minLength: (message: string, ...args: Parameters<typeof minLength>) => helpers.withMessage(message, minLength(...args)),
     maxLength: (message: string, ...args: Parameters<typeof maxLength>) => helpers.withMessage(message, maxLength(...args)),
     minValue: (message: string, ...args: Parameters<typeof minValue>) => helpers.withMessage(message, minValue(...args)),
-    maxValue: (message: string, ...args: Parameters<typeof maxValue>) => helpers.withMessage(message, maxValue(...args)),
+    maxValue: (message: string, ...args: Parameters<typeof maxValue>) => helpers.withMessage(message, maxValue(...args))
   };
 };

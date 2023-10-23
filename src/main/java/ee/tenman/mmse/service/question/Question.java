@@ -9,7 +9,7 @@ import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
-import java.util.List;
+import java.util.Collection;
 
 public interface Question {
     String getQuestionText();
@@ -20,7 +20,7 @@ public interface Question {
 
     QuestionType getQuestionType();
 
-    List<?> getAnswerOptions();
+    Collection<?> getAnswerOptions();
 
     default String convertImageToBase64(String imagePath) {
         try {

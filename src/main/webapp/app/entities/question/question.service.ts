@@ -1,8 +1,8 @@
-import axios from 'axios';
-import {IQuestion} from '@/shared/model/question.model';
-import {IAnswer} from "@/shared/model/answer.model";
+import axios from "axios";
+import { IQuestion } from "@/shared/model/question.model";
+import { IAnswer } from "@/shared/model/answer.model";
 
-const baseApiUrl = 'api/question';
+const baseApiUrl = "api/question";
 
 export default class QuestionService {
   public getQuestion(): Promise<IQuestion> {
@@ -10,11 +10,11 @@ export default class QuestionService {
   }
 
   public submitAnswer(answer: IAnswer): Promise<IQuestion | string> {
-    return axios.post<IQuestion | string>('/api/answer', answer).then(res => res.data);
+    return axios.post<IQuestion | string>("/api/answer", answer).then(res => res.data);
   }
 
   public retakeTest(): Promise<IQuestion | string> {
-    return axios.post<IQuestion | string>('/api/retake').then(res => res.data);
+    return axios.post<IQuestion | string>("/api/retake").then(res => res.data);
   }
 
 }

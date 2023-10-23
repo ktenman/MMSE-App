@@ -1,14 +1,14 @@
-import {ComputedRef, defineComponent, inject, Ref, ref} from 'vue';
-import {useI18n} from 'vue-i18n';
-import LoginService from '@/account/login.service';
-import {useRoute} from 'vue-router';
+import { ComputedRef, defineComponent, inject, Ref, ref } from "vue";
+import { useI18n } from "vue-i18n";
+import LoginService from "@/account/login.service";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
-  compatConfig: {MODE: 3},
-  name: 'Error',
+  compatConfig: { MODE: 3 },
+  name: "Error",
   setup() {
-    const loginService = inject<LoginService>('loginService');
-    const authenticated = inject<ComputedRef<boolean>>('authenticated');
+    const loginService = inject<LoginService>("loginService");
+    const authenticated = inject<ComputedRef<boolean>>("authenticated");
     const errorMessage: Ref<string> = ref(null);
     const error403: Ref<boolean> = ref(false);
     const error404: Ref<boolean> = ref(false);
@@ -27,7 +27,7 @@ export default defineComponent({
       errorMessage,
       error403,
       error404,
-      t$: useI18n().t,
+      t$: useI18n().t
     };
-  },
+  }
 });

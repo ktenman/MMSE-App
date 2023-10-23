@@ -13,7 +13,8 @@
             <input type="text" class="form-control" id="id" name="id" v-model="userAnswer.id" readonly />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="t$('mmseApp.userAnswer.answerText')" for="user-answer-answerText"></label>
+            <label class="form-control-label" v-text="t$('mmseApp.userAnswer.answerText')"
+                   for="user-answer-answerText"></label>
             <input
               type="text"
               class="form-control"
@@ -25,7 +26,8 @@
             />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="t$('mmseApp.userAnswer.createdAt')" for="user-answer-createdAt"></label>
+            <label class="form-control-label" v-text="t$('mmseApp.userAnswer.createdAt')"
+                   for="user-answer-createdAt"></label>
             <div class="d-flex">
               <input
                 id="user-answer-createdAt"
@@ -40,11 +42,13 @@
               />
             </div>
             <div v-if="v$.createdAt.$anyDirty && v$.createdAt.$invalid">
-              <small class="form-text text-danger" v-for="error of v$.createdAt.$errors" :key="error.$uid">{{ error.$message }}</small>
+              <small class="form-text text-danger" v-for="error of v$.createdAt.$errors"
+                     :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="t$('mmseApp.userAnswer.updatedAt')" for="user-answer-updatedAt"></label>
+            <label class="form-control-label" v-text="t$('mmseApp.userAnswer.updatedAt')"
+                   for="user-answer-updatedAt"></label>
             <div class="d-flex">
               <input
                 id="user-answer-updatedAt"
@@ -59,7 +63,8 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="t$('mmseApp.userAnswer.questionId')" for="user-answer-questionId"></label>
+            <label class="form-control-label" v-text="t$('mmseApp.userAnswer.questionId')"
+                   for="user-answer-questionId"></label>
             <select
               class="form-control"
               name="questionId"
@@ -79,11 +84,13 @@
               </option>
             </select>
             <div v-if="v$.questionId.$anyDirty && v$.questionId.$invalid">
-              <small class="form-text text-danger" v-for="error of v$.questionId.$errors" :key="error.$uid">{{ error.$message }}</small>
+              <small class="form-text text-danger" v-for="error of v$.questionId.$errors"
+                     :key="error.$uid">{{ error.$message }}</small>
             </div>
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="t$('mmseApp.userAnswer.testEntity')" for="user-answer-testEntity"></label>
+            <label class="form-control-label" v-text="t$('mmseApp.userAnswer.testEntity')"
+                   for="user-answer-testEntity"></label>
             <select
               class="form-control"
               id="user-answer-testEntity"
@@ -105,11 +112,13 @@
             </select>
           </div>
           <div v-if="v$.testEntity.$anyDirty && v$.testEntity.$invalid">
-            <small class="form-text text-danger" v-for="error of v$.testEntity.$errors" :key="error.$uid">{{ error.$message }}</small>
+            <small class="form-text text-danger" v-for="error of v$.testEntity.$errors"
+                   :key="error.$uid">{{ error.$message }}</small>
           </div>
         </div>
         <div>
-          <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" v-on:click="previousState()">
+          <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary"
+                  v-on:click="previousState()">
             <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.cancel')"></span>
           </button>
           <button

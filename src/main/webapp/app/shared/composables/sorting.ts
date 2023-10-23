@@ -1,6 +1,6 @@
-import { ref } from 'vue';
+import { ref } from "vue";
 
-export function useSorting(defaultPropOrder = 'id', defaultReverse = false) {
+export function useSorting(defaultPropOrder = "id", defaultReverse = false) {
   const propOrder = ref(defaultPropOrder);
   const reverse = ref(defaultReverse);
 
@@ -14,9 +14,9 @@ export function useSorting(defaultPropOrder = 'id', defaultReverse = false) {
   };
 
   const getSort = (): Array<any> => {
-    const result = [propOrder.value + ',' + (reverse.value ? 'desc' : 'asc')];
-    if (propOrder.value !== 'id') {
-      result.push('id');
+    const result = [propOrder.value + "," + (reverse.value ? "desc" : "asc")];
+    if (propOrder.value !== "id") {
+      result.push("id");
     }
     return result;
   };

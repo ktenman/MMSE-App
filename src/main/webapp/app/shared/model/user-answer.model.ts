@@ -1,6 +1,7 @@
-import { ITestEntity } from '@/shared/model/test-entity.model';
+import { ITestEntity } from "@/shared/model/test-entity.model";
 
-import { QuestionId } from '@/shared/model/enumerations/question-id.model';
+import { QuestionId } from "@/shared/model/enumerations/question-id.model";
+
 export interface IUserAnswer {
   id?: number;
   answerText?: string | null;
@@ -18,5 +19,6 @@ export class UserAnswer implements IUserAnswer {
     public updatedAt?: Date | null,
     public questionId?: keyof typeof QuestionId,
     public testEntity?: ITestEntity
-  ) {}
+  ) {
+  }
 }

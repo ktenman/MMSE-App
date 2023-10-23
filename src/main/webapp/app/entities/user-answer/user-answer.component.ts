@@ -1,23 +1,23 @@
-import {defineComponent, inject, onMounted, ref, Ref, watch} from 'vue';
-import {useI18n} from 'vue-i18n';
-import {IUserAnswer} from '@/shared/model/user-answer.model';
-import useDataUtils from '@/shared/data/data-utils.service';
-import {useDateFormat} from '@/shared/composables';
-import UserAnswerService from './user-answer.service';
-import {useAlertService} from '@/shared/alert/alert.service';
-import {usePagination} from '@/shared/composables/pagination';
-import {useSorting} from '@/shared/composables/sorting';
-import {useInfiniteScroll} from '@/shared/composables/useInfiniteScroll';
+import { defineComponent, inject, onMounted, ref, Ref, watch } from "vue";
+import { useI18n } from "vue-i18n";
+import { IUserAnswer } from "@/shared/model/user-answer.model";
+import useDataUtils from "@/shared/data/data-utils.service";
+import { useDateFormat } from "@/shared/composables";
+import UserAnswerService from "./user-answer.service";
+import { useAlertService } from "@/shared/alert/alert.service";
+import { usePagination } from "@/shared/composables/pagination";
+import { useSorting } from "@/shared/composables/sorting";
+import { useInfiniteScroll } from "@/shared/composables/useInfiniteScroll";
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
-  name: 'UserAnswer',
+  name: "UserAnswer",
   setup() {
     const { t: t$ } = useI18n();
     const dateFormat = useDateFormat();
     const dataUtils = useDataUtils();
-    const userAnswerService = inject('userAnswerService', () => new UserAnswerService());
-    const alertService = inject('alertService', () => useAlertService(), true);
+    const userAnswerService = inject("userAnswerService", () => new UserAnswerService());
+    const alertService = inject("alertService", () => useAlertService(), true);
 
     const queryCount: Ref<number> = ref(null);
     const totalItems = ref(0);
@@ -42,12 +42,12 @@ export default defineComponent({
         const paginationQuery = {
           page: pagination.page.value - 1,
           size: pagination.itemsPerPage.value,
-          sort: sorting.getSort(),
+          sort: sorting.getSort()
         };
         const res = await userAnswerService().retrieve(paginationQuery);
-        totalItems.value = Number(res.headers['x-total-count']);
+        totalItems.value = Number(res.headers["x-total-count"]);
         queryCount.value = totalItems.value;
-        links.value = dataUtils.parseLinks(res.headers?.['link']);
+        links.value = dataUtils.parseLinks(res.headers?.["link"]);
         userAnswers.value.push(...(res.data ?? []));
       } catch (err) {
         alertService.showHttpError(err.response);
@@ -76,8 +76,8 @@ export default defineComponent({
     const removeUserAnswer = async () => {
       try {
         await userAnswerService().delete(removeId.value);
-        const message = t$('mmseApp.userAnswer.deleted', { param: removeId.value }).toString();
-        alertService.showInfo(message, { variant: 'danger' });
+        const message = t$("mmseApp.userAnswer.deleted", { param: removeId.value }).toString();
+        alertService.showInfo(message, { variant: "danger" });
         removeId.value = null;
         clear();
         closeDialog();
@@ -104,7 +104,7 @@ export default defineComponent({
           retrieveUserAnswers();
         }
       }
-    }
+    };
 
     useInfiniteScroll(checkScroll);
 
@@ -125,7 +125,7 @@ export default defineComponent({
       ...pagination,
       ...sorting,
       t$,
-      ...dataUtils,
+      ...dataUtils
     };
-  },
+  }
 });

@@ -1,8 +1,8 @@
-import axios from 'axios';
-import buildPaginationQueryOpts from '@/shared/sort/sorts';
-import {ITestEntity} from '@/shared/model/test-entity.model';
+import axios from "axios";
+import buildPaginationQueryOpts from "@/shared/sort/sorts";
+import { ITestEntity } from "@/shared/model/test-entity.model";
 
-const baseApiUrl = 'api/test-entities';
+const baseApiUrl = "api/test-entities";
 
 export default class TestEntityService {
   public find(id: number): Promise<ITestEntity> {

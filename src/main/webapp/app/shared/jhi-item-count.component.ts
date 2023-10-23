@@ -1,12 +1,12 @@
-import { computed, defineComponent, Ref, ref } from 'vue';
-import { useI18n } from 'vue-i18n';
+import { computed, defineComponent } from "vue";
+import { useI18n } from "vue-i18n";
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
   props: {
     page: Number,
     total: Number,
-    itemsPerPage: Number,
+    itemsPerPage: Number
   },
   setup(props) {
     const first = computed(() => ((props.page - 1) * props.itemsPerPage === 0 ? 1 : (props.page - 1) * props.itemsPerPage + 1));
@@ -15,7 +15,7 @@ export default defineComponent({
     return {
       first,
       second,
-      t$: useI18n().t,
+      t$: useI18n().t
     };
-  },
+  }
 });

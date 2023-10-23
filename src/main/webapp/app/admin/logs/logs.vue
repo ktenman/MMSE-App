@@ -9,10 +9,10 @@
 
       <table class="table table-sm table-striped table-bordered" aria-describedby="Logs">
         <thead>
-          <tr title="click to order">
-            <th v-on:click="changeOrder('name')" scope="col"><span v-text="t$('logs.table.name')"></span></th>
-            <th v-on:click="changeOrder('level')" scope="col"><span v-text="t$('logs.table.level')"></span></th>
-          </tr>
+        <tr title="click to order">
+          <th v-on:click="changeOrder('name')" scope="col"><span v-text="t$('logs.table.name')"></span></th>
+          <th v-on:click="changeOrder('level')" scope="col"><span v-text="t$('logs.table.level')"></span></th>
+        </tr>
         </thead>
 
         <tr v-for="logger in filteredLoggers" :key="logger.name">

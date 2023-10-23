@@ -13,6 +13,6 @@
                                  constraintName="fk_test_entity__user_id"
                                  referencedColumnNames="id"
                                  referencedTableName="mmse_user"
-                                 />
+        />
     </changeSet>
 </databaseChangeLog>

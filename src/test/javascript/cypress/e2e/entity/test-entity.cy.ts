@@ -1,20 +1,20 @@
 import {
-  entityTableSelector,
-  entityDetailsButtonSelector,
-  entityDetailsBackButtonSelector,
-  entityCreateButtonSelector,
-  entityCreateSaveButtonSelector,
-  entityCreateCancelButtonSelector,
-  entityEditButtonSelector,
-  entityDeleteButtonSelector,
   entityConfirmDeleteButtonSelector,
-} from '../../support/entity';
+  entityCreateButtonSelector,
+  entityCreateCancelButtonSelector,
+  entityCreateSaveButtonSelector,
+  entityDeleteButtonSelector,
+  entityDetailsBackButtonSelector,
+  entityDetailsButtonSelector,
+  entityEditButtonSelector,
+  entityTableSelector
+} from "../../support/entity";
 
-describe('TestEntity e2e test', () => {
-  const testEntityPageUrl = '/test-entity';
-  const testEntityPageUrlPattern = new RegExp('/test-entity(\\?.*)?$');
-  const username = Cypress.env('E2E_USERNAME') ?? 'user';
-  const password = Cypress.env('E2E_PASSWORD') ?? 'user';
+describe("TestEntity e2e test", () => {
+  const testEntityPageUrl = "/test-entity";
+  const testEntityPageUrlPattern = new RegExp("/test-entity(\\?.*)?$");
+  const username = Cypress.env("E2E_USERNAME") ?? "user";
+  const password = Cypress.env("E2E_PASSWORD") ?? "user";
   // const testEntitySample = {"createdAt":"2023-07-01T09:48:51.071Z"};
 
   let testEntity;
@@ -38,9 +38,9 @@ describe('TestEntity e2e test', () => {
    */
 
   beforeEach(() => {
-    cy.intercept('GET', '/api/test-entities+(?*|)').as('entitiesRequest');
-    cy.intercept('POST', '/api/test-entities').as('postEntityRequest');
-    cy.intercept('DELETE', '/api/test-entities/*').as('deleteEntityRequest');
+    cy.intercept("GET", "/api/test-entities+(?*|)").as("entitiesRequest");
+    cy.intercept("POST", "/api/test-entities").as("postEntityRequest");
+    cy.intercept("DELETE", "/api/test-entities/*").as("deleteEntityRequest");
   });
 
   /* Disabled due to incompatibility
@@ -57,8 +57,8 @@ describe('TestEntity e2e test', () => {
   afterEach(() => {
     if (testEntity) {
       cy.authenticatedRequest({
-        method: 'DELETE',
-        url: `/api/test-entities/${testEntity.id}`,
+        method: "DELETE",
+        url: `/api/test-entities/${testEntity.id}`
       }).then(() => {
         testEntity = undefined;
       });
@@ -78,41 +78,41 @@ describe('TestEntity e2e test', () => {
   });
    */
 
-  it('TestEntities menu should load TestEntities page', () => {
-    cy.visit('/');
-    cy.clickOnEntityMenuItem('test-entity');
-    cy.wait('@entitiesRequest').then(({ response }) => {
+  it("TestEntities menu should load TestEntities page", () => {
+    cy.visit("/");
+    cy.clickOnEntityMenuItem("test-entity");
+    cy.wait("@entitiesRequest").then(({ response }) => {
       if (response.body.length === 0) {
-        cy.get(entityTableSelector).should('not.exist');
+        cy.get(entityTableSelector).should("not.exist");
       } else {
-        cy.get(entityTableSelector).should('exist');
+        cy.get(entityTableSelector).should("exist");
       }
     });
-    cy.getEntityHeading('TestEntity').should('exist');
-    cy.url().should('match', testEntityPageUrlPattern);
+    cy.getEntityHeading("TestEntity").should("exist");
+    cy.url().should("match", testEntityPageUrlPattern);
   });
 
-  describe('TestEntity page', () => {
-    describe('create button click', () => {
+  describe("TestEntity page", () => {
+    describe("create button click", () => {
       beforeEach(() => {
         cy.visit(testEntityPageUrl);
-        cy.wait('@entitiesRequest');
+        cy.wait("@entitiesRequest");
       });
 
-      it('should load create TestEntity page', () => {
+      it("should load create TestEntity page", () => {
         cy.get(entityCreateButtonSelector).click();
-        cy.url().should('match', new RegExp('/test-entity/new$'));
-        cy.getEntityCreateUpdateHeading('TestEntity');
-        cy.get(entityCreateSaveButtonSelector).should('exist');
+        cy.url().should("match", new RegExp("/test-entity/new$"));
+        cy.getEntityCreateUpdateHeading("TestEntity");
+        cy.get(entityCreateSaveButtonSelector).should("exist");
         cy.get(entityCreateCancelButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
+        cy.wait("@entitiesRequest").then(({ response }) => {
           expect(response.statusCode).to.equal(200);
         });
-        cy.url().should('match', testEntityPageUrlPattern);
+        cy.url().should("match", testEntityPageUrlPattern);
       });
     });
 
-    describe('with existing value', () => {
+    describe("with existing value", () => {
       /* Disabled due to incompatibility
       beforeEach(() => {
         cy.authenticatedRequest({
@@ -147,95 +147,95 @@ describe('TestEntity e2e test', () => {
       });
        */
 
-      beforeEach(function () {
+      beforeEach(function() {
         cy.visit(testEntityPageUrl);
 
-        cy.wait('@entitiesRequest').then(({ response }) => {
+        cy.wait("@entitiesRequest").then(({ response }) => {
           if (response.body.length === 0) {
             this.skip();
           }
         });
       });
 
-      it('detail button click should load details TestEntity page', () => {
+      it("detail button click should load details TestEntity page", () => {
         cy.get(entityDetailsButtonSelector).first().click();
-        cy.getEntityDetailsHeading('testEntity');
+        cy.getEntityDetailsHeading("testEntity");
         cy.get(entityDetailsBackButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
+        cy.wait("@entitiesRequest").then(({ response }) => {
           expect(response.statusCode).to.equal(200);
         });
-        cy.url().should('match', testEntityPageUrlPattern);
+        cy.url().should("match", testEntityPageUrlPattern);
       });
 
-      it('edit button click should load edit TestEntity page and go back', () => {
+      it("edit button click should load edit TestEntity page and go back", () => {
         cy.get(entityEditButtonSelector).first().click();
-        cy.getEntityCreateUpdateHeading('TestEntity');
-        cy.get(entityCreateSaveButtonSelector).should('exist');
+        cy.getEntityCreateUpdateHeading("TestEntity");
+        cy.get(entityCreateSaveButtonSelector).should("exist");
         cy.get(entityCreateCancelButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
+        cy.wait("@entitiesRequest").then(({ response }) => {
           expect(response.statusCode).to.equal(200);
         });
-        cy.url().should('match', testEntityPageUrlPattern);
+        cy.url().should("match", testEntityPageUrlPattern);
       });
 
-      it('edit button click should load edit TestEntity page and save', () => {
+      it("edit button click should load edit TestEntity page and save", () => {
         cy.get(entityEditButtonSelector).first().click();
-        cy.getEntityCreateUpdateHeading('TestEntity');
+        cy.getEntityCreateUpdateHeading("TestEntity");
         cy.get(entityCreateSaveButtonSelector).click();
-        cy.wait('@entitiesRequest').then(({ response }) => {
+        cy.wait("@entitiesRequest").then(({ response }) => {
           expect(response.statusCode).to.equal(200);
         });
-        cy.url().should('match', testEntityPageUrlPattern);
+        cy.url().should("match", testEntityPageUrlPattern);
       });
 
-      it.skip('last delete button click should delete instance of TestEntity', () => {
+      it.skip("last delete button click should delete instance of TestEntity", () => {
         cy.get(entityDeleteButtonSelector).last().click();
-        cy.getEntityDeleteDialogHeading('testEntity').should('exist');
+        cy.getEntityDeleteDialogHeading("testEntity").should("exist");
         cy.get(entityConfirmDeleteButtonSelector).click();
-        cy.wait('@deleteEntityRequest').then(({ response }) => {
+        cy.wait("@deleteEntityRequest").then(({ response }) => {
           expect(response.statusCode).to.equal(204);
         });
-        cy.wait('@entitiesRequest').then(({ response }) => {
+        cy.wait("@entitiesRequest").then(({ response }) => {
           expect(response.statusCode).to.equal(200);
         });
-        cy.url().should('match', testEntityPageUrlPattern);
+        cy.url().should("match", testEntityPageUrlPattern);
 
         testEntity = undefined;
       });
     });
   });
 
-  describe('new TestEntity page', () => {
+  describe("new TestEntity page", () => {
     beforeEach(() => {
       cy.visit(`${testEntityPageUrl}`);
       cy.get(entityCreateButtonSelector).click();
-      cy.getEntityCreateUpdateHeading('TestEntity');
+      cy.getEntityCreateUpdateHeading("TestEntity");
     });
 
-    it.skip('should create an instance of TestEntity', () => {
-      cy.get(`[data-cy="createdAt"]`).type('2023-07-01T01:35');
+    it.skip("should create an instance of TestEntity", () => {
+      cy.get(`[data-cy="createdAt"]`).type("2023-07-01T01:35");
       cy.get(`[data-cy="createdAt"]`).blur();
-      cy.get(`[data-cy="createdAt"]`).should('have.value', '2023-07-01T01:35');
+      cy.get(`[data-cy="createdAt"]`).should("have.value", "2023-07-01T01:35");
 
-      cy.get(`[data-cy="updatedAt"]`).type('2023-06-30T14:08');
+      cy.get(`[data-cy="updatedAt"]`).type("2023-06-30T14:08");
       cy.get(`[data-cy="updatedAt"]`).blur();
-      cy.get(`[data-cy="updatedAt"]`).should('have.value', '2023-06-30T14:08');
+      cy.get(`[data-cy="updatedAt"]`).should("have.value", "2023-06-30T14:08");
 
-      cy.get(`[data-cy="score"]`).type('10532');
-      cy.get(`[data-cy="score"]`).should('have.value', '10532');
+      cy.get(`[data-cy="score"]`).type("10532");
+      cy.get(`[data-cy="score"]`).should("have.value", "10532");
 
       cy.get(`[data-cy="user"]`).select(1);
 
       cy.get(entityCreateSaveButtonSelector).click();
 
-      cy.wait('@postEntityRequest').then(({ response }) => {
+      cy.wait("@postEntityRequest").then(({ response }) => {
         expect(response.statusCode).to.equal(201);
         testEntity = response.body;
       });
-      cy.wait('@entitiesRequest').then(({ response }) => {
+      cy.wait("@entitiesRequest").then(({ response }) => {
         expect(response.statusCode).to.equal(200);
       });
-      cy.url().should('match', testEntityPageUrlPattern);
+      cy.url().should("match", testEntityPageUrlPattern);
     });
   });
 });

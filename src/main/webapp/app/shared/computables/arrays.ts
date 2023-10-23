@@ -6,7 +6,7 @@ const compareString = (a: string, b: string): number => {
 };
 
 const asString = (val): string => {
-  return typeof val === 'string' ? val : '' + val;
+  return typeof val === "string" ? val : "" + val;
 };
 
 const compareAny = (a, b): number => {
@@ -23,7 +23,7 @@ export const orderBy = (array: any[], opts: OrderByOptions) => {
 
   const { orderByProp, reverse = false } = opts;
   let sorted: any[];
-  if (array.some(el => typeof el[orderByProp] === 'string')) {
+  if (array.some(el => typeof el[orderByProp] === "string")) {
     sorted = array.sort((a, b) => compareString(asString(a), asString(b)));
   } else {
     sorted = array.sort((a, b) => compareAny(a, b));
@@ -38,17 +38,17 @@ export type FilterByOptions = { filterByTerm: string; filterMaxDepth?: number };
 
 const filterObject = (val: any, opts: FilterByOptions): boolean => {
   const { filterByTerm, filterMaxDepth = 2 } = opts;
-  if (typeof val === 'string') {
+  if (typeof val === "string") {
     return val.toLocaleLowerCase().startsWith(filterByTerm);
   }
-  if (typeof val === 'object') {
+  if (typeof val === "object") {
     if (filterMaxDepth < 0) return false;
     for (const value of Object.values(val)) {
       if (filterObject(value, { filterByTerm, filterMaxDepth: filterMaxDepth - 1 })) return true;
     }
     return false;
   }
-  return ('' + val).toLocaleLowerCase().startsWith(filterByTerm);
+  return ("" + val).toLocaleLowerCase().startsWith(filterByTerm);
 };
 
 export const filterBy = (array: any, opts: FilterByOptions) => {

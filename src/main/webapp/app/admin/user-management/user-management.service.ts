@@ -1,6 +1,6 @@
-import axios from 'axios';
-import buildPaginationQueryOpts from '@/shared/sort/sorts';
-import { IUser } from '@/shared/model/user.model';
+import axios from "axios";
+import buildPaginationQueryOpts from "@/shared/sort/sorts";
+import { IUser } from "@/shared/model/user.model";
 
 export default class UserManagementService {
   public get(userId: string): Promise<any> {
@@ -8,11 +8,11 @@ export default class UserManagementService {
   }
 
   public create(user: IUser): Promise<any> {
-    return axios.post('api/admin/users', user);
+    return axios.post("api/admin/users", user);
   }
 
   public update(user: IUser): Promise<any> {
-    return axios.put('api/admin/users', user);
+    return axios.put("api/admin/users", user);
   }
 
   public remove(userId: number): Promise<any> {
@@ -24,6 +24,6 @@ export default class UserManagementService {
   }
 
   public retrieveAuthorities(): Promise<any> {
-    return axios.get('api/authorities');
+    return axios.get("api/authorities");
   }
 }

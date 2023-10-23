@@ -2,7 +2,14 @@
   "extends": "../../../../tsconfig",
   "compilerOptions": {
     "outDir": "../../../../target/out-tsc/spec",
-    "types": ["vitest/globals", "node"]
+    "types": [
+      "vitest/globals",
+      "node"
+    ]
   },
-  "include": ["../../../../src/main/webapp/app", "../../../../vitest.config.ts", "./"]
+  "include": [
+    "../../../../src/main/webapp/app",
+    "../../../../vitest.config.ts",
+    "./"
+  ]
 }

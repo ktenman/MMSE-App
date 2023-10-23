@@ -8,6 +8,8 @@ import ee.tenman.mmse.repository.TestEntityRepository;
 import ee.tenman.mmse.repository.UserAnswerRepository;
 import ee.tenman.mmse.service.UserService;
 import ee.tenman.mmse.service.dto.AnswerDTO;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -24,6 +26,7 @@ public class QuizService {
     private final UserAnswerRepository userAnswerRepository;
     private final UserService userService;
     private final TestEntityRepository testEntityRepository;
+    private final Logger log = LoggerFactory.getLogger(QuizService.class);
 
     @Autowired
     public QuizService(QuestionsConfig questionsConfig,
@@ -47,6 +50,11 @@ public class QuizService {
 
         for (UserAnswer userAnswer : answers) {
             Question question = questions.get(userAnswer.getQuestionId());
+
+            if (question == null) {
+                log.error("No Question found for ID: {}", userAnswer.getQuestionId());
+                continue;
+            }
 
             if (answeredQuestions.contains(question.getQuestionId())) {
                 continue;

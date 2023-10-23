@@ -4,7 +4,7 @@
       <div v-if="user">
         <h2 class="jh-entity-heading">
           <span v-text="t$('userManagement.detail.title')"></span> [<strong>{{ user.login }}</strong
-          >]
+        >]
         </h2>
         <dl class="row jh-entity-details">
           <dt><span v-text="t$('userManagement.login')"></span></dt>
@@ -48,7 +48,8 @@
         </dl>
         <router-link custom v-slot="{ navigate }" :to="{ name: 'MmseUser' }">
           <button @click="navigate" class="btn btn-info">
-            <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span v-text="t$('entity.action.back')"></span>
+            <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span
+            v-text="t$('entity.action.back')"></span>
           </button>
         </router-link>
       </div>

@@ -1,12 +1,12 @@
-import { defineComponent, inject, ref, Ref } from 'vue';
-import { useI18n } from 'vue-i18n';
-import { useVuelidate } from '@vuelidate/core';
-import { email, maxLength, minLength, required } from '@vuelidate/validators';
-import UserManagementService from './user-management.service';
-import { IUser, User } from '@/shared/model/user.model';
-import { useAlertService } from '@/shared/alert/alert.service';
-import { useRoute, useRouter } from 'vue-router';
-import languages from '@/shared/config/languages';
+import { defineComponent, inject, ref, Ref } from "vue";
+import { useI18n } from "vue-i18n";
+import { useVuelidate } from "@vuelidate/core";
+import { email, maxLength, minLength, required } from "@vuelidate/validators";
+import UserManagementService from "./user-management.service";
+import { IUser, User } from "@/shared/model/user.model";
+import { useAlertService } from "@/shared/alert/alert.service";
+import { useRoute, useRouter } from "vue-router";
+import languages from "@/shared/config/languages";
 
 const loginValidator = (value: string) => {
   if (!value) {
@@ -20,33 +20,33 @@ const validations: any = {
     login: {
       required,
       maxLength: maxLength(254),
-      pattern: loginValidator,
+      pattern: loginValidator
     },
     firstName: {
-      maxLength: maxLength(50),
+      maxLength: maxLength(50)
     },
     lastName: {
-      maxLength: maxLength(50),
+      maxLength: maxLength(50)
     },
     email: {
       required,
       email,
       minLength: minLength(5),
-      maxLength: maxLength(50),
-    },
-  },
+      maxLength: maxLength(50)
+    }
+  }
 };
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
-  name: 'MmseUserManagementEdit',
+  name: "MmseUserManagementEdit",
   validations,
   setup() {
     const route = useRoute();
     const router = useRouter();
 
-    const alertService = inject('alertService', () => useAlertService(), true);
-    const userManagementService = inject('userManagementService', () => new UserManagementService(), true);
+    const alertService = inject("alertService", () => useAlertService(), true);
+    const userManagementService = inject("userManagementService", () => new UserManagementService(), true);
     const previousState = () => router.go(-1);
 
     const userAccount: Ref<IUser> = ref({ ...new User(), authorities: [] });
@@ -78,7 +78,7 @@ export default defineComponent({
       previousState,
       v$: useVuelidate(),
       languages: languages(),
-      t$: useI18n().t,
+      t$: useI18n().t
     };
   },
   methods: {
@@ -115,9 +115,9 @@ export default defineComponent({
     },
 
     getToastMessageFromHeader(res: any): string {
-      return this.t$(res.headers['x-mmseapp-alert'], {
-        param: decodeURIComponent(res.headers['x-mmseapp-params'].replace(/\+/g, ' ')),
+      return this.t$(res.headers["x-mmseapp-alert"], {
+        param: decodeURIComponent(res.headers["x-mmseapp-params"].replace(/\+/g, " "))
       }).toString();
-    },
-  },
+    }
+  }
 });

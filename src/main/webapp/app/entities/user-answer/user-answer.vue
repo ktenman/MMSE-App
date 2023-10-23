@@ -27,91 +27,102 @@
     <div class="table-responsive" v-if="userAnswers && userAnswers.length > 0">
       <table class="table table-striped" aria-describedby="userAnswers">
         <thead>
-          <tr>
-            <th scope="row" v-on:click="changeOrder('id')">
-              <span v-text="t$('global.field.id')"></span>
-              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator>
-            </th>
-            <th scope="row" v-on:click="changeOrder('answerText')">
-              <span v-text="t$('mmseApp.userAnswer.answerText')"></span>
-              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'answerText'"></jhi-sort-indicator>
-            </th>
-            <th scope="row" v-on:click="changeOrder('createdAt')">
-              <span v-text="t$('mmseApp.userAnswer.createdAt')"></span>
-              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'createdAt'"></jhi-sort-indicator>
-            </th>
-            <th scope="row" v-on:click="changeOrder('updatedAt')">
-              <span v-text="t$('mmseApp.userAnswer.updatedAt')"></span>
-              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'updatedAt'"></jhi-sort-indicator>
-            </th>
-            <th scope="row" v-on:click="changeOrder('questionId')">
-              <span v-text="t$('mmseApp.userAnswer.questionId')"></span>
-              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'questionId'"></jhi-sort-indicator>
-            </th>
-            <th scope="row" v-on:click="changeOrder('testEntity.id')">
-              <span v-text="t$('mmseApp.userAnswer.testEntity')"></span>
-              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'testEntity.id'"></jhi-sort-indicator>
-            </th>
-            <th scope="row"></th>
-          </tr>
+        <tr>
+          <th scope="row" v-on:click="changeOrder('id')">
+            <span v-text="t$('global.field.id')"></span>
+            <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator>
+          </th>
+          <th scope="row" v-on:click="changeOrder('answerText')">
+            <span v-text="t$('mmseApp.userAnswer.answerText')"></span>
+            <jhi-sort-indicator :current-order="propOrder" :reverse="reverse"
+                                :field-name="'answerText'"></jhi-sort-indicator>
+          </th>
+          <th scope="row" v-on:click="changeOrder('createdAt')">
+            <span v-text="t$('mmseApp.userAnswer.createdAt')"></span>
+            <jhi-sort-indicator :current-order="propOrder" :reverse="reverse"
+                                :field-name="'createdAt'"></jhi-sort-indicator>
+          </th>
+          <th scope="row" v-on:click="changeOrder('updatedAt')">
+            <span v-text="t$('mmseApp.userAnswer.updatedAt')"></span>
+            <jhi-sort-indicator :current-order="propOrder" :reverse="reverse"
+                                :field-name="'updatedAt'"></jhi-sort-indicator>
+          </th>
+          <th scope="row" v-on:click="changeOrder('questionId')">
+            <span v-text="t$('mmseApp.userAnswer.questionId')"></span>
+            <jhi-sort-indicator :current-order="propOrder" :reverse="reverse"
+                                :field-name="'questionId'"></jhi-sort-indicator>
+          </th>
+          <th scope="row" v-on:click="changeOrder('testEntity.id')">
+            <span v-text="t$('mmseApp.userAnswer.testEntity')"></span>
+            <jhi-sort-indicator :current-order="propOrder" :reverse="reverse"
+                                :field-name="'testEntity.id'"></jhi-sort-indicator>
+          </th>
+          <th scope="row"></th>
+        </tr>
         </thead>
         <tbody>
-          <tr v-for="userAnswer in userAnswers" :key="userAnswer.id" data-cy="entityTable">
-            <td>
-              <router-link :to="{ name: 'UserAnswerView', params: { userAnswerId: userAnswer.id } }">{{ userAnswer.id }}</router-link>
-            </td>
-            <td>{{ userAnswer.answerText }}</td>
-            <td>{{ formatDateShort(userAnswer.createdAt) || '' }}</td>
-            <td>{{ formatDateShort(userAnswer.updatedAt) || '' }}</td>
-            <td v-text="t$('mmseApp.QuestionId.' + userAnswer.questionId)"></td>
-            <td>
-              <div v-if="userAnswer.testEntity">
-                <router-link :to="{ name: 'TestEntityView', params: { testEntityId: userAnswer.testEntity.id } }">{{
+        <tr v-for="userAnswer in userAnswers" :key="userAnswer.id" data-cy="entityTable">
+          <td>
+            <router-link :to="{ name: 'UserAnswerView', params: { userAnswerId: userAnswer.id } }">{{ userAnswer.id }}
+            </router-link>
+          </td>
+          <td>{{ userAnswer.answerText }}</td>
+          <td>{{ formatDateShort(userAnswer.createdAt) || "" }}</td>
+          <td>{{ formatDateShort(userAnswer.updatedAt) || "" }}</td>
+          <td v-text="t$('mmseApp.QuestionId.' + userAnswer.questionId)"></td>
+          <td>
+            <div v-if="userAnswer.testEntity">
+              <router-link :to="{ name: 'TestEntityView', params: { testEntityId: userAnswer.testEntity.id } }">{{
                   userAnswer.testEntity.id
-                }}</router-link>
-              </div>
-            </td>
-            <td class="text-right">
-              <div class="btn-group">
-                <router-link :to="{ name: 'UserAnswerView', params: { userAnswerId: userAnswer.id } }" custom v-slot="{ navigate }">
-                  <button @click="navigate" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
-                    <font-awesome-icon icon="eye"></font-awesome-icon>
-                    <span class="d-none d-md-inline" v-text="t$('entity.action.view')"></span>
-                  </button>
-                </router-link>
-                <router-link :to="{ name: 'UserAnswerEdit', params: { userAnswerId: userAnswer.id } }" custom v-slot="{ navigate }">
-                  <button @click="navigate" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
-                    <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
-                    <span class="d-none d-md-inline" v-text="t$('entity.action.edit')"></span>
-                  </button>
-                </router-link>
-                <b-button
-                  v-on:click="prepareRemove(userAnswer)"
-                  variant="danger"
-                  class="btn btn-sm"
-                  data-cy="entityDeleteButton"
-                  v-b-modal.removeEntity
-                >
-                  <font-awesome-icon icon="times"></font-awesome-icon>
-                  <span class="d-none d-md-inline" v-text="t$('entity.action.delete')"></span>
-                </b-button>
-              </div>
-            </td>
-          </tr>
+                }}
+              </router-link>
+            </div>
+          </td>
+          <td class="text-right">
+            <div class="btn-group">
+              <router-link :to="{ name: 'UserAnswerView', params: { userAnswerId: userAnswer.id } }" custom
+                           v-slot="{ navigate }">
+                <button @click="navigate" class="btn btn-info btn-sm details" data-cy="entityDetailsButton">
+                  <font-awesome-icon icon="eye"></font-awesome-icon>
+                  <span class="d-none d-md-inline" v-text="t$('entity.action.view')"></span>
+                </button>
+              </router-link>
+              <router-link :to="{ name: 'UserAnswerEdit', params: { userAnswerId: userAnswer.id } }" custom
+                           v-slot="{ navigate }">
+                <button @click="navigate" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
+                  <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
+                  <span class="d-none d-md-inline" v-text="t$('entity.action.edit')"></span>
+                </button>
+              </router-link>
+              <b-button
+                v-on:click="prepareRemove(userAnswer)"
+                variant="danger"
+                class="btn btn-sm"
+                data-cy="entityDeleteButton"
+                v-b-modal.removeEntity
+              >
+                <font-awesome-icon icon="times"></font-awesome-icon>
+                <span class="d-none d-md-inline" v-text="t$('entity.action.delete')"></span>
+              </b-button>
+            </div>
+          </td>
+        </tr>
         </tbody>
         <span ref="infiniteScrollEl"></span>
       </table>
     </div>
     <b-modal ref="removeEntity" id="removeEntity">
       <template #modal-title>
-        <span id="mmseApp.userAnswer.delete.question" data-cy="userAnswerDeleteDialogHeading" v-text="t$('entity.delete.title')"></span>
+        <span id="mmseApp.userAnswer.delete.question" data-cy="userAnswerDeleteDialogHeading"
+              v-text="t$('entity.delete.title')"></span>
       </template>
       <div class="modal-body">
         <p id="mmse-delete-userAnswer-heading" v-text="t$('mmseApp.userAnswer.delete.question', { id: removeId })"></p>
       </div>
       <template #modal-footer>
         <div>
-          <button type="button" class="btn btn-secondary" v-text="t$('entity.action.cancel')" v-on:click="closeDialog()"></button>
+          <button type="button" class="btn btn-secondary" v-text="t$('entity.action.cancel')"
+                  v-on:click="closeDialog()"></button>
           <button
             type="button"
             class="btn btn-primary"

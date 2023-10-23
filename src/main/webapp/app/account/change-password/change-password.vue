@@ -9,11 +9,13 @@
         <div class="alert alert-success" role="alert" v-if="success" v-html="t$('password.messages.success')"></div>
         <div class="alert alert-danger" role="alert" v-if="error" v-html="t$('password.messages.error')"></div>
 
-        <div class="alert alert-danger" role="alert" v-if="doNotMatch" v-text="t$('global.messages.error.dontmatch')"></div>
+        <div class="alert alert-danger" role="alert" v-if="doNotMatch"
+             v-text="t$('global.messages.error.dontmatch')"></div>
 
         <form name="form" role="form" id="password-form" v-on:submit.prevent="changePassword()">
           <div class="form-group">
-            <label class="form-control-label" for="currentPassword" v-text="t$('global.form[\'currentpassword.label\']')"></label>
+            <label class="form-control-label" for="currentPassword"
+                   v-text="t$('global.form[\'currentpassword.label\']')"></label>
             <input
               type="password"
               class="form-control"
@@ -34,7 +36,8 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="form-control-label" for="newPassword" v-text="t$('global.form[\'newpassword.label\']')"></label>
+            <label class="form-control-label" for="newPassword"
+                   v-text="t$('global.form[\'newpassword.label\']')"></label>
             <input
               type="password"
               class="form-control"
@@ -67,7 +70,8 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="form-control-label" for="confirmPassword" v-text="t$('global.form[\'confirmpassword.label\']')"></label>
+            <label class="form-control-label" for="confirmPassword"
+                   v-text="t$('global.form[\'confirmpassword.label\']')"></label>
             <input
               type="password"
               class="form-control"

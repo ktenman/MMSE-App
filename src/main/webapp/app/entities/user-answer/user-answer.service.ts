@@ -1,8 +1,8 @@
-import axios from 'axios';
-import buildPaginationQueryOpts from '@/shared/sort/sorts';
-import {IUserAnswer} from '@/shared/model/user-answer.model';
+import axios from "axios";
+import buildPaginationQueryOpts from "@/shared/sort/sorts";
+import { IUserAnswer } from "@/shared/model/user-answer.model";
 
-const baseApiUrl = 'api/user-answers';
+const baseApiUrl = "api/user-answers";
 
 export default class UserAnswerService {
   public find(id: number): Promise<IUserAnswer> {

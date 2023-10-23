@@ -1,14 +1,14 @@
-import {defineComponent, inject, onMounted, ref, Ref} from 'vue';
-import {useI18n} from 'vue-i18n';
-import LoginService from '@/account/login.service';
-import ActivateService from './activate.service';
-import {useRoute} from 'vue-router';
+import { defineComponent, inject, onMounted, ref, Ref } from "vue";
+import { useI18n } from "vue-i18n";
+import LoginService from "@/account/login.service";
+import ActivateService from "./activate.service";
+import { useRoute } from "vue-router";
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
   setup() {
-    const activateService = inject('activateService', () => new ActivateService(), true);
-    const loginService = inject<LoginService>('loginService');
+    const activateService = inject("activateService", () => new ActivateService(), true);
+    const loginService = inject<LoginService>("loginService");
     const route = useRoute();
 
     const success: Ref<boolean> = ref(false);
@@ -35,7 +35,7 @@ export default defineComponent({
       openLogin,
       success,
       error,
-      t$: useI18n().t,
+      t$: useI18n().t
     };
-  },
+  }
 });

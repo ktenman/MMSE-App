@@ -30,7 +30,6 @@ public class QuizController {
     private final TestEntityRepository testEntityRepository;
     private final UserService userService;
 
-
     @Autowired
     public QuizController(QuizService quizService, UserAnswerService userAnswerService, TestEntityRepository testEntityRepository, UserService userService) {
         this.quizService = quizService;
@@ -44,23 +43,8 @@ public class QuizController {
         Optional<UserAnswer> latestUserAnswer = userAnswerService.getLatest();
 
         if (latestUserAnswer.isPresent()) {
-            UserAnswer answer = latestUserAnswer.get();
-            Optional<QuestionId> nextQuestionId = getNextQuestionId(answer.getQuestionId());
-
-            if (nextQuestionId.isEmpty()) {
-                User user = userService.getUserWithAuthorities();
-                TestEntity testEntity = testEntityRepository.findFirstByUserIdOrderByCreatedAtDesc(user.getId()).orElseThrow(() -> new NoSuchElementException("Test not found"));
-                int calculateScore = quizService.calculateScore(testEntity.getId());
-                testEntity.setScore(calculateScore);
-                testEntityRepository.save(testEntity);
-
-                // Return a response indicating that the quiz has ended.
-                return ResponseEntity.ok().body("Quiz has ended. Your score is " + calculateScore);
-            }
-
-            // Continue the quiz with the next question
-            Question nextQuestion = quizService.getQuestion(nextQuestionId.get());
-            return ResponseEntity.ok(nextQuestion);
+            Optional<QuestionId> nextQuestionId = getNextQuestionId(latestUserAnswer.get().getQuestionId());
+            return handleNextQuestion(nextQuestionId);
         } else {
             // If there's no latest user answer, this means the quiz has just started. Return the first question.
             Question firstQuestion = quizService.getFirstQuestion();
@@ -72,20 +56,7 @@ public class QuizController {
     public ResponseEntity<?> saveAnswerAndGetNextQuestion(@RequestBody AnswerDTO answerDTO) {
         quizService.saveAnswer(answerDTO);
         Optional<QuestionId> nextQuestionId = getNextQuestionId(answerDTO.getQuestionId());
-        if (nextQuestionId.isEmpty()) {
-            User user = userService.getUserWithAuthorities();
-            TestEntity testEntity = testEntityRepository.findFirstByUserIdOrderByCreatedAtDesc(user.getId()).orElseThrow(() -> new NoSuchElementException("Test not found"));
-            int calculateScore = quizService.calculateScore(testEntity.getId());
-            testEntity.setScore(calculateScore);
-            testEntityRepository.save(testEntity);
-
-            // Return a response indicating that the quiz has ended.
-            return ResponseEntity.ok().body("Quiz has ended. Your score is " + calculateScore);
-        }
-
-        // Continue the quiz with the next question
-        Question nextQuestion = quizService.getQuestion(nextQuestionId.get());
-        return ResponseEntity.ok(nextQuestion);
+        return handleNextQuestion(nextQuestionId);
     }
 
     @PostMapping("/retake")
@@ -102,6 +73,23 @@ public class QuizController {
         }
 
         return Optional.empty();
+    }
+
+    private ResponseEntity<?> handleNextQuestion(Optional<QuestionId> nextQuestionId) {
+        if (nextQuestionId.isEmpty()) {
+            User user = userService.getUserWithAuthorities();
+            TestEntity testEntity = testEntityRepository.findFirstByUserIdOrderByCreatedAtDesc(user.getId()).orElseThrow(() -> new NoSuchElementException("Test not found"));
+            int calculateScore = quizService.calculateScore(testEntity.getId());
+            testEntity.setScore(calculateScore);
+            testEntityRepository.save(testEntity);
+
+            // Return a response indicating that the quiz has ended.
+            return ResponseEntity.ok().body("Quiz has ended. Your score is " + calculateScore);
+        }
+
+        // Continue the quiz with the next question
+        Question nextQuestion = quizService.getQuestion(nextQuestionId.get());
+        return ResponseEntity.ok(nextQuestion);
     }
 
 }
