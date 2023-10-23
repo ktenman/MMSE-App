@@ -12,7 +12,7 @@ import java.util.List;
 public class Question10 implements Question {
 
     private static final String QUESTION_TEXT = "Please recall the three objects that were previously mentioned.";
-    private final QuestionId questionId = QuestionId.QUESTION_10;
+    private static final QuestionId QUESTION_ID = QuestionId.QUESTION_10;
     private static final List<String> CORRECT_ANSWERS = List.of("man", "car", "ball");
 
     @Override
@@ -27,7 +27,7 @@ public class Question10 implements Question {
 
     @Override
     public QuestionId getQuestionId() {
-        return this.questionId;
+        return this.QUESTION_ID;
     }
 
     @Override

@@ -29,7 +29,7 @@ public class Question5 implements Question {
         AUTUMN, Set.of(Month.SEPTEMBER, Month.OCTOBER, Month.NOVEMBER)
     );
 
-    private final QuestionId questionId = QuestionId.QUESTION_5;
+    private static final QuestionId QUESTION_ID = QuestionId.QUESTION_5;
 
     @Override
     public String getQuestionText() {
@@ -43,7 +43,7 @@ public class Question5 implements Question {
 
     @Override
     public QuestionId getQuestionId() {
-        return this.questionId;
+        return this.QUESTION_ID;
     }
 
     @Override

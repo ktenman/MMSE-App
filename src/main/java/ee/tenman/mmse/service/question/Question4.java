@@ -18,7 +18,7 @@ import java.util.stream.IntStream;
 public class Question4 implements Question {
 
     private static final String QUESTION_TEXT = "What is the current year?";
-    private final QuestionId questionId = QuestionId.QUESTION_4;
+    private static final QuestionId QUESTION_ID = QuestionId.QUESTION_4;
     @Resource
     private Clock clock;
 
@@ -34,7 +34,7 @@ public class Question4 implements Question {
 
     @Override
     public QuestionId getQuestionId() {
-        return this.questionId;
+        return this.QUESTION_ID;
     }
 
     @Override

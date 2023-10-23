@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 public class Question9 implements Question {
 
     private static final String QUESTION_TEXT = "Start with 100 and subtract 7, continue subtracting 7 from each new number for five steps.";
-    private final QuestionId questionId = QuestionId.QUESTION_9;
+    private static final QuestionId QUESTION_ID = QuestionId.QUESTION_9;
     private static final List<Integer> CORRECT_ANSWERS = List.of(93, 86, 79, 72, 65);
     private List<Integer> userAnswers;
 
@@ -39,7 +39,7 @@ public class Question9 implements Question {
 
     @Override
     public QuestionId getQuestionId() {
-        return this.questionId;
+        return this.QUESTION_ID;
     }
 
     @Override

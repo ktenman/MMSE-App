@@ -23,7 +23,7 @@ import java.util.Locale;
 public class Question2 implements Question {
 
     private static final String QUESTION_TEXT = "What is the current date?";
-    private final QuestionId questionId = QuestionId.QUESTION_2;
+    private static final QuestionId QUESTION_ID = QuestionId.QUESTION_2;
 
     @Resource
     private Clock clock;
@@ -40,7 +40,7 @@ public class Question2 implements Question {
 
     @Override
     public QuestionId getQuestionId() {
-        return this.questionId;
+        return this.QUESTION_ID;
     }
 
     @Override

@@ -17,7 +17,7 @@ import java.util.stream.Stream;
 public class Question1 implements Question {
 
     private static final String QUESTION_TEXT = "What is the current day of the week?";
-    private final QuestionId questionId = QuestionId.QUESTION_1;
+    private static final QuestionId QUESTION_ID = QuestionId.QUESTION_1;
 
     @Override
     public String getQuestionText() {
@@ -31,7 +31,7 @@ public class Question1 implements Question {
 
     @Override
     public QuestionId getQuestionId() {
-        return this.questionId;
+        return this.QUESTION_ID;
     }
 
     @Override

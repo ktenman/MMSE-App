@@ -15,7 +15,7 @@ import java.util.stream.Collectors;
 public class Question8 implements Question {
 
     private static final String QUESTION_TEXT = "What is the name of the third object?";
-    private final QuestionId questionId = QuestionId.QUESTION_8;
+    private static final QuestionId QUESTION_ID = QuestionId.QUESTION_8;
 
     @Override
     public String getQuestionText() {
@@ -29,7 +29,7 @@ public class Question8 implements Question {
 
     @Override
     public QuestionId getQuestionId() {
-        return this.questionId;
+        return this.QUESTION_ID;
     }
 
     @Override
