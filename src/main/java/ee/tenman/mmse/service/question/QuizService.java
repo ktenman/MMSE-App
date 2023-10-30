@@ -60,6 +60,8 @@ public class QuizService {
                 continue;
             }
             totalScore += question.getScore(userAnswer);
+
+            log.info("Total score: {}, Question: {}, Score: {}", totalScore, question.getQuestionId(), question.getScore(userAnswer));
             answeredQuestions.add(question.getQuestionId()); // mark the question as answered
         }
         return totalScore;
