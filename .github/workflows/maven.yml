@@ -36,13 +36,8 @@ jobs:
           key: ${{ runner.os }}-m2-${{ hashFiles('**/pom.xml') }}
           restore-keys: ${{ runner.os }}-m2
 
-      - name: Build with Maven and Run Sonar Analysis
-        run: |
-          mvn clean install sonar:sonar -X \
-          -Dsonar.projectKey=ktenman_MMSE-App \
-          -Dsonar.organization=ktenman \
-          -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.token=${{ secrets.SONAR_TOKEN }}
+      - name: Build with Maven
+        run: mvn -B package --file pom.xml
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.4.1
