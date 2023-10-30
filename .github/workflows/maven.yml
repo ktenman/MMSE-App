@@ -38,7 +38,6 @@ jobs:
 
       - name: Build with Maven and Run Sonar Analysis
         run: |
-#          mvn -B clean verify sonar:sonar -X \
           mvn clean install sonar:sonar -X \
           -Dsonar.projectKey=ktenman_MMSE-App \
           -Dsonar.organization=ktenman \
