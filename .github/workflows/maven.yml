@@ -42,7 +42,7 @@ jobs:
           -Dsonar.projectKey=ktenman_mmse-app \
           -Dsonar.organization=ktenman \
           -Dsonar.host.url=https://sonarcloud.io \
-          -Dsonar.login=${{ secrets.SONAR_TOKEN }}
+          -Dsonar.token=${{ secrets.SONAR_TOKEN }}
 
       - name: Setup Node.js environment
         uses: actions/setup-node@v2.4.1
