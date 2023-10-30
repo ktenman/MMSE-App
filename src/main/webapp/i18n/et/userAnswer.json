@@ -1,0 +1,28 @@
+{
+  "mmseApp": {
+    "userAnswer": {
+      "home": {
+        "title": "User Answers",
+        "refreshListLabel": "Värskenda nimekirja",
+        "createLabel": "Lisa uus User Answer",
+        "createOrEditLabel": "Lisa või muuda User Answer",
+        "notFound": "Ei leitud ühtegi User Answers"
+      },
+      "created": "Uus User Answer on loodud identifikaatoriga { param }",
+      "updated": "User Answer identifikaatoriga { param } on muudetud",
+      "deleted": "User Answer identifikaatoriga { param } on kustutatud",
+      "delete": {
+        "question": "Kas olete kindel, et soovite kustutada User Answer { id }?"
+      },
+      "detail": {
+        "title": "User Answer"
+      },
+      "id": "ID",
+      "answerText": "Answer Text",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "questionId": "Question Id",
+      "testEntity": "Test Entity"
+    }
+  }
+}
