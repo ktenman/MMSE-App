@@ -88,3 +88,7 @@ management:
   health:
     mail:
       enabled: false
+
+openai:
+  api:
+    key: ${OPENAI_API_KEY:}

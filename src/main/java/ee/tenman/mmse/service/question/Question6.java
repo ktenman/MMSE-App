@@ -6,6 +6,7 @@ import ee.tenman.mmse.domain.enumeration.QuestionId;
 import ee.tenman.mmse.domain.enumeration.QuestionType;
 import org.springframework.stereotype.Component;
 
+import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
@@ -37,7 +38,7 @@ public class Question6 implements Question {
 
     @Override
     public List<AnswerOption> getAnswerOptions() {
-        List<AnswerOption> answerOptions = List.of(AnswerOption.BALL, AnswerOption.CAR, AnswerOption.MAN, AnswerOption.TREE);
+        List<AnswerOption> answerOptions = Arrays.asList(AnswerOption.BALL, AnswerOption.CAR, AnswerOption.MAN, AnswerOption.TREE);
         Collections.shuffle(answerOptions);
         return answerOptions;
     }
