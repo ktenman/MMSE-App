@@ -76,6 +76,8 @@
         <spotless-maven-plugin.version>2.37.0</spotless-maven-plugin.version>
         <validation-api.version>3.0.2</validation-api.version>
         <lombok.version>1.18.28</lombok.version>
+        <sonar.organization>ktenman</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
     </properties>
 
     <dependencyManagement>
