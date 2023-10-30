@@ -1,9 +1,9 @@
-import { computed, ComputedRef, defineComponent, inject, ref, Ref } from 'vue';
+import { computed, type ComputedRef, defineComponent, inject, ref, type Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import languages from '@/shared/config/languages';
 import { useVuelidate } from '@vuelidate/core';
 import { email, maxLength, minLength, required } from '@vuelidate/validators';
 import axios from 'axios';
+import languages from '@/shared/config/languages';
 import { EMAIL_ALREADY_USED_TYPE } from '@/constants';
 import { useStore } from '@/store';
 

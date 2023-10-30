@@ -1,11 +1,11 @@
-import { defineComponent, inject, ref, Ref } from 'vue';
+import { defineComponent, inject, ref, type Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useVuelidate } from '@vuelidate/core';
 import { email, maxLength, minLength, required } from '@vuelidate/validators';
-import UserManagementService from './user-management.service';
-import { IUser, User } from '@/shared/model/user.model';
-import { useAlertService } from '@/shared/alert/alert.service';
 import { useRoute, useRouter } from 'vue-router';
+import UserManagementService from './user-management.service';
+import { type IUser, User } from '@/shared/model/user.model';
+import { useAlertService } from '@/shared/alert/alert.service';
 import languages from '@/shared/config/languages';
 
 const loginValidator = (value: string) => {

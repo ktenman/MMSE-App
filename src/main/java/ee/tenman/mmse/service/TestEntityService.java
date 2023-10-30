@@ -13,7 +13,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
- * Service Implementation for managing {@link TestEntity}.
+ * Service Implementation for managing {@link ee.tenman.mmse.domain.TestEntity}.
  */
 @Service
 @Transactional

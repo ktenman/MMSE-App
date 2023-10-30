@@ -1,9 +1,11 @@
 package ee.tenman.mmse.web.rest;
 
-import static ee.tenman.mmse.web.rest.AccountResourceIT.TEST_USER_LOGIN;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ee.tenman.mmse.IntegrationTest;
 import ee.tenman.mmse.config.Constants;
@@ -14,11 +16,13 @@ import ee.tenman.mmse.security.AuthoritiesConstants;
 import ee.tenman.mmse.service.UserService;
 import ee.tenman.mmse.service.dto.AdminUserDTO;
 import ee.tenman.mmse.service.dto.PasswordChangeDTO;
-import ee.tenman.mmse.service.dto.UserDTO;
 import ee.tenman.mmse.web.rest.vm.KeyAndPasswordVM;
 import ee.tenman.mmse.web.rest.vm.ManagedUserVM;
 import java.time.Instant;
-import java.util.*;
+import java.util.Collections;
+import java.util.HashSet;
+import java.util.Optional;
+import java.util.Set;
 import org.apache.commons.lang3.RandomStringUtils;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -33,7 +37,6 @@ import org.springframework.transaction.annotation.Transactional;
  * Integration tests for the {@link AccountResource} REST controller.
  */
 @AutoConfigureMockMvc
-@WithMockUser(value = TEST_USER_LOGIN)
 @IntegrationTest
 class AccountResourceIT {
 
@@ -64,21 +67,16 @@ class AccountResourceIT {
     }
 
     @Test
+    @WithMockUser(TEST_USER_LOGIN)
     void testAuthenticatedUser() throws Exception {
         restAccountMockMvc
-            .perform(
-                get("/api/authenticate")
-                    .with(request -> {
-                        request.setRemoteUser(TEST_USER_LOGIN);
-                        return request;
-                    })
-                    .accept(MediaType.APPLICATION_JSON)
-            )
+            .perform(get("/api/authenticate").with(request -> request).accept(MediaType.APPLICATION_JSON))
             .andExpect(status().isOk())
             .andExpect(content().string(TEST_USER_LOGIN));
     }
 
     @Test
+    @WithMockUser(TEST_USER_LOGIN)
     void testGetExistingAccount() throws Exception {
         Set<String> authorities = new HashSet<>();
         authorities.add(AuthoritiesConstants.ADMIN);
@@ -108,9 +106,7 @@ class AccountResourceIT {
 
     @Test
     void testGetUnknownAccount() throws Exception {
-        restAccountMockMvc
-            .perform(get("/api/account").accept(MediaType.APPLICATION_PROBLEM_JSON))
-            .andExpect(status().isInternalServerError());
+        restAccountMockMvc.perform(get("/api/account").accept(MediaType.APPLICATION_PROBLEM_JSON)).andExpect(status().isUnauthorized());
     }
 
     @Test
@@ -263,8 +259,8 @@ class AccountResourceIT {
 
         Optional<User> testUser = userRepository.findOneByEmailIgnoreCase("alice2@example.com");
         assertThat(testUser).isPresent();
-        testUser.get().setActivated(true);
-        userRepository.save(testUser.get());
+        testUser.orElseThrow().setActivated(true);
+        userRepository.save(testUser.orElseThrow());
 
         // Second (already activated) user
         restAccountMockMvc
@@ -339,10 +335,10 @@ class AccountResourceIT {
 
         Optional<User> testUser4 = userRepository.findOneByLogin("test-register-duplicate-email-3");
         assertThat(testUser4).isPresent();
-        assertThat(testUser4.get().getEmail()).isEqualTo("test-register-duplicate-email@example.com");
+        assertThat(testUser4.orElseThrow().getEmail()).isEqualTo("test-register-duplicate-email@example.com");
 
-        testUser4.get().setActivated(true);
-        userService.updateUser((new AdminUserDTO(testUser4.get())));
+        testUser4.orElseThrow().setActivated(true);
+        userService.updateUser((new AdminUserDTO(testUser4.orElseThrow())));
 
         // Register 4th (already activated) user
         restAccountMockMvc
@@ -370,9 +366,9 @@ class AccountResourceIT {
 
         Optional<User> userDup = userRepository.findOneWithAuthoritiesByLogin("badguy");
         assertThat(userDup).isPresent();
-        assertThat(userDup.get().getAuthorities())
+        assertThat(userDup.orElseThrow().getAuthorities())
             .hasSize(1)
-            .containsExactly(authorityRepository.findById(AuthoritiesConstants.USER).get());
+            .containsExactly(authorityRepository.findById(AuthoritiesConstants.USER).orElseThrow());
     }
 
     @Test

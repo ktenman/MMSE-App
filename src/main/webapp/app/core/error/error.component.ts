@@ -1,7 +1,7 @@
-import { ComputedRef, defineComponent, inject, Ref, ref } from 'vue';
+import { type ComputedRef, defineComponent, inject, type Ref, ref } from 'vue';
 import { useI18n } from 'vue-i18n';
-import LoginService from '@/account/login.service';
 import { useRoute } from 'vue-router';
+import type LoginService from '@/account/login.service';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },

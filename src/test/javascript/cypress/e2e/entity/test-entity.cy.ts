@@ -1,13 +1,13 @@
 import {
-  entityTableSelector,
-  entityDetailsButtonSelector,
-  entityDetailsBackButtonSelector,
-  entityCreateButtonSelector,
-  entityCreateSaveButtonSelector,
-  entityCreateCancelButtonSelector,
-  entityEditButtonSelector,
-  entityDeleteButtonSelector,
   entityConfirmDeleteButtonSelector,
+  entityCreateButtonSelector,
+  entityCreateCancelButtonSelector,
+  entityCreateSaveButtonSelector,
+  entityDeleteButtonSelector,
+  entityDetailsBackButtonSelector,
+  entityDetailsButtonSelector,
+  entityEditButtonSelector,
+  entityTableSelector,
 } from '../../support/entity';
 
 describe('TestEntity e2e test', () => {
@@ -30,7 +30,7 @@ describe('TestEntity e2e test', () => {
     cy.authenticatedRequest({
       method: 'POST',
       url: '/api/users',
-      body: {"login":"Northwest teal","firstName":"Silas","lastName":"West"},
+      body: {"login":"whoa rent","firstName":"Aletha","lastName":"Weimann"},
     }).then(({ body }) => {
       user = body;
     });
@@ -221,8 +221,8 @@ describe('TestEntity e2e test', () => {
       cy.get(`[data-cy="updatedAt"]`).blur();
       cy.get(`[data-cy="updatedAt"]`).should('have.value', '2023-06-30T14:08');
 
-      cy.get(`[data-cy="score"]`).type('32142');
-      cy.get(`[data-cy="score"]`).should('have.value', '32142');
+      cy.get(`[data-cy="score"]`).type('10532');
+      cy.get(`[data-cy="score"]`).should('have.value', '10532');
 
       cy.get(`[data-cy="user"]`).select(1);
 

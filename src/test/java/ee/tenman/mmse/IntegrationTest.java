@@ -1,6 +1,5 @@
 package ee.tenman.mmse;
 
-import ee.tenman.mmse.MmseApp;
 import ee.tenman.mmse.config.AsyncSyncConfiguration;
 import ee.tenman.mmse.config.EmbeddedSQL;
 import java.lang.annotation.ElementType;

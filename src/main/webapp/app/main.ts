@@ -1,11 +1,8 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.common with an alias.
-import Vue, { createApp, provide, computed, watch, onMounted } from 'vue';
+import Vue, { computed, createApp, onMounted, provide, watch } from 'vue';
 import { createPinia } from 'pinia';
 import { useI18n } from 'vue-i18n';
-
-import { useStore, useTranslationStore } from '@/store';
-import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
 
 import App from './app.vue';
 import router from './router';
@@ -15,6 +12,8 @@ import JhiItemCountComponent from './shared/jhi-item-count.vue';
 import JhiSortIndicatorComponent from './shared/sort/jhi-sort-indicator.vue';
 import LoginService from './account/login.service';
 import AccountService from './account/account.service';
+import { setupAxiosInterceptors } from '@/shared/config/axios-interceptor';
+import { useStore, useTranslationStore } from '@/store';
 
 import '../content/scss/global.scss';
 import '../content/scss/vendor.scss';
@@ -86,19 +85,19 @@ const app = createApp({
         if (!translationService.getLocalStoreLanguage()) {
           await changeLanguage(value.langKey);
         }
-      }
+      },
     );
 
     watch(
       () => translationStore.currentLanguage,
       value => {
         translationService.setLocale(value);
-      }
+      },
     );
 
     onMounted(async () => {
       const lang = [translationService.getLocalStoreLanguage(), store.account?.langKey, navigator.language, 'en'].find(
-        lang => lang && translationService.isLanguageSupported(lang)
+        lang => lang && translationService.isLanguageSupported(lang),
       );
       await changeLanguage(lang);
     });
@@ -139,16 +138,16 @@ const app = createApp({
       },
       error => {
         return Promise.reject(error);
-      }
+      },
     );
 
     provide(
       'authenticated',
-      computed(() => store.authenticated)
+      computed(() => store.authenticated),
     );
     provide(
       'currentUsername',
-      computed(() => store.account?.login)
+      computed(() => store.account?.login),
     );
 
     provide('translationService', translationService);

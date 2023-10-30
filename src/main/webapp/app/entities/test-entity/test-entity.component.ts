@@ -1,11 +1,11 @@
-import { defineComponent, inject, onMounted, ref, Ref, watch, watchEffect } from 'vue';
+import { defineComponent, inject, onMounted, ref, type Ref, watch, watchEffect } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useIntersectionObserver } from '@vueuse/core';
 
-import { ITestEntity } from '@/shared/model/test-entity.model';
+import TestEntityService from './test-entity.service';
+import { type ITestEntity } from '@/shared/model/test-entity.model';
 import useDataUtils from '@/shared/data/data-utils.service';
 import { useDateFormat } from '@/shared/composables';
-import TestEntityService from './test-entity.service';
 import { useAlertService } from '@/shared/alert/alert.service';
 
 export default defineComponent({
@@ -126,7 +126,7 @@ export default defineComponent({
       {
         threshold: 0.5,
         immediate: false,
-      }
+      },
     );
     watchEffect(() => {
       if (links.value.next) {

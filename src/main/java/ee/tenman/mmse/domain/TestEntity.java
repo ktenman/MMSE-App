@@ -1,7 +1,14 @@
 package ee.tenman.mmse.domain;
 
-import jakarta.persistence.*;
-import jakarta.validation.constraints.*;
+import jakarta.persistence.Column;
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
+import jakarta.persistence.ManyToOne;
+import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.Table;
+import jakarta.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Instant;
 
@@ -112,7 +119,7 @@ public class TestEntity implements Serializable {
         if (!(o instanceof TestEntity)) {
             return false;
         }
-        return id != null && id.equals(((TestEntity) o).id);
+        return getId() != null && getId().equals(((TestEntity) o).getId());
     }
 
     @Override

@@ -7,17 +7,24 @@ import ee.tenman.mmse.service.MailService;
 import ee.tenman.mmse.service.UserService;
 import ee.tenman.mmse.service.dto.AdminUserDTO;
 import ee.tenman.mmse.service.dto.PasswordChangeDTO;
-import ee.tenman.mmse.web.rest.errors.*;
+import ee.tenman.mmse.web.rest.errors.EmailAlreadyUsedException;
+import ee.tenman.mmse.web.rest.errors.InvalidPasswordException;
+import ee.tenman.mmse.web.rest.errors.LoginAlreadyUsedException;
 import ee.tenman.mmse.web.rest.vm.KeyAndPasswordVM;
 import ee.tenman.mmse.web.rest.vm.ManagedUserVM;
-import jakarta.servlet.http.HttpServletRequest;
 import jakarta.validation.Valid;
-import java.util.*;
+import java.util.Optional;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.bind.annotation.RestController;
 
 /**
  * REST controller for managing the current user's account.
@@ -106,7 +113,7 @@ public class AccountResource {
             .getCurrentUserLogin()
             .orElseThrow(() -> new AccountResourceException("Current user login not found"));
         Optional<User> existingUser = userRepository.findOneByEmailIgnoreCase(userDTO.getEmail());
-        if (existingUser.isPresent() && (!existingUser.get().getLogin().equalsIgnoreCase(userLogin))) {
+        if (existingUser.isPresent() && (!existingUser.orElseThrow().getLogin().equalsIgnoreCase(userLogin))) {
             throw new EmailAlreadyUsedException();
         }
         Optional<User> user = userRepository.findOneByLogin(userLogin);
@@ -145,7 +152,7 @@ public class AccountResource {
     public void requestPasswordReset(@RequestBody String mail) {
         Optional<User> user = userService.requestPasswordReset(mail);
         if (user.isPresent()) {
-            mailService.sendPasswordResetMail(user.get());
+            mailService.sendPasswordResetMail(user.orElseThrow());
         } else {
             // Pretend the request has been successful to prevent checking which emails really exist
             // but log that an invalid attempt has been made

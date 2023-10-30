@@ -1,9 +1,9 @@
-import { defineComponent, inject, ref, Ref } from 'vue';
+import { defineComponent, inject, ref, type Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute } from 'vue-router';
 
-import { useDateFormat } from '@/shared/composables';
 import UserManagementService from './user-management.service';
+import { useDateFormat } from '@/shared/composables';
 import { useAlertService } from '@/shared/alert/alert.service';
 
 export default defineComponent({

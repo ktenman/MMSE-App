@@ -1,10 +1,10 @@
-import { defineComponent, inject, ref, Ref } from 'vue';
+import { defineComponent, inject, ref, type Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import numeral from 'numeral';
 
-import { useDateFormat } from '@/shared/composables';
 import MmseMetricsModal from './metrics-modal.vue';
 import MetricsService from './metrics.service';
+import { useDateFormat } from '@/shared/composables';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },

@@ -1,14 +1,14 @@
-import { computed, defineComponent, inject, ref, Ref } from 'vue';
+import { computed, defineComponent, inject, ref, type Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core';
 
-import { useValidation, useDateFormat } from '@/shared/composables';
+import TestEntityService from './test-entity.service';
+import { useDateFormat, useValidation } from '@/shared/composables';
 import { useAlertService } from '@/shared/alert/alert.service';
 
 import UserService from '@/entities/user/user.service';
-import { ITestEntity, TestEntity } from '@/shared/model/test-entity.model';
-import TestEntityService from './test-entity.service';
+import { type ITestEntity, TestEntity } from '@/shared/model/test-entity.model';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },

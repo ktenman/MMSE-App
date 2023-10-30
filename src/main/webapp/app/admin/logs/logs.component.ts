@@ -1,8 +1,8 @@
-import { computed, defineComponent, inject, ref, Ref } from 'vue';
+import { computed, defineComponent, inject, ref, type Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 
-import { orderAndFilterBy } from '@/shared/computables';
 import LogsService from './logs.service';
+import { orderAndFilterBy } from '@/shared/computables';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
@@ -19,7 +19,7 @@ export default defineComponent({
         filterByTerm: filtered.value,
         orderByProp: orderProp.value,
         reverse: reverse.value,
-      })
+      }),
     );
 
     return {

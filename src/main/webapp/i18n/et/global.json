@@ -7,9 +7,9 @@
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Olemid",
+        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
         "testEntity": "Test Entity",
-        "userAnswer": "User Answer",
-        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+        "userAnswer": "User Answer"
       },
       "account": {
         "main": "Konto",

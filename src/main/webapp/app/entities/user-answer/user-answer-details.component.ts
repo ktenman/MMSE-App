@@ -1,10 +1,10 @@
-import { defineComponent, inject, ref, Ref } from 'vue';
+import { defineComponent, inject, ref, type Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
-import { useDateFormat } from '@/shared/composables';
-import { IUserAnswer } from '@/shared/model/user-answer.model';
 import UserAnswerService from './user-answer.service';
+import { useDateFormat } from '@/shared/composables';
+import { type IUserAnswer } from '@/shared/model/user-answer.model';
 import { useAlertService } from '@/shared/alert/alert.service';
 
 export default defineComponent({

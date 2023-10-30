@@ -2,8 +2,14 @@ package ee.tenman.mmse.web.rest;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.put;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import ee.tenman.mmse.IntegrationTest;
 import ee.tenman.mmse.domain.TestEntity;
@@ -249,7 +255,7 @@ class UserAnswerResourceIT {
         int databaseSizeBeforeUpdate = userAnswerRepository.findAll().size();
 
         // Update the userAnswer
-        UserAnswer updatedUserAnswer = userAnswerRepository.findById(userAnswer.getId()).get();
+        UserAnswer updatedUserAnswer = userAnswerRepository.findById(userAnswer.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedUserAnswer are not directly saved in db
         em.detach(updatedUserAnswer);
         updatedUserAnswer
@@ -354,7 +360,7 @@ class UserAnswerResourceIT {
         UserAnswer partialUpdatedUserAnswer = new UserAnswer();
         partialUpdatedUserAnswer.setId(userAnswer.getId());
 
-        partialUpdatedUserAnswer.answerText(UPDATED_ANSWER_TEXT).updatedAt(UPDATED_UPDATED_AT);
+        partialUpdatedUserAnswer.createdAt(UPDATED_CREATED_AT).questionId(UPDATED_QUESTION_ID);
 
         restUserAnswerMockMvc
             .perform(
@@ -368,10 +374,10 @@ class UserAnswerResourceIT {
         List<UserAnswer> userAnswerList = userAnswerRepository.findAll();
         assertThat(userAnswerList).hasSize(databaseSizeBeforeUpdate);
         UserAnswer testUserAnswer = userAnswerList.get(userAnswerList.size() - 1);
-        assertThat(testUserAnswer.getAnswerText()).isEqualTo(UPDATED_ANSWER_TEXT);
-        assertThat(testUserAnswer.getCreatedAt()).isEqualTo(DEFAULT_CREATED_AT);
-        assertThat(testUserAnswer.getUpdatedAt()).isEqualTo(UPDATED_UPDATED_AT);
-        assertThat(testUserAnswer.getQuestionId()).isEqualTo(DEFAULT_QUESTION_ID);
+        assertThat(testUserAnswer.getAnswerText()).isEqualTo(DEFAULT_ANSWER_TEXT);
+        assertThat(testUserAnswer.getCreatedAt()).isEqualTo(UPDATED_CREATED_AT);
+        assertThat(testUserAnswer.getUpdatedAt()).isEqualTo(DEFAULT_UPDATED_AT);
+        assertThat(testUserAnswer.getQuestionId()).isEqualTo(UPDATED_QUESTION_ID);
     }
 
     @Test

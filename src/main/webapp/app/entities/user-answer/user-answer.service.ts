@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import buildPaginationQueryOpts from '@/shared/sort/sorts';
 
-import { IUserAnswer } from '@/shared/model/user-answer.model';
+import { type IUserAnswer } from '@/shared/model/user-answer.model';
 
 const baseApiUrl = 'api/user-answers';
 

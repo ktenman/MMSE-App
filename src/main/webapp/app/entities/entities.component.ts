@@ -1,8 +1,8 @@
 import { defineComponent, provide } from 'vue';
 
-import UserService from '@/entities/user/user.service';
 import TestEntityService from './test-entity/test-entity.service';
 import UserAnswerService from './user-answer/user-answer.service';
+import UserService from '@/entities/user/user.service';
 // jhipster-needle-add-entity-service-to-entities-component-import - JHipster will import entities services here
 
 export default defineComponent({

@@ -1,5 +1,3 @@
-import Vue from 'vue';
-
 export default class LoginService {
   private emit: (event: string, ...args: any[]) => void;
 

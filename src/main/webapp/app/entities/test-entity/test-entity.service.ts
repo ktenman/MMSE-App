@@ -2,7 +2,7 @@ import axios from 'axios';
 
 import buildPaginationQueryOpts from '@/shared/sort/sorts';
 
-import { ITestEntity } from '@/shared/model/test-entity.model';
+import { type ITestEntity } from '@/shared/model/test-entity.model';
 
 const baseApiUrl = 'api/test-entities';
 

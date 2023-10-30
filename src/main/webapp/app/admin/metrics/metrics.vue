@@ -135,7 +135,7 @@
               :value="metrics.garbageCollector['jvm.gc.live.data.size']"
               :label="
                 formatNumber2(
-                  (100 * metrics.garbageCollector['jvm.gc.live.data.size']) / metrics.garbageCollector['jvm.gc.max.data.size']
+                  (100 * metrics.garbageCollector['jvm.gc.live.data.size']) / metrics.garbageCollector['jvm.gc.max.data.size'],
                 ) + '%'
               "
             >
@@ -154,7 +154,7 @@
               :value="metrics.garbageCollector['jvm.gc.memory.promoted']"
               :label="
                 formatNumber2(
-                  (100 * metrics.garbageCollector['jvm.gc.memory.promoted']) / metrics.garbageCollector['jvm.gc.memory.allocated']
+                  (100 * metrics.garbageCollector['jvm.gc.memory.promoted']) / metrics.garbageCollector['jvm.gc.memory.allocated'],
                 ) + '%'
               "
             >
