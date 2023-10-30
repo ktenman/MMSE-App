@@ -38,8 +38,8 @@ jobs:
 
       - name: Build with Maven and Run Sonar Analysis
         run: |
-          mvn clean install sonar:sonar \
-          -Dsonar.projectKey=ktenman_mmse-app \
+          mvn -B clean verify sonar:sonar -X \
+          -Dsonar.projectKey=ktenman_MMSE-App \
           -Dsonar.organization=ktenman \
           -Dsonar.host.url=https://sonarcloud.io \
           -Dsonar.token=${{ secrets.SONAR_TOKEN }}
