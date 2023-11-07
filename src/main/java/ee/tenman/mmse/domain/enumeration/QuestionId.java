@@ -16,7 +16,7 @@ public enum QuestionId {
     QUESTION_9,
     QUESTION_10,
     QUESTION_11,
-//    QUESTION_12,
+    QUESTION_12,
 //    QUESTION_13,
 //    QUESTION_14,
 //    QUESTION_15,

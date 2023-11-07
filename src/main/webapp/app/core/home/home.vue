@@ -104,13 +104,13 @@
 
 .image-container {
   display: flex;
-  justify-content: center;
+  justify-content: left;
   align-items: center;
   height: 100%; /* Adjust as needed */
 }
 
 .question-image {
-  max-width: 100%;
+  max-width: 65%;
   height: auto;
 }
 </style>
