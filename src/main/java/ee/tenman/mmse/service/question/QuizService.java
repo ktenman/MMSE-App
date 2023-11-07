@@ -59,7 +59,8 @@ public class QuizService {
             if (answeredQuestions.contains(question.getQuestionId())) {
                 continue;
             }
-            int score = question.getScore(userAnswer);
+
+            int score = userAnswer.getScore() == null ? question.getScore(userAnswer) : userAnswer.getScore();
             userAnswer.setScore(score);
             userAnswer.setMaximumScore(question.getMaximumScore());
             totalScore += score;

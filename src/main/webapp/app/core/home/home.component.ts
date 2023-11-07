@@ -1,11 +1,11 @@
-import { ComputedRef, defineComponent, inject, onMounted, ref, watch } from "vue";
-import { useI18n } from "vue-i18n";
+import {ComputedRef, defineComponent, inject, onMounted, ref, watch} from "vue";
+import {useI18n} from "vue-i18n";
 import LoginService from "@/account/login.service";
-import { IQuestion } from "@/shared/model/question.model";
+import {IQuestion} from "@/shared/model/question.model";
 import QuestionService from "@/entities/question/question.service";
-import { Answer, IAnswer } from "@/shared/model/answer.model";
-import { QuestionId } from "@/shared/model/enumerations/question-id.model";
-import { QuestionType } from "@/shared/model/enumerations/question-type.model";
+import {Answer, IAnswer} from "@/shared/model/answer.model";
+import {QuestionId} from "@/shared/model/enumerations/question-id.model";
+import {QuestionType} from "@/shared/model/enumerations/question-type.model";
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
@@ -17,7 +17,8 @@ export default defineComponent({
       question,
       selectedAnswer,
       selectedAnswers,
-      quizEndMessage
+      quizEndMessage,
+      loading
     ] = [
       inject<LoginService>("loginService"),
       inject<ComputedRef<boolean>>("authenticated"),
@@ -25,7 +26,8 @@ export default defineComponent({
       ref<IQuestion | null>(null),
       ref<string | null>(null),
       ref<Array<number | null>>([]),
-      ref<string | null>(null)
+      ref<string | null>(null),
+      ref(false),
     ];
 
     const questionService = new QuestionService();
@@ -47,29 +49,46 @@ export default defineComponent({
     };
 
     const submitAnswer = async () => {
+      // Start loading
+      loading.value = true;
+
       if (question.value) {
         let answer: IAnswer;
 
         if (question.value.questionType === QuestionType.MULTIPLE_CHOICE && selectedAnswer.value ||
-          question.value.questionType === QuestionType.TEXT_INPUT && selectedAnswers.value) {
+            question.value.questionType === QuestionType.TEXT_INPUT && selectedAnswers.value) {
           answer = createAnswer(selectedAnswer.value, question.value.questionId as QuestionId);
         } else if (question.value.questionType === QuestionType.SUBTRACTION_TASK && selectedAnswers.value) {
           answer = createAnswer(selectedAnswers.value, question.value.questionId as QuestionId);
         } else {
           // Neither condition met - possibly display an error message here
+          // Stop loading and exit if no answer is provided
+          loading.value = false;
           return;
         }
 
-        const response = await questionService.submitAnswer(answer);
+        try {
+          const response = await questionService.submitAnswer(answer);
 
-        if (typeof response === "string") {
-          quizEndMessage.value = response;
-          question.value = null;
-        } else {
-          question.value = response;
-          selectedAnswers.value = [];
-          selectedAnswer.value = null;
+          if (typeof response === "string") {
+            quizEndMessage.value = response;
+            question.value = null;
+          } else {
+            question.value = response;
+            selectedAnswers.value = [];
+            selectedAnswer.value = null;
+          }
+        } catch (error) {
+          // Handle any errors here
+          console.error('Error submitting answer:', error);
+          // Optionally set an error message to display to the user
+        } finally {
+          // Stop loading regardless of the outcome
+          loading.value = false;
         }
+      } else {
+        // If there's no question, stop loading
+        loading.value = false;
       }
     };
 
@@ -136,7 +155,8 @@ export default defineComponent({
       submitAnswer,
       quizEndMessage,
       retakeTest,
-      isNextButtonDisabled
+      isNextButtonDisabled,
+      loading,
     };
   }
 });

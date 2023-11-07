@@ -1,0 +1,4 @@
+Flask==3.0.0
+torch==2.1.0
+transformers==4.35.0  # Use the version compatible with your torch version
+typing_extensions==4.8.0

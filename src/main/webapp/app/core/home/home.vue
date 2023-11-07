@@ -25,7 +25,12 @@
         </div>
 
         <!-- Conditionally show multiple choice or input fields based on question type -->
-        <div v-if="question && authenticated">
+
+        <div v-if="loading" class="loader-container">
+          <span>Loading...</span> <!-- Replace with your actual loader -->
+        </div>
+
+        <div v-if="question && authenticated && !loading">
 
           <h2>{{ question.questionText }}</h2>
           <div v-if="question.image" class="image-container">
@@ -70,7 +75,7 @@
               @click="submitAnswer"
               variant="primary"
               class="mt-3"
-              :disabled="isNextButtonDisabled()">
+              :disabled="isNextButtonDisabled() || loading">
             Next
           </b-button>
 
