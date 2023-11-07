@@ -3,6 +3,7 @@ package ee.tenman.mmse.service.question;
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
 import ee.tenman.mmse.domain.enumeration.QuestionType;
+import ee.tenman.mmse.service.openai.NoOpenAiResponseException;
 import ee.tenman.mmse.service.openai.OpenAiService;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
@@ -103,6 +104,8 @@ public class Question11 implements Question {
             return 0;
         }
 
+        answerText = StringUtils.trim(answerText).replaceAll("[^a-zA-Z0-9\\s]", "");
+
         if (!containsWordWithThreeLetters(answerText)) {
             log.debug("Answer '{}' does not contain any word with at least three letters.", answerText);
             return 0;
@@ -146,21 +149,17 @@ public class Question11 implements Question {
 
     private Optional<String> checkWithOpenAiService(String answerText) {
         String prompt = prepareOpenAiPrompt(answerText);
-        try {
-            Optional<String> response = openAiService.askQuestion(prompt);
-            if (response.isEmpty()) {
-                log.warn("OpenAI Service returned no response for prompt: {}", prompt);
-                return Optional.empty();
-            }
 
-            String openAiResponse = response.get().toLowerCase();
-            log.debug("OpenAI Response: {}", openAiResponse);
-
-            return response;
-        } catch (Exception e) {
-            log.error("Error during OpenAI Service call", e);
-            return Optional.empty();
+        Optional<String> response = openAiService.askQuestion(prompt);
+        if (response.isEmpty()) {
+            log.debug("Answer '{}' was not recognized as correct by OpenAI Service. Response: '{}'", answerText, NO_RESPONSE);
+            throw new NoOpenAiResponseException("OpenAI Service returned no response");
         }
+
+        String openAiResponse = response.get().toLowerCase();
+        log.debug("OpenAI Response: {}", openAiResponse);
+
+        return response;
     }
 
     private String prepareOpenAiPrompt(String answerText) {

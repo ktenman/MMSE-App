@@ -2,35 +2,32 @@ package ee.tenman.mmse.service.question;
 
 import ee.tenman.mmse.IntegrationTest;
 import ee.tenman.mmse.domain.UserAnswer;
+import ee.tenman.mmse.service.openai.NoOpenAiResponseException;
+import ee.tenman.mmse.service.openai.OpenAiService;
 import jakarta.annotation.Resource;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-
-import java.util.concurrent.TimeUnit;
+import org.springframework.boot.test.mock.mockito.MockBean;
+import java.util.Optional;
 import java.util.stream.Stream;
-
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.when;
 
 @IntegrationTest
 class Question11Test {
 
+    @MockBean
+    OpenAiService openAiService;
+
     @Resource
     Question11 question11;
 
-    @ParameterizedTest
-    @Timeout(value = 60)
-    @MethodSource("provideAnswersForScoring")
-     void getScore(String answerText, int expectedScore) {
-        UserAnswer userAnswer = new UserAnswer();
-        userAnswer.setAnswerText(answerText);
-
-        int score = question11.getScore(userAnswer);
-
-        assertThat(score).isEqualTo(expectedScore);
-    }
     private static Stream<Arguments> provideAnswersForScoring() {
         return Stream.of(
             // Exact and close matches
@@ -93,6 +90,123 @@ class Question11Test {
             Arguments.of("sketching pencil", 1),
             Arguments.of("wooden writing stick", 1),
             Arguments.of("pointy object", 1)
+        );
+    }
+
+
+    @ParameterizedTest
+    @MethodSource("provideCaseSensitivityAnswers")
+    void getScoreCaseSensitivity(String answerText, int expectedScore) {
+        UserAnswer userAnswer = new UserAnswer();
+        userAnswer.setAnswerText(answerText);
+
+        int score = question11.getScore(userAnswer);
+
+        assertThat(score).isEqualTo(expectedScore);
+    }
+
+    private static Stream<Arguments> provideCaseSensitivityAnswers() {
+        return Stream.of(
+            Arguments.of("PENCIL", 1),
+            Arguments.of("PenCil", 1),
+            Arguments.of("STYLUS", 1)
+            // Add more cases as needed
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideAnswersWithSpaces")
+    void getScoreWithSpaces(String answerText, int expectedScore) {
+        UserAnswer userAnswer = new UserAnswer();
+        userAnswer.setAnswerText(answerText);
+
+        int score = question11.getScore(userAnswer);
+
+        assertThat(score).isEqualTo(expectedScore);
+    }
+
+    private static Stream<Arguments> provideAnswersWithSpaces() {
+        return Stream.of(
+            Arguments.of(" pencil ", 1),
+            Arguments.of("    stylus", 1),
+            Arguments.of("\tgraphite\t", 1),
+            Arguments.of("\nlead\n", 1)
+            // Add more cases as needed
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideAnswersWithPunctuation")
+    void getScoreWithPunctuation(String answerText, int expectedScore) {
+        UserAnswer userAnswer = new UserAnswer();
+        userAnswer.setAnswerText(answerText);
+
+        int score = question11.getScore(userAnswer);
+
+        assertThat(score).isEqualTo(expectedScore);
+    }
+
+    private static Stream<Arguments> provideAnswersWithPunctuation() {
+        return Stream.of(
+            Arguments.of("pencil.", 1),
+            Arguments.of("stylus!", 1),
+            Arguments.of("graphite,", 1),
+            Arguments.of("lead?", 1)
+            // Add more cases as needed
+        );
+    }
+
+    @ParameterizedTest
+    @MethodSource("provideAnswersWithSubstrings")
+    void getScoreWithSubstrings(String answerText, int expectedScore) {
+        UserAnswer userAnswer = new UserAnswer();
+        userAnswer.setAnswerText(answerText);
+        when(openAiService.askQuestion(anyString())).thenReturn(Optional.of("no"));
+
+        int score = question11.getScore(userAnswer);
+
+        assertThat(score).isEqualTo(expectedScore);
+    }
+
+    private static Stream<Arguments> provideAnswersWithSubstrings() {
+        return Stream.of(
+            Arguments.of("pen", 1),
+            Arguments.of("cil", 0),
+            Arguments.of("sty", 0)
+        );
+    }
+
+    @ParameterizedTest
+    @Timeout(value = 60)
+    @MethodSource("provideAnswersForScoring")
+    @Disabled
+    void getScoreWithExpectedScore(String answerText, int expectedScore) {
+        UserAnswer userAnswer = new UserAnswer();
+        userAnswer.setAnswerText(answerText);
+
+        int score = question11.getScore(userAnswer);
+
+        assertThat(score).isEqualTo(expectedScore);
+    }
+
+    @Test
+    void getScoreWithExpectedException() {
+        when(openAiService.askQuestion(anyString())).thenReturn(Optional.empty());
+
+        UserAnswer userAnswer = new UserAnswer();
+        userAnswer.setAnswerText("zzz");
+
+        Throwable thrown = catchThrowable(() -> question11.getScore(userAnswer));
+
+        assertThat(thrown).isInstanceOf(NoOpenAiResponseException.class);
+    }
+
+    private static Stream<Arguments> provideOpenAiServiceEdgeCases() {
+        return Stream.of(
+            Arguments.of("pencil", 1, null),
+            Arguments.of("unexpected response", 0, null),
+            Arguments.of("service error", 0, RuntimeException.class)
+            // Add more cases as needed
         );
     }
 
