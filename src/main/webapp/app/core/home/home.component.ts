@@ -96,6 +96,21 @@ export default defineComponent({
       }
     };
 
+    const isNextButtonDisabled = () => {
+      if (question.value) {
+        switch (question.value.questionType) {
+          case QuestionType.MULTIPLE_CHOICE:
+          case QuestionType.TEXT_INPUT:
+            return !selectedAnswer.value; // Disabled if selectedAnswer is null or empty
+          case QuestionType.SUBTRACTION_TASK:
+            return selectedAnswers.value.some(answer => answer === null || answer === ''); // Disabled if any selectedAnswers element is null or empty
+          default:
+            return true; // Disabled for any other case
+        }
+      }
+      return true; // Disabled if there's no question
+    };
+
     (async () => {
       watch(authenticated, async (newVal) => {
         if (newVal === true) {
@@ -120,7 +135,8 @@ export default defineComponent({
       selectedAnswers,
       submitAnswer,
       quizEndMessage,
-      retakeTest
+      retakeTest,
+      isNextButtonDisabled
     };
   }
 });
