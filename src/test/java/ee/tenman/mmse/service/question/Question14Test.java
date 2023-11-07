@@ -1,23 +1,24 @@
 package ee.tenman.mmse.service.question;
 
-import ee.tenman.mmse.IntegrationTest;
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.service.prediction.PredictionService;
-import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
 import org.mockito.Mockito;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
-@IntegrationTest
+@ExtendWith(MockitoExtension.class)
 class Question14Test {
 
-    @MockBean
+    @Mock
     PredictionService predictionService;
 
-    @Resource
+    @InjectMocks
     Question14 question14;
 
     @Test
