@@ -1,16 +1,16 @@
 // The Vue build version to load with the `import` command
 // (runtime-only or standalone) has been set in webpack.common with an alias.
-import Vue, { computed, createApp, onMounted, provide, watch } from "vue";
-import { createPinia } from "pinia";
-import { useI18n } from "vue-i18n";
+import Vue, {computed, createApp, Directive, onMounted, provide, watch} from "vue";
+import {createPinia} from "pinia";
+import {useI18n} from "vue-i18n";
 
-import { useStore, useTranslationStore } from "@/store";
-import { setupAxiosInterceptors } from "@/shared/config/axios-interceptor";
+import {useStore, useTranslationStore} from "@/store";
+import {setupAxiosInterceptors} from "@/shared/config/axios-interceptor";
 
 import App from "./app.vue";
 import router from "./router";
-import { initFortAwesome, initI18N } from "./shared/config/config";
-import { initBootstrapVue } from "./shared/config/config-bootstrap-vue";
+import {initFortAwesome, initI18N} from "./shared/config/config";
+import {initBootstrapVue} from "./shared/config/config-bootstrap-vue";
 import JhiItemCountComponent from "./shared/jhi-item-count.vue";
 import JhiSortIndicatorComponent from "./shared/sort/jhi-sort-indicator.vue";
 import LoginService from "./account/login.service";
@@ -22,6 +22,15 @@ import TranslationService from "@/locale/translation.service";
 import "intersection-observer";
 
 const pinia = createPinia();
+
+const vFocus: Directive = {
+  mounted(element, binding) {
+    // If the directive is used without a value or with a truthy value, focus the element
+    if (binding.value === undefined || binding.value) {
+      element.focus();
+    }
+  }
+};
 
 // jhipster-needle-add-entity-service-to-main-import - JHipster will import entities services here
 
@@ -159,6 +168,8 @@ const app = createApp({
 });
 
 initFortAwesome(app);
+
+app.directive('focus', vFocus);
 
 app
   .component("jhi-item-count", JhiItemCountComponent)

@@ -58,7 +58,7 @@
             <div class="row">
               <div class="col-md-6" v-for="(option, index) in question.answerOptions" :key="index">
                 <input type="number" :min="option.min" :max="option.max" v-model="selectedAnswers[index]" :placeholder="option.placeholder"
-                       class="form-control">
+                       v-focus="index === 0" class="form-control">
               </div>
             </div>
           </div>
@@ -66,7 +66,13 @@
           <div v-if="question.questionType === 'TEXT_INPUT'">
             <div class="row">
               <div class="col-md-6">
-                <input type="text" v-model="selectedAnswer" class="form-control" required :min="1" @keyup.enter="submitAnswer">
+                <input v-model="selectedAnswer"
+                       v-focus="true"
+                       :min="1"
+                       class="form-control"
+                       required
+                       type="text"
+                       @keyup.enter="submitAnswer"> <!-- Always focus this input when it's rendered -->
               </div>
             </div>
           </div>
