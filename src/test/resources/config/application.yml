@@ -90,5 +90,4 @@ management:
       enabled: false
 
 openai:
-  api:
-    key: ${OPENAI_API_KEY:}
+  token: ${OPENAI_API_KEY:}

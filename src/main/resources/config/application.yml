@@ -210,5 +210,12 @@ jhipster:
 # application:
 
 openai:
-  api:
-    key: ${OPENAI_API_KEY:}
+  token: ${OPENAI_API_KEY:}
+
+logging:
+  level:
+    org.springframework.cloud.openfeign: DEBUG
+    feign: DEBUG
+    feign.Logger: DEBUG
+    # Assuming 'com.yourpackage' is where your Feign clients reside.
+    com.yourpackage: DEBUG

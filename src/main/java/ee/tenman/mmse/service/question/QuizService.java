@@ -52,7 +52,7 @@ public class QuizService {
             Question question = questions.get(userAnswer.getQuestionId());
 
             if (question == null) {
-                log.error("No Question found for ID: {}", userAnswer.getQuestionId());
+                log.warn("No Question found for ID: {}", userAnswer.getQuestionId());
                 continue;
             }
 
