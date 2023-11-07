@@ -54,7 +54,7 @@ class Question2Test {
 
     @Test
     void testGetQuestionText() {
-        assertThat(question2.getQuestionText()).isEqualTo("What is the current date?");
+        assertThat(question2.getQuestionText()).isEqualTo("2. What is the current date?");
     }
 
     @Test

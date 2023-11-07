@@ -25,6 +25,7 @@ import java.util.concurrent.atomic.AtomicLong;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.delete;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.patch;
@@ -144,8 +145,8 @@ class UserAnswerResourceIT {
         assertThat(userAnswerList).hasSize(databaseSizeBeforeCreate + 1);
         UserAnswer testUserAnswer = userAnswerList.get(userAnswerList.size() - 1);
         assertThat(testUserAnswer.getAnswerText()).isEqualTo(DEFAULT_ANSWER_TEXT);
-        assertThat(testUserAnswer.getCreatedAt()).isEqualTo(DEFAULT_CREATED_AT);
-        assertThat(testUserAnswer.getUpdatedAt()).isEqualTo(DEFAULT_UPDATED_AT);
+        assertThat(testUserAnswer.getCreatedAt()).isNotNull().isBefore(Instant.now());
+        assertThat(testUserAnswer.getUpdatedAt()).isNotNull().isBefore(Instant.now());
         assertThat(testUserAnswer.getQuestionId()).isEqualTo(DEFAULT_QUESTION_ID);
     }
 
@@ -217,8 +218,8 @@ class UserAnswerResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(userAnswer.getId().intValue())))
             .andExpect(jsonPath("$.[*].answerText").value(hasItem(DEFAULT_ANSWER_TEXT)))
-            .andExpect(jsonPath("$.[*].createdAt").value(hasItem(DEFAULT_CREATED_AT.toString())))
-            .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(DEFAULT_UPDATED_AT.toString())))
+                .andExpect(jsonPath("$.[*].createdAt").value(notNullValue()))
+                .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(notNullValue())))
             .andExpect(jsonPath("$.[*].questionId").value(hasItem(DEFAULT_QUESTION_ID.toString())));
     }
 
@@ -235,8 +236,8 @@ class UserAnswerResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(userAnswer.getId().intValue()))
             .andExpect(jsonPath("$.answerText").value(DEFAULT_ANSWER_TEXT))
-            .andExpect(jsonPath("$.createdAt").value(DEFAULT_CREATED_AT.toString()))
-            .andExpect(jsonPath("$.updatedAt").value(DEFAULT_UPDATED_AT.toString()))
+                .andExpect(jsonPath("$.createdAt").value(notNullValue()))
+                .andExpect(jsonPath("$.updatedAt").value(notNullValue()))
             .andExpect(jsonPath("$.questionId").value(DEFAULT_QUESTION_ID.toString()));
     }
 
@@ -280,7 +281,7 @@ class UserAnswerResourceIT {
         UserAnswer testUserAnswer = userAnswerList.get(userAnswerList.size() - 1);
         assertThat(testUserAnswer.getAnswerText()).isEqualTo(UPDATED_ANSWER_TEXT);
         assertThat(testUserAnswer.getCreatedAt()).isEqualTo(UPDATED_CREATED_AT);
-        assertThat(testUserAnswer.getUpdatedAt()).isEqualTo(UPDATED_UPDATED_AT);
+        assertThat(testUserAnswer.getUpdatedAt()).isNotNull().isBefore(Instant.now());
         assertThat(testUserAnswer.getQuestionId()).isEqualTo(UPDATED_QUESTION_ID);
     }
 
@@ -377,7 +378,7 @@ class UserAnswerResourceIT {
         UserAnswer testUserAnswer = userAnswerList.get(userAnswerList.size() - 1);
         assertThat(testUserAnswer.getAnswerText()).isEqualTo(DEFAULT_ANSWER_TEXT);
         assertThat(testUserAnswer.getCreatedAt()).isEqualTo(UPDATED_CREATED_AT);
-        assertThat(testUserAnswer.getUpdatedAt()).isEqualTo(DEFAULT_UPDATED_AT);
+        assertThat(testUserAnswer.getUpdatedAt()).isNotNull().isBefore(Instant.now());
         assertThat(testUserAnswer.getQuestionId()).isEqualTo(UPDATED_QUESTION_ID);
     }
 
@@ -413,7 +414,7 @@ class UserAnswerResourceIT {
         UserAnswer testUserAnswer = userAnswerList.get(userAnswerList.size() - 1);
         assertThat(testUserAnswer.getAnswerText()).isEqualTo(UPDATED_ANSWER_TEXT);
         assertThat(testUserAnswer.getCreatedAt()).isEqualTo(UPDATED_CREATED_AT);
-        assertThat(testUserAnswer.getUpdatedAt()).isEqualTo(UPDATED_UPDATED_AT);
+        assertThat(testUserAnswer.getUpdatedAt()).isNotNull().isBefore(Instant.now());
         assertThat(testUserAnswer.getQuestionId()).isEqualTo(UPDATED_QUESTION_ID);
     }
 

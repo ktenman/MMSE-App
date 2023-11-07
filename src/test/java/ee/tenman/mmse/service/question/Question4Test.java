@@ -62,7 +62,7 @@ class Question4Test {
 
     @Test
     void testGetQuestionText() {
-        assertThat(question4.getQuestionText()).isEqualTo("What is the current year?");
+        assertThat(question4.getQuestionText()).isEqualTo("4. What is the current year?");
     }
 
     @Test

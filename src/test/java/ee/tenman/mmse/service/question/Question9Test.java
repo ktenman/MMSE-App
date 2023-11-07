@@ -74,7 +74,7 @@ class Question9Test {
 
     @Test
     void testGetQuestionText() {
-        assertThat(question9.getQuestionText()).isEqualTo("Start with 100 and subtract 7, continue subtracting 7 from each new number for five steps.");
+        assertThat(question9.getQuestionText()).isEqualTo("9. Start with 100 and subtract 7, continue subtracting 7 from each new number for five steps.");
     }
 
     @Test

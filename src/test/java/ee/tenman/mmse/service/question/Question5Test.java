@@ -77,7 +77,7 @@ class Question5Test {
 
     @Test
     void testGetQuestionText() {
-        assertThat(question5.getQuestionText()).isEqualTo("What is the current season?");
+        assertThat(question5.getQuestionText()).isEqualTo("5. What is the current season?");
     }
 
     @Test

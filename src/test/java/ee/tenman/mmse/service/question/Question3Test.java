@@ -55,7 +55,7 @@ class Question3Test {
 
     @Test
     void testGetQuestionText() {
-        assertThat(question3.getQuestionText()).isEqualTo("What is the current month?");
+        assertThat(question3.getQuestionText()).isEqualTo("3. What is the current month?");
     }
 
     @Test

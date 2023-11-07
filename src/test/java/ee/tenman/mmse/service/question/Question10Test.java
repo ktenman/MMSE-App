@@ -40,7 +40,7 @@ class Question10Test {
 
     @Test
     void testGetQuestionText() {
-        assertThat(question10.getQuestionText()).isEqualTo("Please recall the three objects that were previously mentioned.");
+        assertThat(question10.getQuestionText()).isEqualTo("10. Please recall the three objects that were previously mentioned.");
     }
 
     @Test

@@ -50,7 +50,7 @@ class Question1Test {
 
     @Test
     void testGetQuestionText() {
-        assertThat(question1.getQuestionText()).isEqualTo("What is the current day of the week?");
+        assertThat(question1.getQuestionText()).isEqualTo("1. What is the current day of the week?");
     }
 
     @Test

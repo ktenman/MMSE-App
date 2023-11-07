@@ -41,7 +41,7 @@ class Question6Test {
 
     @Test
     void testGetQuestionText() {
-        assertThat(question6.getQuestionText()).isEqualTo("Please look at these three images. What is the name of the first object?");
+        assertThat(question6.getQuestionText()).isEqualTo("6. Please look at these three images. What is the name of the first object?");
     }
 
     @Test

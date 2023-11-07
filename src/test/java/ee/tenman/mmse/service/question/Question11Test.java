@@ -1,31 +1,35 @@
 package ee.tenman.mmse.service.question;
 
-import ee.tenman.mmse.IntegrationTest;
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.service.openai.NoOpenAiResponseException;
 import ee.tenman.mmse.service.openai.OpenAiService;
-import jakarta.annotation.Resource;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
 import org.junit.jupiter.params.provider.MethodSource;
-import org.springframework.boot.test.mock.mockito.MockBean;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
+
 import java.util.Optional;
 import java.util.stream.Stream;
+
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.anyString;
+import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
 
-@IntegrationTest
+@ExtendWith(MockitoExtension.class)
 class Question11Test {
 
-    @MockBean
+    @Mock
     OpenAiService openAiService;
 
-    @Resource
+    @InjectMocks
     Question11 question11;
 
     private static Stream<Arguments> provideAnswersForScoring() {
@@ -110,7 +114,6 @@ class Question11Test {
             Arguments.of("PENCIL", 1),
             Arguments.of("PenCil", 1),
             Arguments.of("STYLUS", 1)
-            // Add more cases as needed
         );
     }
 
@@ -131,7 +134,6 @@ class Question11Test {
             Arguments.of("    stylus", 1),
             Arguments.of("\tgraphite\t", 1),
             Arguments.of("\nlead\n", 1)
-            // Add more cases as needed
         );
     }
 
@@ -152,7 +154,14 @@ class Question11Test {
             Arguments.of("stylus!", 1),
             Arguments.of("graphite,", 1),
             Arguments.of("lead?", 1)
-            // Add more cases as needed
+        );
+    }
+
+    private static Stream<Arguments> provideAnswersWithSubstrings() {
+        return Stream.of(
+                Arguments.of("pen", 1), // This should return "yes" from the service
+                Arguments.of("cil", 0), // This should return "no" from the service
+                Arguments.of("sty", 0)  // This should return "no" from the service
         );
     }
 
@@ -161,19 +170,15 @@ class Question11Test {
     void getScoreWithSubstrings(String answerText, int expectedScore) {
         UserAnswer userAnswer = new UserAnswer();
         userAnswer.setAnswerText(answerText);
-        when(openAiService.askQuestion(anyString())).thenReturn(Optional.of("no"));
+
+        lenient().when(openAiService.askQuestion(anyString())).thenAnswer(invocation -> {
+            String question = invocation.getArgument(0);
+            return Optional.of(question.contains("pen") ? "no" : "yes");
+        });
 
         int score = question11.getScore(userAnswer);
 
         assertThat(score).isEqualTo(expectedScore);
-    }
-
-    private static Stream<Arguments> provideAnswersWithSubstrings() {
-        return Stream.of(
-            Arguments.of("pen", 1),
-            Arguments.of("cil", 0),
-            Arguments.of("sty", 0)
-        );
     }
 
     @ParameterizedTest

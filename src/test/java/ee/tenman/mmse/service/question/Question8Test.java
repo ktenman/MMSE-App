@@ -39,7 +39,7 @@ class Question8Test {
 
     @Test
     void testGetQuestionText() {
-        assertThat(question8.getQuestionText()).isEqualTo("What is the name of the third object?");
+        assertThat(question8.getQuestionText()).isEqualTo("8. What is the name of the third object?");
     }
 
     @Test
