@@ -4,11 +4,13 @@ public class InputField {
     private String type;
     private int min;
     private int max;
+    private String placeholder;
 
-    public InputField(String type, int min, int max) {
+    public InputField(String type, int min, int max, String placeholder) {
         this.type = type;
         this.min = min;
         this.max = max;
+        this.placeholder = placeholder;
     }
 
     public String getType() {
@@ -33,6 +35,14 @@ public class InputField {
 
     public void setMax(int max) {
         this.max = max;
+    }
+
+    public String getPlaceholder() {
+        return placeholder;
+    }
+
+    public void setPlaceholder(String placeholder) {
+        this.placeholder = placeholder;
     }
 }
 

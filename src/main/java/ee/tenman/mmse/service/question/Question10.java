@@ -11,7 +11,7 @@ import java.util.List;
 @Component
 public class Question10 implements Question {
 
-    private static final String QUESTION_TEXT = "Please recall the three objects that were previously mentioned.";
+    private static final String QUESTION_TEXT = "10. Please recall the three objects that were previously mentioned.";
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_10;
     private static final List<String> CORRECT_ANSWERS = List.of("man", "car", "ball");
 

@@ -52,7 +52,7 @@
           <div v-if="question.questionType === 'SUBTRACTION_TASK'">
             <div class="row">
               <div class="col-md-6" v-for="(option, index) in question.answerOptions" :key="index">
-                <input type="number" :min="option.min" :max="option.max" v-model="selectedAnswers[index]"
+                <input type="number" :min="option.min" :max="option.max" v-model="selectedAnswers[index]" :placeholder="option.placeholder"
                        class="form-control">
               </div>
             </div>

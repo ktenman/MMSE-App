@@ -16,7 +16,7 @@ import java.util.stream.Stream;
 @Component
 public class Question1 implements Question {
 
-    private static final String QUESTION_TEXT = "What is the current day of the week?";
+    private static final String QUESTION_TEXT = "1. What is the current day of the week?";
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_1;
 
     @Override

@@ -18,7 +18,7 @@ import java.util.stream.IntStream;
 @Component
 public class Question3 implements Question {
 
-    private static final String QUESTION_TEXT = "What is the current month?";
+    private static final String QUESTION_TEXT = "3. What is the current month?";
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_3;
 
     @Resource

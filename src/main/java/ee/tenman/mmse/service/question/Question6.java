@@ -13,7 +13,7 @@ import java.util.List;
 @Component
 public class Question6 implements Question {
 
-    private static final String QUESTION_TEXT = "Please look at these three images. What is the name of the first object?";
+    private static final String QUESTION_TEXT = "6. Please look at these three images. What is the name of the first object?";
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_6;
 
     @Override

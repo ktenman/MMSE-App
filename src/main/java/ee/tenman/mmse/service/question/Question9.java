@@ -15,7 +15,7 @@ import java.util.stream.Stream;
 @Component
 public class Question9 implements Question {
 
-    private static final String QUESTION_TEXT = "Start with 100 and subtract 7, continue subtracting 7 from each new number for five steps.";
+    private static final String QUESTION_TEXT = "9. Start with 100 and subtract 7, continue subtracting 7 from each new number for five steps.";
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_9;
     private static final List<Integer> CORRECT_ANSWERS = List.of(93, 86, 79, 72, 65);
     private List<Integer> userAnswers;
@@ -24,7 +24,7 @@ public class Question9 implements Question {
         userAnswers = Stream.of(userAnswer.getAnswerText().split(","))
             .filter(s -> !s.isEmpty())
             .map(Integer::parseInt)
-            .collect(Collectors.toList());
+            .toList();
     }
 
     @Override
@@ -39,7 +39,7 @@ public class Question9 implements Question {
 
     @Override
     public QuestionId getQuestionId() {
-        return this.QUESTION_ID;
+        return QUESTION_ID;
     }
 
     @Override
@@ -48,9 +48,13 @@ public class Question9 implements Question {
     }
 
     public List<InputField> getAnswerOptions() {
-        InputField[] fields = new InputField[5];
-        Arrays.fill(fields, new InputField(InputFieldType.NUMBER, 0, 99));
-        return List.of(fields);
+        return List.of(
+            new InputField(InputFieldType.NUMBER, 0, 99, "Result after subtracting 7 from 100"),
+            new InputField(InputFieldType.NUMBER, 0, 99, "Result after subtracting 7 from the first result"),
+            new InputField(InputFieldType.NUMBER, 0, 99, "Result after subtracting 7 from the second result"),
+            new InputField(InputFieldType.NUMBER, 0, 99, "Result after subtracting 7 from the third result"),
+            new InputField(InputFieldType.NUMBER, 0, 99, "Result after subtracting 7 from the fourth result")
+        );
     }
 
     @Override

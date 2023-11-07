@@ -17,7 +17,7 @@ import java.util.Set;
 @Component
 public class Question5 implements Question {
 
-    private static final String QUESTION_TEXT = "What is the current season?";
+    private static final String QUESTION_TEXT = "5. What is the current season?";
     private static final String SPRING = "SPRING";
     private static final String SUMMER = "SUMMER";
     private static final String AUTUMN = "AUTUMN";

@@ -20,7 +20,7 @@ public class Question12 implements Question {
 
     private static final Logger log = LoggerFactory.getLogger(Question12.class);
 
-    private static final String QUESTION_TEXT = "Please name the object shown.";
+    private static final String QUESTION_TEXT = "12. Please name the object shown.";
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_12;
     private static final Set<String> ACCEPTED_ANSWERS = Set.of(
         "watch",

@@ -17,7 +17,7 @@ import java.util.stream.IntStream;
 @Component
 public class Question4 implements Question {
 
-    private static final String QUESTION_TEXT = "What is the current year?";
+    private static final String QUESTION_TEXT = "4. What is the current year?";
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_4;
     @Resource
     private Clock clock;

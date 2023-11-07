@@ -22,7 +22,7 @@ import java.util.Locale;
 @Component
 public class Question2 implements Question {
 
-    private static final String QUESTION_TEXT = "What is the current date?";
+    private static final String QUESTION_TEXT = "2. What is the current date?";
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_2;
 
     @Resource

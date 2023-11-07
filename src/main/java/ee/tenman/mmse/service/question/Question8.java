@@ -13,7 +13,7 @@ import java.util.List;
 @Component
 public class Question8 implements Question {
 
-    private static final String QUESTION_TEXT = "What is the name of the third object?";
+    private static final String QUESTION_TEXT = "8. What is the name of the third object?";
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_8;
 
     @Override
