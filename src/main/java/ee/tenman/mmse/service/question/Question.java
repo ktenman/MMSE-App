@@ -39,4 +39,8 @@ public interface Question {
 
     int getScore(UserAnswer userAnswer);
 
+    default int getMaximumScore() {
+        return 1;
+    };
+
 }

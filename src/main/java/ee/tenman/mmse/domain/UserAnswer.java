@@ -10,6 +10,9 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
+import jakarta.persistence.PostUpdate;
+import jakarta.persistence.PrePersist;
+import jakarta.persistence.PreUpdate;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
@@ -44,6 +47,12 @@ public class UserAnswer implements Serializable {
     @Column(name = "updated_at")
     private Instant updatedAt;
 
+    @Column(name = "score")
+    private Integer score;
+
+    @Column(name = "maximum_score")
+    private Integer maximumScore;
+
     @NotNull
     @Enumerated(EnumType.STRING)
     @Column(name = "question_id", nullable = false)
@@ -53,6 +62,17 @@ public class UserAnswer implements Serializable {
     @NotNull
     @JsonIgnoreProperties(value = {"user"}, allowSetters = true)
     private TestEntity testEntity;
+
+    @PrePersist
+    public void prePersist() {
+        this.createdAt = Instant.now();
+        this.updatedAt = Instant.now(); // Set updatedAt on insert as well.
+    }
+
+    @PreUpdate
+    public void preUpdate() {
+        this.updatedAt = Instant.now(); // Update the updatedAt field before update.
+    }
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -129,9 +149,25 @@ public class UserAnswer implements Serializable {
         this.testEntity = testEntity;
     }
 
+    public Integer getScore() {
+        return this.score;
+    }
+
+    public void setScore(Integer score) {
+        this.score = score;
+    }
+
     public UserAnswer testEntity(TestEntity testEntity) {
         this.setTestEntity(testEntity);
         return this;
+    }
+
+    public Integer getMaximumScore() {
+        return this.maximumScore;
+    }
+
+    public void setMaximumScore(Integer maximumScore) {
+        this.maximumScore = maximumScore;
     }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here

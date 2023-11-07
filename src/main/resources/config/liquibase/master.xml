@@ -20,6 +20,8 @@
              relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20230714145700_added_entity_constraints_UserAnswer.xml"
              relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20231107073949_add_score_column_to_user_answer.sql" relativeToChangelogFile="false"/>
+
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

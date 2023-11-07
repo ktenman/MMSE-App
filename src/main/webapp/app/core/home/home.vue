@@ -61,7 +61,7 @@
           <div v-if="question.questionType === 'TEXT_INPUT'">
             <div class="row">
               <div class="col-md-6">
-                <input type="text" v-model="selectedAnswer" class="form-control">
+                <input type="text" v-model="selectedAnswer" class="form-control" required :min="1">
               </div>
             </div>
           </div>

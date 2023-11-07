@@ -35,8 +35,14 @@ export default defineComponent({
     const createAnswer = (answerText: string | Array<number | null>, questionId: QuestionId): IAnswer => {
       if (typeof answerText === "string") {
         return new Answer(answerText, questionId);
+      } else if (Array.isArray(answerText) && answerText.length > 0) {
+        // Filter out null values before joining
+        const filteredAnswerText = answerText.filter(item => item !== null);
+        return new Answer(filteredAnswerText.join(","), questionId);
       } else {
-        return new Answer(answerText.join(","), questionId);
+        // Handle the case where answerText is null or an empty array
+        // You might want to return a default Answer or throw an error
+        return new Answer("", questionId); // or throw new Error("answerText is null or empty");
       }
     };
 

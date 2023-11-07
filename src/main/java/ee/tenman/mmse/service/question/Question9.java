@@ -72,5 +72,10 @@ public class Question9 implements Question {
         return result;
     }
 
+    @Override
+    public int getMaximumScore() {
+        return 5;
+    }
+
 }
 

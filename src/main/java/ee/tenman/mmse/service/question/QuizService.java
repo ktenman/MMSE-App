@@ -59,11 +59,16 @@ public class QuizService {
             if (answeredQuestions.contains(question.getQuestionId())) {
                 continue;
             }
-            totalScore += question.getScore(userAnswer);
+            int score = question.getScore(userAnswer);
+            userAnswer.setScore(score);
+            userAnswer.setMaximumScore(question.getMaximumScore());
+            totalScore += score;
 
-            log.info("Total score: {}, Question: {}, Score: {}", totalScore, question.getQuestionId(), question.getScore(userAnswer));
+            log.info("Total score: {}, Question: {}, Score: {}", totalScore, question.getQuestionId(), score);
             answeredQuestions.add(question.getQuestionId()); // mark the question as answered
         }
+
+        userAnswerRepository.saveAll(answers);
         return totalScore;
     }
 
