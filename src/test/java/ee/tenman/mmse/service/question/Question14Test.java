@@ -1,7 +1,7 @@
 package ee.tenman.mmse.service.question;
 
 import ee.tenman.mmse.domain.UserAnswer;
-import ee.tenman.mmse.service.prediction.PredictionService;
+import ee.tenman.mmse.service.external.prediction.PredictionService;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;

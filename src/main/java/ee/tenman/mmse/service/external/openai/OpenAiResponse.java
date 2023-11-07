@@ -1,4 +1,4 @@
-package ee.tenman.mmse.service.openai;
+package ee.tenman.mmse.service.external.openai;
 
 import java.util.List;
 import java.util.Map;

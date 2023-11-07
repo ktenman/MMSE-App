@@ -1,4 +1,4 @@
-package ee.tenman.mmse.service.openai;
+package ee.tenman.mmse.service.external.openai;
 
 import feign.RequestInterceptor;
 import feign.RequestTemplate;

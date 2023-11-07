@@ -1,4 +1,4 @@
-package ee.tenman.mmse.service.openai;
+package ee.tenman.mmse.service.external.openai;
 
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;

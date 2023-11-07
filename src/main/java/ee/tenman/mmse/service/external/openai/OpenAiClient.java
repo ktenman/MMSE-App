@@ -1,4 +1,4 @@
-package ee.tenman.mmse.service.openai;
+package ee.tenman.mmse.service.external.openai;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;

@@ -1,4 +1,4 @@
-package ee.tenman.mmse.service.prediction;
+package ee.tenman.mmse.service.external.prediction;
 
 public class PredictionRequest {
     private String sentence;

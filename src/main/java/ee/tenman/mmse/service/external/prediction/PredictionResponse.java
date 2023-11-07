@@ -1,4 +1,4 @@
-package ee.tenman.mmse.service.prediction;
+package ee.tenman.mmse.service.external.prediction;
 
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;

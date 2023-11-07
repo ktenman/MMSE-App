@@ -1,4 +1,4 @@
-package ee.tenman.mmse.service.prediction;
+package ee.tenman.mmse.service.external.prediction;
 
 import jakarta.annotation.Resource;
 import org.slf4j.Logger;

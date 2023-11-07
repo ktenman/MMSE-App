@@ -219,3 +219,10 @@ logging:
     feign.Logger: DEBUG
     # Assuming 'com.yourpackage' is where your Feign clients reside.
     com.yourpackage: DEBUG
+
+minio:
+  url: ${MINIO_URL:http://127.0.0.1:9000}
+  access-key: ${MINIO_ACCESS_KEY:minioaccesskey}
+  secret-key: ${MINIO_SECRET_KEY:miniosecretkey}
+  bucket-name: ${MINIO_BUCKET_NAME:mybucket}
+

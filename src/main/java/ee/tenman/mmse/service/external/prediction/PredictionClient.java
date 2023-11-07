@@ -1,4 +1,4 @@
-package ee.tenman.mmse.service.prediction;
+package ee.tenman.mmse.service.external.prediction;
 
 import org.springframework.cloud.openfeign.FeignClient;
 import org.springframework.web.bind.annotation.PostMapping;

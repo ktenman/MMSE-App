@@ -91,3 +91,10 @@ management:
 
 openai:
   token: ${OPENAI_API_KEY:}
+
+minio:
+  url: ${MINIO_URL:http://127.0.0.1:9000}
+  access-key: ${MINIO_ACCESS_KEY:minioaccesskey}
+  secret-key: ${MINIO_SECRET_KEY:miniosecretkey}
+  bucket-name: ${MINIO_BUCKET_NAME:mybucket}
+

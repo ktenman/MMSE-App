@@ -1,8 +1,8 @@
 package ee.tenman.mmse.service.question;
 
 import ee.tenman.mmse.domain.UserAnswer;
-import ee.tenman.mmse.service.openai.NoOpenAiResponseException;
-import ee.tenman.mmse.service.openai.OpenAiService;
+import ee.tenman.mmse.service.external.openai.NoOpenAiResponseException;
+import ee.tenman.mmse.service.external.openai.OpenAiService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
