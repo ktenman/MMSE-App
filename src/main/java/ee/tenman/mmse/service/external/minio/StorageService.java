@@ -8,10 +8,14 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
 import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.core.ResponseBytes;
 import software.amazon.awssdk.core.exception.SdkException;
 import software.amazon.awssdk.core.sync.RequestBody;
+import software.amazon.awssdk.core.sync.ResponseTransformer;
 import software.amazon.awssdk.regions.Region;
 import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.model.GetObjectResponse;
 import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
@@ -32,7 +36,7 @@ public class StorageService {
         this.bucketName = bucketName;
         this.s3Client = S3Client.builder()
                 .endpointOverride(URI.create(minioUrl))
-                .region(Region.of("us-east-1"))
+                .region(Region.EU_CENTRAL_1)
                 .credentialsProvider(StaticCredentialsProvider.create(AwsBasicCredentials.create(accessKey, secretKey)))
                 .build();
     }
@@ -53,6 +57,26 @@ public class StorageService {
         } catch (IOException e) {
             log.error("IO Error: {}", e.getMessage());
             return false;
+        }
+    }
+
+
+    public byte[] downloadFile(String fileName) {
+        log.info("Downloading file: {}", fileName);
+        try {
+            GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+                    .bucket(bucketName)
+                    .key(fileName)
+                    .build();
+
+            ResponseBytes<GetObjectResponse> objectBytes = s3Client.getObject(getObjectRequest,
+                    ResponseTransformer.toBytes());
+
+            log.info("File downloaded successfully: {}", fileName);
+            return objectBytes.asByteArray();
+        } catch (SdkException e) {
+            log.error("Error downloading file: {}", e.getMessage());
+            throw new RuntimeException("Error downloading file from S3", e);
         }
     }
 }

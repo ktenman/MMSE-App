@@ -20,15 +20,20 @@ class StorageServiceTest {
     @Test
     @Disabled
     void uploadFile() {
+        String string = "Test file content";
         MultipartFile multipartFile = new MockMultipartFile(
                 "file",
                 UUID.randomUUID() + "-test.txt",
                 "text/plain",
-                "Test file content".getBytes()
+                string.getBytes()
         );
 
         boolean result = storageService.uploadFile(multipartFile);
 
         assertThat(result).isTrue();
+
+        byte[] bytes = storageService.downloadFile(multipartFile.getOriginalFilename());
+
+        assertThat(new String(bytes)).isEqualTo(string);
     }
 }
