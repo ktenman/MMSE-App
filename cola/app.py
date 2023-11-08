@@ -20,5 +20,10 @@ def predict():
     return jsonify({'grammatically_correct': bool(predicted_label)})
 
 
+@app.route('/health', methods=['GET'])
+def healthcheck():
+    return jsonify({'status': 'healthy'}), 200
+
+
 if __name__ == '__main__':
-    app.run(host='0.0.0.0', port=5000)
+    app.run(host='0.0.0.0', port=61234)
