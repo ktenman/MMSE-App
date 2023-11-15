@@ -6,7 +6,8 @@ import java.util.List;
 import java.util.Map;
 
 public class OpenAiRequest {
-    private static final String DEFAULT_MODEL = "gpt-4";
+    //    private static final String DEFAULT_MODEL = "gpt-4";
+    private static final String DEFAULT_MODEL = "gpt-4-1106-preview";
     private static final String ROLE = "role";
     private static final String USER = "user";
     private static final String CONTENT = "content";
