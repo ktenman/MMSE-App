@@ -1,5 +1,5 @@
 flask==2.0.0
-werkzeug==2.0.0
+werkzeug==2.3.8
 torch==1.10.0
 sentence-transformers==2.2.0
 fuzzywuzzy==0.18.0
