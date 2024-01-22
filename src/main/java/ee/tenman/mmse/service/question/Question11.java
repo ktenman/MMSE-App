@@ -1,10 +1,17 @@
 package ee.tenman.mmse.service.question;
 
+import ee.tenman.mmse.NumberFileHandler;
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
 import ee.tenman.mmse.domain.enumeration.QuestionType;
+import ee.tenman.mmse.service.external.dolphin.DolphinService;
+import ee.tenman.mmse.service.external.openai.NoDolphinResponseException;
 import ee.tenman.mmse.service.external.openai.NoOpenAiResponseException;
 import ee.tenman.mmse.service.external.openai.OpenAiService;
+import ee.tenman.mmse.service.external.similarity.SimilarityRequest;
+import ee.tenman.mmse.service.external.similarity.SimilarityService;
+import ee.tenman.mmse.service.external.synonym.SynonymRequest;
+import ee.tenman.mmse.service.external.synonym.SynonymService;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -22,8 +29,9 @@ public class Question11 implements Question {
 
     private static final String QUESTION_TEXT = "11. Please name the object shown.";
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_11;
+    private static final String PENCIL = "pencil";
     private static final Set<String> ACCEPTED_ANSWERS = Set.of(
-        "pencil",
+        PENCIL,
         "stylus",
         "graphite",
         "lead",
@@ -34,7 +42,8 @@ public class Question11 implements Question {
     );
     private static final Set<String> INCORRECT_ANSWERS = Set.of(
         "paper",
-        "eraser"
+        "eraser",
+        "charcoal"
     );
     private static final Set<String> CORRECT_INDICATORS = Set.of(
         "yes",
@@ -70,6 +79,15 @@ public class Question11 implements Question {
     @Resource
     OpenAiService openAiService;
 
+    @Resource
+    SimilarityService similarityService;
+
+    @Resource
+    SynonymService synonymService;
+
+    @Resource
+    DolphinService dolphinService;
+
     @Override
     public String getQuestionText() {
         return QUESTION_TEXT;
@@ -104,7 +122,7 @@ public class Question11 implements Question {
             return 0;
         }
 
-        answerText = StringUtils.trim(answerText).replaceAll("[^a-zA-Z0-9\\s]", "");
+        answerText = StringUtils.trim(answerText).replaceAll("[^a-zA-Z0-9\\s]", "").toLowerCase();
 
         if (!containsWordWithThreeLetters(answerText)) {
             log.debug("Answer '{}' does not contain any word with at least three letters.", answerText);
@@ -116,17 +134,56 @@ public class Question11 implements Question {
             return 1;
         }
 
-        return evaluateOpenAiResponse(answerText);
+        if (INCORRECT_ANSWERS.contains(answerText)) {
+            log.debug("Answer '{}' is in the list of incorrect answers.", answerText);
+            return 0;
+        }
+
+        if (isSynonym(answerText)) {
+            log.debug("Answer '{}' is a synonym to one of the accepted answers.", answerText);
+            return 1;
+        }
+
+        if (isSimilar(answerText)) {
+            log.debug("Answer '{}' is similar to one of the accepted answers.", answerText);
+            return 1;
+        }
+
+        if (isDolphinSimilar(answerText)) {
+            log.debug("Answer '{}' is similar to one of the accepted answers.", answerText);
+            return 1;
+        }
+        NumberFileHandler.incrementNumberInFile();
+        Optional<String> openAiResponse = checkWithOpenAiService(answerText);
+        return evaluateOpenAiResponse(answerText, openAiResponse);
     }
 
-    private int evaluateOpenAiResponse(String answerText) {
-        Optional<String> openAiResponse = checkWithOpenAiService(answerText);
-        if (openAiResponse.isEmpty()) {
+    private boolean isDolphinSimilar(String answerText) {
+        String response = checkWithDolphinService(answerText);
+        log.debug("DolphinAI Service Response: '{}'", response);
+        if (CORRECT_INDICATORS.stream().anyMatch(response::contains)) {
+            log.debug("DolphinAI Service deemed answer '{}' as correct. Response: '{}'", answerText, response);
+            return true;
+        }
+        log.debug("DolphinAI Service deemed answer '{}' as incorrect. Response: '{}'", answerText, response);
+        return false;
+    }
+
+    private boolean isSynonym(String answerText) {
+        return synonymService.isSynonym(new SynonymRequest(answerText, PENCIL));
+    }
+
+    private boolean isSimilar(String answerText) {
+        return similarityService.isSimilar(new SimilarityRequest(answerText, PENCIL));
+    }
+
+    private int evaluateOpenAiResponse(String answerText, Optional<String> responseText) {
+        if (responseText.isEmpty()) {
             log.debug("Answer '{}' was not recognized as correct by OpenAI Service. Response: '{}'", answerText, Question11.NO_RESPONSE);
             return 0;
         }
 
-        String response = openAiResponse.get().toLowerCase();
+        String response = responseText.get().toLowerCase();
         log.debug("OpenAI Service Response: '{}'", response);
 
         if (CORRECT_INDICATORS.stream().anyMatch(response::contains)) {
@@ -148,7 +205,7 @@ public class Question11 implements Question {
     }
 
     private Optional<String> checkWithOpenAiService(String answerText) {
-        String prompt = prepareOpenAiPrompt(answerText);
+        String prompt = prepareAiPrompt(answerText);
 
         Optional<String> response = openAiService.askQuestion(prompt);
         if (response.isEmpty()) {
@@ -162,11 +219,23 @@ public class Question11 implements Question {
         return response;
     }
 
-    private String prepareOpenAiPrompt(String answerText) {
+    private String checkWithDolphinService(String answerText) {
+        String prompt = prepareAiPrompt(answerText);
+
+        Optional<String> response = dolphinService.askQuestion(prompt);
+        if (response.isEmpty()) {
+            log.debug("Answer '{}' was not recognized as correct by Dolphin Service. Response: '{}'", answerText, NO_RESPONSE);
+            throw new NoDolphinResponseException("Dolphin Service returned no response");
+        }
+
+        response.ifPresent(r -> log.info("Dolphin Response: {}", r.toLowerCase()));
+        return response.get().toLowerCase();
+    }
+
+    private String prepareAiPrompt(String answerText) {
         String allAnswers = String.join(", ", ACCEPTED_ANSWERS);
-        String allIncorrectAnswers = String.join(", ", INCORRECT_ANSWERS);
-        return String.format("Is the phrase \"%s\" close to or misspelled in meaning to any of these: %s? And it is not close to or misspelled in meaning to any of these: %s?. Please answer as 'yes' or 'no'", answerText,
-            allAnswers, allIncorrectAnswers);
+        return String.format("Is the phrase \"%s\" close to or misspelled in meaning to any of these: %s? Answer only yes/no", answerText,
+            allAnswers);
     }
 
     private int performSecondaryOpenAiCheck(String openAiResponse) {

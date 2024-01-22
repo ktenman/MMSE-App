@@ -1,8 +1,11 @@
 package ee.tenman.mmse.service.question;
 
 import ee.tenman.mmse.domain.UserAnswer;
-import ee.tenman.mmse.service.external.openai.NoOpenAiResponseException;
+import ee.tenman.mmse.service.external.dolphin.DolphinService;
+import ee.tenman.mmse.service.external.openai.NoDolphinResponseException;
 import ee.tenman.mmse.service.external.openai.OpenAiService;
+import ee.tenman.mmse.service.external.similarity.SimilarityService;
+import ee.tenman.mmse.service.external.synonym.SynonymService;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.Timeout;
@@ -21,13 +24,21 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class Question11Test {
 
     @Mock
     OpenAiService openAiService;
+
+    @Mock
+    SimilarityService similarityService;
+
+    @Mock
+    SynonymService synonymService;
+
+    @Mock
+    DolphinService dolphinService;
 
     @InjectMocks
     Question11 question11;
@@ -176,6 +187,11 @@ class Question11Test {
             return Optional.of(question.contains("pen") ? "no" : "yes");
         });
 
+        lenient().when(dolphinService.askQuestion(anyString())).thenAnswer(invocation -> {
+            String question = invocation.getArgument(0);
+            return Optional.of(question.contains("pen") ? "no" : "yes");
+        });
+
         int score = question11.getScore(userAnswer);
 
         assertThat(score).isEqualTo(expectedScore);
@@ -196,14 +212,12 @@ class Question11Test {
 
     @Test
     void getScoreWithExpectedException() {
-        when(openAiService.askQuestion(anyString())).thenReturn(Optional.empty());
-
         UserAnswer userAnswer = new UserAnswer();
         userAnswer.setAnswerText("zzz");
 
         Throwable thrown = catchThrowable(() -> question11.getScore(userAnswer));
 
-        assertThat(thrown).isInstanceOf(NoOpenAiResponseException.class);
+        assertThat(thrown).isInstanceOf(NoDolphinResponseException.class);
     }
 
     private static Stream<Arguments> provideOpenAiServiceEdgeCases() {

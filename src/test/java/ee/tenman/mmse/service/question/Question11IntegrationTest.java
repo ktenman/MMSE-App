@@ -112,9 +112,9 @@ class Question11IntegrationTest {
 
     private static Stream<Arguments> provideAnswersWithSubstrings() {
         return Stream.of(
-            Arguments.of("pen", 1), // This should return "yes" from the service
-            Arguments.of("cil", 0), // This should return "no" from the service
-            Arguments.of("sty", 0)  // This should return "no" from the service
+            Arguments.of("pen", 1),
+            Arguments.of("cil", 0),
+            Arguments.of("sty", 1)
         );
     }
 

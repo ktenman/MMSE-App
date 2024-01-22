@@ -20,12 +20,20 @@ RUN pip install --no-cache-dir -r requirements.txt
 RUN pip install torch torchvision torchaudio --extra-index-url https://download.pytorch.org/whl/nightly/cpu
 
 # Preload models
-RUN mkdir -p /usr/src/app/pretrained_models/wav2vec2-base-960h
+RUN mkdir -p /usr/src/app/pretrained_models/wav2vec2-large-960h
 RUN python -c "from transformers import AutoModelForCTC, Wav2Vec2Processor; \
-               model = AutoModelForCTC.from_pretrained('facebook/wav2vec2-base-960h'); \
-               model.save_pretrained('/usr/src/app/pretrained_models/wav2vec2-base-960h'); \
-               processor = Wav2Vec2Processor.from_pretrained('facebook/wav2vec2-base-960h'); \
-               processor.save_pretrained('/usr/src/app/pretrained_models/wav2vec2-base-960h')"
+               model = AutoModelForCTC.from_pretrained('facebook/wav2vec2-large-960h'); \
+               model.save_pretrained('/usr/src/app/pretrained_models/wav2vec2-large-960h'); \
+               processor = Wav2Vec2Processor.from_pretrained('facebook/wav2vec2-large-960h'); \
+               processor.save_pretrained('/usr/src/app/pretrained_models/wav2vec2-large-960h')"
+
+# Preload models for wav2vec2-large-robust-ft-libri-960h
+RUN mkdir -p /usr/src/app/pretrained_models/wav2vec2-large-robust-ft-libri-960h
+RUN python -c "from transformers import AutoModelForCTC, Wav2Vec2Processor; \
+               model = AutoModelForCTC.from_pretrained('facebook/wav2vec2-large-robust-ft-libri-960h'); \
+               model.save_pretrained('/usr/src/app/pretrained_models/wav2vec2-large-robust-ft-libri-960h'); \
+               processor = Wav2Vec2Processor.from_pretrained('facebook/wav2vec2-large-robust-ft-libri-960h'); \
+               processor.save_pretrained('/usr/src/app/pretrained_models/wav2vec2-large-robust-ft-libri-960h')" \
 
 # Expose the port the app runs on
 EXPOSE 61235
