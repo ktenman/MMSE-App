@@ -1,10 +1,10 @@
-Flask==3.0.0
-transformers==4.36.0  # Use the version compatible with your torch version
+Flask==3.0.1
+transformers==4.36.0
 soundfile==0.12.1
 librosa
 numpy==1.23.0
 scipy
 pydub==0.25.1
-huggingsound
-pyctcdecode
+huggingsound==0.1.6
+pyctcdecode==0.5.0
 -f https://github.com/kpu/kenlm/archive/master.zip

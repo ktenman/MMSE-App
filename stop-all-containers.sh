@@ -11,6 +11,9 @@ docker-compose -f synonym/docker-compose.yml down
 docker-compose -f similarity/docker-compose.yml down
 docker-compose -f minio/docker-compose.yml down
 docker-compose -f cola/docker-compose.yml down
+docker-compose -f meta/docker-compose.yml down
+docker-compose -f transcribe/docker-compose.yml down
+docker-compose -f transcribe2/docker-compose.yml down
 
 # Kill the background process started with 'ollama run'
 # Note: Replace 'dolphin-mixtral' with the actual process name if different
