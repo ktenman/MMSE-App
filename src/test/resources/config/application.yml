@@ -90,7 +90,7 @@ management:
       enabled: false
 
 openai:
-  token: ${OPENAI_API_KEY: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}
+  token: ${OPENAI_API_KEY:}
 
 minio:
   url: ${MINIO_URL:http://127.0.0.1:9000}
