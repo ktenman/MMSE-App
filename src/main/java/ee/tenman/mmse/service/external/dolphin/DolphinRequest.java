@@ -2,7 +2,8 @@ package ee.tenman.mmse.service.external.dolphin;
 
 public class DolphinRequest {
 
-    private final String model = "dolphin-mixtral";
+    //    private final String model = "dolphin-mixtral";
+    private final String model = "tinydolphin";
     private final boolean stream = false;
     private String prompt;
 
