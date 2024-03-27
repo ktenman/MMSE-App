@@ -38,7 +38,7 @@
           </div>
 
           <!-- Render this div if question type is multiple choice -->
-          <div v-if="question.questionType === 'MULTIPLE_CHOICE'">
+          <div v-if="question.questionType === QuestionType.MULTIPLE_CHOICE">
             <div class="row">
               <div class="col-md-6" v-for="(option, index) in question.answerOptions" :key="index">
                 <b-button
@@ -54,7 +54,7 @@
           </div>
 
           <!-- Render this div if question type is subtraction task -->
-          <div v-if="question.questionType === 'SUBTRACTION_TASK'">
+          <div v-if="question.questionType === QuestionType.SUBTRACTION_TASK">
             <div class="row">
               <div class="col-md-6" v-for="(option, index) in question.answerOptions" :key="index">
                 <input type="number" :min="option.min" :max="option.max" v-model="selectedAnswers[index]" :placeholder="option.placeholder"
@@ -63,7 +63,7 @@
             </div>
           </div>
 
-          <div v-if="question.questionType === 'TEXT_INPUT'">
+          <div v-if="question.questionType === QuestionType.TEXT_INPUT">
             <div class="row">
               <div class="col-md-6">
                 <input v-model="selectedAnswer"
@@ -77,6 +77,18 @@
             </div>
           </div>
 
+          <div v-if="question.questionType === QuestionType.VOICE_INPUT">
+            <div class="row">
+              <div class="col-md-6">
+                <div class="voice-recorder">
+                  <button :disabled="isRecording" @click="startRecording">Start Recording</button>
+                  <button :disabled="!isRecording" @click="stopRecording">Stop Recording</button>
+                  <audio v-if="audioUrl" :src="audioUrl" controls></audio>
+                </div>
+              </div>
+            </div>
+          </div>
+
           <b-button
               @click="submitAnswer"
               variant="primary"
@@ -86,7 +98,6 @@
           </b-button>
 
         </div>
-
 
         <div class="alert alert-warning" v-if="!authenticated">
           <span v-text="t$('global.messages.info.authenticated.prefix')"></span>

@@ -9,7 +9,7 @@ echo "Shutting down..."
 docker-compose -f src/main/docker/postgresql.yml down
 docker-compose -f synonym/docker-compose.yml down
 docker-compose -f similarity/docker-compose.yml down
-docker-compose -f minio/docker-compose.yml down
+docker-compose -f minio/docker-compose.yml stop
 docker-compose -f cola/docker-compose.yml down
 docker-compose -f meta/docker-compose.yml down
 docker-compose -f transcribe/docker-compose.yml down

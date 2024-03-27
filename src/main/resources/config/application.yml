@@ -221,7 +221,7 @@ logging:
     com.yourpackage: DEBUG
 
 minio:
-  url: ${MINIO_URL:http://127.0.0.1:9000}
+  url: ${MINIO_URL:http://127.0.0.1:9001}
   access-key: ${MINIO_ACCESS_KEY:minioaccesskey}
   secret-key: ${MINIO_SECRET_KEY:miniosecretkey}
   bucket-name: ${MINIO_BUCKET_NAME:mybucket}

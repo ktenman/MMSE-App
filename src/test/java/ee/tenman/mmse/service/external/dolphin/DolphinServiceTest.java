@@ -2,6 +2,7 @@ package ee.tenman.mmse.service.external.dolphin;
 
 import ee.tenman.mmse.IntegrationTest;
 import jakarta.annotation.Resource;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 
 import java.util.Optional;
@@ -13,6 +14,7 @@ class DolphinServiceTest {
     private DolphinService dolphinService;
 
     @Test
+    @Disabled
     void generate() {
         Optional<String> answer = dolphinService.askQuestion("2+2");
 

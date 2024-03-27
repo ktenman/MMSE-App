@@ -16,7 +16,7 @@ public class Question15 implements Question {
     private static final Logger log = LoggerFactory.getLogger(Question15.class);
 
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_15;
-    private static final String QUESTION_TEXT = "Repeat the following phrase: 'No ifs, ands, or buts'";
+    private static final String QUESTION_TEXT = "Press the record button and repeat the following phrase: 'No ifs, ands, or buts'";
 
     @Override
     public String getQuestionText() {

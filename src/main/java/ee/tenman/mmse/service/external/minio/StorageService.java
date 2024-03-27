@@ -20,6 +20,7 @@ import software.amazon.awssdk.services.s3.model.PutObjectRequest;
 
 import java.io.IOException;
 import java.net.URI;
+import java.util.UUID;
 
 @Service
 public class StorageService {
@@ -41,22 +42,25 @@ public class StorageService {
                 .build();
     }
 
-    public boolean uploadFile(MultipartFile file) {
+    public String uploadFile(MultipartFile file) {
         log.info("Uploading file: {}", file.getOriginalFilename());
         try {
+            String fileId = UUID.randomUUID().toString();
+            String fileName = fileId + "_" + file.getOriginalFilename();
+
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
-                    .bucket(bucketName)
-                    .key(file.getOriginalFilename())
-                    .build();
+                .bucket(bucketName)
+                .key(fileName)
+                .build();
 
             s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
-            return true;
+            return fileId;
         } catch (SdkException e) {
             log.error("Error uploading file: {}", e.getMessage());
-            return false;
+            throw new RuntimeException("Error uploading file to S3", e);
         } catch (IOException e) {
             log.error("IO Error: {}", e.getMessage());
-            return false;
+            throw new RuntimeException("IO Error", e);
         }
     }
 

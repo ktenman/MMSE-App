@@ -1,7 +1,9 @@
 package ee.tenman.mmse.service;
 
 import ee.tenman.mmse.domain.TestEntity;
+import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.repository.TestEntityRepository;
+import ee.tenman.mmse.repository.UserAnswerRepository;
 import ee.tenman.mmse.service.dto.TestEntityDTO;
 import ee.tenman.mmse.service.mapper.TestEntityMapper;
 import org.slf4j.Logger;
@@ -11,6 +13,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
 import java.util.Optional;
 
 /**
@@ -24,11 +27,18 @@ public class TestEntityService {
 
     private final TestEntityRepository testEntityRepository;
 
+    private final UserAnswerRepository userAnswerRepository;
+
     private final TestEntityMapper testEntityMapper;
 
-    public TestEntityService(TestEntityRepository testEntityRepository, TestEntityMapper testEntityMapper) {
+    public TestEntityService(
+        TestEntityRepository testEntityRepository,
+        TestEntityMapper testEntityMapper,
+        UserAnswerRepository userAnswerRepository
+    ) {
         this.testEntityRepository = testEntityRepository;
         this.testEntityMapper = testEntityMapper;
+        this.userAnswerRepository = userAnswerRepository;
     }
 
     /**
@@ -116,6 +126,8 @@ public class TestEntityService {
      * @param id the id of the entity.
      */
     public void delete(Long id) {
+        List<UserAnswer> answers = userAnswerRepository.findByTestEntityIdOrderByCreatedAtDesc(id);
+        userAnswerRepository.deleteAll(answers);
         log.debug("Request to delete TestEntity : {}", id);
         testEntityRepository.deleteById(id);
     }

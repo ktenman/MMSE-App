@@ -1,13 +1,18 @@
-import {ComputedRef, defineComponent, inject, onMounted, ref, watch} from "vue";
-import {useI18n} from "vue-i18n";
-import LoginService from "@/account/login.service";
-import {IQuestion} from "@/shared/model/question.model";
-import QuestionService from "@/entities/question/question.service";
-import {Answer, IAnswer} from "@/shared/model/answer.model";
-import {QuestionId} from "@/shared/model/enumerations/question-id.model";
-import {QuestionType} from "@/shared/model/enumerations/question-type.model";
+import { ComputedRef, defineComponent, inject, onMounted, ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import LoginService from '@/account/login.service';
+import { IQuestion } from '@/shared/model/question.model';
+import QuestionService from '@/entities/question/question.service';
+import { Answer, IAnswer } from '@/shared/model/answer.model';
+import { QuestionId } from '@/shared/model/enumerations/question-id.model';
+import { QuestionType } from '@/shared/model/enumerations/question-type.model';
 
 export default defineComponent({
+  computed: {
+    QuestionType() {
+      return QuestionType;
+    }
+  },
   compatConfig: { MODE: 3 },
   setup() {
     const [
@@ -18,7 +23,11 @@ export default defineComponent({
       selectedAnswer,
       selectedAnswers,
       quizEndMessage,
-      loading
+      loading,
+      isRecording,
+      audioContext,
+      recorder,
+      stream
     ] = [
       inject<LoginService>("loginService"),
       inject<ComputedRef<boolean>>("authenticated"),
@@ -28,11 +37,49 @@ export default defineComponent({
       ref<Array<number | null>>([]),
       ref<string | null>(null),
       ref(false),
+      ref(false),
+      ref(null),
+      ref(null),
+      ref(null)
     ];
 
     const questionService = new QuestionService();
 
     const openLogin = () => loginService.openLogin();
+
+    const startRecording = async () => {
+      if (!isRecording.value) {
+        try {
+          stream.value = await navigator.mediaDevices.getUserMedia({ audio: true });
+          audioContext.value = new AudioContext();
+          recorder.value = new MediaRecorder(stream.value);
+
+          const audioChunks: Blob[] = [];
+          recorder.value.ondataavailable = (event) => {
+            audioChunks.push(event.data);
+          };
+
+          recorder.value.onstop = () => {
+            const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+            questionService.sendAudioToServer(audioBlob);
+            audioChunks.length = 0;
+          };
+
+          recorder.value.start();
+          isRecording.value = true;
+        } catch (error) {
+          console.error('Error starting recording:', error);
+        }
+      }
+    };
+
+    const stopRecording = () => {
+      if (isRecording.value && recorder.value && recorder.value.state !== 'inactive') {
+        recorder.value.stop();
+        stream.value?.getTracks().forEach(track => track.stop());
+        isRecording.value = false;
+      }
+    };
 
     const createAnswer = (answerText: string | Array<number | null>, questionId: QuestionId): IAnswer => {
       if (typeof answerText === "string") {
@@ -157,6 +204,12 @@ export default defineComponent({
       retakeTest,
       isNextButtonDisabled,
       loading,
+      audioContext,
+      recorder,
+      stream,
+      startRecording,
+      stopRecording,
+      isRecording
     };
   }
 });

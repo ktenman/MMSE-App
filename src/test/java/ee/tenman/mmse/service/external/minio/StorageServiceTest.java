@@ -28,9 +28,9 @@ class StorageServiceTest {
                 string.getBytes()
         );
 
-        boolean result = storageService.uploadFile(multipartFile);
+        String result = storageService.uploadFile(multipartFile);
 
-        assertThat(result).isTrue();
+        assertThat(result).isNotEmpty();
 
         byte[] bytes = storageService.downloadFile(multipartFile.getOriginalFilename());
 
