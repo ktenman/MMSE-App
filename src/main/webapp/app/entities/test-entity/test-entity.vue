@@ -61,11 +61,11 @@
             <router-link :to="{ name: 'TestEntityView', params: { testEntityId: testEntity.id } }">{{ testEntity.id }}
             </router-link>
           </td>
-          <td>{{ formatDateShort(testEntity.createdAt) || "" }}</td>
-          <td>{{ formatDateShort(testEntity.updatedAt) || "" }}</td>
+          <td>{{ formatDateShort(testEntity.createdAt) || '' }}</td>
+          <td>{{ formatDateShort(testEntity.updatedAt) || '' }}</td>
           <td>{{ testEntity.score }}</td>
           <td>
-            {{ testEntity.user ? testEntity.user.login : "" }}
+            {{ testEntity.user ? testEntity.user.login : '' }}
           </td>
           <td class="text-right">
             <div class="btn-group">

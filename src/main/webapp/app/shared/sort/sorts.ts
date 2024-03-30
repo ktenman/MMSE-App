@@ -3,11 +3,11 @@ export default function buildPaginationQueryOpts(paginationQuery) {
     return Object.entries(paginationQuery)
       .map(([paramName, paramValue]) => {
         if (Array.isArray(paramValue)) {
-          return paramValue.map(eachValue => `${paramName}=${eachValue}`).join("&");
+          return paramValue.map(eachValue => `${paramName}=${eachValue}`).join('&');
         }
         return `${paramName}=${paramValue}`;
       })
-      .join("&");
+      .join('&');
   }
-  return "";
+  return '';
 }

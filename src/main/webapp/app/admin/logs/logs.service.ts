@@ -1,4 +1,4 @@
-import axios, { AxiosPromise } from "axios";
+import axios, { AxiosPromise } from 'axios';
 
 export default class LogsService {
   public changeLevel(name: string, configuredLevel: string): AxiosPromise<any> {
@@ -6,6 +6,6 @@ export default class LogsService {
   }
 
   public findAll(): AxiosPromise<any> {
-    return axios.get("management/loggers");
+    return axios.get('management/loggers');
   }
 }

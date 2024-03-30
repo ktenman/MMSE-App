@@ -1,14 +1,14 @@
-import axios, { AxiosPromise } from "axios";
+import axios, { AxiosPromise } from 'axios';
 
 export default class HealthService {
   public separator: string;
 
   constructor() {
-    this.separator = ".";
+    this.separator = '.';
   }
 
   public checkHealth(): AxiosPromise<any> {
-    return axios.get("management/health");
+    return axios.get('management/health');
   }
 
   public transformHealthData(data: any): any {
@@ -19,17 +19,17 @@ export default class HealthService {
 
   public getBaseName(name: string): string {
     if (name) {
-      const split = name.split(".");
+      const split = name.split('.');
       return split[0];
     }
   }
 
   public getSubSystemName(name: string): string {
     if (name) {
-      const split = name.split(".");
+      const split = name.split('.');
       split.splice(0, 1);
-      const remainder = split.join(".");
-      return remainder ? " - " + remainder : "";
+      const remainder = split.join('.');
+      return remainder ? ' - ' + remainder : '';
     }
   }
 
@@ -46,7 +46,7 @@ export default class HealthService {
     for (const key in healthObject) {
       if (Object.prototype.hasOwnProperty.call(healthObject, key)) {
         const value = healthObject[key];
-        if (key === "status" || key === "error") {
+        if (key === 'status' || key === 'error') {
           healthData[key] = value;
         } else {
           if (!this.isHealthObject(value)) {
@@ -94,7 +94,7 @@ export default class HealthService {
     } else if (name) {
       return name;
     } else {
-      return "";
+      return '';
     }
   }
 
@@ -117,7 +117,7 @@ export default class HealthService {
 
     for (const key in healthObject) {
       if (Object.prototype.hasOwnProperty.call(healthObject, key)) {
-        if (key === "status") {
+        if (key === 'status') {
           result = true;
         }
       }

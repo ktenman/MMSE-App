@@ -14,27 +14,21 @@
           <div v-if="quizEndMessage" class="alert alert-info">
             {{ quizEndMessage }}
           </div>
-          <b-button
-            @click="retakeTest"
-            variant="primary"
-            class="mt-3"
-            v-if="!question && authenticated"
-          >
-            Retake Test
+          <b-button v-if="!question && authenticated" class="mt-3" variant="primary" @click="retakeTest"> Retake Test
           </b-button>
         </div>
 
         <!-- Conditionally show multiple choice or input fields based on question type -->
 
         <div v-if="loading" class="loader-container">
-          <span>Loading...</span> <!-- Replace with your actual loader -->
+          <span>Loading...</span>
+          <!-- Replace with your actual loader -->
         </div>
 
         <div v-if="question && authenticated && !loading">
-
           <h2>{{ question.questionText }}</h2>
           <div v-if="question.image" class="image-container">
-            <img :src="'data:image/png;base64,' + question.image" alt="Question image" class="question-image">
+            <img :src="'data:image/png;base64,' + question.image" alt="Question image" class="question-image" />
           </div>
 
           <!-- Render this div if question type is multiple choice -->
@@ -57,8 +51,15 @@
           <div v-if="question.questionType === QuestionType.SUBTRACTION_TASK">
             <div class="row">
               <div class="col-md-6" v-for="(option, index) in question.answerOptions" :key="index">
-                <input type="number" :min="option.min" :max="option.max" v-model="selectedAnswers[index]" :placeholder="option.placeholder"
-                       v-focus="index === 0" class="form-control">
+                <input
+                  v-model="selectedAnswers[index]"
+                  v-focus="index === 0"
+                  :max="option.max"
+                  :min="option.min"
+                  :placeholder="option.placeholder"
+                  class="form-control"
+                  type="number"
+                />
               </div>
             </div>
           </div>
@@ -66,13 +67,16 @@
           <div v-if="question.questionType === QuestionType.TEXT_INPUT">
             <div class="row">
               <div class="col-md-6">
-                <input v-model="selectedAnswer"
-                       v-focus="true"
-                       :min="1"
-                       class="form-control"
-                       required
-                       type="text"
-                       @keyup.enter="submitAnswer"> <!-- Always focus this input when it's rendered -->
+                <input
+                  v-model="selectedAnswer"
+                  v-focus="true"
+                  :min="1"
+                  class="form-control"
+                  required
+                  type="text"
+                  @keyup.enter="submitAnswer"
+                />
+                <!-- Always focus this input when it's rendered -->
               </div>
             </div>
           </div>
@@ -90,9 +94,7 @@
                       <font-awesome-icon icon="stop" />
                       Stop Recording
                     </b-button>
-                    <div v-if="isRecording" class="recording-timer ml-3">
-                      {{ recordingDuration }}s
-                    </div>
+                    <div v-if="isRecording" class="recording-timer ml-3">{{ recordingDuration }}s</div>
                   </div>
                   <div v-if="lastRecordedAudioUrl" class="audio-player mt-3">
                     <p>To listen to your recorded audio, press the play button below:</p>
@@ -103,14 +105,9 @@
             </div>
           </div>
 
-          <b-button
-              @click="submitAnswer"
-              variant="primary"
-              class="mt-3"
-              :disabled="isNextButtonDisabled() || loading">
+          <b-button :disabled="isNextButtonDisabled() || loading" class="mt-3" variant="primary" @click="submitAnswer">
             Next
           </b-button>
-
         </div>
 
         <div class="alert alert-warning" v-if="!authenticated">

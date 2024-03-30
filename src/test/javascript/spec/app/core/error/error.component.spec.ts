@@ -1,23 +1,23 @@
-import { vitest } from "vitest";
-import { Ref, ref } from "vue";
-import { shallowMount } from "@vue/test-utils";
-import { RouteLocation } from "vue-router";
+import { vitest } from 'vitest';
+import { Ref, ref } from 'vue';
+import { shallowMount } from '@vue/test-utils';
+import { RouteLocation } from 'vue-router';
 
-import Error from "../../../../../../main/webapp/app/core/error/error.vue";
+import Error from '../../../../../../main/webapp/app/core/error/error.vue';
 
-import LoginService from "../../../../../../main/webapp/app/account/login.service";
+import LoginService from '../../../../../../main/webapp/app/account/login.service';
 
 type ErrorComponentType = InstanceType<typeof Error>;
 
 let route: Partial<RouteLocation>;
 
-vitest.mock("vue-router", () => ({
+vitest.mock('vue-router', () => ({
   useRoute: () => route
 }));
 
-const customErrorMsg = "An error occurred.";
+const customErrorMsg = 'An error occurred.';
 
-describe("Error component", () => {
+describe('Error component', () => {
   let error: ErrorComponentType;
   let loginService: LoginService;
   let authenticated: Ref<boolean>;
@@ -26,13 +26,13 @@ describe("Error component", () => {
     route = {};
     authenticated = ref(false);
     loginService = new LoginService({ emit: vitest.fn() });
-    vitest.spyOn(loginService, "openLogin");
+    vitest.spyOn(loginService, 'openLogin');
   });
 
-  it("should have retrieve custom error on routing", () => {
+  it('should have retrieve custom error on routing', () => {
     route = {
-      path: "/custom-error",
-      name: "CustomMessage",
+      path: '/custom-error',
+      name: 'CustomMessage',
       meta: { errorMessage: customErrorMsg }
     };
     const wrapper = shallowMount(Error, {
@@ -40,8 +40,8 @@ describe("Error component", () => {
         provide: {
           loginService,
           authenticated
-        }
-      }
+        },
+      },
     });
     error = wrapper.vm;
 
@@ -51,7 +51,7 @@ describe("Error component", () => {
     expect(loginService.openLogin).toHaveBeenCalledTimes(0);
   });
 
-  it("should have set forbidden error on routing", () => {
+  it('should have set forbidden error on routing', () => {
     route = {
       meta: { error403: true }
     };
@@ -60,8 +60,8 @@ describe("Error component", () => {
         provide: {
           loginService,
           authenticated
-        }
-      }
+        },
+      },
     });
     error = wrapper.vm;
 
@@ -71,7 +71,7 @@ describe("Error component", () => {
     expect(loginService.openLogin).toHaveBeenCalled();
   });
 
-  it("should have set not found error on routing", () => {
+  it('should have set not found error on routing', () => {
     route = {
       meta: { error404: true }
     };
@@ -80,8 +80,8 @@ describe("Error component", () => {
         provide: {
           loginService,
           authenticated
-        }
-      }
+        },
+      },
     });
     error = wrapper.vm;
 
@@ -91,14 +91,14 @@ describe("Error component", () => {
     expect(loginService.openLogin).toHaveBeenCalledTimes(0);
   });
 
-  it("should have set default on no error", () => {
+  it('should have set default on no error', () => {
     const wrapper = shallowMount(Error, {
       global: {
         provide: {
           loginService,
           authenticated
-        }
-      }
+        },
+      },
     });
     error = wrapper.vm;
 

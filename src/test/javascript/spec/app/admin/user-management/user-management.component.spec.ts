@@ -1,21 +1,21 @@
-import { vitest } from "vitest";
-import { ref } from "vue";
-import { shallowMount } from "@vue/test-utils";
-import axios from "axios";
-import sinon from "sinon";
+import { vitest } from 'vitest';
+import { ref } from 'vue';
+import { shallowMount } from '@vue/test-utils';
+import axios from 'axios';
+import sinon from 'sinon';
 
-import AlertService from "../../../../../../main/webapp/app/shared/alert/alert.service";
-import UserManagement from "../../../../../../main/webapp/app/admin/user-management/user-management.vue";
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
+import UserManagement from '../../../../../../main/webapp/app/admin/user-management/user-management.vue';
 
 type UserManagementComponentType = InstanceType<typeof UserManagement>;
 
 const axiosStub = {
-  delete: sinon.stub(axios, "delete"),
-  get: sinon.stub(axios, "get"),
-  put: sinon.stub(axios, "put")
+  delete: sinon.stub(axios, 'delete'),
+  get: sinon.stub(axios, 'get'),
+  put: sinon.stub(axios, 'put')
 };
 
-describe("UserManagement Component", () => {
+describe('UserManagement Component', () => {
   let userManagement: UserManagementComponentType;
   let alertService: AlertService;
 
@@ -28,7 +28,7 @@ describe("UserManagement Component", () => {
       i18n: { t: vitest.fn() } as any,
       bvToast: {
         toast: vitest.fn()
-      } as any
+      } as any,
     });
 
     const wrapper = shallowMount(UserManagement, {
@@ -37,25 +37,25 @@ describe("UserManagement Component", () => {
           bPagination: true,
           jhiItemCount: true,
           bModal: true,
-          "router-link": true,
-          "jhi-sort-indicator": true,
-          "font-awesome-icon": true,
-          "b-button": true
+          'router-link': true,
+          'jhi-sort-indicator': true,
+          'font-awesome-icon': true,
+          'b-button': true
         },
         directives: {
-          "b-modal": {}
+          'b-modal': {}
         },
         provide: {
           alertService,
-          currentUsername: ref("")
-        }
-      }
+          currentUsername: ref('')
+        },
+      },
     });
     userManagement = wrapper.vm;
   });
 
-  describe("OnInit", () => {
-    it("Should call load all on init", async () => {
+  describe('OnInit', () => {
+    it('Should call load all on init', async () => {
       // WHEN
       userManagement.loadAll();
       await userManagement.$nextTick();
@@ -65,8 +65,8 @@ describe("UserManagement Component", () => {
     });
   });
 
-  describe("setActive", () => {
-    it("Should update user and call load all", async () => {
+  describe('setActive', () => {
+    it('Should update user and call load all', async () => {
       // GIVEN
       axiosStub.put.resolves({});
 
@@ -80,14 +80,14 @@ describe("UserManagement Component", () => {
     });
   });
 
-  describe("confirmDelete", () => {
-    it("Should call delete service on confirmDelete", async () => {
+  describe('confirmDelete', () => {
+    it('Should call delete service on confirmDelete', async () => {
       // GIVEN
       axiosStub.delete.resolves({
         headers: {
-          "x-mmseapp-alert": "",
-          "x-mmseapp-params": ""
-        }
+          'x-mmseapp-alert': '',
+          'x-mmseapp-params': ''
+        },
       });
 
       // WHEN
@@ -96,18 +96,18 @@ describe("UserManagement Component", () => {
       await userManagement.$nextTick();
 
       // THEN
-      expect(axiosStub.delete.calledWith("api/admin/users/" + 123)).toBeTruthy();
+      expect(axiosStub.delete.calledWith('api/admin/users/' + 123)).toBeTruthy();
       expect(axiosStub.get.calledWith(`api/admin/users?sort=id,asc&page=0&size=20`)).toBeTruthy();
     });
   });
 
-  describe("change order", () => {
-    it("should change order and invert reverse", () => {
+  describe('change order', () => {
+    it('should change order and invert reverse', () => {
       // WHEN
-      userManagement.changeOrder("dummy-order");
+      userManagement.changeOrder('dummy-order');
 
       // THEN
-      expect(userManagement.propOrder).toEqual("dummy-order");
+      expect(userManagement.propOrder).toEqual('dummy-order');
       expect(userManagement.reverse).toBe(true);
     });
   });

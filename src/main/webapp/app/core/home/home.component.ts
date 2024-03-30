@@ -34,9 +34,9 @@ export default defineComponent({
       recordingDuration,
       recordingTimer
     ] = [
-      inject<LoginService>("loginService"),
-      inject<ComputedRef<boolean>>("authenticated"),
-      inject<ComputedRef<string>>("currentUsername"),
+      inject<LoginService>('loginService'),
+      inject<ComputedRef<boolean>>('authenticated'),
+      inject<ComputedRef<string>>('currentUsername'),
       ref<IQuestion | null>(null),
       ref<string | null>(null),
       ref<Array<number | null>>([]),
@@ -65,7 +65,7 @@ export default defineComponent({
           recorder.value = new MediaRecorder(stream.value);
 
           const audioChunks: Blob[] = [];
-          recorder.value.ondataavailable = (event) => {
+          recorder.value.ondataavailable = event => {
             audioChunks.push(event.data);
           };
 
@@ -113,16 +113,16 @@ export default defineComponent({
     };
 
     const createAnswer = (answerText: string | Array<number | null>, questionId: QuestionId): IAnswer => {
-      if (typeof answerText === "string") {
+      if (typeof answerText === 'string') {
         return new Answer(answerText, questionId);
       } else if (Array.isArray(answerText) && answerText.length > 0) {
         // Filter out null values before joining
         const filteredAnswerText = answerText.filter(item => item !== null);
-        return new Answer(filteredAnswerText.join(","), questionId);
+        return new Answer(filteredAnswerText.join(','), questionId);
       } else {
         // Handle the case where answerText is null or an empty array
         // You might want to return a default Answer or throw an error
-        return new Answer("", questionId); // or throw new Error("answerText is null or empty");
+        return new Answer('', questionId); // or throw new Error("answerText is null or empty");
       }
     };
 
@@ -184,7 +184,7 @@ export default defineComponent({
     const retakeTest = async () => {
       const response = await questionService.retakeTest();
 
-      if (typeof response === "string") {
+      if (typeof response === 'string') {
         quizEndMessage.value = response;
       } else {
         question.value = response;
@@ -195,7 +195,7 @@ export default defineComponent({
 
     const loadQuestion = async () => {
       const response = await questionService.getQuestion();
-      if (typeof response === "string") {
+      if (typeof response === 'string') {
         quizEndMessage.value = response;
         question.value = null;
       } else {
@@ -226,7 +226,7 @@ export default defineComponent({
     };
 
     (async () => {
-      watch(authenticated, async (newVal) => {
+      watch(authenticated, async newVal => {
         if (newVal === true) {
           await loadQuestion();
         }

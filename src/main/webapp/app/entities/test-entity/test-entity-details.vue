@@ -28,7 +28,7 @@
             <span v-text="t$('mmseApp.testEntity.user')"></span>
           </dt>
           <dd>
-            {{ testEntity.user ? testEntity.user.login : "" }}
+            {{ testEntity.user ? testEntity.user.login : '' }}
           </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info"

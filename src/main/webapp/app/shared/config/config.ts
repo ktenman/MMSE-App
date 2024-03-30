@@ -45,59 +45,59 @@ import { faStop } from '@fortawesome/free-solid-svg-icons/faStop';
 const datetimeFormats: IntlDateTimeFormats = {
   en: {
     short: {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric"
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric'
     },
     medium: {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      weekday: "short",
-      hour: "numeric",
-      minute: "numeric"
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      weekday: 'short',
+      hour: 'numeric',
+      minute: 'numeric'
     },
     long: {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      weekday: "long",
-      hour: "numeric",
-      minute: "numeric"
-    }
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      weekday: 'long',
+      hour: 'numeric',
+      minute: 'numeric'
+    },
   },
   et: {
     short: {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      hour: "numeric",
-      minute: "numeric"
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      hour: 'numeric',
+      minute: 'numeric'
     },
     medium: {
-      year: "numeric",
-      month: "short",
-      day: "numeric",
-      weekday: "short",
-      hour: "numeric",
-      minute: "numeric"
+      year: 'numeric',
+      month: 'short',
+      day: 'numeric',
+      weekday: 'short',
+      hour: 'numeric',
+      minute: 'numeric'
     },
     long: {
-      year: "numeric",
-      month: "long",
-      day: "numeric",
-      weekday: "long",
-      hour: "numeric",
-      minute: "numeric"
-    }
-  }
+      year: 'numeric',
+      month: 'long',
+      day: 'numeric',
+      weekday: 'long',
+      hour: 'numeric',
+      minute: 'numeric'
+    },
+  },
   // jhipster-needle-i18n-language-date-time-format - JHipster will add/remove format options in this object
 };
 
 export function initFortAwesome(vue) {
-  vue.component("font-awesome-icon", FontAwesomeIcon);
+  vue.component('font-awesome-icon', FontAwesomeIcon);
 
   library.add(
     faArrowLeft,

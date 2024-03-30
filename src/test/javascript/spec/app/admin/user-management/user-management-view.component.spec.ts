@@ -1,28 +1,28 @@
-import { vitest } from "vitest";
-import { shallowMount } from "@vue/test-utils";
-import axios from "axios";
-import sinon from "sinon";
-import { RouteLocation, Router } from "vue-router";
+import { vitest } from 'vitest';
+import { shallowMount } from '@vue/test-utils';
+import axios from 'axios';
+import sinon from 'sinon';
+import { RouteLocation, Router } from 'vue-router';
 
-import AlertService from "../../../../../../main/webapp/app/shared/alert/alert.service";
-import UserManagementView from "../../../../../../main/webapp/app/admin/user-management/user-management-view.vue";
-import { Authority } from "../../../../../../main/webapp/app/shared/security/authority";
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
+import UserManagementView from '../../../../../../main/webapp/app/admin/user-management/user-management-view.vue';
+import { Authority } from '../../../../../../main/webapp/app/shared/security/authority';
 
 type UserManagementViewComponentType = InstanceType<typeof UserManagementView>;
 
 let route: Partial<RouteLocation>;
 let router: Router;
 
-vitest.mock("vue-router", () => ({
+vitest.mock('vue-router', () => ({
   useRoute: () => route,
   useRouter: () => router
 }));
 
 const axiosStub = {
-  get: sinon.stub(axios, "get")
+  get: sinon.stub(axios, 'get')
 };
 
-describe("UserManagementView Component", () => {
+describe('UserManagementView Component', () => {
   let alertService: AlertService;
 
   beforeEach(() => {
@@ -31,23 +31,23 @@ describe("UserManagementView Component", () => {
       i18n: { t: vitest.fn() } as any,
       bvToast: {
         toast: vitest.fn()
-      } as any
+      } as any,
     });
   });
 
-  describe("OnInit", () => {
-    it("Should call load all on init", async () => {
+  describe('OnInit', () => {
+    it('Should call load all on init', async () => {
       // GIVEN
       const userData = {
         id: 1,
-        login: "user",
-        firstName: "first",
-        lastName: "last",
-        email: "first@last.com",
+        login: 'user',
+        firstName: 'first',
+        lastName: 'last',
+        email: 'first@last.com',
         activated: true,
-        langKey: "en",
+        langKey: 'en',
         authorities: [Authority.USER],
-        createdBy: "admin",
+        createdBy: 'admin',
         createdDate: null,
         lastModifiedBy: null,
         lastModifiedDate: null,
@@ -57,21 +57,21 @@ describe("UserManagementView Component", () => {
 
       route = {
         params: {
-          userId: "" + 123
-        }
+          userId: '' + 123
+        },
       };
 
       const wrapper = shallowMount(UserManagementView, {
         global: {
           stubs: {
-            "b-badge": true,
-            "router-link": true,
-            "font-awesome-icon": true
+            'b-badge': true,
+            'router-link': true,
+            'font-awesome-icon': true
           },
           provide: {
             alertService
-          }
-        }
+          },
+        },
       });
       const userManagementView = wrapper.vm;
 
@@ -79,7 +79,7 @@ describe("UserManagementView Component", () => {
       await userManagementView.$nextTick();
 
       // THEN
-      expect(axiosStub.get.calledWith("api/admin/users/" + 123)).toBeTruthy();
+      expect(axiosStub.get.calledWith('api/admin/users/' + 123)).toBeTruthy();
       expect(userManagementView.user).toEqual(userData);
     });
   });

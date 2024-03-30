@@ -1,35 +1,35 @@
 /* tslint:disable max-line-length */
-import { vitest } from "vitest";
-import { MountingOptions, shallowMount } from "@vue/test-utils";
-import sinon, { SinonStubbedInstance } from "sinon";
-import { RouteLocation } from "vue-router";
+import { vitest } from 'vitest';
+import { MountingOptions, shallowMount } from '@vue/test-utils';
+import sinon, { SinonStubbedInstance } from 'sinon';
+import { RouteLocation } from 'vue-router';
 
-import TestEntityDetails from "../../../../../../main/webapp/app/entities/test-entity/test-entity-details.vue";
-import TestEntityService from "../../../../../../main/webapp/app/entities/test-entity/test-entity.service";
-import AlertService from "../../../../../../main/webapp/app/shared/alert/alert.service";
+import TestEntityDetails from '../../../../../../main/webapp/app/entities/test-entity/test-entity-details.vue';
+import TestEntityService from '../../../../../../main/webapp/app/entities/test-entity/test-entity.service';
+import AlertService from '../../../../../../main/webapp/app/shared/alert/alert.service';
 
 type TestEntityDetailsComponentType = InstanceType<typeof TestEntityDetails>;
 
 let route: Partial<RouteLocation>;
 const routerGoMock = vitest.fn();
 
-vitest.mock("vue-router", () => ({
+vitest.mock('vue-router', () => ({
   useRoute: () => route,
   useRouter: () => ({ go: routerGoMock })
 }));
 
 const testEntitySample = { id: 123 };
 
-describe("Component Tests", () => {
+describe('Component Tests', () => {
   let alertService: AlertService;
 
   afterEach(() => {
     vitest.resetAllMocks();
   });
 
-  describe("TestEntity Management Detail Component", () => {
+  describe('TestEntity Management Detail Component', () => {
     let testEntityServiceStub: SinonStubbedInstance<TestEntityService>;
-    let mountOptions: MountingOptions<TestEntityDetailsComponentType>["global"];
+    let mountOptions: MountingOptions<TestEntityDetailsComponentType>['global'];
 
     beforeEach(() => {
       route = {};
@@ -39,29 +39,29 @@ describe("Component Tests", () => {
         i18n: { t: vitest.fn() } as any,
         bvToast: {
           toast: vitest.fn()
-        } as any
+        } as any,
       });
 
       mountOptions = {
         stubs: {
-          "font-awesome-icon": true,
-          "router-link": true
+          'font-awesome-icon': true,
+          'router-link': true
         },
         provide: {
           alertService,
           testEntityService: () => testEntityServiceStub
-        }
+        },
       };
     });
 
-    describe("Navigate to details", () => {
-      it("Should call load all on init", async () => {
+    describe('Navigate to details', () => {
+      it('Should call load all on init', async () => {
         // GIVEN
         testEntityServiceStub.find.resolves(testEntitySample);
         route = {
           params: {
-            testEntityId: "" + 123
-          }
+            testEntityId: '' + 123
+          },
         };
         const wrapper = shallowMount(TestEntityDetails, { global: mountOptions });
         const comp = wrapper.vm;
@@ -73,8 +73,8 @@ describe("Component Tests", () => {
       });
     });
 
-    describe("Previous state", () => {
-      it("Should go previous state", async () => {
+    describe('Previous state', () => {
+      it('Should go previous state', async () => {
         testEntityServiceStub.find.resolves(testEntitySample);
         const wrapper = shallowMount(TestEntityDetails, { global: mountOptions });
         const comp = wrapper.vm;

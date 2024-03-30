@@ -1,18 +1,18 @@
-import { computed, defineComponent, inject, ref, Ref } from "vue";
-import { useI18n } from "vue-i18n";
+import { computed, defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
 
-import { orderAndFilterBy } from "@/shared/computables";
-import LogsService from "./logs.service";
+import { orderAndFilterBy } from '@/shared/computables';
+import LogsService from './logs.service';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
-  name: "MmseLogs",
+  name: 'MmseLogs',
   setup() {
-    const logsService = inject("logsService", () => new LogsService(), true);
+    const logsService = inject('logsService', () => new LogsService(), true);
 
     const loggers: Ref<any[]> = ref([]);
-    const filtered = ref("");
-    const orderProp = ref("name");
+    const filtered = ref('');
+    const orderProp = ref('name');
     const reverse = ref(false);
     const filteredLoggers = computed(() =>
       orderAndFilterBy(loggers.value, {
@@ -58,6 +58,6 @@ export default defineComponent({
           this.loggers.push({ name: key, level: logger.effectiveLevel });
         }
       }
-    }
-  }
+    },
+  },
 });

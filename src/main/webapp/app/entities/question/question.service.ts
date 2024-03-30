@@ -9,11 +9,11 @@ export default class QuestionService {
   }
 
   public submitAnswer(answer: IAnswer): Promise<IQuestion | string> {
-    return axios.post<IQuestion | string>("/api/answer", answer).then(res => res.data);
+    return axios.post<IQuestion | string>('/api/answer', answer).then(res => res.data);
   }
 
   public retakeTest(): Promise<IQuestion | string> {
-    return axios.post<IQuestion | string>("/api/retake").then(res => res.data);
+    return axios.post<IQuestion | string>('/api/retake').then(res => res.data);
   }
 
   public sendAudioToServer(audioBlob: Blob, questionId: QuestionId | undefined): Promise<void> {
@@ -21,7 +21,8 @@ export default class QuestionService {
     formData.append('audio', audioBlob, 'recording.webm');
     formData.append('questionId', questionId as string);
 
-    return axios.post('/api/upload-audio', formData)
+    return axios
+      .post('/api/upload-audio', formData)
       .then(() => {
         console.log('Audio uploaded successfully');
       })
@@ -30,17 +31,16 @@ export default class QuestionService {
       });
   }
 
-  public getLastRecordedAudio(questionId: QuestionId): Promise<{ data: Blob, fileName: string }> {
-    return axios.get('/api/last-recorded-audio', {
-      params: { questionId },
-      responseType: 'blob'
-    })
+  public getLastRecordedAudio(questionId: QuestionId): Promise<{ data: Blob; fileName: string }> {
+    return axios
+      .get('/api/last-recorded-audio', {
+        params: { questionId },
+        responseType: 'blob'
+      })
       .then(res => {
         const contentDisposition = res.headers['content-disposition'];
         const fileName = contentDisposition ? contentDisposition.split('filename=')[1]?.split(';')[0].replace(/"/g, '') : null;
         return { data: res.data, fileName };
       });
   }
-
 }
-

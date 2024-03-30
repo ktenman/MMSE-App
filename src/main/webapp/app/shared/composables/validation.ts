@@ -8,7 +8,7 @@ import {
   numeric,
   required,
   sameAs
-} from "@vuelidate/validators";
+} from '@vuelidate/validators';
 
 export const useValidation = () => {
   return {

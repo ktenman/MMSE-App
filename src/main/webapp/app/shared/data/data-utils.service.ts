@@ -5,11 +5,11 @@ const useDataUtils = () => ({
   /**
    * Method to abbreviate the text given
    */
-  abbreviate(text, append = "...") {
+  abbreviate(text, append = '...') {
     if (text.length < 30) {
       return text;
     }
-    return text ? text.substring(0, 15) + append + text.slice(-10) : "";
+    return text ? text.substring(0, 15) + append + text.slice(-10) : '';
   },
 
   /**
@@ -46,7 +46,7 @@ const useDataUtils = () => ({
     const fileReader = new FileReader();
     fileReader.readAsDataURL(file);
     fileReader.onload = (e: any) => {
-      const base64Data = e.target.result.substring(e.target.result.indexOf("base64,") + "base64,".length);
+      const base64Data = e.target.result.substring(e.target.result.indexOf('base64,') + 'base64,'.length);
       cb(base64Data);
     };
   },
@@ -62,8 +62,8 @@ const useDataUtils = () => ({
       if (Object.prototype.hasOwnProperty.call(entity, fieldContentType)) {
         entity[fieldContentType] = null;
       }
-      if (elementRef && idInput && elementRef.nativeElement.querySelector("#" + idInput)) {
-        elementRef.nativeElement.querySelector("#" + idInput).value = null;
+      if (elementRef && idInput && elementRef.nativeElement.querySelector('#' + idInput)) {
+        elementRef.nativeElement.querySelector('#' + idInput).value = null;
       }
     }
   },
@@ -73,10 +73,10 @@ const useDataUtils = () => ({
   },
 
   paddingSize(value) {
-    if (this.endsWith("==", value)) {
+    if (this.endsWith('==', value)) {
       return 2;
     }
-    if (this.endsWith("=", value)) {
+    if (this.endsWith('=', value)) {
       return 1;
     }
     return 0;
@@ -87,7 +87,7 @@ const useDataUtils = () => ({
   },
 
   formatAsBytes(size) {
-    return size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, " ") + " bytes";
+    return size.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ' ') + ' bytes';
   },
 
   setFileData(event, entity, field, isImage) {
@@ -116,10 +116,10 @@ const useDataUtils = () => ({
     const blob = new Blob([byteArray], {
       type: contentType
     });
-    const tempLink = document.createElement("a");
+    const tempLink = document.createElement('a');
     tempLink.href = window.URL.createObjectURL(blob);
     tempLink.download = fileName;
-    tempLink.target = "_blank";
+    tempLink.target = '_blank';
     tempLink.click();
   },
 
@@ -129,32 +129,32 @@ const useDataUtils = () => ({
   parseLinks(header) {
     const links = {};
 
-    if ((header?.indexOf(",") ?? -1) === -1) {
+    if ((header?.indexOf(',') ?? -1) === -1) {
       return links;
     }
     // Split parts by comma
-    const parts = header.split(",");
+    const parts = header.split(',');
 
     // Parse each part into a named link
     parts.forEach(p => {
-      if (p.indexOf(">;") === -1) {
+      if (p.indexOf('>;') === -1) {
         return;
       }
-      const section = p.split(">;");
-      const url = section[0].replace(/<(.*)/, "$1").trim();
+      const section = p.split('>;');
+      const url = section[0].replace(/<(.*)/, '$1').trim();
       const queryString = { page: null };
       url.replace(new RegExp(/([^?=&]+)(=([^&]*))?/g), ($0, $1, $2, $3) => {
         queryString[$1] = $3;
       });
       let page = queryString.page;
-      if (typeof page === "string") {
+      if (typeof page === 'string') {
         page = parseInt(page, 10);
       }
-      const name = section[1].replace(/rel="(.*)"/, "$1").trim();
+      const name = section[1].replace(/rel="(.*)"/, '$1').trim();
       links[name] = page;
     });
     return links;
-  }
+  },
 });
 
 export default useDataUtils;

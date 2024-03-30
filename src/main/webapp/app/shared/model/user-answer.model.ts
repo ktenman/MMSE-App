@@ -1,6 +1,6 @@
-import { ITestEntity } from "@/shared/model/test-entity.model";
+import { ITestEntity } from '@/shared/model/test-entity.model';
 
-import { QuestionId } from "@/shared/model/enumerations/question-id.model";
+import { QuestionId } from '@/shared/model/enumerations/question-id.model';
 
 export interface IUserAnswer {
   id?: number;

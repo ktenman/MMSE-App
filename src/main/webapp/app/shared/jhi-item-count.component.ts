@@ -1,5 +1,5 @@
-import { computed, defineComponent } from "vue";
-import { useI18n } from "vue-i18n";
+import { computed, defineComponent } from 'vue';
+import { useI18n } from 'vue-i18n';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
@@ -17,5 +17,5 @@ export default defineComponent({
       second,
       t$: useI18n().t
     };
-  }
+  },
 });

@@ -1,6 +1,6 @@
-import axios from "axios";
+import axios from 'axios';
 
-import { AccountStore } from "@/store";
+import { AccountStore } from '@/store';
 
 export default class AccountService {
   constructor(private store: AccountStore) {
@@ -16,10 +16,10 @@ export default class AccountService {
 
   public async retrieveProfiles(): Promise<boolean> {
     try {
-      const res = await axios.get<any>("management/info");
+      const res = await axios.get<any>('management/info');
       if (res.data && res.data.activeProfiles) {
-        this.store.setRibbonOnProfiles(res.data["display-ribbon-on-profiles"]);
-        this.store.setActiveProfiles(res.data["activeProfiles"]);
+        this.store.setRibbonOnProfiles(res.data['display-ribbon-on-profiles']);
+        this.store.setActiveProfiles(res.data['activeProfiles']);
       }
       return true;
     } catch (error) {
@@ -29,7 +29,7 @@ export default class AccountService {
 
   public async retrieveAccount(): Promise<boolean> {
     try {
-      const response = await axios.get<any>("api/account");
+      const response = await axios.get<any>('api/account');
       if (response.status === 200 && response.data) {
         const account = response.data;
         this.store.setAuthentication(account);
@@ -46,7 +46,7 @@ export default class AccountService {
     if (this.store.logon) {
       return this.store.logon;
     }
-    const token = localStorage.getItem("mmse-authenticationToken") || sessionStorage.getItem("mmse-authenticationToken");
+    const token = localStorage.getItem('mmse-authenticationToken') || sessionStorage.getItem('mmse-authenticationToken');
     if (this.authenticated && this.userAuthorities && token) {
       return;
     }
@@ -58,7 +58,7 @@ export default class AccountService {
   }
 
   public async hasAnyAuthorityAndCheckAuth(authorities: any): Promise<boolean> {
-    if (typeof authorities === "string") {
+    if (typeof authorities === 'string') {
       authorities = [authorities];
     }
 

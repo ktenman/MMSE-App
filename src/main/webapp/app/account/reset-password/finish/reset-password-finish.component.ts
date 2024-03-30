@@ -1,13 +1,13 @@
-import { defineComponent, inject, ref, Ref } from "vue";
-import { useI18n } from "vue-i18n";
-import axios from "axios";
-import { useVuelidate } from "@vuelidate/core";
-import { maxLength, minLength, required, sameAs } from "@vuelidate/validators";
-import LoginService from "@/account/login.service";
+import { defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import axios from 'axios';
+import { useVuelidate } from '@vuelidate/core';
+import { maxLength, minLength, required, sameAs } from '@vuelidate/validators';
+import LoginService from '@/account/login.service';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
-  name: "ResetPasswordFinish",
+  name: 'ResetPasswordFinish',
   validations() {
     return {
       resetAccount: {
@@ -18,8 +18,8 @@ export default defineComponent({
         },
         confirmPassword: {
           sameAsPassword: sameAs(this.resetAccount.newPassword)
-        }
-      }
+        },
+      },
     };
   },
   created(): void {
@@ -29,7 +29,7 @@ export default defineComponent({
     this.keyMissing = !this.key;
   },
   setup(prop) {
-    const loginService = inject<LoginService>("loginService");
+    const loginService = inject<LoginService>('loginService');
 
     const doNotMatch: Ref<string> = ref(null);
     const success: Ref<string> = ref(null);
@@ -63,18 +63,18 @@ export default defineComponent({
       this.success = null;
       this.error = null;
       if (this.resetAccount.newPassword !== this.resetAccount.confirmPassword) {
-        this.doNotMatch = "ERROR";
+        this.doNotMatch = 'ERROR';
       } else {
         return axios
-          .post("api/account/reset-password/finish", { key: this.key, newPassword: this.resetAccount.newPassword })
+          .post('api/account/reset-password/finish', { key: this.key, newPassword: this.resetAccount.newPassword })
           .then(() => {
-            this.success = "OK";
+            this.success = 'OK';
           })
           .catch(() => {
             this.success = null;
-            this.error = "ERROR";
+            this.error = 'ERROR';
           });
       }
-    }
-  }
+    },
+  },
 });

@@ -1,14 +1,14 @@
-import { shallowMount } from "@vue/test-utils";
-import Ribbon from "../../../../../../main/webapp/app/core/ribbon/ribbon.vue";
+import { shallowMount } from '@vue/test-utils';
+import Ribbon from '../../../../../../main/webapp/app/core/ribbon/ribbon.vue';
 
-import { createTestingPinia } from "@pinia/testing";
-import { AccountStore, useStore } from "../../../../../../main/webapp/app/store";
+import { createTestingPinia } from '@pinia/testing';
+import { AccountStore, useStore } from '../../../../../../main/webapp/app/store';
 
 type RibbonComponentType = InstanceType<typeof Ribbon>;
 
 const pinia = createTestingPinia({ stubActions: false });
 
-describe("Ribbon", () => {
+describe('Ribbon', () => {
   let ribbon: RibbonComponentType;
   let store: AccountStore;
 
@@ -16,7 +16,7 @@ describe("Ribbon", () => {
     const wrapper = shallowMount(Ribbon, {
       global: {
         plugins: [pinia]
-      }
+      },
     });
     ribbon = wrapper.vm;
     await ribbon.$nextTick();
@@ -24,20 +24,20 @@ describe("Ribbon", () => {
     store.setRibbonOnProfiles(null);
   });
 
-  it("should not have ribbonEnabled when no data", () => {
+  it('should not have ribbonEnabled when no data', () => {
     expect(ribbon.ribbonEnabled).toBeFalsy();
   });
 
-  it("should have ribbonEnabled set to value in store", async () => {
-    const profile = "dev";
-    store.setActiveProfiles(["foo", profile, "bar"]);
+  it('should have ribbonEnabled set to value in store', async () => {
+    const profile = 'dev';
+    store.setActiveProfiles(['foo', profile, 'bar']);
     store.setRibbonOnProfiles(profile);
     expect(ribbon.ribbonEnabled).toBeTruthy();
   });
 
-  it("should not have ribbonEnabled when profile not activated", async () => {
-    const profile = "dev";
-    store.setActiveProfiles(["foo", "bar"]);
+  it('should not have ribbonEnabled when profile not activated', async () => {
+    const profile = 'dev';
+    store.setActiveProfiles(['foo', 'bar']);
     store.setRibbonOnProfiles(profile);
     expect(ribbon.ribbonEnabled).toBeFalsy();
   });

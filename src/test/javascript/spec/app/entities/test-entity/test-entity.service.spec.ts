@@ -1,31 +1,31 @@
 /* tslint:disable max-line-length */
-import axios from "axios";
-import sinon from "sinon";
-import dayjs from "dayjs";
+import axios from 'axios';
+import sinon from 'sinon';
+import dayjs from 'dayjs';
 
-import { DATE_TIME_FORMAT } from "../../../../../../main/webapp/app/shared/composables/date-format";
-import TestEntityService from "../../../../../../main/webapp/app/entities/test-entity/test-entity.service";
-import { TestEntity } from "../../../../../../main/webapp/app/shared/model/test-entity.model";
+import { DATE_TIME_FORMAT } from '../../../../../../main/webapp/app/shared/composables/date-format';
+import TestEntityService from '../../../../../../main/webapp/app/entities/test-entity/test-entity.service';
+import { TestEntity } from '../../../../../../main/webapp/app/shared/model/test-entity.model';
 
 const error = {
   response: {
     status: null,
     data: {
       type: null
-    }
-  }
+    },
+  },
 };
 
 const axiosStub = {
-  get: sinon.stub(axios, "get"),
-  post: sinon.stub(axios, "post"),
-  put: sinon.stub(axios, "put"),
-  patch: sinon.stub(axios, "patch"),
-  delete: sinon.stub(axios, "delete")
+  get: sinon.stub(axios, 'get'),
+  post: sinon.stub(axios, 'post'),
+  put: sinon.stub(axios, 'put'),
+  patch: sinon.stub(axios, 'patch'),
+  delete: sinon.stub(axios, 'delete')
 };
 
-describe("Service Tests", () => {
-  describe("TestEntity Service", () => {
+describe('Service Tests', () => {
+  describe('TestEntity Service', () => {
     let service: TestEntityService;
     let elemDefault;
     let currentDate: Date;
@@ -36,8 +36,8 @@ describe("Service Tests", () => {
       elemDefault = new TestEntity(123, currentDate, currentDate, 0);
     });
 
-    describe("Service methods", () => {
-      it("should find an element", async () => {
+    describe('Service methods', () => {
+      it('should find an element', async () => {
         const returnedFromService = Object.assign(
           {
             createdAt: dayjs(currentDate).format(DATE_TIME_FORMAT),
@@ -52,7 +52,7 @@ describe("Service Tests", () => {
         });
       });
 
-      it("should not find an element", async () => {
+      it('should not find an element', async () => {
         axiosStub.get.rejects(error);
         return service
           .find(123)
@@ -62,7 +62,7 @@ describe("Service Tests", () => {
           });
       });
 
-      it("should create a TestEntity", async () => {
+      it('should create a TestEntity', async () => {
         const returnedFromService = Object.assign(
           {
             id: 123,
@@ -85,7 +85,7 @@ describe("Service Tests", () => {
         });
       });
 
-      it("should not create a TestEntity", async () => {
+      it('should not create a TestEntity', async () => {
         axiosStub.post.rejects(error);
 
         return service
@@ -96,7 +96,7 @@ describe("Service Tests", () => {
           });
       });
 
-      it("should update a TestEntity", async () => {
+      it('should update a TestEntity', async () => {
         const returnedFromService = Object.assign(
           {
             createdAt: dayjs(currentDate).format(DATE_TIME_FORMAT),
@@ -120,7 +120,7 @@ describe("Service Tests", () => {
         });
       });
 
-      it("should not update a TestEntity", async () => {
+      it('should not update a TestEntity', async () => {
         axiosStub.put.rejects(error);
 
         return service
@@ -131,7 +131,7 @@ describe("Service Tests", () => {
           });
       });
 
-      it("should partial update a TestEntity", async () => {
+      it('should partial update a TestEntity', async () => {
         const patchObject = Object.assign(
           {
             createdAt: dayjs(currentDate).format(DATE_TIME_FORMAT),
@@ -155,7 +155,7 @@ describe("Service Tests", () => {
         });
       });
 
-      it("should not partial update a TestEntity", async () => {
+      it('should not partial update a TestEntity', async () => {
         axiosStub.patch.rejects(error);
 
         return service
@@ -166,7 +166,7 @@ describe("Service Tests", () => {
           });
       });
 
-      it("should return a list of TestEntity", async () => {
+      it('should return a list of TestEntity', async () => {
         const returnedFromService = Object.assign(
           {
             createdAt: dayjs(currentDate).format(DATE_TIME_FORMAT),
@@ -188,7 +188,7 @@ describe("Service Tests", () => {
         });
       });
 
-      it("should not return a list of TestEntity", async () => {
+      it('should not return a list of TestEntity', async () => {
         axiosStub.get.rejects(error);
 
         return service
@@ -199,14 +199,14 @@ describe("Service Tests", () => {
           });
       });
 
-      it("should delete a TestEntity", async () => {
+      it('should delete a TestEntity', async () => {
         axiosStub.delete.resolves({ ok: true });
         return service.delete(123).then(res => {
           expect(res.ok).toBeTruthy();
         });
       });
 
-      it("should not delete a TestEntity", async () => {
+      it('should not delete a TestEntity', async () => {
         axiosStub.delete.rejects(error);
 
         return service

@@ -1,17 +1,17 @@
-import axios from "axios";
-import sinon from "sinon";
-import { shallowMount } from "@vue/test-utils";
+import axios from 'axios';
+import sinon from 'sinon';
+import { shallowMount } from '@vue/test-utils';
 import ResetPasswordFinish
-  from "../../../../../../../main/webapp/app/account/reset-password/finish/reset-password-finish.vue";
+  from '../../../../../../../main/webapp/app/account/reset-password/finish/reset-password-finish.vue';
 
 type ResetPasswordFinishComponentType = InstanceType<typeof ResetPasswordFinish>;
 
 const axiosStub = {
-  get: sinon.stub(axios, "get"),
-  post: sinon.stub(axios, "post")
+  get: sinon.stub(axios, 'get'),
+  post: sinon.stub(axios, 'post')
 };
 
-describe("Reset Component Finish", () => {
+describe('Reset Component Finish', () => {
   let resetPasswordFinish: ResetPasswordFinishComponentType;
 
   beforeEach(() => {
@@ -20,13 +20,13 @@ describe("Reset Component Finish", () => {
       global: {
         provide: {
           loginService: {}
-        }
-      }
+        },
+      },
     });
     resetPasswordFinish = wrapper.vm;
   });
 
-  it("should reset finish be a success", async () => {
+  it('should reset finish be a success', async () => {
     // Given
     axiosStub.post.resolves();
 
@@ -37,15 +37,15 @@ describe("Reset Component Finish", () => {
     expect(resetPasswordFinish.success).toBeTruthy();
   });
 
-  it("should reset request fail as an error", async () => {
+  it('should reset request fail as an error', async () => {
     // Given
     axiosStub.post.rejects({
       response: {
         status: null,
         data: {
           type: null
-        }
-      }
+        },
+      },
     });
 
     // When
@@ -54,6 +54,6 @@ describe("Reset Component Finish", () => {
 
     // Then
     expect(resetPasswordFinish.success).toBeNull();
-    expect(resetPasswordFinish.error).toEqual("ERROR");
+    expect(resetPasswordFinish.error).toEqual('ERROR');
   });
 });

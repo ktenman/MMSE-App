@@ -1,20 +1,20 @@
-import { defineComponent, inject, ref, Ref } from "vue";
-import { useI18n } from "vue-i18n";
-import { useRoute } from "vue-router";
+import { defineComponent, inject, ref, Ref } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { useRoute } from 'vue-router';
 
-import { useDateFormat } from "@/shared/composables";
-import UserManagementService from "./user-management.service";
-import { useAlertService } from "@/shared/alert/alert.service";
+import { useDateFormat } from '@/shared/composables';
+import UserManagementService from './user-management.service';
+import { useAlertService } from '@/shared/alert/alert.service';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
-  name: "MmseUserManagementView",
+  name: 'MmseUserManagementView',
   setup() {
     const route = useRoute();
     const { formatDateLong: formatDate } = useDateFormat();
 
-    const alertService = inject("alertService", () => useAlertService(), true);
-    const userManagementService = inject("userManagementService", () => new UserManagementService(), true);
+    const alertService = inject('alertService', () => useAlertService(), true);
+    const userManagementService = inject('userManagementService', () => new UserManagementService(), true);
 
     const user: Ref<any> = ref(null);
 
@@ -36,5 +36,5 @@ export default defineComponent({
       user,
       t$: useI18n().t
     };
-  }
+  },
 });

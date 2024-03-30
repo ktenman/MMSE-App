@@ -11,13 +11,13 @@ import { useInfiniteScroll } from '@/shared/composables/useInfiniteScroll';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
-  name: "UserAnswer",
+  name: 'UserAnswer',
   setup() {
     const { t: t$ } = useI18n();
     const dateFormat = useDateFormat();
     const dataUtils = useDataUtils();
-    const userAnswerService = inject("userAnswerService", () => new UserAnswerService());
-    const alertService = inject("alertService", () => useAlertService(), true);
+    const userAnswerService = inject('userAnswerService', () => new UserAnswerService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
     const queryCount: Ref<number> = ref(null);
     const totalItems = ref(0);
@@ -45,11 +45,13 @@ export default defineComponent({
           sort: sorting.getSort()
         };
         const res = await userAnswerService().retrieve(paginationQuery);
-        totalItems.value = Number(res.headers["x-total-count"]);
+        totalItems.value = Number(res.headers['x-total-count']);
         queryCount.value = totalItems.value;
-        links.value = dataUtils.parseLinks(res.headers?.["link"]);
+        links.value = dataUtils.parseLinks(res.headers?.['link']);
 
-        const newData = res.data.filter(answer => !userAnswers.value.some(existing => existing.id === answer.id));
+        const newData = (res.data ?? []).filter(answer => {
+          return !userAnswers.value.some(existing => existing.id === answer.id);
+        });
 
         userAnswers.value.push(...newData);
       } catch (err) {
@@ -79,8 +81,8 @@ export default defineComponent({
     const removeUserAnswer = async () => {
       try {
         await userAnswerService().delete(removeId.value);
-        const message = t$("mmseApp.userAnswer.deleted", { param: removeId.value }).toString();
-        alertService.showInfo(message, { variant: "danger" });
+        const message = t$('mmseApp.userAnswer.deleted', { param: removeId.value }).toString();
+        alertService.showInfo(message, { variant: 'danger' });
         removeId.value = null;
         clear();
         closeDialog();
@@ -100,7 +102,9 @@ export default defineComponent({
     });
 
     const checkScroll = () => {
-      const bottomOfWindow = Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight >= document.documentElement.offsetHeight - 10;
+      const bottomOfWindow =
+        Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight >=
+        document.documentElement.offsetHeight - 10;
       if (bottomOfWindow) {
         if (!isFetching.value) {
           pagination.page.value++;
@@ -130,5 +134,5 @@ export default defineComponent({
       t$,
       ...dataUtils
     };
-  }
+  },
 });

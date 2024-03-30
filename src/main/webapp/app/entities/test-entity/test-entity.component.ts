@@ -1,23 +1,23 @@
-import { defineComponent, inject, onMounted, ref, Ref, watch, watchEffect } from "vue";
-import { useI18n } from "vue-i18n";
-import { ITestEntity } from "@/shared/model/test-entity.model";
-import useDataUtils from "@/shared/data/data-utils.service";
-import { useDateFormat } from "@/shared/composables";
-import TestEntityService from "./test-entity.service";
-import { useAlertService } from "@/shared/alert/alert.service";
-import { usePagination } from "@/shared/composables/pagination";
-import { useSorting } from "@/shared/composables/sorting";
-import { useInfiniteScroll } from "@/shared/composables/infinite-scroll";
+import { defineComponent, inject, onMounted, ref, Ref, watch, watchEffect } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { ITestEntity } from '@/shared/model/test-entity.model';
+import useDataUtils from '@/shared/data/data-utils.service';
+import { useDateFormat } from '@/shared/composables';
+import TestEntityService from './test-entity.service';
+import { useAlertService } from '@/shared/alert/alert.service';
+import { usePagination } from '@/shared/composables/pagination';
+import { useSorting } from '@/shared/composables/sorting';
+import { useInfiniteScroll } from '@/shared/composables/infinite-scroll';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
-  name: "TestEntity",
+  name: 'TestEntity',
   setup() {
     const { t: t$ } = useI18n();
     const dateFormat = useDateFormat();
     const dataUtils = useDataUtils();
-    const testEntityService = inject("testEntityService", () => new TestEntityService());
-    const alertService = inject("alertService", () => useAlertService(), true);
+    const testEntityService = inject('testEntityService', () => new TestEntityService());
+    const alertService = inject('alertService', () => useAlertService(), true);
 
     const queryCount: Ref<number> = ref(null);
     const totalItems = ref(0);
@@ -51,9 +51,9 @@ export default defineComponent({
           sort: sorting.getSort()
         };
         const res = await testEntityService().retrieve(paginationQuery);
-        totalItems.value = Number(res.headers["x-total-count"]);
+        totalItems.value = Number(res.headers['x-total-count']);
         queryCount.value = totalItems.value;
-        links.value = dataUtils.parseLinks(res.headers?.["link"]);
+        links.value = dataUtils.parseLinks(res.headers?.['link']);
         testEntities.value.push(...(res.data ?? []));
       } catch (err) {
         alertService.showHttpError(err.response);
@@ -82,8 +82,8 @@ export default defineComponent({
     const removeTestEntity = async () => {
       try {
         await testEntityService().delete(removeId.value);
-        const message = t$("mmseApp.testEntity.deleted", { param: removeId.value }).toString();
-        alertService.showInfo(message, { variant: "danger" });
+        const message = t$('mmseApp.testEntity.deleted', { param: removeId.value }).toString();
+        alertService.showInfo(message, { variant: 'danger' });
         removeId.value = null;
         clear();
         closeDialog();
@@ -132,5 +132,5 @@ export default defineComponent({
       t$,
       ...dataUtils
     };
-  }
+  },
 });

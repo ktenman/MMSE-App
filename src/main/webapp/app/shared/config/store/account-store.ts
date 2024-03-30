@@ -1,4 +1,4 @@
-import { defineStore } from "pinia";
+import { defineStore } from 'pinia';
 
 export interface AccountStateStorable {
   logon: boolean;
@@ -14,11 +14,11 @@ export const defaultAccountState: AccountStateStorable = {
   userIdentity: null,
   authenticated: false,
   profilesLoaded: false,
-  ribbonOnProfiles: "",
-  activeProfiles: ""
+  ribbonOnProfiles: '',
+  activeProfiles: ''
 };
 
-export const useAccountStore = defineStore("main", {
+export const useAccountStore = defineStore('main', {
   state: (): AccountStateStorable => ({ ...defaultAccountState }),
   getters: {
     account: state => state.userIdentity
@@ -45,6 +45,6 @@ export const useAccountStore = defineStore("main", {
     },
     setRibbonOnProfiles(ribbon) {
       this.ribbonOnProfiles = ribbon;
-    }
-  }
+    },
+  },
 });

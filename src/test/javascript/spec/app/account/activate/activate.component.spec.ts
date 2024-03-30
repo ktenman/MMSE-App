@@ -1,25 +1,25 @@
-import { vitest } from "vitest";
-import { ComponentMountingOptions, shallowMount } from "@vue/test-utils";
-import axios from "axios";
-import sinon from "sinon";
+import { vitest } from 'vitest';
+import { ComponentMountingOptions, shallowMount } from '@vue/test-utils';
+import axios from 'axios';
+import sinon from 'sinon';
 
-import Activate from "../../../../../../main/webapp/app/account/activate/activate.vue";
-import LoginService from "../../../../../../main/webapp/app/account/login.service";
+import Activate from '../../../../../../main/webapp/app/account/activate/activate.vue';
+import LoginService from '../../../../../../main/webapp/app/account/login.service';
 
 type ActivateComponentType = InstanceType<typeof Activate>;
 
-const route = { query: { key: "key" } };
+const route = { query: { key: 'key' } };
 
-vitest.mock("vue-router", () => ({
+vitest.mock('vue-router', () => ({
   useRoute: () => route
 }));
 
 const axiosStub = {
-  get: sinon.stub(axios, "get"),
-  post: sinon.stub(axios, "post")
+  get: sinon.stub(axios, 'get'),
+  post: sinon.stub(axios, 'post')
 };
 
-describe("Activate Component", () => {
+describe('Activate Component', () => {
   let activate: ActivateComponentType;
   let loginService: LoginService;
   let mountOptions: ComponentMountingOptions<ActivateComponentType>;
@@ -30,8 +30,8 @@ describe("Activate Component", () => {
       global: {
         provide: {
           loginService
-        }
-      }
+        },
+      },
     };
   });
 
@@ -39,7 +39,7 @@ describe("Activate Component", () => {
     sinon.restore();
   });
 
-  it("should display error when activation fails", async () => {
+  it('should display error when activation fails', async () => {
     axiosStub.get.rejects({});
 
     const wrapper = shallowMount(Activate as any, mountOptions);
@@ -50,7 +50,7 @@ describe("Activate Component", () => {
     expect(activate.success).toBeFalsy();
   });
 
-  it("should display success when activation succeeds", async () => {
+  it('should display success when activation succeeds', async () => {
     axiosStub.get.resolves({});
 
     const wrapper = shallowMount(Activate as any, mountOptions);

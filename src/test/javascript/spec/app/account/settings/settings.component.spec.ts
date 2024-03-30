@@ -1,11 +1,11 @@
-import { shallowMount } from "@vue/test-utils";
-import axios from "axios";
-import sinon from "sinon";
-import { createTestingPinia } from "@pinia/testing";
+import { shallowMount } from '@vue/test-utils';
+import axios from 'axios';
+import sinon from 'sinon';
+import { createTestingPinia } from '@pinia/testing';
 
-import { useStore } from "../../../../../../main/webapp/app/store";
-import Settings from "../../../../../../main/webapp/app/account/settings/settings.vue";
-import { EMAIL_ALREADY_USED_TYPE } from "../../../../../../main/webapp/app/constants";
+import { useStore } from '../../../../../../main/webapp/app/store';
+import Settings from '../../../../../../main/webapp/app/account/settings/settings.vue';
+import { EMAIL_ALREADY_USED_TYPE } from '../../../../../../main/webapp/app/constants';
 
 type SettingsComponentType = InstanceType<typeof Settings>;
 
@@ -14,16 +14,16 @@ const pinia = createTestingPinia({ stubActions: false });
 const store = useStore();
 
 const axiosStub = {
-  get: sinon.stub(axios, "get"),
-  post: sinon.stub(axios, "post")
+  get: sinon.stub(axios, 'get'),
+  post: sinon.stub(axios, 'post')
 };
 
-describe("Settings Component", () => {
+describe('Settings Component', () => {
   let settings: SettingsComponentType;
   const account = {
-    firstName: "John",
-    lastName: "Doe",
-    email: "john.doe@jhipster.org"
+    firstName: 'John',
+    lastName: 'Doe',
+    email: 'john.doe@jhipster.org'
   };
 
   beforeEach(() => {
@@ -34,12 +34,12 @@ describe("Settings Component", () => {
     const wrapper = shallowMount(Settings, {
       global: {
         plugins: [pinia]
-      }
+      },
     });
     settings = wrapper.vm;
   });
 
-  it("should send the current identity upon save", async () => {
+  it('should send the current identity upon save', async () => {
     // GIVEN
     axiosStub.post.resolves({});
 
@@ -48,10 +48,10 @@ describe("Settings Component", () => {
     await settings.$nextTick();
 
     // THEN
-    expect(axiosStub.post.calledWith("api/account", account)).toBeTruthy();
+    expect(axiosStub.post.calledWith('api/account', account)).toBeTruthy();
   });
 
-  it("should notify of success upon successful save", async () => {
+  it('should notify of success upon successful save', async () => {
     // GIVEN
     axiosStub.post.resolves(account);
 
@@ -61,10 +61,10 @@ describe("Settings Component", () => {
 
     // THEN
     expect(settings.error).toBeNull();
-    expect(settings.success).toBe("OK");
+    expect(settings.success).toBe('OK');
   });
 
-  it("should notify of error upon failed save", async () => {
+  it('should notify of error upon failed save', async () => {
     // GIVEN
     const error = { response: { status: 417 } };
     axiosStub.post.rejects(error);
@@ -74,12 +74,12 @@ describe("Settings Component", () => {
     await settings.$nextTick();
 
     // THEN
-    expect(settings.error).toEqual("ERROR");
+    expect(settings.error).toEqual('ERROR');
     expect(settings.errorEmailExists).toBeNull();
     expect(settings.success).toBeNull();
   });
 
-  it("should notify of error upon error 400", async () => {
+  it('should notify of error upon error 400', async () => {
     // GIVEN
     const error = { response: { status: 400, data: {} } };
     axiosStub.post.rejects(error);
@@ -89,12 +89,12 @@ describe("Settings Component", () => {
     await settings.$nextTick();
 
     // THEN
-    expect(settings.error).toEqual("ERROR");
+    expect(settings.error).toEqual('ERROR');
     expect(settings.errorEmailExists).toBeNull();
     expect(settings.success).toBeNull();
   });
 
-  it("should notify of error upon email already used", async () => {
+  it('should notify of error upon email already used', async () => {
     // GIVEN
     const error = { response: { status: 400, data: { type: EMAIL_ALREADY_USED_TYPE } } };
     axiosStub.post.rejects(error);
@@ -104,7 +104,7 @@ describe("Settings Component", () => {
     await settings.$nextTick();
 
     // THEN
-    expect(settings.errorEmailExists).toEqual("ERROR");
+    expect(settings.errorEmailExists).toEqual('ERROR');
     expect(settings.error).toBeNull();
     expect(settings.success).toBeNull();
   });

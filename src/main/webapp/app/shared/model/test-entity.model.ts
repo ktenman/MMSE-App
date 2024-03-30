@@ -1,4 +1,4 @@
-import { IUser } from "@/shared/model/user.model";
+import { IUser } from '@/shared/model/user.model';
 
 export interface ITestEntity {
   id?: number;

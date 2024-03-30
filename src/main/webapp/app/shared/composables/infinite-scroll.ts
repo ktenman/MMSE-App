@@ -1,5 +1,5 @@
-import { ref } from "vue";
-import { useIntersectionObserver } from "@vueuse/core";
+import { ref } from 'vue';
+import { useIntersectionObserver } from '@vueuse/core';
 
 export function useInfiniteScroll(callback: () => void) {
   const infiniteScrollEl = ref<HTMLElement>(null);
@@ -8,10 +8,10 @@ export function useInfiniteScroll(callback: () => void) {
     infiniteScrollEl,
     intersection => {
       if (intersection[0].isIntersecting) {
-        console.log("Intersecting, loading more data..."); // Log for debugging
+        console.log('Intersecting, loading more data...'); // Log for debugging
         callback();
       } else {
-        console.log("Not intersecting"); // Log for debugging
+        console.log('Not intersecting'); // Log for debugging
       }
     },
     {
