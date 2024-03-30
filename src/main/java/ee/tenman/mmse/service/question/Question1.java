@@ -3,21 +3,59 @@ package ee.tenman.mmse.service.question;
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
 import ee.tenman.mmse.domain.enumeration.QuestionType;
+import ee.tenman.mmse.service.external.dolphin.DolphinService;
+import ee.tenman.mmse.service.external.minio.StorageService;
+import ee.tenman.mmse.service.external.similarity.SimilarityRequest;
+import ee.tenman.mmse.service.external.similarity.SimilarityService;
+import ee.tenman.mmse.service.external.synonym.SynonymRequest;
+import ee.tenman.mmse.service.external.synonym.SynonymService;
+import ee.tenman.mmse.service.external.transcription.ByteArrayMultipartFile;
+import ee.tenman.mmse.service.external.transcription.TranscriptionRequest;
+import ee.tenman.mmse.service.external.transcription.TranscriptionResponse;
+import ee.tenman.mmse.service.external.transcription.TranscriptionService;
+import jakarta.annotation.Resource;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.time.DayOfWeek;
-import java.time.ZoneId;
-import java.time.ZonedDateTime;
-import java.util.Collections;
 import java.util.List;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
+import java.util.Set;
+
+import static ee.tenman.mmse.service.external.transcription.TranscriptionRequest.ModelName.FACEBOOK_WAV_2_VEC_2_LARGE_960_H;
 
 @Component
 public class Question1 implements Question {
 
-    private static final String QUESTION_TEXT = "1. What is the current day of the week?";
+    private static final Logger log = LoggerFactory.getLogger(Question1.class);
+
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_1;
+
+    private static final String SENTENCE = "No ifs, ands, or buts";
+    private static final String QUESTION_TEXT = String.format("1. Press the record button and repeat the following phrase: '%s'", SENTENCE);
+
+    private static final Set<String> CORRECT_INDICATORS = Set.of(
+        "yes",
+        "is similar",
+        "which directly relates",
+        "could be considered somewhat similar",
+        "It might",
+        "seems to be a misspelling",
+        "is close",
+        "is a type",
+        "closely refers"
+    );
+    @Resource
+    SimilarityService similarityService;
+    @Resource
+    SynonymService synonymService;
+    @Resource
+    DolphinService dolphinService;
+    @Resource
+    private StorageService storageService;
+    @Resource
+    private TranscriptionService transcriptionService;
+
 
     @Override
     public String getQuestionText() {
@@ -31,37 +69,70 @@ public class Question1 implements Question {
 
     @Override
     public QuestionId getQuestionId() {
-        return this.QUESTION_ID;
+        return QUESTION_ID;
     }
 
     @Override
     public QuestionType getQuestionType() {
-        return QuestionType.MULTIPLE_CHOICE;
+        return QuestionType.VOICE_INPUT;
     }
 
     @Override
     public List<String> getAnswerOptions() {
-        // Get the current day of the week
-        ZonedDateTime zonedDateTime = ZonedDateTime.now(ZoneId.systemDefault());
-        String currentDayOfWeek = DayOfWeek.from(zonedDateTime).name();
-
-        // Prepare a list of three random days excluding the current day
-        List<String> daysOfWeek = Stream.of(DayOfWeek.values()).map(DayOfWeek::name).collect(Collectors.toList());
-        daysOfWeek.remove(currentDayOfWeek);
-        Collections.shuffle(daysOfWeek);
-        List<String> answerOptions = daysOfWeek.subList(0, 3);
-
-        // Add the current day to the list and shuffle again
-        answerOptions.add(currentDayOfWeek);
-        Collections.shuffle(answerOptions);
-
-        return answerOptions;
+        return List.of();
     }
 
     @Override
     public int getScore(UserAnswer userAnswer) {
-        ZonedDateTime zonedDateTime = userAnswer.getCreatedAt().atZone(ZoneId.systemDefault());
-        String dayOfWeek = DayOfWeek.from(zonedDateTime).name();
-        return dayOfWeek.equalsIgnoreCase(userAnswer.getAnswerText()) ? 1 : 0;
+        String answerText = processVoiceInput(userAnswer.getAnswerText());
+        if (isSynonym(answerText)) {
+            log.debug("Answer '{}' is a synonym to one of the accepted answers.", answerText);
+            return 1;
+        }
+        if (isSimilar(answerText)) {
+            log.debug("Answer '{}' is similar to one of the accepted answers.", answerText);
+            return 1;
+        }
+        if (isDolphinSimilar(answerText)) {
+            log.debug("Answer '{}' is similar to one of the accepted answers.", answerText);
+            return 1;
+        } else {
+            log.debug("User did not repeat the phrase correctly.");
+            return 0;
+        }
     }
+
+    private String processVoiceInput(String fileName) {
+        byte[] bytes = storageService.downloadFile(fileName);
+        MultipartFile multipartFile = new ByteArrayMultipartFile(fileName, bytes);
+        TranscriptionRequest transcriptionRequest = new TranscriptionRequest(multipartFile, FACEBOOK_WAV_2_VEC_2_LARGE_960_H);
+        TranscriptionResponse transcriptionResponse = transcriptionService.transcribe(transcriptionRequest);
+        return transcriptionResponse.getTranscription();
+    }
+
+    private boolean isSynonym(String answerText) {
+        return synonymService.isSynonym(new SynonymRequest(answerText, SENTENCE));
+    }
+
+    private boolean isSimilar(String answerText) {
+        return similarityService.isSimilar(new SimilarityRequest(answerText, SENTENCE));
+    }
+
+    private boolean isDolphinSimilar(String answerText) {
+        String prompt = prepareAiPrompt(answerText);
+        String response = dolphinService.checkWithDolphinService(prompt);
+        log.debug("DolphinAI Service Response: '{}'", response);
+        if (CORRECT_INDICATORS.stream().anyMatch(response::contains)) {
+            log.debug("DolphinAI Service deemed answer '{}' as correct. Response: '{}'", answerText, response);
+            return true;
+        }
+        log.debug("DolphinAI Service deemed answer '{}' as incorrect. Response: '{}'", answerText, response);
+        return false;
+    }
+
+    private String prepareAiPrompt(String answerText) {
+        return String.format("Is the phrase \"%s\" close to or misspelled in meaning to this: %s? Answer only yes/no",
+            answerText, SENTENCE);
+    }
+
 }

@@ -18,14 +18,14 @@ import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
 
-class Question1Test {
+class Question15Test {
 
-    private Question1 question1;
+    private Question15 question15;
     private UserAnswer userAnswer;
 
     @BeforeEach
     void setUp() {
-        question1 = new Question1();
+        question15 = new Question15();
         userAnswer = new UserAnswer();
         userAnswer.setQuestionId(QuestionId.QUESTION_1);
         LocalDateTime localDateTime = LocalDateTime.of(LocalDate.of(2023, 1, 1), LocalTime.MIDNIGHT);
@@ -37,7 +37,7 @@ class Question1Test {
     void testGetScore_whenCorrect(DayOfWeek dayOfWeek) {
         userAnswer.setAnswerText(dayOfWeek.name());
 
-        assertThat(question1.getScore(userAnswer)).isOne();
+        assertThat(question15.getScore(userAnswer)).isOne();
     }
 
     @ParameterizedTest
@@ -45,35 +45,35 @@ class Question1Test {
     void testGetScore_whenIncorrect(DayOfWeek dayOfWeek) {
         userAnswer.setAnswerText(dayOfWeek.name());
 
-        assertThat(question1.getScore(userAnswer)).isZero();
+        assertThat(question15.getScore(userAnswer)).isZero();
     }
 
     @Test
     void testGetQuestionText() {
-        assertThat(question1.getQuestionText()).isEqualTo("1. What is the current day of the week?");
+        assertThat(question15.getQuestionText()).isEqualTo("1. What is the current day of the week?");
     }
 
     @Test
     void testGetQuestionId() {
-        assertThat(question1.getQuestionId()).isEqualTo(QuestionId.QUESTION_1);
+        assertThat(question15.getQuestionId()).isEqualTo(QuestionId.QUESTION_1);
     }
 
     @Test
     void testGetAnswerOptionsSize() {
-        List<String> answerOptions = question1.getAnswerOptions();
+        List<String> answerOptions = question15.getAnswerOptions();
         assertThat(answerOptions.size()).isEqualTo(4);
     }
 
     @Test
     void testGetAnswerOptionsContainsCorrectDay() {
         String currentDayOfWeek = ZonedDateTime.now(ZoneId.systemDefault()).getDayOfWeek().name();
-        List<String> answerOptions = question1.getAnswerOptions();
+        List<String> answerOptions = question15.getAnswerOptions();
         assertThat(answerOptions.contains(currentDayOfWeek)).isTrue();
     }
 
     @Test
     void testGetAnswerOptionsNoDuplicates() {
-        List<String> answerOptions = question1.getAnswerOptions();
+        List<String> answerOptions = question15.getAnswerOptions();
         assertThat(answerOptions.stream().distinct().count()).isEqualTo(answerOptions.size());
     }
 }

@@ -23,6 +23,9 @@ public interface UserAnswerRepository extends JpaRepository<UserAnswer, Long> {
 
     List<UserAnswer> findByTestEntityIdOrderByCreatedAtDesc(Long testEntityId);
 
+    @Query("SELECT u FROM UserAnswer u WHERE u.score is null ORDER BY u.createdAt ASC")
+    List<UserAnswer> findUnscored();
+
     Optional<UserAnswer> findFirstByTestEntityIdAndQuestionIdOrderByCreatedAtDesc(Long testEntityId, QuestionId questionId);
 
 }
