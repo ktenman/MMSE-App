@@ -48,9 +48,4 @@ public class Question7 implements Question {
         return AnswerOption.valueOf(userAnswer.getAnswerText()) == AnswerOption.CAR ? 1 : 0;
     }
 
-    @Override
-    public int getMaximumScore() {
-        return 3;
-    }
-
 }

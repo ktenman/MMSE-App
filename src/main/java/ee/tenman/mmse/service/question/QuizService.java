@@ -78,7 +78,7 @@ public class QuizService {
         return new Question1();
     }
 
-    public TestEntity saveAnswer(AnswerDTO answerDTO) {
+    public void saveAnswer(AnswerDTO answerDTO) {
         Optional<User> user = userService.findUserWithAuthorities();
         if (user.isEmpty()) {
             throw new RuntimeException("User not found");
@@ -88,12 +88,12 @@ public class QuizService {
             t.setUser(user.get());
             return testEntityRepository.save(t);
         });
-        UserAnswer userAnswer = new UserAnswer();
+        UserAnswer userAnswer = userAnswerRepository.findFirstByTestEntityIdAndQuestionIdOrderByCreatedAtDesc(testEntity.getId(), answerDTO.getQuestionId())
+            .orElse(new UserAnswer());
         userAnswer.setAnswerText(answerDTO.getAnswerText());
         userAnswer.setQuestionId(answerDTO.getQuestionId());
         userAnswer.setTestEntity(testEntity);
         userAnswerRepository.save(userAnswer);
-        return testEntity;
     }
 
     public Question retakeTest() {

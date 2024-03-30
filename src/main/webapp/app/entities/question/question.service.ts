@@ -8,8 +8,8 @@ export default class QuestionService {
     return axios.get<IQuestion>('api/question').then(res => res.data);
   }
 
-  public submitAnswer(answer: IAnswer): Promise<IQuestion | string> {
-    return axios.post<IQuestion | string>('/api/answer', answer).then(res => res.data);
+  public submitAnswer(answer: IAnswer): Promise<void> {
+    return axios.post<void>('/api/answer', answer);
   }
 
   public retakeTest(): Promise<IQuestion | string> {

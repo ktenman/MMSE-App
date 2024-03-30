@@ -120,63 +120,38 @@ export default defineComponent({
         const filteredAnswerText = answerText.filter(item => item !== null);
         return new Answer(filteredAnswerText.join(','), questionId);
       } else {
-        // Handle the case where answerText is null or an empty array
-        // You might want to return a default Answer or throw an error
-        return new Answer('', questionId); // or throw new Error("answerText is null or empty");
+        return new Answer('', questionId);
       }
     };
 
     const submitAnswer = async () => {
-      // Start loading
       loading.value = true;
-
       if (question.value) {
         let answer: IAnswer;
 
-        switch (question.value.questionType) {
-          case QuestionType.MULTIPLE_CHOICE:
-          case QuestionType.TEXT_INPUT:
-            if (selectedAnswer.value) {
-              answer = createAnswer(selectedAnswer.value, question.value.questionId as QuestionId);
-            }
-            break;
-          case QuestionType.SUBTRACTION_TASK:
-            if (selectedAnswers.value.every(answer => answer !== null && answer.toString() !== '')) {
-              answer = createAnswer(selectedAnswers.value, question.value.questionId as QuestionId);
-            }
-            break;
-          case QuestionType.VOICE_INPUT:
-            if (lastRecordedAudioUrl.value) {
-              answer = createAnswer(lastRecordedAudioFileName.value, question.value.questionId as QuestionId);
-            }
-            break;
-          default:
-            loading.value = false;
-            return;
+        if (question.value.questionType === QuestionType.MULTIPLE_CHOICE && selectedAnswer.value ||
+          question.value.questionType === QuestionType.TEXT_INPUT && selectedAnswer.value) {
+          answer = createAnswer(selectedAnswer.value, question.value.questionId as QuestionId);
+        } else if (question.value.questionType === QuestionType.SUBTRACTION_TASK && selectedAnswers.value) {
+          answer = createAnswer(selectedAnswers.value, question.value.questionId as QuestionId);
+        } else if (question.value.questionType === QuestionType.VOICE_INPUT && lastRecordedAudioUrl.value) {
+          answer = createAnswer(lastRecordedAudioFileName.value, question.value.questionId as QuestionId);
+        } else {
+          loading.value = false;
+          return;
         }
 
-        if (answer) {
-          try {
-            const response = await questionService.submitAnswer(answer);
-
-            if (typeof response === 'string') {
-              quizEndMessage.value = response;
-              question.value = null;
-            } else {
-              question.value = response;
-              selectedAnswers.value = [];
-              selectedAnswer.value = null;
-              lastRecordedAudioUrl.value = null;
-            }
-          } catch (error) {
-            console.error('Error submitting answer:', error);
-          } finally {
-            loading.value = false;
-          }
-        } else {
+        try {
+          await questionService.submitAnswer(answer);
+          await loadQuestion(); // Load the next question after submitting the answer
+        } catch (error) {
+          console.error('Error submitting answer:', error);
+          // Optionally set an error message to display to the user
+        } finally {
           loading.value = false;
         }
       } else {
+        // If there's no question, stop loading
         loading.value = false;
       }
     };
@@ -200,6 +175,8 @@ export default defineComponent({
         question.value = null;
       } else {
         question.value = response;
+        selectedAnswers.value = [];
+        selectedAnswer.value = null;
         if (question.value.questionType === QuestionType.VOICE_INPUT) {
           await loadLastRecordedAudio();
         } else {

@@ -1,6 +1,7 @@
 package ee.tenman.mmse.service.dto;
 
 import ee.tenman.mmse.domain.enumeration.QuestionId;
+import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
@@ -10,6 +11,7 @@ public class AnswerDTO implements Serializable {
 
     private Long id;
 
+    @NotEmpty
     private String answerText;
 
     @NotNull

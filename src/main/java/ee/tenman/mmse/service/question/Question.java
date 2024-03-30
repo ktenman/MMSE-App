@@ -32,7 +32,6 @@ public interface Question {
             byte[] imageBytes = IOUtils.toByteArray(inputStream);
             return Base64.getEncoder().encodeToString(imageBytes);
         } catch (IOException ignored) {
-            // handle exception
         }
         return null;
     }

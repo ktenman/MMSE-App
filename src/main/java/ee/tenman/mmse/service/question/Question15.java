@@ -131,7 +131,8 @@ public class Question15 implements Question {
     }
 
     private String prepareAiPrompt(String answerText) {
-        return String.format("Is the phrase \"%s\" close to or misspelled in meaning to this: %s? Answer only yes/no", answerText, SENTENCE);
+        return String.format("Is the phrase \"%s\" close to or misspelled in meaning to this: %s? Answer only yes/no",
+            answerText, SENTENCE);
     }
 
 }
