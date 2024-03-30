@@ -8,7 +8,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
+import java.util.List;
 
 @Component
 public class Question13 implements Question {
@@ -16,7 +16,7 @@ public class Question13 implements Question {
     private static final Logger log = LoggerFactory.getLogger(Question13.class);
 
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_13;
-    private static final String QUESTION_TEXT = "14. Please type the word 'agree' into the text box to confirm that you have read and understood this command.";
+    private static final String QUESTION_TEXT = "13. Please type the word 'agree' into the text box to confirm that you have read and understood this command.";
     private static final String EXPECTED_CONFIRMATION = "agree";
 
 
@@ -41,8 +41,8 @@ public class Question13 implements Question {
     }
 
     @Override
-    public Collection<?> getAnswerOptions() {
-        return null;
+    public List<String> getAnswerOptions() {
+        return List.of();
     }
 
     @Override

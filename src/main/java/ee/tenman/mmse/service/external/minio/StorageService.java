@@ -42,10 +42,10 @@ public class StorageService {
                 .build();
     }
 
-    public String uploadFile(MultipartFile file) {
+    public UUID uploadFile(MultipartFile file) {
         log.info("Uploading file: {}", file.getOriginalFilename());
         try {
-            String fileId = UUID.randomUUID().toString();
+            UUID fileId = UUID.randomUUID();
             String fileName = fileId + "_" + file.getOriginalFilename();
 
             PutObjectRequest putObjectRequest = PutObjectRequest.builder()
@@ -55,6 +55,24 @@ public class StorageService {
 
             s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
             return fileId;
+        } catch (SdkException e) {
+            log.error("Error uploading file: {}", e.getMessage());
+            throw new RuntimeException("Error uploading file to S3", e);
+        } catch (IOException e) {
+            log.error("IO Error: {}", e.getMessage());
+            throw new RuntimeException("IO Error", e);
+        }
+    }
+
+    public void uploadFile(MultipartFile file, String fileName) {
+        log.info("Uploading file: {}", fileName);
+        try {
+            PutObjectRequest putObjectRequest = PutObjectRequest.builder()
+                .bucket(bucketName)
+                .key(fileName)
+                .build();
+
+            s3Client.putObject(putObjectRequest, RequestBody.fromBytes(file.getBytes()));
         } catch (SdkException e) {
             log.error("Error uploading file: {}", e.getMessage());
             throw new RuntimeException("Error uploading file to S3", e);

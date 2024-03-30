@@ -1,11 +1,9 @@
 package ee.tenman.mmse.service.question;
 
-import ee.tenman.mmse.NumberFileHandler;
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
 import ee.tenman.mmse.domain.enumeration.QuestionType;
 import ee.tenman.mmse.service.external.dolphin.DolphinService;
-import ee.tenman.mmse.service.external.openai.NoDolphinResponseException;
 import ee.tenman.mmse.service.external.openai.NoOpenAiResponseException;
 import ee.tenman.mmse.service.external.openai.OpenAiService;
 import ee.tenman.mmse.service.external.similarity.SimilarityRequest;
@@ -153,13 +151,13 @@ public class Question11 implements Question {
             log.debug("Answer '{}' is similar to one of the accepted answers.", answerText);
             return 1;
         }
-        NumberFileHandler.incrementNumberInFile();
         Optional<String> openAiResponse = checkWithOpenAiService(answerText);
         return evaluateOpenAiResponse(answerText, openAiResponse);
     }
 
     private boolean isDolphinSimilar(String answerText) {
-        String response = checkWithDolphinService(answerText);
+        String prompt = prepareAiPrompt(answerText);
+        String response = dolphinService.checkWithDolphinService(prompt);
         log.debug("DolphinAI Service Response: '{}'", response);
         if (CORRECT_INDICATORS.stream().anyMatch(response::contains)) {
             log.debug("DolphinAI Service deemed answer '{}' as correct. Response: '{}'", answerText, response);
@@ -217,19 +215,6 @@ public class Question11 implements Question {
         log.debug("OpenAI Response: {}", openAiResponse);
 
         return response;
-    }
-
-    private String checkWithDolphinService(String answerText) {
-        String prompt = prepareAiPrompt(answerText);
-
-        Optional<String> response = dolphinService.askQuestion(prompt);
-        if (response.isEmpty()) {
-            log.debug("Answer '{}' was not recognized as correct by Dolphin Service. Response: '{}'", answerText, NO_RESPONSE);
-            throw new NoDolphinResponseException("Dolphin Service returned no response");
-        }
-
-        response.ifPresent(r -> log.info("Dolphin Response: {}", r.toLowerCase()));
-        return response.get().toLowerCase();
     }
 
     private String prepareAiPrompt(String answerText) {

@@ -3,12 +3,26 @@ package ee.tenman.mmse.service.question;
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
 import ee.tenman.mmse.domain.enumeration.QuestionType;
+import ee.tenman.mmse.service.external.dolphin.DolphinService;
+import ee.tenman.mmse.service.external.minio.StorageService;
+import ee.tenman.mmse.service.external.similarity.SimilarityRequest;
+import ee.tenman.mmse.service.external.similarity.SimilarityService;
+import ee.tenman.mmse.service.external.synonym.SynonymRequest;
+import ee.tenman.mmse.service.external.synonym.SynonymService;
+import ee.tenman.mmse.service.external.transcription.ByteArrayMultipartFile;
+import ee.tenman.mmse.service.external.transcription.TranscriptionRequest;
+import ee.tenman.mmse.service.external.transcription.TranscriptionResponse;
+import ee.tenman.mmse.service.external.transcription.TranscriptionService;
+import jakarta.annotation.Resource;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
+import org.springframework.web.multipart.MultipartFile;
 
-import java.util.Collection;
-import java.util.UUID;
+import java.util.List;
+import java.util.Set;
+
+import static ee.tenman.mmse.service.external.transcription.TranscriptionRequest.ModelName.FACEBOOK_WAV_2_VEC_2_LARGE_960_H;
 
 @Component
 public class Question15 implements Question {
@@ -16,7 +30,32 @@ public class Question15 implements Question {
     private static final Logger log = LoggerFactory.getLogger(Question15.class);
 
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_15;
-    private static final String QUESTION_TEXT = "Press the record button and repeat the following phrase: 'No ifs, ands, or buts'";
+
+    private static final String SENTENCE = "No ifs, ands, or buts";
+    private static final String QUESTION_TEXT = String.format("15. Press the record button and repeat the following phrase: '%s'", SENTENCE);
+
+    private static final Set<String> CORRECT_INDICATORS = Set.of(
+        "yes",
+        "is similar",
+        "which directly relates",
+        "could be considered somewhat similar",
+        "It might",
+        "seems to be a misspelling",
+        "is close",
+        "is a type",
+        "closely refers"
+    );
+    @Resource
+    SimilarityService similarityService;
+    @Resource
+    SynonymService synonymService;
+    @Resource
+    DolphinService dolphinService;
+    @Resource
+    private StorageService storageService;
+    @Resource
+    private TranscriptionService transcriptionService;
+
 
     @Override
     public String getQuestionText() {
@@ -25,7 +64,6 @@ public class Question15 implements Question {
 
     @Override
     public String getImage() {
-        // This question does not use an image
         return null;
     }
 
@@ -36,23 +74,27 @@ public class Question15 implements Question {
 
     @Override
     public QuestionType getQuestionType() {
-        // Assuming you have a VOICE_INPUT type for this kind of question
         return QuestionType.VOICE_INPUT;
     }
 
     @Override
-    public Collection<?> getAnswerOptions() {
-        // This question does not have predefined answer options
-        return null;
+    public List<String> getAnswerOptions() {
+        return List.of();
     }
 
     @Override
     public int getScore(UserAnswer userAnswer) {
-        // This method needs to handle the voice input.
-        // Assuming you have a service to process and validate the voice input
-        String transcribedText = processVoiceInput(userAnswer.getVoiceInputFileUuid());
-        if ("no ifs, ands, or buts".equalsIgnoreCase(transcribedText)) {
-            log.debug("User repeated the phrase correctly.");
+        String answerText = processVoiceInput(userAnswer.getAnswerText());
+        if (isSynonym(answerText)) {
+            log.debug("Answer '{}' is a synonym to one of the accepted answers.", answerText);
+            return 1;
+        }
+        if (isSimilar(answerText)) {
+            log.debug("Answer '{}' is similar to one of the accepted answers.", answerText);
+            return 1;
+        }
+        if (isDolphinSimilar(answerText)) {
+            log.debug("Answer '{}' is similar to one of the accepted answers.", answerText);
             return 1;
         } else {
             log.debug("User did not repeat the phrase correctly.");
@@ -60,9 +102,36 @@ public class Question15 implements Question {
         }
     }
 
-    private String processVoiceInput(UUID voiceInputFileUuid) {
-        // Implement the logic to process the voice input.
-        // This would involve sending the audio to a speech-to-text service and getting the transcribed text.
-        return ""; // Return the transcribed text
+    private String processVoiceInput(String fileName) {
+        byte[] bytes = storageService.downloadFile(fileName);
+        MultipartFile multipartFile = new ByteArrayMultipartFile(fileName, bytes);
+        TranscriptionRequest transcriptionRequest = new TranscriptionRequest(multipartFile, FACEBOOK_WAV_2_VEC_2_LARGE_960_H);
+        TranscriptionResponse transcriptionResponse = transcriptionService.transcribe(transcriptionRequest);
+        return transcriptionResponse.getTranscription();
     }
+
+    private boolean isSynonym(String answerText) {
+        return synonymService.isSynonym(new SynonymRequest(answerText, SENTENCE));
+    }
+
+    private boolean isSimilar(String answerText) {
+        return similarityService.isSimilar(new SimilarityRequest(answerText, SENTENCE));
+    }
+
+    private boolean isDolphinSimilar(String answerText) {
+        String prompt = prepareAiPrompt(answerText);
+        String response = dolphinService.checkWithDolphinService(prompt);
+        log.debug("DolphinAI Service Response: '{}'", response);
+        if (CORRECT_INDICATORS.stream().anyMatch(response::contains)) {
+            log.debug("DolphinAI Service deemed answer '{}' as correct. Response: '{}'", answerText, response);
+            return true;
+        }
+        log.debug("DolphinAI Service deemed answer '{}' as incorrect. Response: '{}'", answerText, response);
+        return false;
+    }
+
+    private String prepareAiPrompt(String answerText) {
+        return String.format("Is the phrase \"%s\" close to or misspelled in meaning to this: %s? Answer only yes/no", answerText, SENTENCE);
+    }
+
 }

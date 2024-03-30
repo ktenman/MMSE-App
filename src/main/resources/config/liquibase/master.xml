@@ -25,6 +25,9 @@
              relativeToChangelogFile="false"/>
     <include file="config/liquibase/changelog/20231115212931_add_voice_input_file_uuid_to_user_answer.sql"
              relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240330095149_add_media_recording.sql" relativeToChangelogFile="false"/>
+    <include file="config/liquibase/changelog/20240330095150_remove_voice_input_file_uuid_to_user_answer.sql"
+             relativeToChangelogFile="false"/>
 
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->

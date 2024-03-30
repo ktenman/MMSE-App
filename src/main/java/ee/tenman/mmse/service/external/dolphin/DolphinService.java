@@ -1,5 +1,6 @@
 package ee.tenman.mmse.service.external.dolphin;
 
+import ee.tenman.mmse.service.external.openai.NoDolphinResponseException;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -16,7 +17,18 @@ public class DolphinService {
     @Resource
     private DolphinClient dolphinClient;
 
-    public Optional<String> askQuestion(String question) {
+    public String checkWithDolphinService(String prompt) {
+        Optional<String> response = askQuestion(prompt);
+        if (response.isEmpty()) {
+            log.debug("Answer '{}' was not recognized as correct by Dolphin Service.", prompt);
+            throw new NoDolphinResponseException("Dolphin Service returned no response");
+        }
+
+        response.ifPresent(r -> log.info("Dolphin Response: {}", r.toLowerCase()));
+        return response.get().toLowerCase();
+    }
+
+    private Optional<String> askQuestion(String question) {
         if (StringUtils.isBlank(question)) {
             log.warn("Received blank question, returning empty response");
             return Optional.empty();

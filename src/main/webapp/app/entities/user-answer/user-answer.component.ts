@@ -1,13 +1,13 @@
-import { defineComponent, inject, onMounted, ref, Ref, watch } from "vue";
-import { useI18n } from "vue-i18n";
-import { IUserAnswer } from "@/shared/model/user-answer.model";
-import useDataUtils from "@/shared/data/data-utils.service";
-import { useDateFormat } from "@/shared/composables";
-import UserAnswerService from "./user-answer.service";
-import { useAlertService } from "@/shared/alert/alert.service";
-import { usePagination } from "@/shared/composables/pagination";
-import { useSorting } from "@/shared/composables/sorting";
-import { useInfiniteScroll } from "@/shared/composables/useInfiniteScroll";
+import { defineComponent, inject, onMounted, ref, Ref, watch } from 'vue';
+import { useI18n } from 'vue-i18n';
+import { IUserAnswer } from '@/shared/model/user-answer.model';
+import useDataUtils from '@/shared/data/data-utils.service';
+import { useDateFormat } from '@/shared/composables';
+import UserAnswerService from './user-answer.service';
+import { useAlertService } from '@/shared/alert/alert.service';
+import { usePagination } from '@/shared/composables/pagination';
+import { useSorting } from '@/shared/composables/sorting';
+import { useInfiniteScroll } from '@/shared/composables/useInfiniteScroll';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
@@ -48,7 +48,10 @@ export default defineComponent({
         totalItems.value = Number(res.headers["x-total-count"]);
         queryCount.value = totalItems.value;
         links.value = dataUtils.parseLinks(res.headers?.["link"]);
-        userAnswers.value.push(...(res.data ?? []));
+
+        const newData = res.data.filter(answer => !userAnswers.value.some(existing => existing.id === answer.id));
+
+        userAnswers.value.push(...newData);
       } catch (err) {
         alertService.showHttpError(err.response);
       } finally {

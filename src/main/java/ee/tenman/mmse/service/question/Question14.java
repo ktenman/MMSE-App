@@ -10,7 +10,7 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.Collection;
+import java.util.List;
 
 @Component
 public class Question14 implements Question {
@@ -18,7 +18,7 @@ public class Question14 implements Question {
     private static final Logger log = LoggerFactory.getLogger(Question14.class);
 
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_14;
-    private static final String QUESTION_TEXT = "15. Write a complete sentence about something you do every day.";
+    private static final String QUESTION_TEXT = "14. Write a complete sentence about something you do every day.";
 
     @Resource
     private PredictionService predictionService;
@@ -44,8 +44,8 @@ public class Question14 implements Question {
     }
 
     @Override
-    public Collection<?> getAnswerOptions() {
-        return null;
+    public List<String> getAnswerOptions() {
+        return List.of();
     }
 
     @Override

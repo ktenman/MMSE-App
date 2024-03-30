@@ -18,7 +18,6 @@ import jakarta.validation.constraints.NotNull;
 
 import java.io.Serializable;
 import java.time.Instant;
-import java.util.UUID;
 
 /**
  * A UserAnswer.
@@ -51,9 +50,6 @@ public class UserAnswer implements Serializable {
 
     @Column(name = "maximum_score")
     private Integer maximumScore;
-
-    @Column(name = "voice_input_file_uuid", columnDefinition = "UUID")
-    private UUID voiceInputFileUuid;
 
     @NotNull
     @Enumerated(EnumType.STRING)
@@ -172,14 +168,6 @@ public class UserAnswer implements Serializable {
         this.maximumScore = maximumScore;
     }
 
-    public UUID getVoiceInputFileUuid() {
-        return this.voiceInputFileUuid;
-    }
-
-    public void setVoiceInputFileUuid(UUID voiceInputFileUuid) {
-        this.voiceInputFileUuid = voiceInputFileUuid;
-    }
-
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
@@ -200,14 +188,17 @@ public class UserAnswer implements Serializable {
     }
 
     // prettier-ignore
+
     @Override
     public String toString() {
         return "UserAnswer{" +
-            "id=" + getId() +
-            ", answerText='" + getAnswerText() + "'" +
-            ", createdAt='" + getCreatedAt() + "'" +
-            ", updatedAt='" + getUpdatedAt() + "'" +
-            ", questionId='" + getQuestionId() + "'" +
-            "}";
+            "id=" + id +
+            ", answerText='" + answerText + '\'' +
+            ", createdAt=" + createdAt +
+            ", updatedAt=" + updatedAt +
+            ", score=" + score +
+            ", maximumScore=" + maximumScore +
+            ", questionId=" + questionId +
+            '}';
     }
 }

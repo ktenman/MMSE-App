@@ -27,7 +27,12 @@ export default defineComponent({
       isRecording,
       audioContext,
       recorder,
-      stream
+      stream,
+      lastRecordedAudioUrl,
+      lastRecordedAudioFileName,
+      audioPlayer,
+      recordingDuration,
+      recordingTimer
     ] = [
       inject<LoginService>("loginService"),
       inject<ComputedRef<boolean>>("authenticated"),
@@ -40,6 +45,11 @@ export default defineComponent({
       ref(false),
       ref(null),
       ref(null),
+      ref(null),
+      ref<string | null>(null),
+      ref<string | null>(null),
+      ref<HTMLAudioElement | null>(null),
+      ref(0),
       ref(null)
     ];
 
@@ -59,14 +69,21 @@ export default defineComponent({
             audioChunks.push(event.data);
           };
 
-          recorder.value.onstop = () => {
+          recorder.value.onstop = async () => {
             const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-            questionService.sendAudioToServer(audioBlob);
+            await questionService.sendAudioToServer(audioBlob, question.value?.questionId);
             audioChunks.length = 0;
+            await loadLastRecordedAudio();
           };
 
           recorder.value.start();
           isRecording.value = true;
+
+          const timer = setInterval(() => {
+            recordingDuration.value++;
+          }, 1000);
+
+          recordingTimer.value = timer;
         } catch (error) {
           console.error('Error starting recording:', error);
         }
@@ -78,6 +95,20 @@ export default defineComponent({
         recorder.value.stop();
         stream.value?.getTracks().forEach(track => track.stop());
         isRecording.value = false;
+        clearInterval(recordingTimer.value);
+        recordingDuration.value = 0;
+      }
+    };
+
+    const loadLastRecordedAudio = async () => {
+      if (question.value?.questionId) {
+        try {
+          const { data, fileName } = await questionService.getLastRecordedAudio(question.value.questionId);
+          lastRecordedAudioUrl.value = URL.createObjectURL(data);
+          lastRecordedAudioFileName.value = fileName;
+        } catch (error) {
+          console.error('Error loading last recorded audio:', error);
+        }
       }
     };
 
@@ -102,39 +133,50 @@ export default defineComponent({
       if (question.value) {
         let answer: IAnswer;
 
-        if (question.value.questionType === QuestionType.MULTIPLE_CHOICE && selectedAnswer.value ||
-            question.value.questionType === QuestionType.TEXT_INPUT && selectedAnswers.value) {
-          answer = createAnswer(selectedAnswer.value, question.value.questionId as QuestionId);
-        } else if (question.value.questionType === QuestionType.SUBTRACTION_TASK && selectedAnswers.value) {
-          answer = createAnswer(selectedAnswers.value, question.value.questionId as QuestionId);
-        } else {
-          // Neither condition met - possibly display an error message here
-          // Stop loading and exit if no answer is provided
-          loading.value = false;
-          return;
+        switch (question.value.questionType) {
+          case QuestionType.MULTIPLE_CHOICE:
+          case QuestionType.TEXT_INPUT:
+            if (selectedAnswer.value) {
+              answer = createAnswer(selectedAnswer.value, question.value.questionId as QuestionId);
+            }
+            break;
+          case QuestionType.SUBTRACTION_TASK:
+            if (selectedAnswers.value.every(answer => answer !== null && answer.toString() !== '')) {
+              answer = createAnswer(selectedAnswers.value, question.value.questionId as QuestionId);
+            }
+            break;
+          case QuestionType.VOICE_INPUT:
+            if (lastRecordedAudioUrl.value) {
+              answer = createAnswer(lastRecordedAudioFileName.value, question.value.questionId as QuestionId);
+            }
+            break;
+          default:
+            loading.value = false;
+            return;
         }
 
-        try {
-          const response = await questionService.submitAnswer(answer);
+        if (answer) {
+          try {
+            const response = await questionService.submitAnswer(answer);
 
-          if (typeof response === "string") {
-            quizEndMessage.value = response;
-            question.value = null;
-          } else {
-            question.value = response;
-            selectedAnswers.value = [];
-            selectedAnswer.value = null;
+            if (typeof response === 'string') {
+              quizEndMessage.value = response;
+              question.value = null;
+            } else {
+              question.value = response;
+              selectedAnswers.value = [];
+              selectedAnswer.value = null;
+              lastRecordedAudioUrl.value = null;
+            }
+          } catch (error) {
+            console.error('Error submitting answer:', error);
+          } finally {
+            loading.value = false;
           }
-        } catch (error) {
-          // Handle any errors here
-          console.error('Error submitting answer:', error);
-          // Optionally set an error message to display to the user
-        } finally {
-          // Stop loading regardless of the outcome
+        } else {
           loading.value = false;
         }
       } else {
-        // If there's no question, stop loading
         loading.value = false;
       }
     };
@@ -153,12 +195,16 @@ export default defineComponent({
 
     const loadQuestion = async () => {
       const response = await questionService.getQuestion();
-
       if (typeof response === "string") {
         quizEndMessage.value = response;
         question.value = null;
       } else {
         question.value = response;
+        if (question.value.questionType === QuestionType.VOICE_INPUT) {
+          await loadLastRecordedAudio();
+        } else {
+          lastRecordedAudioUrl.value = null;
+        }
       }
     };
 
@@ -170,6 +216,8 @@ export default defineComponent({
             return !selectedAnswer.value; // Disabled if selectedAnswer is null or empty
           case QuestionType.SUBTRACTION_TASK:
             return selectedAnswers.value.some(answer => answer === null || answer === ''); // Disabled if any selectedAnswers element is null or empty
+          case QuestionType.VOICE_INPUT:
+            return !lastRecordedAudioUrl.value; // Disabled if lastRecordedAudioUrl is null or empty
           default:
             return true; // Disabled for any other case
         }
@@ -209,7 +257,12 @@ export default defineComponent({
       stream,
       startRecording,
       stopRecording,
-      isRecording
+      isRecording,
+      lastRecordedAudioUrl,
+      lastRecordedAudioFileName,
+      audioPlayer,
+      loadLastRecordedAudio,
+      recordingDuration
     };
   }
 });

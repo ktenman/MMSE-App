@@ -24,6 +24,7 @@ import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class Question11Test {
@@ -187,9 +188,9 @@ class Question11Test {
             return Optional.of(question.contains("pen") ? "no" : "yes");
         });
 
-        lenient().when(dolphinService.askQuestion(anyString())).thenAnswer(invocation -> {
+        lenient().when(dolphinService.checkWithDolphinService(anyString())).thenAnswer(invocation -> {
             String question = invocation.getArgument(0);
-            return Optional.of(question.contains("pen") ? "no" : "yes");
+            return question.contains("pen") ? "no" : "yes";
         });
 
         int score = question11.getScore(userAnswer);
@@ -214,6 +215,7 @@ class Question11Test {
     void getScoreWithExpectedException() {
         UserAnswer userAnswer = new UserAnswer();
         userAnswer.setAnswerText("zzz");
+        when(dolphinService.checkWithDolphinService(anyString())).thenThrow(new NoDolphinResponseException("No response from DolphinAI."));
 
         Throwable thrown = catchThrowable(() -> question11.getScore(userAnswer));
 

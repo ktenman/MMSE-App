@@ -28,9 +28,9 @@ class StorageServiceTest {
                 string.getBytes()
         );
 
-        String result = storageService.uploadFile(multipartFile);
+        UUID result = storageService.uploadFile(multipartFile);
 
-        assertThat(result).isNotEmpty();
+        assertThat(result).isNotNull();
 
         byte[] bytes = storageService.downloadFile(multipartFile.getOriginalFilename());
 

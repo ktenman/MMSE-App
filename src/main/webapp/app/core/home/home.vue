@@ -79,11 +79,25 @@
 
           <div v-if="question.questionType === QuestionType.VOICE_INPUT">
             <div class="row">
-              <div class="col-md-6">
+              <div class="col-md-12">
                 <div class="voice-recorder">
-                  <button :disabled="isRecording" @click="startRecording">Start Recording</button>
-                  <button :disabled="!isRecording" @click="stopRecording">Stop Recording</button>
-                  <audio v-if="audioUrl" :src="audioUrl" controls></audio>
+                  <div class="button-group d-flex align-items-center">
+                    <b-button :disabled="isRecording" class="mt-6 mr-2" variant="primary" @click="startRecording">
+                      <font-awesome-icon icon="microphone" />
+                      Start Recording
+                    </b-button>
+                    <b-button :disabled="!isRecording" class="mt-6" variant="danger" @click="stopRecording">
+                      <font-awesome-icon icon="stop" />
+                      Stop Recording
+                    </b-button>
+                    <div v-if="isRecording" class="recording-timer ml-3">
+                      {{ recordingDuration }}s
+                    </div>
+                  </div>
+                  <div v-if="lastRecordedAudioUrl" class="audio-player mt-3">
+                    <p>To listen to your recorded audio, press the play button below:</p>
+                    <audio ref="audioPlayer" :src="lastRecordedAudioUrl" controls></audio>
+                  </div>
                 </div>
               </div>
             </div>
