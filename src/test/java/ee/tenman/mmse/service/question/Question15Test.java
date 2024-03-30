@@ -61,14 +61,16 @@ class Question15Test {
     @Test
     void testGetAnswerOptionsSize() {
         List<String> answerOptions = question15.getAnswerOptions();
-        assertThat(answerOptions.size()).isEqualTo(4);
+        assertThat(answerOptions).hasSize(4);
     }
 
     @Test
     void testGetAnswerOptionsContainsCorrectDay() {
         String currentDayOfWeek = ZonedDateTime.now(ZoneId.systemDefault()).getDayOfWeek().name();
+
         List<String> answerOptions = question15.getAnswerOptions();
-        assertThat(answerOptions.contains(currentDayOfWeek)).isTrue();
+
+        assertThat(answerOptions).contains(currentDayOfWeek);
     }
 
     @Test

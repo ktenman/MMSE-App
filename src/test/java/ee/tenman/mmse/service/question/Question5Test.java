@@ -17,7 +17,7 @@ import java.util.List;
 import java.util.Set;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.assertj.core.api.Assertions.assertThatExceptionOfType;
+import static org.assertj.core.api.Assertions.catchThrowable;
 
 class Question5Test {
 
@@ -95,9 +95,10 @@ class Question5Test {
 
     @Test
     void testGetSeasonFromMonth_shouldThrowException() {
-        assertThatExceptionOfType(DateTimeException.class)
-            .isThrownBy(() -> question5.getSeasonFromMonth(Month.of(13)))
-            .withMessage("Invalid value for MonthOfYear: 13");
+        Throwable thrown = catchThrowable(() -> question5.getSeasonFromMonth(Month.of(13)));
+
+        assertThat(thrown).isInstanceOf(DateTimeException.class)
+            .hasMessage("Invalid value for MonthOfYear: 13");
     }
 
     @Test

@@ -101,6 +101,6 @@ class Question4Test {
             distinctOrders.add(question4.getAnswerOptions());
         }
 
-        assertThat(distinctOrders.size()).isGreaterThan(1);
+        assertThat(distinctOrders).hasSizeGreaterThan(1);
     }
 }

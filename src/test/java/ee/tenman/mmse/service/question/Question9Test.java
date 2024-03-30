@@ -91,11 +91,10 @@ class Question9Test {
     void testGetAnswerOptions() {
         List<InputField> answerOptions = question9.getAnswerOptions();
 
-        assertThat(answerOptions).hasSize(5);
-        assertThat(answerOptions)
+        assertThat(answerOptions).hasSize(5)
             .allSatisfy(inputField -> {
                 assertThat(inputField.getType()).isEqualTo(InputFieldType.NUMBER);
-                assertThat(inputField.getMin()).isEqualTo(0);
+                assertThat(inputField.getMin()).isZero();
                 assertThat(inputField.getMax()).isEqualTo(99);
             });
     }
