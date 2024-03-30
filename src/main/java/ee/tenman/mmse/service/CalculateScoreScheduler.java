@@ -28,7 +28,7 @@ public class CalculateScoreScheduler {
         this.userAnswerRepository = userAnswerRepository;
     }
 
-    @Scheduled(fixedDelay = 2000)
+    @Scheduled(fixedDelay = 5000)
     public void calculateUnscored() {
         List<UserAnswer> answers;
         do {

@@ -50,12 +50,12 @@ class Question15Test {
 
     @Test
     void testGetQuestionText() {
-        assertThat(question15.getQuestionText()).isEqualTo("1. What is the current day of the week?");
+        assertThat(question15.getQuestionText()).isEqualTo("15. What is the current day of the week?");
     }
 
     @Test
     void testGetQuestionId() {
-        assertThat(question15.getQuestionId()).isEqualTo(QuestionId.QUESTION_1);
+        assertThat(question15.getQuestionId()).isEqualTo(QuestionId.QUESTION_15);
     }
 
     @Test
