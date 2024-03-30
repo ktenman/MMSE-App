@@ -2,6 +2,7 @@ start_time=$(date +%s)
 
 echo "Starting up..."
 docker-compose -f src/main/docker/postgresql.yml up -d
+docker-compose -f src/main/docker/redis.yml up -d
 # docker-compose build --no-cache -f synonym/docker-compose.yml
 docker-compose -f synonym/docker-compose.yml up -d
 docker-compose -f similarity/docker-compose.yml up -d

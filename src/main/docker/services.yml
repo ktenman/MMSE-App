@@ -5,3 +5,7 @@ services:
     extends:
       file: ./postgresql.yml
       service: postgresql
+    redis:
+      extends:
+        file: ./redis.yml
+        service: redis

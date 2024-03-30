@@ -3,6 +3,7 @@ package ee.tenman.mmse.service;
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
 import ee.tenman.mmse.repository.UserAnswerRepository;
+import ee.tenman.mmse.service.lock.Lock;
 import ee.tenman.mmse.service.question.Question;
 import ee.tenman.mmse.service.question.QuestionsConfig;
 import org.slf4j.Logger;
@@ -29,6 +30,7 @@ public class CalculateScoreScheduler {
     }
 
     @Scheduled(fixedDelay = 5000)
+    @Lock(key = "'calculateUnscored'", retry = false)
     public void calculateUnscored() {
         List<UserAnswer> answers;
         do {

@@ -12,6 +12,9 @@ public class AnswerDTO implements Serializable {
     private Long id;
 
     @NotEmpty
+    private String idempotencyKey;
+
+    @NotEmpty
     private String answerText;
 
     @NotNull
@@ -41,12 +44,21 @@ public class AnswerDTO implements Serializable {
         this.questionId = questionId;
     }
 
+    public String getIdempotencyKey() {
+        return idempotencyKey;
+    }
+
+    public void setIdempotencyKey(String idempotencyKey) {
+        this.idempotencyKey = idempotencyKey;
+    }
+
     @Override
     public String toString() {
         return "AnswerDTO{" +
             "id=" + id +
             ", answerText='" + answerText + '\'' +
             ", questionId=" + questionId +
+            ", idempotencyKey=" + idempotencyKey +
             '}';
     }
 

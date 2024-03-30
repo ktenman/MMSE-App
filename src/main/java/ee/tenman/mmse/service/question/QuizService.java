@@ -8,6 +8,7 @@ import ee.tenman.mmse.repository.TestEntityRepository;
 import ee.tenman.mmse.repository.UserAnswerRepository;
 import ee.tenman.mmse.service.UserService;
 import ee.tenman.mmse.service.dto.AnswerDTO;
+import ee.tenman.mmse.service.lock.Lock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -78,7 +79,8 @@ public class QuizService {
         return new Question1();
     }
 
-    public void saveAnswer(AnswerDTO answerDTO) {
+    @Lock(key = "#answerDTO.idempotencyKey")
+    public UserAnswer saveAnswer(AnswerDTO answerDTO) {
         Optional<User> user = userService.findUserWithAuthorities();
         if (user.isEmpty()) {
             throw new RuntimeException("User not found");
@@ -88,12 +90,13 @@ public class QuizService {
             t.setUser(user.get());
             return testEntityRepository.save(t);
         });
-        UserAnswer userAnswer = userAnswerRepository.findFirstByTestEntityIdAndQuestionIdOrderByCreatedAtDesc(testEntity.getId(), answerDTO.getQuestionId())
+        UserAnswer userAnswer = userAnswerRepository
+            .findFirstByTestEntityIdAndQuestionIdOrderByCreatedAtDesc(testEntity.getId(), answerDTO.getQuestionId())
             .orElse(new UserAnswer());
         userAnswer.setAnswerText(answerDTO.getAnswerText());
         userAnswer.setQuestionId(answerDTO.getQuestionId());
         userAnswer.setTestEntity(testEntity);
-        userAnswerRepository.save(userAnswer);
+        return userAnswerRepository.save(userAnswer);
     }
 
     public Question retakeTest() {

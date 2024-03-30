@@ -7,6 +7,7 @@ echo "Shutting down..."
 
 # Stop the Docker containers
 docker-compose -f src/main/docker/postgresql.yml down
+docker-compose -f src/main/docker/redis.yml down
 docker-compose -f synonym/docker-compose.yml down
 docker-compose -f similarity/docker-compose.yml down
 docker-compose -f minio/docker-compose.yml stop
