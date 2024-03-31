@@ -76,7 +76,7 @@ public class QuizService {
 
 
     public Question getFirstQuestion() {
-        return new Question16();
+        return new Question1();
     }
 
     @Lock(key = "#answerDTO.idempotencyKey")
