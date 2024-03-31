@@ -6,5 +6,6 @@ public enum QuestionType {
     MULTIPLE_TEXT_INPUT, // For multiple text input questions
     NUMERIC_INPUT,   // For numeric input questions
     SUBTRACTION_TASK, // For subtraction tasks
-    VOICE_INPUT // For voice input questions
+    VOICE_INPUT, // For voice input questions
+    DRAG_AND_DROP // For drag and drop questions
 }

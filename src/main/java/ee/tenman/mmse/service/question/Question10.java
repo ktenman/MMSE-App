@@ -36,11 +36,6 @@ public class Question10 implements Question {
     }
 
     @Override
-    public List<InputField> getAnswerOptions() {
-        return List.of();
-    }
-
-    @Override
     public int getScore(UserAnswer userAnswer) {
         int result = 0;
         for (String correctAnswer : CORRECT_ANSWERS) {

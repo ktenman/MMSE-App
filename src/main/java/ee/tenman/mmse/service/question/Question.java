@@ -10,17 +10,22 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.util.Base64;
 import java.util.Collection;
+import java.util.List;
 
 public interface Question {
     String getQuestionText();
 
-    String getImage();
+    default String getImage() {
+        return null;
+    }
 
     QuestionId getQuestionId();
 
     QuestionType getQuestionType();
 
-    Collection<?> getAnswerOptions();
+    default Collection<?> getAnswerOptions() {
+        return List.of();
+    }
 
     default String convertImageToBase64(String imagePath) {
         try {

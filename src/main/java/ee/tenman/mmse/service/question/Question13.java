@@ -8,8 +8,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
-
 @Component
 public class Question13 implements Question {
 
@@ -38,11 +36,6 @@ public class Question13 implements Question {
     @Override
     public QuestionType getQuestionType() {
         return QuestionType.TEXT_INPUT;
-    }
-
-    @Override
-    public List<String> getAnswerOptions() {
-        return List.of();
     }
 
     @Override

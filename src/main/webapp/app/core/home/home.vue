@@ -105,6 +105,33 @@
             </div>
           </div>
 
+          <div v-if="question.questionType === QuestionType.DRAG_AND_DROP">
+            <div v-if="!isPaperPickedUp" :class="{ 'picked-up': isPaperPickedUp, 'folded': isPaperFolded }" class="paper"
+                 @click="pickUpPaper">
+              <span>Paper</span>
+            </div>
+            <div
+              v-if="isPaperPickedUp && !isPaperOnFloor"
+              :class="{ 'picked-up': isPaperPickedUp, 'folded': isPaperFolded }"
+              class="paper"
+              draggable="true"
+              @dragstart="startDragging">
+              <div class="paper-content">
+                <span v-if="!isPaperFolded">Paper picked</span>
+                <span v-else>Folded Paper</span>
+              </div>
+            </div>
+            <b-button v-if="!isPaperFolded" :disabled="!isPaperPickedUp" class="mt-6 mr-2" variant="dark"
+                      @click="foldPaper">Fold Paper in Half
+            </b-button>
+            <div v-if="isPaperFolded" class="floor" @drop="putPaperOnFloor" @dragover.prevent>
+              <span>Floor</span>
+              <div v-if="isPaperOnFloor" :class="{ 'no-animation': noAnimation }" class="paper folded">
+                <span>Folded Paper</span>
+              </div>
+            </div>
+          </div>
+
           <b-button :disabled="isNextButtonDisabled() || loading" class="mt-3" variant="primary" @click="submitAnswer">
             Next
           </b-button>
@@ -145,5 +172,73 @@
 .question-image {
   max-width: 65%;
   height: auto;
+}
+
+.paper {
+  width: 300px;
+  height: 210px;
+  background-color: #fcfcf1;
+  border: 1px solid gray;
+  cursor: pointer;
+  margin-bottom: 20px;
+  transition: width 1.5s, height 1s;
+}
+
+.paper span {
+  font-size: 16px;
+  text-align: center;
+}
+
+.paper.picked-up {
+  animation: pick-up 1s;
+}
+
+.paper.folded {
+  width: 150px;
+  height: 210px;
+  animation: fold 1.5s;
+}
+
+.paper.folded.no-animation {
+  animation: none;
+}
+
+.floor {
+  width: 600px;
+  height: 300px;
+  border: 1px dashed black;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+.floor span {
+  font-size: 16px;
+  text-align: center;
+}
+
+@keyframes pick-up {
+  0% {
+    transform: translate3d(0, 0, 0);
+  }
+  50% {
+    transform: translate3d(20px, -40px, 20px);
+  }
+  100% {
+    transform: translate3d(0, 0, 0);
+  }
+}
+
+@keyframes fold {
+  0% {
+    transform: scale(0.6) rotate(0deg);
+  }
+  50% {
+    transform: scale(0.8) rotate(10deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
 }
 </style>

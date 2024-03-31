@@ -31,11 +31,6 @@ public class Question9 implements Question {
     }
 
     @Override
-    public String getImage() {
-        return null;
-    }
-
-    @Override
     public QuestionId getQuestionId() {
         return QUESTION_ID;
     }

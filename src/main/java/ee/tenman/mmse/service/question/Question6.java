@@ -28,7 +28,7 @@ public class Question6 implements Question {
 
     @Override
     public QuestionId getQuestionId() {
-        return this.QUESTION_ID;
+        return QUESTION_ID;
     }
 
     @Override

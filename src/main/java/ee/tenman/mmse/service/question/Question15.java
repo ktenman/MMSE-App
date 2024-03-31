@@ -25,13 +25,8 @@ public class Question15 implements Question {
     }
 
     @Override
-    public String getImage() {
-        return null;
-    }
-
-    @Override
     public QuestionId getQuestionId() {
-        return this.QUESTION_ID;
+        return QUESTION_ID;
     }
 
     @Override

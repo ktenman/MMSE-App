@@ -32,7 +32,11 @@ export default defineComponent({
       lastRecordedAudioFileName,
       audioPlayer,
       recordingDuration,
-      recordingTimer
+      recordingTimer,
+      isPaperPickedUp,
+      isPaperFolded,
+      isPaperOnFloor,
+      noAnimation
     ] = [
       inject<LoginService>('loginService'),
       inject<ComputedRef<boolean>>('authenticated'),
@@ -50,12 +54,34 @@ export default defineComponent({
       ref<string | null>(null),
       ref<HTMLAudioElement | null>(null),
       ref(0),
-      ref(null)
+      ref(null),
+      ref(false),
+      ref(false),
+      ref(false),
+      ref(false)
     ];
 
     const questionService = new QuestionService();
 
     const openLogin = () => loginService.openLogin();
+
+    const pickUpPaper = () => {
+      isPaperPickedUp.value = true;
+    };
+
+    const foldPaper = () => {
+      isPaperFolded.value = true;
+    };
+
+    const putPaperOnFloor = (event: DragEvent) => {
+      event.preventDefault();
+      noAnimation.value = true;
+      isPaperOnFloor.value = true;
+    };
+
+    const startDragging = (event: DragEvent) => {
+      event.dataTransfer?.setData('text/plain', 'paper');
+    };
 
     const startRecording = async () => {
       if (!isRecording.value) {
@@ -136,6 +162,13 @@ export default defineComponent({
           answer = createAnswer(selectedAnswers.value, question.value.questionId as QuestionId);
         } else if (question.value.questionType === QuestionType.VOICE_INPUT && lastRecordedAudioUrl.value) {
           answer = createAnswer(lastRecordedAudioFileName.value, question.value.questionId as QuestionId);
+        } else if (question.value.questionType === QuestionType.DRAG_AND_DROP) {
+          const actions = [
+            isPaperPickedUp.value,
+            isPaperFolded.value,
+            isPaperOnFloor.value
+          ];
+          answer = createAnswer(actions.join(','), question.value.questionId as QuestionId);
         } else {
           loading.value = false;
           return;
@@ -157,6 +190,9 @@ export default defineComponent({
     };
 
     const retakeTest = async () => {
+      isPaperPickedUp.value = false;
+      isPaperFolded.value = false;
+      isPaperOnFloor.value = false;
       const response = await questionService.retakeTest();
 
       if (typeof response === 'string') {
@@ -195,6 +231,8 @@ export default defineComponent({
             return selectedAnswers.value.some(answer => answer === null || answer === ''); // Disabled if any selectedAnswers element is null or empty
           case QuestionType.VOICE_INPUT:
             return !lastRecordedAudioUrl.value; // Disabled if lastRecordedAudioUrl is null or empty
+          case QuestionType.DRAG_AND_DROP:
+            return false; // Always enabled for drag and drop
           default:
             return true; // Disabled for any other case
         }
@@ -239,7 +277,15 @@ export default defineComponent({
       lastRecordedAudioFileName,
       audioPlayer,
       loadLastRecordedAudio,
-      recordingDuration
+      recordingDuration,
+      pickUpPaper,
+      foldPaper,
+      putPaperOnFloor,
+      isPaperFolded,
+      isPaperOnFloor,
+      isPaperPickedUp,
+      startDragging,
+      noAnimation
     };
   }
 });

@@ -19,7 +19,6 @@ import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.util.List;
 import java.util.Set;
 
 import static ee.tenman.mmse.service.external.transcription.TranscriptionRequest.ModelName.FACEBOOK_WAV_2_VEC_2_LARGE_960_H;
@@ -75,11 +74,6 @@ public class Question1 implements Question {
     @Override
     public QuestionType getQuestionType() {
         return QuestionType.VOICE_INPUT;
-    }
-
-    @Override
-    public List<String> getAnswerOptions() {
-        return List.of();
     }
 
     @Override
