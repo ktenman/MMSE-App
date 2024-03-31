@@ -33,21 +33,22 @@ public class Question16 implements Question {
 
     @Override
     public int getScore(UserAnswer userAnswer) {
+        if (userAnswer.getAnswerText() == null) {
+            return 0;
+        }
+
+        String[] actions = userAnswer.getAnswerText().split(",");
+        if (actions.length != 3) {
+            return 0;
+        }
+
         int score = 0;
-        if (userAnswer.getAnswerText() != null) {
-            String[] actions = userAnswer.getAnswerText().split(",");
-            if (actions.length == 3) {
-                if (Boolean.parseBoolean(actions[0])) {
-                    score += 1; // Unlocked the slider
-                }
-                if (Boolean.parseBoolean(actions[1])) {
-                    score += 1; // Folded the paper
-                }
-                if (Boolean.parseBoolean(actions[2])) {
-                    score += 1; // Put the paper on the floor
-                }
+        for (String action : actions) {
+            if (Boolean.parseBoolean(action)) {
+                score++;
             }
         }
+
         return score;
     }
 
