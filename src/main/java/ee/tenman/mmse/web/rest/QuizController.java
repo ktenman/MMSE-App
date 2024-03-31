@@ -82,9 +82,14 @@ public class QuizController {
     @GetMapping("/last-recorded-audio")
     public ResponseEntity<byte[]> getLastRecordedAudio(@RequestParam("questionId") QuestionId questionId) {
         User user = userService.getUserWithAuthorities();
-        TestEntity testEntity = testEntityRepository.findFirstByUserIdOrderByCreatedAtDesc(user.getId()).orElseThrow(() -> new NoSuchElementException("Test not found"));
+        TestEntity testEntity = testEntityRepository.findFirstByUserIdOrderByCreatedAtDesc(user.getId()).orElseGet(() -> {
+            TestEntity t = new TestEntity();
+            t.setUser(user);
+            return testEntityRepository.save(t);
+        });
 
-        MediaRecording mediaRecording = mediaRecordingRepository.findFirstByTestEntityIdAndQuestionIdOrderByCreatedAtDesc(testEntity.getId(), questionId)
+        MediaRecording mediaRecording = mediaRecordingRepository
+            .findFirstByTestEntityIdAndQuestionIdOrderByCreatedAtDesc(testEntity.getId(), questionId)
             .orElseThrow(() -> new NoSuchElementException("No media recording found"));
 
         String fileName = mediaRecording.getFileName();
@@ -98,7 +103,10 @@ public class QuizController {
     }
 
     @PostMapping("/upload-audio")
-    public ResponseEntity<?> uploadAudio(@RequestParam("audio") MultipartFile audioFile, @RequestParam("questionId") QuestionId questionId) {
+    public ResponseEntity<?> uploadAudio(
+        @RequestParam("audio") MultipartFile audioFile,
+        @RequestParam("questionId") QuestionId questionId
+    ) {
         User user = userService.getUserWithAuthorities();
         TestEntity testEntity = testEntityRepository.findFirstByUserIdOrderByCreatedAtDesc(user.getId()).orElseThrow(() -> new NoSuchElementException("Test not found"));
 

@@ -82,7 +82,6 @@ public class StorageService {
         }
     }
 
-
     public byte[] downloadFile(String fileName) {
         log.info("Downloading file: {}", fileName);
         try {
