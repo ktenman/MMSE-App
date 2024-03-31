@@ -2,16 +2,15 @@ package ee.tenman.mmse.web.rest;
 
 import ee.tenman.mmse.domain.MediaRecording;
 import ee.tenman.mmse.domain.TestEntity;
-import ee.tenman.mmse.domain.User;
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
 import ee.tenman.mmse.repository.MediaRecordingRepository;
-import ee.tenman.mmse.repository.TestEntityRepository;
+import ee.tenman.mmse.service.TestEntityService;
 import ee.tenman.mmse.service.UserAnswerService;
-import ee.tenman.mmse.service.UserService;
 import ee.tenman.mmse.service.dto.AnswerDTO;
 import ee.tenman.mmse.service.external.minio.StorageService;
 import ee.tenman.mmse.service.question.Question;
+import ee.tenman.mmse.service.question.QuizResult;
 import ee.tenman.mmse.service.question.QuizService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -40,17 +39,15 @@ public class QuizController {
 
     private final QuizService quizService;
     private final UserAnswerService userAnswerService;
-    private final TestEntityRepository testEntityRepository;
-    private final UserService userService;
+    private final TestEntityService testEntityService;
     private final StorageService storageService;
     private final MediaRecordingRepository mediaRecordingRepository;
 
     @Autowired
-    public QuizController(QuizService quizService, UserAnswerService userAnswerService, TestEntityRepository testEntityRepository, UserService userService, StorageService storageService, MediaRecordingRepository mediaRecordingRepository) {
+    public QuizController(QuizService quizService, UserAnswerService userAnswerService, TestEntityService testEntityService, StorageService storageService, MediaRecordingRepository mediaRecordingRepository) {
         this.quizService = quizService;
         this.userAnswerService = userAnswerService;
-        this.testEntityRepository = testEntityRepository;
-        this.userService = userService;
+        this.testEntityService = testEntityService;
         this.storageService = storageService;
         this.mediaRecordingRepository = mediaRecordingRepository;
     }
@@ -62,7 +59,6 @@ public class QuizController {
             Optional<QuestionId> nextQuestionId = getNextQuestionId(latestUserAnswer.get().getQuestionId());
             return handleNextQuestion(nextQuestionId);
         } else {
-            // If there's no latest user answer, this means the quiz has just started. Return the first question.
             Question firstQuestion = quizService.getFirstQuestion();
             return ResponseEntity.ok(firstQuestion);
         }
@@ -81,13 +77,7 @@ public class QuizController {
 
     @GetMapping("/last-recorded-audio")
     public ResponseEntity<byte[]> getLastRecordedAudio(@RequestParam("questionId") QuestionId questionId) {
-        User user = userService.getUserWithAuthorities();
-        TestEntity testEntity = testEntityRepository.findFirstByUserIdOrderByCreatedAtDesc(user.getId()).orElseGet(() -> {
-            TestEntity t = new TestEntity();
-            t.setUser(user);
-            return testEntityRepository.save(t);
-        });
-
+        TestEntity testEntity = testEntityService.getLast();
         MediaRecording mediaRecording = mediaRecordingRepository
             .findFirstByTestEntityIdAndQuestionIdOrderByCreatedAtDesc(testEntity.getId(), questionId)
             .orElseThrow(() -> new NoSuchElementException("No media recording found"));
@@ -107,8 +97,7 @@ public class QuizController {
         @RequestParam("audio") MultipartFile audioFile,
         @RequestParam("questionId") QuestionId questionId
     ) {
-        User user = userService.getUserWithAuthorities();
-        TestEntity testEntity = testEntityRepository.findFirstByUserIdOrderByCreatedAtDesc(user.getId()).orElseThrow(() -> new NoSuchElementException("Test not found"));
+        TestEntity testEntity = testEntityService.getLast();
 
         UUID fileUuid = UUID.randomUUID();
         String fileName = fileUuid + "." + getFileExtension(audioFile.getOriginalFilename());
@@ -148,17 +137,13 @@ public class QuizController {
 
     private ResponseEntity<?> handleNextQuestion(Optional<QuestionId> nextQuestionId) {
         if (nextQuestionId.isEmpty()) {
-            User user = userService.getUserWithAuthorities();
-            TestEntity testEntity = testEntityRepository.findFirstByUserIdOrderByCreatedAtDesc(user.getId()).orElseThrow(() -> new NoSuchElementException("Test not found"));
-            int calculateScore = quizService.calculateScore(testEntity.getId());
-            testEntity.setScore(calculateScore);
-            testEntityRepository.save(testEntity);
-
-            // Return a response indicating that the quiz has ended.
-            return ResponseEntity.ok().body("Quiz has ended. Your score is " + calculateScore);
+            TestEntity testEntity = testEntityService.getLast();
+            QuizResult quizResult = quizService.calculateScore(testEntity.getId());
+            testEntity.setScore(quizResult.getScore());
+            testEntityService.save(testEntity);
+            String result = String.format("Quiz has ended. Your score is %d/%d", quizResult.getScore(), quizResult.getMaxScore());
+            return ResponseEntity.ok().body(result);
         }
-
-        // Continue the quiz with the next question
         Question nextQuestion = quizService.getQuestion(nextQuestionId.get());
         return ResponseEntity.ok(nextQuestion);
     }

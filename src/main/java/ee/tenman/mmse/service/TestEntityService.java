@@ -1,6 +1,7 @@
 package ee.tenman.mmse.service;
 
 import ee.tenman.mmse.domain.TestEntity;
+import ee.tenman.mmse.domain.User;
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.repository.TestEntityRepository;
 import ee.tenman.mmse.repository.UserAnswerRepository;
@@ -31,14 +32,17 @@ public class TestEntityService {
 
     private final TestEntityMapper testEntityMapper;
 
+    private final UserService userService;
+
     public TestEntityService(
         TestEntityRepository testEntityRepository,
         TestEntityMapper testEntityMapper,
-        UserAnswerRepository userAnswerRepository
+        UserAnswerRepository userAnswerRepository, UserService userService
     ) {
         this.testEntityRepository = testEntityRepository;
         this.testEntityMapper = testEntityMapper;
         this.userAnswerRepository = userAnswerRepository;
+        this.userService = userService;
     }
 
     /**
@@ -130,5 +134,18 @@ public class TestEntityService {
         userAnswerRepository.deleteAll(answers);
         log.debug("Request to delete TestEntity : {}", id);
         testEntityRepository.deleteById(id);
+    }
+
+    public TestEntity getLast() {
+        User user = userService.getUserWithAuthorities();
+        return testEntityRepository.findFirstByUserIdOrderByCreatedAtDesc(user.getId()).orElseGet(() -> {
+            TestEntity t = new TestEntity();
+            t.setUser(user);
+            return testEntityRepository.save(t);
+        });
+    }
+
+    public void save(TestEntity testEntity) {
+        testEntityRepository.save(testEntity);
     }
 }

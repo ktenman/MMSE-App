@@ -30,10 +30,12 @@ public class QuizService {
     private final Logger log = LoggerFactory.getLogger(QuizService.class);
 
     @Autowired
-    public QuizService(QuestionsConfig questionsConfig,
-                       UserAnswerRepository userAnswerRepository,
-                       UserService userService,
-                       TestEntityRepository testEntityRepository) {
+    public QuizService(
+        QuestionsConfig questionsConfig,
+        UserAnswerRepository userAnswerRepository,
+        UserService userService,
+        TestEntityRepository testEntityRepository
+    ) {
         this.questions = questionsConfig.getQuestions();
         this.userAnswerRepository = userAnswerRepository;
         this.userService = userService;
@@ -44,13 +46,16 @@ public class QuizService {
         return questions.get(questionId);
     }
 
-    public int calculateScore(Long testEntityId) {
+    public QuizResult calculateScore(Long testEntityId) {
         List<UserAnswer> answers = userAnswerRepository.findByTestEntityIdOrderByCreatedAtDesc(testEntityId);
         int totalScore = 0;
         Set<QuestionId> answeredQuestions = new HashSet<>();
 
+        int maxScore = 0;
+
         for (UserAnswer userAnswer : answers) {
             Question question = questions.get(userAnswer.getQuestionId());
+            maxScore += question.getMaximumScore();
 
             if (question == null) {
                 log.warn("No Question found for ID: {}", userAnswer.getQuestionId());
@@ -67,11 +72,11 @@ public class QuizService {
             totalScore += score;
 
             log.info("Total score: {}, Question: {}, Score: {}", totalScore, question.getQuestionId(), score);
-            answeredQuestions.add(question.getQuestionId()); // mark the question as answered
+            answeredQuestions.add(question.getQuestionId());
         }
 
         userAnswerRepository.saveAll(answers);
-        return totalScore;
+        return new QuizResult(totalScore, maxScore);
     }
 
 
@@ -110,11 +115,4 @@ public class QuizService {
         return getFirstQuestion();
     }
 
-    public Long createNewTestEntity() {
-        User user = userService.getUserWithAuthorities();
-        TestEntity testEntity = new TestEntity();
-        testEntity.setUser(user);
-        TestEntity savedTestEntity = testEntityRepository.save(testEntity);
-        return savedTestEntity.getId();
-    }
 }
