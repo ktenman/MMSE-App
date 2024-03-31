@@ -1,0 +1,8 @@
+CREATE TABLE dolphin_question
+(
+    id         BIGSERIAL PRIMARY KEY,
+    question   VARCHAR(255) NOT NULL UNIQUE,
+    answer     TEXT         NOT NULL,
+    created_at TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMPTZ  NOT NULL DEFAULT CURRENT_TIMESTAMP
+);

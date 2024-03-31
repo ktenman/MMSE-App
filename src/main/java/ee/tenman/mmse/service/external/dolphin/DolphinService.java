@@ -1,5 +1,7 @@
 package ee.tenman.mmse.service.external.dolphin;
 
+import ee.tenman.mmse.domain.DolphinQuestion;
+import ee.tenman.mmse.service.DolphinQuestionService;
 import ee.tenman.mmse.service.external.openai.NoDolphinResponseException;
 import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
@@ -17,14 +19,29 @@ public class DolphinService {
     @Resource
     private DolphinClient dolphinClient;
 
+    @Resource
+    private DolphinQuestionService dolphinQuestionService;
+
     public String checkWithDolphinService(String prompt) {
+        Optional<String> answer = dolphinQuestionService.findAnswer(prompt);
+        if (answer.isPresent()) {
+            log.info("Dolphin Question Service Answer: {}", answer.get());
+            return answer.get().toLowerCase();
+        }
+
         Optional<String> response = askQuestion(prompt);
         if (response.isEmpty()) {
             log.debug("Answer '{}' was not recognized as correct by Dolphin Service.", prompt);
             throw new NoDolphinResponseException("Dolphin Service returned no response");
         }
 
-        response.ifPresent(r -> log.info("Dolphin Response: {}", r.toLowerCase()));
+        response.ifPresent(r -> {
+            log.info("Dolphin Response: {}", r.toLowerCase());
+            DolphinQuestion dolphinQuestion = new DolphinQuestion();
+            dolphinQuestion.setQuestion(prompt);
+            dolphinQuestion.setAnswer(r.toLowerCase());
+            dolphinQuestionService.save(dolphinQuestion);
+        });
         return response.get().toLowerCase();
     }
 
