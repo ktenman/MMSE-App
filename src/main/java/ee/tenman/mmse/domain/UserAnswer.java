@@ -6,44 +6,16 @@ import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.EnumType;
 import jakarta.persistence.Enumerated;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.PrePersist;
-import jakarta.persistence.PreUpdate;
-import jakarta.persistence.SequenceGenerator;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
-import java.io.Serializable;
-import java.time.Instant;
-
-/**
- * A UserAnswer.
- */
 @Entity
 @Table(name = "user_answer")
-@SuppressWarnings("common-java:DuplicatedBlocks")
-public class UserAnswer implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    @Column(name = "id")
-    private Long id;
+public class UserAnswer extends BaseEntity {
 
     @Column(name = "answer_text")
     private String answerText;
-
-    @NotNull
-    @Column(name = "created_at", nullable = false)
-    private Instant createdAt = Instant.now();
-
-    @Column(name = "updated_at")
-    private Instant updatedAt;
 
     @Column(name = "score")
     private Integer score;
@@ -61,78 +33,32 @@ public class UserAnswer implements Serializable {
     @JsonIgnoreProperties(value = {"user"}, allowSetters = true)
     private TestEntity testEntity;
 
-    @PrePersist
-    public void prePersist() {
-        this.createdAt = Instant.now();
-        this.updatedAt = Instant.now(); // Set updatedAt on insert as well.
-    }
-
-    @PreUpdate
-    public void preUpdate() {
-        this.updatedAt = Instant.now(); // Update the updatedAt field before update.
-    }
-
-    // jhipster-needle-entity-add-field - JHipster will add fields here
-
-    public Long getId() {
-        return this.id;
-    }
-
-    public UserAnswer id(Long id) {
-        this.setId(id);
-        return this;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
     public String getAnswerText() {
-        return this.answerText;
-    }
-
-    public UserAnswer answerText(String answerText) {
-        this.setAnswerText(answerText);
-        return this;
+        return answerText;
     }
 
     public void setAnswerText(String answerText) {
         this.answerText = answerText;
     }
 
-    public Instant getCreatedAt() {
-        return this.createdAt;
+    public Integer getScore() {
+        return score;
     }
 
-    public UserAnswer createdAt(Instant createdAt) {
-        this.setCreatedAt(createdAt);
-        return this;
+    public void setScore(Integer score) {
+        this.score = score;
     }
 
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
+    public Integer getMaximumScore() {
+        return maximumScore;
     }
 
-    public Instant getUpdatedAt() {
-        return this.updatedAt;
-    }
-
-    public UserAnswer updatedAt(Instant updatedAt) {
-        this.setUpdatedAt(updatedAt);
-        return this;
-    }
-
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
+    public void setMaximumScore(Integer maximumScore) {
+        this.maximumScore = maximumScore;
     }
 
     public QuestionId getQuestionId() {
-        return this.questionId;
-    }
-
-    public UserAnswer questionId(QuestionId questionId) {
-        this.setQuestionId(questionId);
-        return this;
+        return questionId;
     }
 
     public void setQuestionId(QuestionId questionId) {
@@ -140,35 +66,12 @@ public class UserAnswer implements Serializable {
     }
 
     public TestEntity getTestEntity() {
-        return this.testEntity;
+        return testEntity;
     }
 
     public void setTestEntity(TestEntity testEntity) {
         this.testEntity = testEntity;
     }
-
-    public Integer getScore() {
-        return this.score;
-    }
-
-    public void setScore(Integer score) {
-        this.score = score;
-    }
-
-    public UserAnswer testEntity(TestEntity testEntity) {
-        this.setTestEntity(testEntity);
-        return this;
-    }
-
-    public Integer getMaximumScore() {
-        return this.maximumScore;
-    }
-
-    public void setMaximumScore(Integer maximumScore) {
-        this.maximumScore = maximumScore;
-    }
-
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {
@@ -178,7 +81,7 @@ public class UserAnswer implements Serializable {
         if (!(o instanceof UserAnswer)) {
             return false;
         }
-        return id != null && id.equals(((UserAnswer) o).id);
+        return getId() != null && getId().equals(((UserAnswer) o).getId());
     }
 
     @Override
@@ -192,10 +95,10 @@ public class UserAnswer implements Serializable {
     @Override
     public String toString() {
         return "UserAnswer{" +
-            "id=" + id +
+            "id=" + getId() +
             ", answerText='" + answerText + '\'' +
-            ", createdAt=" + createdAt +
-            ", updatedAt=" + updatedAt +
+            ", createdAt=" + getCreatedAt() +
+            ", updatedAt=" + getUpdatedAt() +
             ", score=" + score +
             ", maximumScore=" + maximumScore +
             ", questionId=" + questionId +

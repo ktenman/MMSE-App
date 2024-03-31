@@ -82,40 +82,15 @@ class UserAnswerResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static UserAnswer createEntity(EntityManager em) {
-        UserAnswer userAnswer = new UserAnswer()
-            .answerText(DEFAULT_ANSWER_TEXT)
-            .createdAt(DEFAULT_CREATED_AT)
-            .updatedAt(DEFAULT_UPDATED_AT)
-            .questionId(DEFAULT_QUESTION_ID);
+        UserAnswer userAnswer = new UserAnswer();
+        userAnswer.setAnswerText(DEFAULT_ANSWER_TEXT);
+        userAnswer.setCreatedAt(DEFAULT_CREATED_AT);
+        userAnswer.setUpdatedAt(DEFAULT_UPDATED_AT);
+        userAnswer.setQuestionId(DEFAULT_QUESTION_ID);
         // Add required entity
         TestEntity testEntity;
         if (TestUtil.findAll(em, TestEntity.class).isEmpty()) {
             testEntity = TestEntityResourceIT.createEntity(em);
-            em.persist(testEntity);
-            em.flush();
-        } else {
-            testEntity = TestUtil.findAll(em, TestEntity.class).get(0);
-        }
-        userAnswer.setTestEntity(testEntity);
-        return userAnswer;
-    }
-
-    /**
-     * Create an updated entity for this test.
-     * <p>
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static UserAnswer createUpdatedEntity(EntityManager em) {
-        UserAnswer userAnswer = new UserAnswer()
-            .answerText(UPDATED_ANSWER_TEXT)
-            .createdAt(UPDATED_CREATED_AT)
-            .updatedAt(UPDATED_UPDATED_AT)
-            .questionId(UPDATED_QUESTION_ID);
-        // Add required entity
-        TestEntity testEntity;
-        if (TestUtil.findAll(em, TestEntity.class).isEmpty()) {
-            testEntity = TestEntityResourceIT.createUpdatedEntity(em);
             em.persist(testEntity);
             em.flush();
         } else {
@@ -260,11 +235,10 @@ class UserAnswerResourceIT {
         UserAnswer updatedUserAnswer = userAnswerRepository.findById(userAnswer.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedUserAnswer are not directly saved in db
         em.detach(updatedUserAnswer);
-        updatedUserAnswer
-            .answerText(UPDATED_ANSWER_TEXT)
-            .createdAt(UPDATED_CREATED_AT)
-            .updatedAt(UPDATED_UPDATED_AT)
-            .questionId(UPDATED_QUESTION_ID);
+        updatedUserAnswer.setAnswerText(UPDATED_ANSWER_TEXT);
+        updatedUserAnswer.setCreatedAt(UPDATED_CREATED_AT);
+        updatedUserAnswer.setUpdatedAt(UPDATED_UPDATED_AT);
+        updatedUserAnswer.setQuestionId(UPDATED_QUESTION_ID);
         UserAnswerDTO userAnswerDTO = userAnswerMapper.toDto(updatedUserAnswer);
 
         restUserAnswerMockMvc
@@ -362,7 +336,8 @@ class UserAnswerResourceIT {
         UserAnswer partialUpdatedUserAnswer = new UserAnswer();
         partialUpdatedUserAnswer.setId(userAnswer.getId());
 
-        partialUpdatedUserAnswer.createdAt(UPDATED_CREATED_AT).questionId(UPDATED_QUESTION_ID);
+        partialUpdatedUserAnswer.setCreatedAt(UPDATED_CREATED_AT);
+        partialUpdatedUserAnswer.setQuestionId(UPDATED_QUESTION_ID);
 
         restUserAnswerMockMvc
             .perform(
@@ -394,11 +369,10 @@ class UserAnswerResourceIT {
         UserAnswer partialUpdatedUserAnswer = new UserAnswer();
         partialUpdatedUserAnswer.setId(userAnswer.getId());
 
-        partialUpdatedUserAnswer
-            .answerText(UPDATED_ANSWER_TEXT)
-            .createdAt(UPDATED_CREATED_AT)
-            .updatedAt(UPDATED_UPDATED_AT)
-            .questionId(UPDATED_QUESTION_ID);
+        partialUpdatedUserAnswer.setAnswerText(UPDATED_ANSWER_TEXT);
+        partialUpdatedUserAnswer.setCreatedAt(UPDATED_CREATED_AT);
+        partialUpdatedUserAnswer.setUpdatedAt(UPDATED_UPDATED_AT);
+        partialUpdatedUserAnswer.setQuestionId(UPDATED_QUESTION_ID);
 
         restUserAnswerMockMvc
             .perform(
