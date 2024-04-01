@@ -1,6 +1,7 @@
 package ee.tenman.mmse.repository;
 
 import ee.tenman.mmse.domain.TestEntity;
+import ee.tenman.mmse.domain.UserAnswer;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
@@ -46,8 +47,8 @@ public interface TestEntityRepository extends JpaRepository<TestEntity, Long> {
     @Query("SELECT t FROM TestEntity t WHERE t.user.id = :userId ORDER BY t.createdAt DESC LIMIT 1")
     List<TestEntity> findLatestByUserId(@Param("userId") Long userId, Pageable pageable);
 
-
     Optional<TestEntity> findFirstByUserIdOrderByCreatedAtDesc(Long userId);
 
+    TestEntity findByUserAnswersContains(UserAnswer userAnswer);
 
 }

@@ -1,6 +1,5 @@
 package ee.tenman.mmse.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
@@ -11,12 +10,8 @@ import jakarta.validation.constraints.NotNull;
 import java.util.HashSet;
 import java.util.Set;
 
-/**
- * A PatientProfile.
- */
 @Entity
 @Table(name = "patient_profile")
-@SuppressWarnings("common-java:DuplicatedBlocks")
 public class PatientProfile extends BaseEntity {
 
     @NotNull
@@ -28,8 +23,10 @@ public class PatientProfile extends BaseEntity {
     private String name;
 
     @OneToMany(fetch = FetchType.LAZY, mappedBy = "patientProfile")
-    @JsonIgnoreProperties(value = {"user", "userAnswers", "patientProfile"}, allowSetters = true)
     private Set<TestEntity> testEntities = new HashSet<>();
+
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "patientProfile")
+    private Set<OrientationToPlaceAnswer> orientationToPlaceAnswers = new HashSet<>();
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -57,6 +54,13 @@ public class PatientProfile extends BaseEntity {
         this.testEntities = testEntities;
     }
 
+    public Set<OrientationToPlaceAnswer> getOrientationToPlaceAnswers() {
+        return orientationToPlaceAnswers;
+    }
+
+    public void setOrientationToPlaceAnswers(Set<OrientationToPlaceAnswer> orientationToPlaceAnswers) {
+        this.orientationToPlaceAnswers = orientationToPlaceAnswers;
+    }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 

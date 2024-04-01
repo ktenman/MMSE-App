@@ -34,6 +34,8 @@
 
     <include file="/config/liquibase/changelog/20240401062525_add_entity_patient_profile.sql"
              relativeToChangelogFile="false"/>
+    <include file="/config/liquibase/changelog/20240401183856_add_orientation_to_place_answer.sql"
+             relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

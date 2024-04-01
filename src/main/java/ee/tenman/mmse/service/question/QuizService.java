@@ -42,7 +42,8 @@ public class QuizService {
         this.testEntityRepository = testEntityRepository;
     }
 
-    public Question getQuestion(QuestionId questionId) {
+    public Question getQuestion(QuestionId... questionIds) {
+        QuestionId questionId = questionIds.length == 0 ? QuestionId.QUESTION_1 : questionIds[0];
         return questions.get(questionId);
     }
 
@@ -79,11 +80,6 @@ public class QuizService {
         return new QuizResult(totalScore, maxScore);
     }
 
-
-    public Question getFirstQuestion() {
-        return new Question1();
-    }
-
     @Lock(key = "#answerDTO.idempotencyKey")
     public UserAnswer saveAnswer(AnswerDTO answerDTO) {
         Optional<User> user = userService.findUserWithAuthorities();
@@ -112,7 +108,7 @@ public class QuizService {
         TestEntity testEntity = new TestEntity();
         testEntity.setUser(user.get());
         testEntityRepository.save(testEntity);
-        return getFirstQuestion();
+        return getQuestion();
     }
 
 }

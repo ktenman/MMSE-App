@@ -47,4 +47,8 @@ public interface Question {
         return 1;
     };
 
+    default boolean isOrientationToPlace() {
+        return false;
+    }
+
 }

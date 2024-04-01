@@ -1,4 +1,4 @@
-CREATE TABLE dolphin_question
+CREATE TABLE IF NOT EXISTS dolphin_question
 (
     id         BIGSERIAL PRIMARY KEY,
     question   VARCHAR(255) NOT NULL UNIQUE,

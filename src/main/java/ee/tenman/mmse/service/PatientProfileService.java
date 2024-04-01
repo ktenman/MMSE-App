@@ -1,6 +1,7 @@
 package ee.tenman.mmse.service;
 
 import ee.tenman.mmse.domain.PatientProfile;
+import ee.tenman.mmse.domain.TestEntity;
 import ee.tenman.mmse.repository.PatientProfileRepository;
 import ee.tenman.mmse.service.dto.PatientProfileDTO;
 import ee.tenman.mmse.service.mapper.PatientProfileMapper;
@@ -113,5 +114,9 @@ public class PatientProfileService {
     public void delete(Long id) {
         log.debug("Request to delete PatientProfile : {}", id);
         patientProfileRepository.deleteById(id);
+    }
+
+    public PatientProfile getByTestEntity(TestEntity testEntity) {
+        return patientProfileRepository.findByTestEntitiesContains(testEntity);
     }
 }

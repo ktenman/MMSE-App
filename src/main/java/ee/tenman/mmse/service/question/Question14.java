@@ -51,5 +51,4 @@ public class Question14 implements Question {
         return predictionService.isGrammaticallyCorrect(userAnswer.getAnswerText()) ? 1 : 0;
     }
 
-
 }

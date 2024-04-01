@@ -157,4 +157,8 @@ public class TestEntityService {
     public void save(TestEntity testEntity) {
         testEntityRepository.save(testEntity);
     }
+
+    public TestEntity getByUserAnswer(UserAnswer userAnswer) {
+        return testEntityRepository.findByUserAnswersContains(userAnswer);
+    }
 }

@@ -55,13 +55,21 @@ public class QuizController {
     @GetMapping("/question")
     public ResponseEntity<?> getNextQuestion() {
         Optional<UserAnswer> latestUserAnswer = userAnswerService.getLatest();
-        if (latestUserAnswer.isPresent()) {
-            Optional<QuestionId> nextQuestionId = getNextQuestionId(latestUserAnswer.get().getQuestionId());
-            return handleNextQuestion(nextQuestionId);
-        } else {
-            Question firstQuestion = quizService.getFirstQuestion();
+        if (latestUserAnswer.isEmpty()) {
+            Question firstQuestion = quizService.getQuestion();
             return ResponseEntity.ok(firstQuestion);
         }
+        Optional<QuestionId> nextQuestionId = getNextQuestionId(latestUserAnswer.get().getQuestionId());
+        if (nextQuestionId.isEmpty()) {
+            TestEntity testEntity = testEntityService.getLast();
+            QuizResult quizResult = quizService.calculateScore(testEntity.getId());
+            testEntity.setScore(quizResult.getScore());
+            testEntityService.save(testEntity);
+            String result = String.format("Quiz has ended. Your score is %d/%d", quizResult.getScore(), quizResult.getMaxScore());
+            return ResponseEntity.ok().body(result);
+        }
+        Question nextQuestion = quizService.getQuestion(nextQuestionId.get());
+        return ResponseEntity.ok(nextQuestion);
     }
 
     @PostMapping("/answer")
@@ -133,19 +141,6 @@ public class QuizController {
         }
 
         return Optional.empty();
-    }
-
-    private ResponseEntity<?> handleNextQuestion(Optional<QuestionId> nextQuestionId) {
-        if (nextQuestionId.isEmpty()) {
-            TestEntity testEntity = testEntityService.getLast();
-            QuizResult quizResult = quizService.calculateScore(testEntity.getId());
-            testEntity.setScore(quizResult.getScore());
-            testEntityService.save(testEntity);
-            String result = String.format("Quiz has ended. Your score is %d/%d", quizResult.getScore(), quizResult.getMaxScore());
-            return ResponseEntity.ok().body(result);
-        }
-        Question nextQuestion = quizService.getQuestion(nextQuestionId.get());
-        return ResponseEntity.ok(nextQuestion);
     }
 
 }

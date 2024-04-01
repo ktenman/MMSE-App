@@ -1,6 +1,7 @@
 package ee.tenman.mmse.web.rest;
 
 import ee.tenman.mmse.IntegrationTest;
+import ee.tenman.mmse.domain.PatientProfile;
 import ee.tenman.mmse.domain.TestEntity;
 import ee.tenman.mmse.domain.User;
 import ee.tenman.mmse.repository.TestEntityRepository;
@@ -101,7 +102,13 @@ class TestEntityResourceIT {
         User user = UserResourceIT.createEntity(em);
         em.persist(user);
         em.flush();
+
+        PatientProfile patientProfile = PatientProfileResourceIT.createEntity(em);
+        em.persist(patientProfile);
+        em.flush();
+
         testEntity.setUser(user);
+        testEntity.setPatientProfile(patientProfile);
         return testEntity;
     }
 
