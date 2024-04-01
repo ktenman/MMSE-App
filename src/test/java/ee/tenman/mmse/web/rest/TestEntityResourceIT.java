@@ -29,8 +29,11 @@ import java.util.List;
 import java.util.Random;
 import java.util.concurrent.atomic.AtomicLong;
 
+import static java.time.temporal.ChronoUnit.MINUTES;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.within;
 import static org.hamcrest.Matchers.hasItem;
+import static org.hamcrest.Matchers.notNullValue;
 import static org.mockito.Mockito.any;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
@@ -53,20 +56,16 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @WithMockUser
 class TestEntityResourceIT {
 
-    private static final Instant DEFAULT_CREATED_AT = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_CREATED_AT = Instant.now().truncatedTo(ChronoUnit.MILLIS);
-
-    private static final Instant DEFAULT_UPDATED_AT = Instant.ofEpochMilli(0L);
-    private static final Instant UPDATED_UPDATED_AT = Instant.now().truncatedTo(ChronoUnit.MILLIS);
-
     private static final Integer DEFAULT_SCORE = 1;
     private static final Integer UPDATED_SCORE = 2;
 
     private static final String ENTITY_API_URL = "/api/test-entities";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
+    private static final Instant NOW = Instant.now().truncatedTo(ChronoUnit.MILLIS);
+
     private static Random random = new Random();
-    private static AtomicLong count = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
+    private static AtomicLong longCount = new AtomicLong(random.nextInt() + (2 * Integer.MAX_VALUE));
 
     @Autowired
     private TestEntityRepository testEntityRepository;
@@ -90,28 +89,14 @@ class TestEntityResourceIT {
 
     /**
      * Create an entity for this test.
-     * <p>
+     *
      * This is a static method, as tests for other entities might also need it,
      * if they test an entity which requires the current entity.
      */
     public static TestEntity createEntity(EntityManager em) {
-        TestEntity testEntity = new TestEntity().createdAt(DEFAULT_CREATED_AT).updatedAt(DEFAULT_UPDATED_AT).score(DEFAULT_SCORE);
-        // Add required entity
-        User user = UserResourceIT.createEntity(em);
-        em.persist(user);
-        em.flush();
-        testEntity.setUser(user);
-        return testEntity;
-    }
+        TestEntity testEntity = new TestEntity();
+        testEntity.setScore(DEFAULT_SCORE);
 
-    /**
-     * Create an updated entity for this test.
-     * <p>
-     * This is a static method, as tests for other entities might also need it,
-     * if they test an entity which requires the current entity.
-     */
-    public static TestEntity createUpdatedEntity(EntityManager em) {
-        TestEntity testEntity = new TestEntity().createdAt(UPDATED_CREATED_AT).updatedAt(UPDATED_UPDATED_AT).score(UPDATED_SCORE);
         // Add required entity
         User user = UserResourceIT.createEntity(em);
         em.persist(user);
@@ -128,19 +113,21 @@ class TestEntityResourceIT {
     @Test
     @Transactional
     void createTestEntity() throws Exception {
-        int databaseSizeBeforeCreate = testEntityRepository.findAll().size();
+        List<TestEntity> testEntities = testEntityRepository.findAll();
+        assertThat(testEntities).isEmpty();
         // Create the TestEntity
         TestEntityDTO testEntityDTO = testEntityMapper.toDto(testEntity);
         restTestEntityMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(testEntityDTO)))
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON)
+                .content(TestUtil.convertObjectToJsonBytes(testEntityDTO)))
             .andExpect(status().isCreated());
 
         // Validate the TestEntity in the database
-        List<TestEntity> testEntityList = testEntityRepository.findAll();
-        assertThat(testEntityList).hasSize(databaseSizeBeforeCreate + 1);
-        TestEntity testTestEntity = testEntityList.get(testEntityList.size() - 1);
-        assertThat(testTestEntity.getCreatedAt()).isEqualTo(DEFAULT_CREATED_AT);
-        assertThat(testTestEntity.getUpdatedAt()).isEqualTo(DEFAULT_UPDATED_AT);
+        testEntities = testEntityRepository.findAll();
+        assertThat(testEntities).hasSize(1);
+        TestEntity testTestEntity = testEntities.get(0);
+        assertThat(testTestEntity.getCreatedAt()).isNotNull().isCloseTo(NOW, within(1, MINUTES));
+        assertThat(testTestEntity.getUpdatedAt()).isNotNull().isCloseTo(NOW, within(1, MINUTES));
         assertThat(testTestEntity.getScore()).isEqualTo(DEFAULT_SCORE);
     }
 
@@ -165,24 +152,6 @@ class TestEntityResourceIT {
 
     @Test
     @Transactional
-    void checkCreatedAtIsRequired() throws Exception {
-        int databaseSizeBeforeTest = testEntityRepository.findAll().size();
-        // set the field null
-        testEntity.setCreatedAt(null);
-
-        // Create the TestEntity, which fails.
-        TestEntityDTO testEntityDTO = testEntityMapper.toDto(testEntity);
-
-        restTestEntityMockMvc
-            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(testEntityDTO)))
-            .andExpect(status().isBadRequest());
-
-        List<TestEntity> testEntityList = testEntityRepository.findAll();
-        assertThat(testEntityList).hasSize(databaseSizeBeforeTest);
-    }
-
-    @Test
-    @Transactional
     void getAllTestEntities() throws Exception {
         // Initialize the database
         testEntityRepository.saveAndFlush(testEntity);
@@ -193,8 +162,8 @@ class TestEntityResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(testEntity.getId().intValue())))
-            .andExpect(jsonPath("$.[*].createdAt").value(hasItem(DEFAULT_CREATED_AT.toString())))
-            .andExpect(jsonPath("$.[*].updatedAt").value(hasItem(DEFAULT_UPDATED_AT.toString())))
+            .andExpect(jsonPath("$.[*].createdAt").value(notNullValue()))
+            .andExpect(jsonPath("$.[*].updatedAt").value(notNullValue()))
             .andExpect(jsonPath("$.[*].score").value(hasItem(DEFAULT_SCORE)));
     }
 
@@ -227,8 +196,8 @@ class TestEntityResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(testEntity.getId().intValue()))
-            .andExpect(jsonPath("$.createdAt").value(DEFAULT_CREATED_AT.toString()))
-            .andExpect(jsonPath("$.updatedAt").value(DEFAULT_UPDATED_AT.toString()))
+            .andExpect(jsonPath("$.createdAt").value(notNullValue()))
+            .andExpect(jsonPath("$.updatedAt").value(notNullValue()))
             .andExpect(jsonPath("$.score").value(DEFAULT_SCORE));
     }
 
@@ -251,7 +220,7 @@ class TestEntityResourceIT {
         TestEntity updatedTestEntity = testEntityRepository.findById(testEntity.getId()).orElseThrow();
         // Disconnect from session so that the updates on updatedTestEntity are not directly saved in db
         em.detach(updatedTestEntity);
-        updatedTestEntity.createdAt(UPDATED_CREATED_AT).updatedAt(UPDATED_UPDATED_AT).score(UPDATED_SCORE);
+        updatedTestEntity.setScore(UPDATED_SCORE);
         TestEntityDTO testEntityDTO = testEntityMapper.toDto(updatedTestEntity);
 
         restTestEntityMockMvc
@@ -266,8 +235,8 @@ class TestEntityResourceIT {
         List<TestEntity> testEntityList = testEntityRepository.findAll();
         assertThat(testEntityList).hasSize(databaseSizeBeforeUpdate);
         TestEntity testTestEntity = testEntityList.get(testEntityList.size() - 1);
-        assertThat(testTestEntity.getCreatedAt()).isEqualTo(UPDATED_CREATED_AT);
-        assertThat(testTestEntity.getUpdatedAt()).isEqualTo(UPDATED_UPDATED_AT);
+        assertThat(testTestEntity.getCreatedAt()).isNotNull().isCloseTo(NOW, within(1, MINUTES));
+        assertThat(testTestEntity.getUpdatedAt()).isNotNull().isCloseTo(NOW, within(1, MINUTES));
         assertThat(testTestEntity.getScore()).isEqualTo(UPDATED_SCORE);
     }
 
@@ -275,7 +244,7 @@ class TestEntityResourceIT {
     @Transactional
     void putNonExistingTestEntity() throws Exception {
         int databaseSizeBeforeUpdate = testEntityRepository.findAll().size();
-        testEntity.setId(count.incrementAndGet());
+        testEntity.setId(longCount.incrementAndGet());
 
         // Create the TestEntity
         TestEntityDTO testEntityDTO = testEntityMapper.toDto(testEntity);
@@ -298,7 +267,7 @@ class TestEntityResourceIT {
     @Transactional
     void putWithIdMismatchTestEntity() throws Exception {
         int databaseSizeBeforeUpdate = testEntityRepository.findAll().size();
-        testEntity.setId(count.incrementAndGet());
+        testEntity.setId(longCount.incrementAndGet());
 
         // Create the TestEntity
         TestEntityDTO testEntityDTO = testEntityMapper.toDto(testEntity);
@@ -306,7 +275,7 @@ class TestEntityResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restTestEntityMockMvc
             .perform(
-                put(ENTITY_API_URL_ID, count.incrementAndGet())
+                put(ENTITY_API_URL_ID, longCount.incrementAndGet())
                     .contentType(MediaType.APPLICATION_JSON)
                     .content(TestUtil.convertObjectToJsonBytes(testEntityDTO))
             )
@@ -321,7 +290,7 @@ class TestEntityResourceIT {
     @Transactional
     void putWithMissingIdPathParamTestEntity() throws Exception {
         int databaseSizeBeforeUpdate = testEntityRepository.findAll().size();
-        testEntity.setId(count.incrementAndGet());
+        testEntity.setId(longCount.incrementAndGet());
 
         // Create the TestEntity
         TestEntityDTO testEntityDTO = testEntityMapper.toDto(testEntity);
@@ -348,7 +317,7 @@ class TestEntityResourceIT {
         TestEntity partialUpdatedTestEntity = new TestEntity();
         partialUpdatedTestEntity.setId(testEntity.getId());
 
-        partialUpdatedTestEntity.createdAt(UPDATED_CREATED_AT).score(UPDATED_SCORE);
+        partialUpdatedTestEntity.setScore(UPDATED_SCORE);
 
         restTestEntityMockMvc
             .perform(
@@ -362,8 +331,8 @@ class TestEntityResourceIT {
         List<TestEntity> testEntityList = testEntityRepository.findAll();
         assertThat(testEntityList).hasSize(databaseSizeBeforeUpdate);
         TestEntity testTestEntity = testEntityList.get(testEntityList.size() - 1);
-        assertThat(testTestEntity.getCreatedAt()).isEqualTo(UPDATED_CREATED_AT);
-        assertThat(testTestEntity.getUpdatedAt()).isEqualTo(DEFAULT_UPDATED_AT);
+        assertThat(testTestEntity.getCreatedAt()).isNotNull().isCloseTo(NOW, within(1, MINUTES));
+        assertThat(testTestEntity.getUpdatedAt()).isNotNull().isCloseTo(NOW, within(1, MINUTES));
         assertThat(testTestEntity.getScore()).isEqualTo(UPDATED_SCORE);
     }
 
@@ -379,7 +348,7 @@ class TestEntityResourceIT {
         TestEntity partialUpdatedTestEntity = new TestEntity();
         partialUpdatedTestEntity.setId(testEntity.getId());
 
-        partialUpdatedTestEntity.createdAt(UPDATED_CREATED_AT).updatedAt(UPDATED_UPDATED_AT).score(UPDATED_SCORE);
+        partialUpdatedTestEntity.setScore(UPDATED_SCORE);
 
         restTestEntityMockMvc
             .perform(
@@ -393,8 +362,8 @@ class TestEntityResourceIT {
         List<TestEntity> testEntityList = testEntityRepository.findAll();
         assertThat(testEntityList).hasSize(databaseSizeBeforeUpdate);
         TestEntity testTestEntity = testEntityList.get(testEntityList.size() - 1);
-        assertThat(testTestEntity.getCreatedAt()).isEqualTo(UPDATED_CREATED_AT);
-        assertThat(testTestEntity.getUpdatedAt()).isEqualTo(UPDATED_UPDATED_AT);
+        assertThat(testTestEntity.getCreatedAt()).isNotNull().isCloseTo(NOW, within(1, MINUTES));
+        assertThat(testTestEntity.getUpdatedAt()).isNotNull().isCloseTo(NOW, within(1, MINUTES));
         assertThat(testTestEntity.getScore()).isEqualTo(UPDATED_SCORE);
     }
 
@@ -402,7 +371,7 @@ class TestEntityResourceIT {
     @Transactional
     void patchNonExistingTestEntity() throws Exception {
         int databaseSizeBeforeUpdate = testEntityRepository.findAll().size();
-        testEntity.setId(count.incrementAndGet());
+        testEntity.setId(longCount.incrementAndGet());
 
         // Create the TestEntity
         TestEntityDTO testEntityDTO = testEntityMapper.toDto(testEntity);
@@ -425,7 +394,7 @@ class TestEntityResourceIT {
     @Transactional
     void patchWithIdMismatchTestEntity() throws Exception {
         int databaseSizeBeforeUpdate = testEntityRepository.findAll().size();
-        testEntity.setId(count.incrementAndGet());
+        testEntity.setId(longCount.incrementAndGet());
 
         // Create the TestEntity
         TestEntityDTO testEntityDTO = testEntityMapper.toDto(testEntity);
@@ -433,7 +402,7 @@ class TestEntityResourceIT {
         // If url ID doesn't match entity ID, it will throw BadRequestAlertException
         restTestEntityMockMvc
             .perform(
-                patch(ENTITY_API_URL_ID, count.incrementAndGet())
+                patch(ENTITY_API_URL_ID, longCount.incrementAndGet())
                     .contentType("application/merge-patch+json")
                     .content(TestUtil.convertObjectToJsonBytes(testEntityDTO))
             )
@@ -448,7 +417,7 @@ class TestEntityResourceIT {
     @Transactional
     void patchWithMissingIdPathParamTestEntity() throws Exception {
         int databaseSizeBeforeUpdate = testEntityRepository.findAll().size();
-        testEntity.setId(count.incrementAndGet());
+        testEntity.setId(longCount.incrementAndGet());
 
         // Create the TestEntity
         TestEntityDTO testEntityDTO = testEntityMapper.toDto(testEntity);

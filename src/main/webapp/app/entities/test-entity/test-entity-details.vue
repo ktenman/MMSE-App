@@ -30,6 +30,18 @@
           <dd>
             {{ testEntity.user ? testEntity.user.login : '' }}
           </dd>
+          <dt>
+            <span v-text="t$('mmseApp.testEntity.patientProfile')"></span>
+          </dt>
+          <dd>
+            <div v-if="testEntity.patientProfile">
+              <router-link
+                :to="{ name: 'PatientProfileView', params: { patientProfileId: testEntity.patientProfile.id } }">{{
+                  testEntity.patientProfile.id
+                }}
+              </router-link>
+            </div>
+          </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info"
                 data-cy="entityDetailsBackButton">

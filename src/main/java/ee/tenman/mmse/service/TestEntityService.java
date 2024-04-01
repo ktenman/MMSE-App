@@ -1,5 +1,6 @@
 package ee.tenman.mmse.service;
 
+import ee.tenman.mmse.domain.PatientProfile;
 import ee.tenman.mmse.domain.TestEntity;
 import ee.tenman.mmse.domain.User;
 import ee.tenman.mmse.domain.UserAnswer;
@@ -34,15 +35,18 @@ public class TestEntityService {
 
     private final UserService userService;
 
+    private final PatientProfileService patientProfileService;
+
     public TestEntityService(
         TestEntityRepository testEntityRepository,
         TestEntityMapper testEntityMapper,
-        UserAnswerRepository userAnswerRepository, UserService userService
+        UserAnswerRepository userAnswerRepository, UserService userService, PatientProfileService patientProfileService
     ) {
         this.testEntityRepository = testEntityRepository;
         this.testEntityMapper = testEntityMapper;
         this.userAnswerRepository = userAnswerRepository;
         this.userService = userService;
+        this.patientProfileService = patientProfileService;
     }
 
     /**
@@ -139,8 +143,13 @@ public class TestEntityService {
     public TestEntity getLast() {
         User user = userService.getUserWithAuthorities();
         return testEntityRepository.findFirstByUserIdOrderByCreatedAtDesc(user.getId()).orElseGet(() -> {
+            PatientProfile patientProfile = new PatientProfile();
+            patientProfile.setPatientId("123");
+            patientProfile.setName("John Doe");
+            PatientProfile savePatientProfile = patientProfileService.save(patientProfile);
             TestEntity t = new TestEntity();
             t.setUser(user);
+            t.setPatientProfile(savePatientProfile);
             return testEntityRepository.save(t);
         });
     }

@@ -1,4 +1,7 @@
 {
+  "annotations": {
+    "changelogDate": "20230714145700"
+  },
   "changelogDate": "20230714145700",
   "dto": "mapstruct",
   "entityTableName": "user_answer",

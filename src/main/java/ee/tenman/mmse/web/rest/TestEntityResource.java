@@ -38,7 +38,7 @@ import java.util.Optional;
  * REST controller for managing {@link ee.tenman.mmse.domain.TestEntity}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/test-entities")
 public class TestEntityResource {
 
     private final Logger log = LoggerFactory.getLogger(TestEntityResource.class);
@@ -64,7 +64,7 @@ public class TestEntityResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new testEntityDTO, or with status {@code 400 (Bad Request)} if the testEntity has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/test-entities")
+    @PostMapping("")
     public ResponseEntity<TestEntityDTO> createTestEntity(@Valid @RequestBody TestEntityDTO testEntityDTO) throws URISyntaxException {
         log.debug("REST request to save TestEntity : {}", testEntityDTO);
         if (testEntityDTO.getId() != null) {
@@ -80,14 +80,14 @@ public class TestEntityResource {
     /**
      * {@code PUT  /test-entities/:id} : Updates an existing testEntity.
      *
-     * @param id            the id of the testEntityDTO to save.
+     * @param id the id of the testEntityDTO to save.
      * @param testEntityDTO the testEntityDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated testEntityDTO,
      * or with status {@code 400 (Bad Request)} if the testEntityDTO is not valid,
      * or with status {@code 500 (Internal Server Error)} if the testEntityDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/test-entities/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<TestEntityDTO> updateTestEntity(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody TestEntityDTO testEntityDTO
@@ -114,7 +114,7 @@ public class TestEntityResource {
     /**
      * {@code PATCH  /test-entities/:id} : Partial updates given fields of an existing testEntity, field will ignore if it is null
      *
-     * @param id            the id of the testEntityDTO to save.
+     * @param id the id of the testEntityDTO to save.
      * @param testEntityDTO the testEntityDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated testEntityDTO,
      * or with status {@code 400 (Bad Request)} if the testEntityDTO is not valid,
@@ -122,7 +122,7 @@ public class TestEntityResource {
      * or with status {@code 500 (Internal Server Error)} if the testEntityDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/test-entities/{id}", consumes = {"application/json", "application/merge-patch+json"})
+    @PatchMapping(value = "/{id}", consumes = {"application/json", "application/merge-patch+json"})
     public ResponseEntity<TestEntityDTO> partialUpdateTestEntity(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody TestEntityDTO testEntityDTO
@@ -150,14 +150,14 @@ public class TestEntityResource {
     /**
      * {@code GET  /test-entities} : get all the testEntities.
      *
-     * @param pageable  the pagination information.
+     * @param pageable the pagination information.
      * @param eagerload flag to eager load entities from relationships (This is applicable for many-to-many).
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of testEntities in body.
      */
-    @GetMapping("/test-entities")
+    @GetMapping("")
     public ResponseEntity<List<TestEntityDTO>> getAllTestEntities(
         @org.springdoc.core.annotations.ParameterObject Pageable pageable,
-        @RequestParam(required = false, defaultValue = "false") boolean eagerload
+        @RequestParam(name = "eagerload", required = false, defaultValue = "true") boolean eagerload
     ) {
         log.debug("REST request to get a page of TestEntities");
         Page<TestEntityDTO> page;
@@ -176,8 +176,8 @@ public class TestEntityResource {
      * @param id the id of the testEntityDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the testEntityDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/test-entities/{id}")
-    public ResponseEntity<TestEntityDTO> getTestEntity(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<TestEntityDTO> getTestEntity(@PathVariable("id") Long id) {
         log.debug("REST request to get TestEntity : {}", id);
         Optional<TestEntityDTO> testEntityDTO = testEntityService.findOne(id);
         return ResponseUtil.wrapOrNotFound(testEntityDTO);
@@ -189,8 +189,8 @@ public class TestEntityResource {
      * @param id the id of the testEntityDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/test-entities/{id}")
-    public ResponseEntity<Void> deleteTestEntity(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteTestEntity(@PathVariable("id") Long id) {
         log.debug("REST request to delete TestEntity : {}", id);
         testEntityService.delete(id);
         return ResponseEntity

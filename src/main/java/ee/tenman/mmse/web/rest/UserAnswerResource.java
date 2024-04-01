@@ -37,7 +37,7 @@ import java.util.Optional;
  * REST controller for managing {@link ee.tenman.mmse.domain.UserAnswer}.
  */
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/api/user-answers")
 public class UserAnswerResource {
 
     private final Logger log = LoggerFactory.getLogger(UserAnswerResource.class);
@@ -63,7 +63,7 @@ public class UserAnswerResource {
      * @return the {@link ResponseEntity} with status {@code 201 (Created)} and with body the new userAnswerDTO, or with status {@code 400 (Bad Request)} if the userAnswer has already an ID.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PostMapping("/user-answers")
+    @PostMapping("")
     public ResponseEntity<UserAnswerDTO> createUserAnswer(@Valid @RequestBody UserAnswerDTO userAnswerDTO) throws URISyntaxException {
         log.debug("REST request to save UserAnswer : {}", userAnswerDTO);
         if (userAnswerDTO.getId() != null) {
@@ -79,14 +79,14 @@ public class UserAnswerResource {
     /**
      * {@code PUT  /user-answers/:id} : Updates an existing userAnswer.
      *
-     * @param id            the id of the userAnswerDTO to save.
+     * @param id the id of the userAnswerDTO to save.
      * @param userAnswerDTO the userAnswerDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated userAnswerDTO,
      * or with status {@code 400 (Bad Request)} if the userAnswerDTO is not valid,
      * or with status {@code 500 (Internal Server Error)} if the userAnswerDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PutMapping("/user-answers/{id}")
+    @PutMapping("/{id}")
     public ResponseEntity<UserAnswerDTO> updateUserAnswer(
         @PathVariable(value = "id", required = false) final Long id,
         @Valid @RequestBody UserAnswerDTO userAnswerDTO
@@ -113,7 +113,7 @@ public class UserAnswerResource {
     /**
      * {@code PATCH  /user-answers/:id} : Partial updates given fields of an existing userAnswer, field will ignore if it is null
      *
-     * @param id            the id of the userAnswerDTO to save.
+     * @param id the id of the userAnswerDTO to save.
      * @param userAnswerDTO the userAnswerDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated userAnswerDTO,
      * or with status {@code 400 (Bad Request)} if the userAnswerDTO is not valid,
@@ -121,7 +121,7 @@ public class UserAnswerResource {
      * or with status {@code 500 (Internal Server Error)} if the userAnswerDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/user-answers/{id}", consumes = {"application/json", "application/merge-patch+json"})
+    @PatchMapping(value = "/{id}", consumes = {"application/json", "application/merge-patch+json"})
     public ResponseEntity<UserAnswerDTO> partialUpdateUserAnswer(
         @PathVariable(value = "id", required = false) final Long id,
         @NotNull @RequestBody UserAnswerDTO userAnswerDTO
@@ -152,7 +152,7 @@ public class UserAnswerResource {
      * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of userAnswers in body.
      */
-    @GetMapping("/user-answers")
+    @GetMapping("")
     public ResponseEntity<List<UserAnswerDTO>> getAllUserAnswers(@org.springdoc.core.annotations.ParameterObject Pageable pageable) {
         log.debug("REST request to get a page of UserAnswers");
         Page<UserAnswerDTO> page = userAnswerService.findAll(pageable);
@@ -166,8 +166,8 @@ public class UserAnswerResource {
      * @param id the id of the userAnswerDTO to retrieve.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the userAnswerDTO, or with status {@code 404 (Not Found)}.
      */
-    @GetMapping("/user-answers/{id}")
-    public ResponseEntity<UserAnswerDTO> getUserAnswer(@PathVariable Long id) {
+    @GetMapping("/{id}")
+    public ResponseEntity<UserAnswerDTO> getUserAnswer(@PathVariable("id") Long id) {
         log.debug("REST request to get UserAnswer : {}", id);
         Optional<UserAnswerDTO> userAnswerDTO = userAnswerService.findOne(id);
         return ResponseUtil.wrapOrNotFound(userAnswerDTO);
@@ -179,8 +179,8 @@ public class UserAnswerResource {
      * @param id the id of the userAnswerDTO to delete.
      * @return the {@link ResponseEntity} with status {@code 204 (NO_CONTENT)}.
      */
-    @DeleteMapping("/user-answers/{id}")
-    public ResponseEntity<Void> deleteUserAnswer(@PathVariable Long id) {
+    @DeleteMapping("/{id}")
+    public ResponseEntity<Void> deleteUserAnswer(@PathVariable("id") Long id) {
         log.debug("REST request to delete UserAnswer : {}", id);
         userAnswerService.delete(id);
         return ResponseEntity

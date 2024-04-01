@@ -1,0 +1,28 @@
+{
+  "mmseApp": {
+    "patientProfile": {
+      "home": {
+        "title": "Patient Profiles",
+        "refreshListLabel": "Refresh list",
+        "createLabel": "Create a new Patient Profile",
+        "createOrEditLabel": "Create or edit a Patient Profile",
+        "notFound": "No Patient Profiles found"
+      },
+      "created": "A new Patient Profile is created with identifier { param }",
+      "updated": "A Patient Profile is updated with identifier { param }",
+      "deleted": "A Patient Profile is deleted with identifier { param }",
+      "delete": {
+        "question": "Are you sure you want to delete Patient Profile { id }?"
+      },
+      "detail": {
+        "title": "Patient Profile"
+      },
+      "id": "ID",
+      "patientId": "Patient Id",
+      "name": "Name",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "testEntity": "Test Entity"
+    }
+  }
+}

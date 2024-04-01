@@ -21,7 +21,9 @@
       "createdAt": "Created At",
       "updatedAt": "Updated At",
       "score": "Score",
-      "user": "User"
+      "user": "User",
+      "userAnswer": "User Answer",
+      "patientProfile": "Patient Profile"
     }
   }
 }

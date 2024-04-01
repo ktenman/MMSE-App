@@ -1,17 +1,16 @@
 package ee.tenman.mmse.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
-import jakarta.persistence.SequenceGenerator;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
-import java.io.Serializable;
-import java.time.Instant;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * A TestEntity.
@@ -19,22 +18,7 @@ import java.time.Instant;
 @Entity
 @Table(name = "test_entity")
 @SuppressWarnings("common-java:DuplicatedBlocks")
-public class TestEntity implements Serializable {
-
-    private static final long serialVersionUID = 1L;
-
-    @Id
-    @GeneratedValue(strategy = GenerationType.SEQUENCE, generator = "sequenceGenerator")
-    @SequenceGenerator(name = "sequenceGenerator")
-    @Column(name = "id")
-    private Long id;
-
-    @NotNull
-    @Column(name = "created_at", nullable = false)
-    private Instant createdAt = Instant.now();
-
-    @Column(name = "updated_at")
-    private Instant updatedAt;
+public class TestEntity extends BaseEntity {
 
     @Column(name = "score")
     private Integer score;
@@ -43,54 +27,18 @@ public class TestEntity implements Serializable {
     @NotNull
     private User user;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "testEntity")
+    @JsonIgnoreProperties(value = {"testEntity"}, allowSetters = true)
+    private Set<UserAnswer> userAnswers = new HashSet<>();
+
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JsonIgnoreProperties(value = {"testEntities"}, allowSetters = true)
+    private PatientProfile patientProfile;
+
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
-    public Long getId() {
-        return this.id;
-    }
-
-    public TestEntity id(Long id) {
-        this.setId(id);
-        return this;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
-
-    public Instant getCreatedAt() {
-        return this.createdAt;
-    }
-
-    public TestEntity createdAt(Instant createdAt) {
-        this.setCreatedAt(createdAt);
-        return this;
-    }
-
-    public void setCreatedAt(Instant createdAt) {
-        this.createdAt = createdAt;
-    }
-
-    public Instant getUpdatedAt() {
-        return this.updatedAt;
-    }
-
-    public TestEntity updatedAt(Instant updatedAt) {
-        this.setUpdatedAt(updatedAt);
-        return this;
-    }
-
-    public void setUpdatedAt(Instant updatedAt) {
-        this.updatedAt = updatedAt;
-    }
-
     public Integer getScore() {
-        return this.score;
-    }
-
-    public TestEntity score(Integer score) {
-        this.setScore(score);
-        return this;
+        return score;
     }
 
     public void setScore(Integer score) {
@@ -98,17 +46,29 @@ public class TestEntity implements Serializable {
     }
 
     public User getUser() {
-        return this.user;
+        return user;
     }
 
     public void setUser(User user) {
         this.user = user;
     }
 
-    public TestEntity user(User user) {
-        this.setUser(user);
-        return this;
+    public Set<UserAnswer> getUserAnswers() {
+        return userAnswers;
     }
+
+    public void setUserAnswers(Set<UserAnswer> userAnswers) {
+        this.userAnswers = userAnswers;
+    }
+
+    public PatientProfile getPatientProfile() {
+        return patientProfile;
+    }
+
+    public void setPatientProfile(PatientProfile patientProfile) {
+        this.patientProfile = patientProfile;
+    }
+
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
@@ -120,7 +80,7 @@ public class TestEntity implements Serializable {
         if (!(o instanceof TestEntity)) {
             return false;
         }
-        return id != null && id.equals(((TestEntity) o).id);
+        return getId() != null && getId().equals(((TestEntity) o).getId());
     }
 
     @Override

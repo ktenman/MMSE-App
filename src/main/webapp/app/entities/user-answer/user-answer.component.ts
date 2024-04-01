@@ -1,13 +1,12 @@
-import { defineComponent, inject, onMounted, ref, Ref, watch } from 'vue';
+import { defineComponent, inject, onMounted, ref, type Ref, watch, watchEffect } from 'vue';
 import { useI18n } from 'vue-i18n';
-import { IUserAnswer } from '@/shared/model/user-answer.model';
+import { useIntersectionObserver } from '@vueuse/core';
+
+import UserAnswerService from './user-answer.service';
+import { type IUserAnswer } from '@/shared/model/user-answer.model';
 import useDataUtils from '@/shared/data/data-utils.service';
 import { useDateFormat } from '@/shared/composables';
-import UserAnswerService from './user-answer.service';
 import { useAlertService } from '@/shared/alert/alert.service';
-import { usePagination } from '@/shared/composables/pagination';
-import { useSorting } from '@/shared/composables/sorting';
-import { useInfiniteScroll } from '@/shared/composables/useInfiniteScroll';
 
 export default defineComponent({
   compatConfig: { MODE: 3 },
@@ -19,7 +18,11 @@ export default defineComponent({
     const userAnswerService = inject('userAnswerService', () => new UserAnswerService());
     const alertService = inject('alertService', () => useAlertService(), true);
 
+    const itemsPerPage = ref(20);
     const queryCount: Ref<number> = ref(null);
+    const page: Ref<number> = ref(1);
+    const propOrder = ref('id');
+    const reverse = ref(false);
     const totalItems = ref(0);
     const links: Ref<any> = ref({});
 
@@ -27,33 +30,33 @@ export default defineComponent({
 
     const isFetching = ref(false);
 
-    const pagination = usePagination();
-    const sorting = useSorting();
-
     const clear = () => {
-      pagination.page.value = 1;
+      page.value = 1;
       links.value = {};
       userAnswers.value = [];
+    };
+
+    const sort = (): Array<any> => {
+      const result = [propOrder.value + ',' + (reverse.value ? 'desc' : 'asc')];
+      if (propOrder.value !== 'id') {
+        result.push('id');
+      }
+      return result;
     };
 
     const retrieveUserAnswers = async () => {
       isFetching.value = true;
       try {
         const paginationQuery = {
-          page: pagination.page.value - 1,
-          size: pagination.itemsPerPage.value,
-          sort: sorting.getSort()
+          page: page.value - 1,
+          size: itemsPerPage.value,
+          sort: sort()
         };
         const res = await userAnswerService().retrieve(paginationQuery);
         totalItems.value = Number(res.headers['x-total-count']);
         queryCount.value = totalItems.value;
         links.value = dataUtils.parseLinks(res.headers?.['link']);
-
-        const newData = (res.data ?? []).filter(answer => {
-          return !userAnswers.value.some(existing => existing.id === answer.id);
-        });
-
-        userAnswers.value.push(...newData);
+        userAnswers.value.push(...(res.data ?? []));
       } catch (err) {
         alertService.showHttpError(err.response);
       } finally {
@@ -91,29 +94,47 @@ export default defineComponent({
       }
     };
 
-    watch([sorting.propOrder, sorting.reverse], () => {
+    const changeOrder = (newOrder: string) => {
+      if (propOrder.value === newOrder) {
+        reverse.value = !reverse.value;
+      } else {
+        reverse.value = false;
+      }
+      propOrder.value = newOrder;
+    };
+
+    // Whenever order changes, reset the pagination
+    watch([propOrder, reverse], () => {
       clear();
     });
 
-    watch([userAnswers, pagination.page], async ([data, page], [_prevData, prevPage]) => {
+    // Whenever the data resets or page changes, switch to the new page.
+    watch([userAnswers, page], async ([data, page], [_prevData, prevPage]) => {
       if (data.length === 0 || page !== prevPage) {
         await retrieveUserAnswers();
       }
     });
 
-    const checkScroll = () => {
-      const bottomOfWindow =
-        Math.max(window.pageYOffset, document.documentElement.scrollTop, document.body.scrollTop) + window.innerHeight >=
-        document.documentElement.offsetHeight - 10;
-      if (bottomOfWindow) {
-        if (!isFetching.value) {
-          pagination.page.value++;
-          retrieveUserAnswers();
+    const infiniteScrollEl = ref<HTMLElement>(null);
+    const intersectionObserver = useIntersectionObserver(
+      infiniteScrollEl,
+      intersection => {
+        if (intersection[0].isIntersecting && !isFetching.value) {
+          page.value++;
         }
+      },
+      {
+        threshold: 0.5,
+        immediate: false
       }
-    };
-
-    useInfiniteScroll(checkScroll);
+    );
+    watchEffect(() => {
+      if (links.value.next) {
+        intersectionObserver.resume();
+      } else if (intersectionObserver.isActive) {
+        intersectionObserver.pause();
+      }
+    });
 
     return {
       userAnswers,
@@ -127,10 +148,14 @@ export default defineComponent({
       prepareRemove,
       closeDialog,
       removeUserAnswer,
-      totalItems,
+      itemsPerPage,
       queryCount,
-      ...pagination,
-      ...sorting,
+      page,
+      propOrder,
+      reverse,
+      totalItems,
+      changeOrder,
+      infiniteScrollEl,
       t$,
       ...dataUtils
     };

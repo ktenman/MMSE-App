@@ -1,7 +1,9 @@
 package ee.tenman.mmse.service.mapper;
 
+import ee.tenman.mmse.domain.PatientProfile;
 import ee.tenman.mmse.domain.TestEntity;
 import ee.tenman.mmse.domain.User;
+import ee.tenman.mmse.service.dto.PatientProfileDTO;
 import ee.tenman.mmse.service.dto.TestEntityDTO;
 import ee.tenman.mmse.service.dto.UserDTO;
 import org.mapstruct.BeanMapping;
@@ -15,6 +17,7 @@ import org.mapstruct.Named;
 @Mapper(componentModel = "spring")
 public interface TestEntityMapper extends EntityMapper<TestEntityDTO, TestEntity> {
     @Mapping(target = "user", source = "user", qualifiedByName = "userLogin")
+    @Mapping(target = "patientProfile", source = "patientProfile", qualifiedByName = "patientProfileId")
     TestEntityDTO toDto(TestEntity s);
 
     @Named("userLogin")
@@ -22,4 +25,9 @@ public interface TestEntityMapper extends EntityMapper<TestEntityDTO, TestEntity
     @Mapping(target = "id", source = "id")
     @Mapping(target = "login", source = "login")
     UserDTO toDtoUserLogin(User user);
+
+    @Named("patientProfileId")
+    @BeanMapping(ignoreByDefault = true)
+    @Mapping(target = "id", source = "id")
+    PatientProfileDTO toDtoPatientProfileId(PatientProfile patientProfile);
 }

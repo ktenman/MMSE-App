@@ -35,8 +35,9 @@
           </dt>
           <dd>
             <div v-if="userAnswer.testEntity">
-              <router-link :to="{ name: 'TestEntityView', params: { testEntityId: userAnswer.testEntity.id } }"
-              >{{ userAnswer.testEntity.id }}
+              <router-link :to="{ name: 'TestEntityView', params: { testEntityId: userAnswer.testEntity.id } }">{{
+                  userAnswer.testEntity.id
+                }}
               </router-link>
             </div>
           </dd>

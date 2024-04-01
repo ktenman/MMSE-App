@@ -1,10 +1,10 @@
-import { defineComponent, inject, ref, Ref } from 'vue';
+import { defineComponent, inject, ref, type Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 
-import { useDateFormat } from '@/shared/composables';
-import { ITestEntity } from '@/shared/model/test-entity.model';
 import TestEntityService from './test-entity.service';
+import { useDateFormat } from '@/shared/composables';
+import { type ITestEntity } from '@/shared/model/test-entity.model';
 import { useAlertService } from '@/shared/alert/alert.service';
 
 export default defineComponent({

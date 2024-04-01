@@ -9,7 +9,7 @@
     -->
     <changeSet id="20230701121957-1" author="jhipster">
         <createTable tableName="test_entity">
-            <column name="id" type="bigint">
+            <column name="id" type="bigserial">
                 <constraints primaryKey="true" nullable="false"/>
             </column>
             <column name="created_at" type="${datetimeType}">

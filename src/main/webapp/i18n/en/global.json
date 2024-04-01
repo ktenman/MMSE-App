@@ -9,7 +9,8 @@
         "main": "Entities",
         "testEntity": "Test Entity",
         "userAnswer": "User Answer",
-        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
+        "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)",
+        "patientProfile": "Patient Profile"
       },
       "account": {
         "main": "Account",

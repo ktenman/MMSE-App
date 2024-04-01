@@ -79,6 +79,30 @@
             <small class="form-text text-danger" v-for="error of v$.user.$errors" :key="error.$uid">{{ error.$message
               }}</small>
           </div>
+          <div class="form-group">
+            <label class="form-control-label" for="test-entity-patientProfile"
+                   v-text="t$('mmseApp.testEntity.patientProfile')"></label>
+            <select
+              id="test-entity-patientProfile"
+              v-model="testEntity.patientProfile"
+              class="form-control"
+              data-cy="patientProfile"
+              name="patientProfile"
+            >
+              <option v-bind:value="null"></option>
+              <option
+                v-for="patientProfileOption in patientProfiles"
+                :key="patientProfileOption.id"
+                v-bind:value="
+                  testEntity.patientProfile && patientProfileOption.id === testEntity.patientProfile.id
+                    ? testEntity.patientProfile
+                    : patientProfileOption
+                "
+              >
+                {{ patientProfileOption.id }}
+              </option>
+            </select>
+          </div>
         </div>
         <div>
           <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary"

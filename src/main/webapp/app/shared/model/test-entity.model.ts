@@ -1,4 +1,6 @@
-import { IUser } from '@/shared/model/user.model';
+import { type IUser } from '@/shared/model/user.model';
+import { type IUserAnswer } from '@/shared/model/user-answer.model';
+import { type IPatientProfile } from '@/shared/model/patient-profile.model';
 
 export interface ITestEntity {
   id?: number;
@@ -6,6 +8,8 @@ export interface ITestEntity {
   updatedAt?: Date | null;
   score?: number | null;
   user?: IUser;
+  userAnswers?: IUserAnswer[] | null;
+  patientProfile?: IPatientProfile | null;
 }
 
 export class TestEntity implements ITestEntity {
@@ -14,7 +18,9 @@ export class TestEntity implements ITestEntity {
     public createdAt?: Date,
     public updatedAt?: Date | null,
     public score?: number | null,
-    public user?: IUser
+    public user?: IUser,
+    public userAnswers?: IUserAnswer[] | null,
+    public patientProfile?: IPatientProfile | null
   ) {
   }
 }

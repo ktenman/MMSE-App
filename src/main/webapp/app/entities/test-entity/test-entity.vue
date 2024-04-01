@@ -52,6 +52,11 @@
             <jhi-sort-indicator :current-order="propOrder" :reverse="reverse"
                                 :field-name="'user.login'"></jhi-sort-indicator>
           </th>
+          <th scope="row" v-on:click="changeOrder('patientProfile.id')">
+            <span v-text="t$('mmseApp.testEntity.patientProfile')"></span>
+            <jhi-sort-indicator :current-order="propOrder" :field-name="'patientProfile.id'"
+                                :reverse="reverse"></jhi-sort-indicator>
+          </th>
           <th scope="row"></th>
         </tr>
         </thead>
@@ -66,6 +71,15 @@
           <td>{{ testEntity.score }}</td>
           <td>
             {{ testEntity.user ? testEntity.user.login : '' }}
+          </td>
+          <td>
+            <div v-if="testEntity.patientProfile">
+              <router-link
+                :to="{ name: 'PatientProfileView', params: { patientProfileId: testEntity.patientProfile.id } }">{{
+                  testEntity.patientProfile.id
+                }}
+              </router-link>
+            </div>
           </td>
           <td class="text-right">
             <div class="btn-group">

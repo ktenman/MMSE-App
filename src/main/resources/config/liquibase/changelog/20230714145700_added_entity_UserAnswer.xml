@@ -45,10 +45,10 @@
     -->
     <!--    <changeSet id="20230714145700-1-data" author="jhipster" context="faker">-->
     <!--        <loadData-->
-    <!--            file="config/liquibase/fake-data/user_answer.csv"-->
-    <!--            separator=";"-->
-    <!--            tableName="user_answer"-->
-    <!--            usePreparedStatements="true">-->
+    <!--                  file="config/liquibase/fake-data/user_answer.csv"-->
+    <!--                  separator=";"-->
+    <!--                  tableName="user_answer"-->
+    <!--                  usePreparedStatements="true">-->
     <!--            <column name="id" type="numeric"/>-->
     <!--            <column name="answer_text" type="string"/>-->
     <!--            <column name="created_at" type="date"/>-->

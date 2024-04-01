@@ -1,6 +1,5 @@
 package ee.tenman.mmse.service.mapper;
 
-
 import org.junit.jupiter.api.BeforeEach;
 
 class UserAnswerMapperTest {

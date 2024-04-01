@@ -1,0 +1,28 @@
+{
+  "mmseApp": {
+    "patientProfile": {
+      "home": {
+        "title": "Patient Profiles",
+        "refreshListLabel": "Värskenda nimekirja",
+        "createLabel": "Lisa uus Patient Profile",
+        "createOrEditLabel": "Lisa või muuda Patient Profile",
+        "notFound": "Ei leitud ühtegi Patient Profiles"
+      },
+      "created": "Uus Patient Profile on loodud identifikaatoriga { param }",
+      "updated": "Patient Profile identifikaatoriga { param } on muudetud",
+      "deleted": "Patient Profile identifikaatoriga { param } on kustutatud",
+      "delete": {
+        "question": "Kas olete kindel, et soovite kustutada Patient Profile { id }?"
+      },
+      "detail": {
+        "title": "Patient Profile"
+      },
+      "id": "ID",
+      "patientId": "Patient Id",
+      "name": "Name",
+      "createdAt": "Created At",
+      "updatedAt": "Updated At",
+      "testEntity": "Test Entity"
+    }
+  }
+}

@@ -81,7 +81,7 @@ public class UserAnswerGatlingTest extends Simulation {
                                     "\"answerText\": \"SAMPLE_TEXT\"" +
                                     ", \"createdAt\": \"2020-01-01T00:00:00.000Z\"" +
                                     ", \"updatedAt\": \"2020-01-01T00:00:00.000Z\"" +
-                                    ", \"questionId\": \"FIRST\"" +
+                                    ", \"questionId\": \"QUESTION_1\"" +
                                     "}"
                             )
                         )

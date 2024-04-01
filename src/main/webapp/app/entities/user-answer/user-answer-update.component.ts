@@ -1,15 +1,15 @@
-import { computed, defineComponent, inject, ref, Ref } from 'vue';
+import { computed, defineComponent, inject, ref, type Ref } from 'vue';
 import { useI18n } from 'vue-i18n';
 import { useRoute, useRouter } from 'vue-router';
 import { useVuelidate } from '@vuelidate/core';
 
+import UserAnswerService from './user-answer.service';
 import { useDateFormat, useValidation } from '@/shared/composables';
 import { useAlertService } from '@/shared/alert/alert.service';
 
 import TestEntityService from '@/entities/test-entity/test-entity.service';
-import { ITestEntity } from '@/shared/model/test-entity.model';
-import { IUserAnswer, UserAnswer } from '@/shared/model/user-answer.model';
-import UserAnswerService from './user-answer.service';
+import { type ITestEntity } from '@/shared/model/test-entity.model';
+import { type IUserAnswer, UserAnswer } from '@/shared/model/user-answer.model';
 import { QuestionId } from '@/shared/model/enumerations/question-id.model';
 
 export default defineComponent({
@@ -20,7 +20,9 @@ export default defineComponent({
     const alertService = inject('alertService', () => useAlertService(), true);
 
     const userAnswer: Ref<IUserAnswer> = ref(new UserAnswer());
+
     const testEntityService = inject('testEntityService', () => new TestEntityService());
+
     const testEntities: Ref<ITestEntity[]> = ref([]);
     const questionIdValues: Ref<string[]> = ref(Object.keys(QuestionId));
     const isSaving = ref(false);

@@ -72,8 +72,9 @@
           <td v-text="t$('mmseApp.QuestionId.' + userAnswer.questionId)"></td>
           <td>
             <div v-if="userAnswer.testEntity">
-              <router-link :to="{ name: 'TestEntityView', params: { testEntityId: userAnswer.testEntity.id } }"
-              >{{ userAnswer.testEntity.id }}
+              <router-link :to="{ name: 'TestEntityView', params: { testEntityId: userAnswer.testEntity.id } }">{{
+                  userAnswer.testEntity.id
+                }}
               </router-link>
             </div>
           </td>

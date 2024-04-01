@@ -1,7 +1,5 @@
 package ee.tenman.mmse.service.dto;
 
-import jakarta.validation.constraints.NotNull;
-
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
@@ -14,7 +12,6 @@ public class TestEntityDTO implements Serializable {
 
     private Long id;
 
-    @NotNull
     private Instant createdAt;
 
     private Instant updatedAt;
@@ -22,6 +19,8 @@ public class TestEntityDTO implements Serializable {
     private Integer score;
 
     private UserDTO user;
+
+    private PatientProfileDTO patientProfile;
 
     public Long getId() {
         return id;
@@ -63,6 +62,14 @@ public class TestEntityDTO implements Serializable {
         this.user = user;
     }
 
+    public PatientProfileDTO getPatientProfile() {
+        return patientProfile;
+    }
+
+    public void setPatientProfile(PatientProfileDTO patientProfile) {
+        this.patientProfile = patientProfile;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -93,6 +100,7 @@ public class TestEntityDTO implements Serializable {
             ", updatedAt='" + getUpdatedAt() + "'" +
             ", score=" + getScore() +
             ", user=" + getUser() +
+            ", patientProfile=" + getPatientProfile() +
             "}";
     }
 }
