@@ -157,12 +157,12 @@ public class QuizController {
     }
 
     @PostMapping("/orientation-to-place/correct-answers/{patientProfileId}")
-    @ResponseStatus(HttpStatus.CREATED)
-    public TestEntityDTO saveOrientationToPlaceCorrectAnswers(
+    @ResponseStatus(HttpStatus.OK)
+    public List<OrientationToPlaceQuestionDTO> saveOrientationToPlaceCorrectAnswers(
         @PathVariable Long patientProfileId,
         @RequestBody List<OrientationToPlaceQuestionDTO> answers
     ) {
-        return quizService.saveOrientationToPlaceAnswers(patientProfileId, answers);
+        return quizService.saveOrientationToPlaceCorrectAnswers(patientProfileId, answers);
     }
 
     @PostMapping("/orientation-to-place/answer-options/{patientProfileId}")
@@ -171,7 +171,7 @@ public class QuizController {
         @PathVariable Long patientProfileId,
         @RequestBody List<OrientationToPlaceQuestionDTO> answers
     ) {
-        return quizService.saveOrientationToPlaceAnswers(patientProfileId, answers);
+        return quizService.saveOrientationToPlaceAnswerOptions(patientProfileId, answers);
     }
 
     private String getFileExtension(String fileName) {

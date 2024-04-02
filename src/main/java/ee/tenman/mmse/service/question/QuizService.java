@@ -14,9 +14,11 @@ import ee.tenman.mmse.service.UserService;
 import ee.tenman.mmse.service.dto.AnswerDTO;
 import ee.tenman.mmse.service.dto.OrientationToPlaceQuestionDTO;
 import ee.tenman.mmse.service.dto.TestEntityDTO;
+import ee.tenman.mmse.service.external.dolphin.DolphinService;
 import ee.tenman.mmse.service.lock.Lock;
 import ee.tenman.mmse.service.mapper.TestEntityMapper;
 import jakarta.persistence.EntityNotFoundException;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -45,6 +47,7 @@ public class QuizService {
     private final PatientProfileService patientProfileService;
     private final OrientationToPlaceAnswerService orientationToPlaceAnswerService;
     private final TestEntityMapper testEntityMapper;
+    private final DolphinService dolphinService;
 
     @Autowired
     public QuizService(
@@ -52,7 +55,7 @@ public class QuizService {
         UserAnswerRepository userAnswerRepository,
         UserService userService, TestEntityService testEntityService,
         PatientProfileService patientProfileService,
-        OrientationToPlaceAnswerService orientationToPlaceAnswerService, TestEntityMapper testEntityMapper
+        OrientationToPlaceAnswerService orientationToPlaceAnswerService, TestEntityMapper testEntityMapper, DolphinService dolphinService
     ) {
         this.questions = questionsConfig.getQuestions();
         this.userAnswerRepository = userAnswerRepository;
@@ -61,6 +64,7 @@ public class QuizService {
         this.patientProfileService = patientProfileService;
         this.orientationToPlaceAnswerService = orientationToPlaceAnswerService;
         this.testEntityMapper = testEntityMapper;
+        this.dolphinService = dolphinService;
     }
 
     public Question getQuestion(QuestionId... questionIds) {
@@ -124,7 +128,33 @@ public class QuizService {
             .toList();
     }
 
-    public TestEntityDTO saveOrientationToPlaceAnswers(Long patientProfileId, List<OrientationToPlaceQuestionDTO> answers) {
+    public List<OrientationToPlaceQuestionDTO> saveOrientationToPlaceCorrectAnswers(Long patientProfileId, List<OrientationToPlaceQuestionDTO> answers) {
+        PatientProfile patientProfile = patientProfileService.findById(patientProfileId)
+            .orElseThrow(() -> new RuntimeException("Patient profile not found"));
+        Set<OrientationToPlaceAnswer> orientationToPlaceAnswers = answers.stream()
+            .filter(answer -> StringUtils.isNotBlank(answer.getCorrectAnswer()))
+            .map(answer -> {
+                Question question = questions.get(answer.getQuestionId());
+                String found = dolphinService.find(question.getDolphinPrompt(answer.getCorrectAnswer()));
+                OrientationToPlaceAnswer orientationToPlaceAnswer = orientationToPlaceAnswerService
+                    .findByPatientProfileAndQuestionId(patientProfile, answer.getQuestionId())
+                    .orElse(new OrientationToPlaceAnswer());
+                orientationToPlaceAnswer.setQuestionId(answer.getQuestionId());
+                orientationToPlaceAnswer.setCorrectAnswer(answer.getCorrectAnswer());
+                orientationToPlaceAnswer.setAnswerOptions(answerOptions(found));
+                orientationToPlaceAnswer.setPatientProfile(patientProfile);
+                return orientationToPlaceAnswer;
+            })
+            .collect(toSet());
+        orientationToPlaceAnswerService.saveAll(orientationToPlaceAnswers);
+        return orientationToPlaceAnswerService.saveAll(orientationToPlaceAnswers)
+            .stream()
+            .map(this::toOrientationToPlaceQuestionDTO)
+            .toList();
+    }
+
+
+    public TestEntityDTO saveOrientationToPlaceAnswerOptions(Long patientProfileId, List<OrientationToPlaceQuestionDTO> answers) {
         PatientProfile patientProfile = patientProfileService.findById(patientProfileId)
             .orElseThrow(() -> new RuntimeException("Patient profile not found"));
         Set<OrientationToPlaceAnswer> orientationToPlaceAnswers = answers.stream()
@@ -155,6 +185,7 @@ public class QuizService {
 
     private List<String> answerOptions(String answerOptions) {
         if (answerOptions == null || answerOptions.isBlank()) return List.of();
+        answerOptions = answerOptions.replace(".", "");
         return List.of(answerOptions.split(","));
     }
 

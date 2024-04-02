@@ -51,7 +51,7 @@ public interface Question {
         return false;
     }
 
-    default String getDolphinPrompt() {
+    default String getDolphinPrompt(String input) {
         return null;
     }
 

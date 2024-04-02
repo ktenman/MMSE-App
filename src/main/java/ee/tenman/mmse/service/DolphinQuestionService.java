@@ -5,7 +5,6 @@ import ee.tenman.mmse.domain.DolphinQuestion;
 import ee.tenman.mmse.repository.DolphinQuestionRepository;
 import jakarta.annotation.Resource;
 import org.springframework.cache.annotation.Cacheable;
-import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,9 +21,8 @@ public class DolphinQuestionService {
             .map(DolphinQuestion::getAnswer);
     }
 
-    @Async("taskExecutor")
-    public void save(DolphinQuestion dolphinQuestion) {
-        dolphinQuestionRepository.save(dolphinQuestion);
+    public DolphinQuestion save(DolphinQuestion dolphinQuestion) {
+        return dolphinQuestionRepository.save(dolphinQuestion);
     }
 
 }

@@ -157,7 +157,7 @@ public class Question11 implements Question {
 
     private boolean isDolphinSimilar(String answerText) {
         String prompt = prepareAiPrompt(answerText);
-        String response = dolphinService.checkWithDolphinService(prompt);
+        String response = dolphinService.find(prompt).toLowerCase();
         log.debug("DolphinAI Service Response: '{}'", response);
         if (CORRECT_INDICATORS.stream().anyMatch(response::contains)) {
             log.debug("DolphinAI Service deemed answer '{}' as correct. Response: '{}'", answerText, response);

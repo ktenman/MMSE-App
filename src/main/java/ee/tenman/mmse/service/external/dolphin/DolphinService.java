@@ -1,5 +1,6 @@
 package ee.tenman.mmse.service.external.dolphin;
 
+import ee.tenman.mmse.config.RedisConfiguration;
 import ee.tenman.mmse.domain.DolphinQuestion;
 import ee.tenman.mmse.service.DolphinQuestionService;
 import ee.tenman.mmse.service.external.openai.NoDolphinResponseException;
@@ -7,6 +8,7 @@ import jakarta.annotation.Resource;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 
 import java.util.Optional;
@@ -22,11 +24,12 @@ public class DolphinService {
     @Resource
     private DolphinQuestionService dolphinQuestionService;
 
-    public String checkWithDolphinService(String prompt) {
+    @Cacheable(value = RedisConfiguration.DOLPHIN_CACHE, key = "#prompt")
+    public String find(String prompt) {
         Optional<String> answer = dolphinQuestionService.findAnswer(prompt);
         if (answer.isPresent()) {
             log.info("Dolphin Question Service Answer: {}", answer.get());
-            return answer.get().toLowerCase();
+            return answer.get();
         }
 
         Optional<String> response = askQuestion(prompt);
@@ -39,10 +42,11 @@ public class DolphinService {
             log.info("Dolphin Response: {}", r.toLowerCase());
             DolphinQuestion dolphinQuestion = new DolphinQuestion();
             dolphinQuestion.setQuestion(prompt);
-            dolphinQuestion.setAnswer(r.toLowerCase());
-            dolphinQuestionService.save(dolphinQuestion);
+            dolphinQuestion.setAnswer(r);
+            DolphinQuestion savedDolphinQuestion = dolphinQuestionService.save(dolphinQuestion);
+            log.info("Saved Dolphin Question: {}", savedDolphinQuestion);
         });
-        return response.get().toLowerCase();
+        return response.get();
     }
 
     private Optional<String> askQuestion(String question) {
@@ -56,7 +60,9 @@ public class DolphinService {
             log.info("Generating: {}", request);
             DolphinResponse response = dolphinClient.generate(request);
             log.info("Dolphin response: {}", response);
-            return Optional.ofNullable(response.getResponse());
+            return Optional.ofNullable(response.getResponse())
+                .filter(StringUtils::isNotBlank)
+                .map(s -> s.replaceFirst("^\\s+", ""));
         } catch (Exception e) {
             log.error("Failed to ask question: {}", question, e);
             return Optional.empty();

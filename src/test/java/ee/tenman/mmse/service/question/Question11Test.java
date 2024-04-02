@@ -188,7 +188,7 @@ class Question11Test {
             return Optional.of(question.contains("pen") ? "no" : "yes");
         });
 
-        lenient().when(dolphinService.checkWithDolphinService(anyString())).thenAnswer(invocation -> {
+        lenient().when(dolphinService.find(anyString())).thenAnswer(invocation -> {
             String question = invocation.getArgument(0);
             return question.contains("pen") ? "no" : "yes";
         });
@@ -215,7 +215,7 @@ class Question11Test {
     void getScoreWithExpectedException() {
         UserAnswer userAnswer = new UserAnswer();
         userAnswer.setAnswerText("zzz");
-        when(dolphinService.checkWithDolphinService(anyString())).thenThrow(new NoDolphinResponseException("No response from DolphinAI."));
+        when(dolphinService.find(anyString())).thenThrow(new NoDolphinResponseException("No response from DolphinAI."));
 
         Throwable thrown = catchThrowable(() -> question11.getScore(userAnswer));
 

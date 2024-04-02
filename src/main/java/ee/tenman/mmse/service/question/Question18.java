@@ -78,11 +78,11 @@ public class Question18 implements Question {
     }
 
     @Override
-    public String getDolphinPrompt() {
-        return "%s is the correct answer to the question: '" + QUESTION + "'. Please give me four different answer " +
+    public String getDolphinPrompt(String input) {
+        return String.format("%s is the correct answer to the question: '" + QUESTION + "'. Please give me four different answer " +
             "options to this question. Separate these by commas, and only give me answers, nothing else. These should " +
             "be one to two-word options, and one of the answers should be '%s'. However, these options shouldn't be " +
             "similar; they should be quite different because it's part of a mini-mental examination. Don't give me any " +
-            "examples or an explanation. These options should belong to the same country or region";
+            "examples or an explanation. These options should belong to the same country or region", input, input);
     }
 }

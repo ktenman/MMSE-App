@@ -83,7 +83,9 @@ export default defineComponent({
     const loadOrientationToPlaceQuestions = async () => {
       try {
         if (patientProfile.value.id && patientProfile.value.id > 0) {
-          orientationToPlaceQuestions.value = await questionService.getOrientationToPlaceQuestionsByPatientProfileId(patientProfile.value.id);
+          orientationToPlaceQuestions.value = await questionService.getOrientationToPlaceQuestionsByPatientProfileId(
+            patientProfile.value.id
+          );
         } else {
           orientationToPlaceQuestions.value = await questionService.getOrientationToPlaceQuestions();
         }
@@ -105,17 +107,24 @@ export default defineComponent({
       isPaperPickedUp.value = false;
     };
 
+    const validateCorrectAnswer = (question: IOrientationToPlaceQuestion) => {
+      if (question.correctAnswer && question.correctAnswer.length >= 3) {
+        console.log('Correct answer:', question.correctAnswer);
+        questionService.saveOrientationToPlaceCorrectAnswers(patientProfile.value.id, orientationToPlaceQuestions.value);
+      }
+    };
+
     const saveOrientationToPlaceCorrectAnswers = async () => {
       try {
         const response = await questionService.saveOrientationToPlaceCorrectAnswers(
           patientProfile.value.id, orientationToPlaceQuestions.value);
-        testEntity.value = response;
+        orientationToPlaceQuestions.value = response;
         console.log('Orientation to place correct answers saved successfully');
         quizState.value = QuizState.ORIENTATION_ANSWERS;
+        saveQuizProgress();
       } catch (error) {
         console.error('Error saving orientation to place correct answers:', error);
       }
-      saveQuizProgress();
     };
 
     const saveOrientationToPlaceAnswerOptions = async () => {
@@ -126,10 +135,10 @@ export default defineComponent({
         console.log('Orientation to place answer options saved successfully');
         quizState.value = QuizState.QUIZ;
         await loadQuestion();
+        saveQuizProgress();
       } catch (error) {
         console.error('Error saving orientation to place answer options:', error);
       }
-      saveQuizProgress();
     };
 
     const startQuiz = async () => {
@@ -376,7 +385,7 @@ export default defineComponent({
         if (authenticated.value) {
           if (quizState.value === QuizState.QUIZ) {
             await loadQuestion();
-          } else if (quizState.value === QuizState.ORIENTATION_QUESTIONS) {
+          } else if (quizState.value === QuizState.ORIENTATION_QUESTIONS || quizState.value === QuizState.ORIENTATION_ANSWERS) {
             await loadOrientationToPlaceQuestions();
           }
         }
@@ -420,7 +429,8 @@ export default defineComponent({
       saveOrientationToPlaceCorrectAnswers,
       saveOrientationToPlaceAnswerOptions,
       quizState,
-      retakeQuiz
+      retakeQuiz,
+      validateCorrectAnswer
     };
   }
 });

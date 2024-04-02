@@ -44,7 +44,8 @@
               <h4>{{ question.questionText }}</h4>
               <div class="form-group">
                 <label>Correct Answer:</label>
-                <input v-model="question.correctAnswer" class="form-control" required type="text">
+                <input v-model="question.correctAnswer" class="form-control" required
+                       type="text" @blur="validateCorrectAnswer(question)">
               </div>
             </div>
             <button class="btn btn-primary" type="submit">Save Correct Answers</button>

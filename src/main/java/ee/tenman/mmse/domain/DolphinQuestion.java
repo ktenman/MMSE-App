@@ -26,4 +26,12 @@ public class DolphinQuestion extends BaseEntity {
     public void setAnswer(String answer) {
         this.answer = answer;
     }
+
+    @Override
+    public String toString() {
+        return "DolphinQuestion{" +
+            "question='" + question + '\'' +
+            ", answer='" + answer + '\'' +
+            '}';
+    }
 }
