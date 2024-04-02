@@ -133,4 +133,8 @@ public class UserAnswerService {
         );
     }
 
+    public Optional<UserAnswer> getLatestByTestEntityId(Long testEntityId) {
+        return userAnswerRepository.findLatestByTestEntityId(testEntityId, PageRequest.of(0, 1)).stream().findFirst();
+    }
+
 }

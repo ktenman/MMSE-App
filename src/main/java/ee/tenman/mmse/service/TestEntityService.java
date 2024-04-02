@@ -143,6 +143,13 @@ public class TestEntityService {
             .orElseThrow(() -> new IllegalStateException(String.format("No test entity found for user %s", user.getLogin())));
     }
 
+    public TestEntity getById(Long id) {
+        User user = userService.getUserWithAuthorities();
+        return testEntityRepository.findById(id)
+            .filter(testEntity -> testEntity.getUser().equals(user))
+            .orElseThrow(() -> new IllegalStateException(String.format("No test entity found for id %s", id)));
+    }
+
     public void save(TestEntity testEntity) {
         testEntityRepository.save(testEntity);
     }
@@ -158,11 +165,11 @@ public class TestEntityService {
         return testEntityRepository.findByPatientProfileIdAndScoreIsNull(patientId);
     }
 
-    public void createTestEntity(PatientProfile patientProfile) {
+    public TestEntity createTestEntity(PatientProfile patientProfile) {
         User user = userService.getUserWithAuthorities();
         TestEntity testEntity = new TestEntity();
         testEntity.setUser(user);
         testEntity.setPatientProfile(patientProfile);
-        testEntityRepository.save(testEntity);
+        return testEntityRepository.save(testEntity);
     }
 }

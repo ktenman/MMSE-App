@@ -4,23 +4,24 @@ import { IAnswer } from '@/shared/model/answer.model';
 import { QuestionId } from '@/shared/model/enumerations/question-id.model';
 import { IPatientProfile } from '@/shared/model/patient-profile.model';
 import { IOrientationToPlaceQuestion } from '@/shared/model/orientation-to-place-question.model';
+import { ITestEntity } from '@/shared/model/test-entity.model';
 
 export default class QuestionService {
-  public getQuestion(): Promise<IQuestion> {
-    return axios.get<IQuestion>('api/question').then(res => res.data);
+  public getQuestion(testEntityId: number): Promise<IQuestion> {
+    return axios.get<IQuestion>(`api/question/${testEntityId}`).then(res => res.data);
   }
 
-  public submitAnswer(answer: IAnswer): Promise<void> {
-    return axios.post<void>('/api/answer', answer);
+  public submitAnswer(answer: IAnswer, testEntityId: number): Promise<void> {
+    return axios.post<void>(`/api/answer/${testEntityId}`, answer);
   }
 
-  public sendAudioToServer(audioBlob: Blob, questionId: QuestionId | undefined): Promise<void> {
+  public sendAudioToServer(audioBlob: Blob, questionId: QuestionId | undefined, testEntityId: number): Promise<void> {
     const formData = new FormData();
     formData.append('audio', audioBlob, 'recording.webm');
     formData.append('questionId', questionId as string);
 
     return axios
-      .post('/api/upload-audio', formData)
+      .post(`/api/upload-audio/${testEntityId}`, formData)
       .then(() => {
         console.log('Audio uploaded successfully');
       })
@@ -29,9 +30,9 @@ export default class QuestionService {
       });
   }
 
-  public getLastRecordedAudio(questionId: QuestionId): Promise<{ data: Blob; fileName: string }> {
+  public getLastRecordedAudio(questionId: QuestionId, testEntityId: number): Promise<{ data: Blob; fileName: string }> {
     return axios
-      .get('/api/last-recorded-audio', {
+      .get(`/api/last-recorded-audio/${testEntityId}`, {
         params: { questionId },
         responseType: 'blob'
       })
@@ -56,12 +57,8 @@ export default class QuestionService {
       .then(res => res.data);
   }
 
-  public async saveOrientationToPlaceAnswers(patientProfileId: number, answers: IOrientationToPlaceQuestion[]): Promise<void> {
-    try {
-      await axios.post(`/api/save-orientation-to-place-answers/${patientProfileId}`, answers);
-    } catch (error) {
-      throw new Error('Error saving orientation to place answers');
-    }
+  public saveOrientationToPlaceAnswers(patientProfileId: number, answers: IOrientationToPlaceQuestion[]): Promise<ITestEntity> {
+    return axios.post(`/api/save-orientation-to-place-answers/${patientProfileId}`, answers).then(res => res.data);
   }
 
 }

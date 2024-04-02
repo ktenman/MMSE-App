@@ -9,6 +9,7 @@ import { QuestionType } from '@/shared/model/enumerations/question-type.model';
 import { IPatientProfile, PatientProfile } from '@/shared/model/patient-profile.model';
 import { IOrientationToPlaceQuestion } from '@/shared/model/orientation-to-place-question.model';
 import { QuizState } from '@/shared/model/enumerations/quiz-state.mode';
+import { ITestEntity, TestEntity } from '@/shared/model/test-entity.model';
 
 export default defineComponent({
   computed: {
@@ -45,7 +46,8 @@ export default defineComponent({
       noAnimation,
       patientProfile,
       orientationToPlaceQuestions,
-      quizState
+      quizState,
+      testEntity
     ] = [
       inject<LoginService>('loginService'),
       inject<ComputedRef<boolean>>('authenticated'),
@@ -70,7 +72,8 @@ export default defineComponent({
       ref(false),
       ref(<IPatientProfile>new PatientProfile()),
       ref<IOrientationToPlaceQuestion[]>([]),
-      ref(QuizState.PATIENT_INFO)
+      ref(QuizState.PATIENT_INFO),
+      ref(<ITestEntity>new TestEntity())
     ];
 
     const questionService = new QuestionService();
@@ -78,7 +81,6 @@ export default defineComponent({
     const loadOrientationToPlaceQuestions = async () => {
       try {
         if (patientProfile.value.id && patientProfile.value.id > 0) {
-          console.log('Loading orientation to place questions for patient profile:', patientProfile.value.id);
           orientationToPlaceQuestions.value = await questionService.getOrientationToPlaceQuestionsByPatientProfileId(patientProfile.value.id);
         } else {
           orientationToPlaceQuestions.value = await questionService.getOrientationToPlaceQuestions();
@@ -103,7 +105,8 @@ export default defineComponent({
 
     const saveOrientationToPlaceAnswers = async () => {
       try {
-        await questionService.saveOrientationToPlaceAnswers(patientProfile.value.id, orientationToPlaceQuestions.value);
+        const response = await questionService.saveOrientationToPlaceAnswers(patientProfile.value.id, orientationToPlaceQuestions.value);
+        testEntity.value = response;
         console.log('Orientation to place answers saved successfully');
         quizState.value = QuizState.QUIZ;
         await loadQuestion();
@@ -130,8 +133,9 @@ export default defineComponent({
       } catch (error) {
         console.error('Error starting quiz:', error);
         // Handle error
+      } finally {
+        saveQuizProgress();
       }
-      saveQuizProgress();
     };
 
     const openLogin = () => loginService.openLogin();
@@ -168,7 +172,7 @@ export default defineComponent({
 
           recorder.value.onstop = async () => {
             const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-            await questionService.sendAudioToServer(audioBlob, question.value?.questionId);
+            await questionService.sendAudioToServer(audioBlob, question.value?.questionId, testEntity.value.id);
             audioChunks.length = 0;
             await loadLastRecordedAudio();
           };
@@ -200,7 +204,10 @@ export default defineComponent({
     const loadLastRecordedAudio = async () => {
       if (question.value?.questionId) {
         try {
-          const { data, fileName } = await questionService.getLastRecordedAudio(question.value.questionId);
+          const {
+            data,
+            fileName
+          } = await questionService.getLastRecordedAudio(question.value.questionId, testEntity.value.id);
           lastRecordedAudioUrl.value = URL.createObjectURL(data);
           lastRecordedAudioFileName.value = fileName;
         } catch (error) {
@@ -246,7 +253,7 @@ export default defineComponent({
         }
 
         try {
-          await questionService.submitAnswer(answer);
+          await questionService.submitAnswer(answer, testEntity.value.id);
           if (question.value.questionType === QuestionType.DRAG_AND_DROP) {
             isPaperFolded.value = false;
             isPaperOnFloor.value = false;
@@ -271,7 +278,7 @@ export default defineComponent({
 
     const loadQuestion = async () => {
       if (patientProfile.value.id) {
-        const response = await questionService.getQuestion();
+        const response = await questionService.getQuestion(testEntity.value.id);
         if (typeof response === 'string') {
           quizEndMessage.value = response;
           question.value = null;
@@ -318,7 +325,8 @@ export default defineComponent({
         isPaperFolded: isPaperFolded.value,
         isPaperOnFloor: isPaperOnFloor.value,
         isPaperPickedUp: isPaperPickedUp.value,
-        quizEndMessage: quizEndMessage.value
+        quizEndMessage: quizEndMessage.value,
+        testEntity: testEntity.value
       };
       localStorage.setItem('quizProgress', JSON.stringify(quizProgress));
     };
@@ -336,6 +344,7 @@ export default defineComponent({
         isPaperOnFloor.value = quizProgress.isPaperOnFloor;
         isPaperPickedUp.value = quizProgress.isPaperPickedUp;
         quizEndMessage.value = quizProgress.quizEndMessage;
+        testEntity.value = quizProgress.testEntity;
       }
     };
 

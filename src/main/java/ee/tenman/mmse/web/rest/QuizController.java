@@ -13,6 +13,7 @@ import ee.tenman.mmse.service.dto.AnswerDTO;
 import ee.tenman.mmse.service.dto.OrientationToPlaceQuestionDTO;
 import ee.tenman.mmse.service.dto.PatientProfileDTO;
 import ee.tenman.mmse.service.dto.PatientProfileRequest;
+import ee.tenman.mmse.service.dto.TestEntityDTO;
 import ee.tenman.mmse.service.external.minio.StorageService;
 import ee.tenman.mmse.service.mapper.PatientProfileMapper;
 import ee.tenman.mmse.service.question.Question;
@@ -63,16 +64,16 @@ public class QuizController {
         this.patientProfileMapper = patientProfileMapper;
     }
 
-    @GetMapping("/question")
-    public ResponseEntity<?> getNextQuestion() {
-        Optional<UserAnswer> latestUserAnswer = userAnswerService.getLatest();
+    @GetMapping("/question/{testEntityId}")
+    public ResponseEntity<?> getNextQuestion(@PathVariable Long testEntityId) {
+        Optional<UserAnswer> latestUserAnswer = userAnswerService.getLatestByTestEntityId(testEntityId);
         if (latestUserAnswer.isEmpty()) {
             Question firstQuestion = quizService.getQuestion();
             return ResponseEntity.ok(firstQuestion);
         }
         Optional<QuestionId> nextQuestionId = getNextQuestionId(latestUserAnswer.get().getQuestionId());
         if (nextQuestionId.isEmpty()) {
-            TestEntity testEntity = testEntityService.getLast();
+            TestEntity testEntity = testEntityService.getById(testEntityId);
             QuizResult quizResult = quizService.calculateScore(testEntity.getId());
             testEntity.setScore(quizResult.getScore());
             testEntityService.save(testEntity);
@@ -83,10 +84,10 @@ public class QuizController {
         return ResponseEntity.ok(nextQuestion);
     }
 
-    @PostMapping("/answer")
+    @PostMapping("/answer/{testEntityId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public void saveAnswer(@RequestBody @Valid AnswerDTO answerDTO) {
-        quizService.saveAnswer(answerDTO);
+    public void saveAnswer(@RequestBody @Valid AnswerDTO answerDTO, @PathVariable Long testEntityId) {
+        quizService.saveAnswer(answerDTO, testEntityId);
     }
 
     @GetMapping("/orientation-to-place-questions")
@@ -110,9 +111,12 @@ public class QuizController {
         return patientProfileMapper.toDto(patientProfile);
     }
 
-    @GetMapping("/last-recorded-audio")
-    public ResponseEntity<byte[]> getLastRecordedAudio(@RequestParam("questionId") QuestionId questionId) {
-        TestEntity testEntity = testEntityService.getLast();
+    @GetMapping("/last-recorded-audio/{testEntityId}")
+    public ResponseEntity<byte[]> getLastRecordedAudio(
+        @RequestParam("questionId") QuestionId questionId,
+        @PathVariable Long testEntityId
+    ) {
+        TestEntity testEntity = testEntityService.getById(testEntityId);
         Optional<MediaRecording> recording = mediaRecordingRepository
             .findFirstByTestEntityIdAndQuestionIdOrderByCreatedAtDesc(testEntity.getId(), questionId);
 
@@ -130,12 +134,13 @@ public class QuizController {
         return new ResponseEntity<>(audioData, headers, HttpStatus.OK);
     }
 
-    @PostMapping("/upload-audio")
+    @PostMapping("/upload-audio/{testEntityId}")
     public ResponseEntity<?> uploadAudio(
         @RequestParam("audio") MultipartFile audioFile,
-        @RequestParam("questionId") QuestionId questionId
+        @RequestParam("questionId") QuestionId questionId,
+        @PathVariable Long testEntityId
     ) {
-        TestEntity testEntity = testEntityService.getLast();
+        TestEntity testEntity = testEntityService.getById(testEntityId);
 
         UUID fileUuid = UUID.randomUUID();
         String fileName = fileUuid + "." + getFileExtension(audioFile.getOriginalFilename());
@@ -153,7 +158,7 @@ public class QuizController {
 
     @PostMapping("/save-orientation-to-place-answers/{patientProfileId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public List<OrientationToPlaceQuestionDTO> saveOrientationToPlaceAnswers(
+    public TestEntityDTO saveOrientationToPlaceAnswers(
         @PathVariable Long patientProfileId,
         @RequestBody List<OrientationToPlaceQuestionDTO> answers
     ) {

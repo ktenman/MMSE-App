@@ -13,7 +13,9 @@ import ee.tenman.mmse.service.TestEntityService;
 import ee.tenman.mmse.service.UserService;
 import ee.tenman.mmse.service.dto.AnswerDTO;
 import ee.tenman.mmse.service.dto.OrientationToPlaceQuestionDTO;
+import ee.tenman.mmse.service.dto.TestEntityDTO;
 import ee.tenman.mmse.service.lock.Lock;
+import ee.tenman.mmse.service.mapper.TestEntityMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -42,6 +44,7 @@ public class QuizService {
     private final TestEntityService testEntityService;
     private final PatientProfileService patientProfileService;
     private final OrientationToPlaceAnswerService orientationToPlaceAnswerService;
+    private final TestEntityMapper testEntityMapper;
 
     @Autowired
     public QuizService(
@@ -49,7 +52,7 @@ public class QuizService {
         UserAnswerRepository userAnswerRepository,
         UserService userService, TestEntityService testEntityService,
         PatientProfileService patientProfileService,
-        OrientationToPlaceAnswerService orientationToPlaceAnswerService
+        OrientationToPlaceAnswerService orientationToPlaceAnswerService, TestEntityMapper testEntityMapper
     ) {
         this.questions = questionsConfig.getQuestions();
         this.userAnswerRepository = userAnswerRepository;
@@ -57,6 +60,7 @@ public class QuizService {
         this.testEntityService = testEntityService;
         this.patientProfileService = patientProfileService;
         this.orientationToPlaceAnswerService = orientationToPlaceAnswerService;
+        this.testEntityMapper = testEntityMapper;
     }
 
     public Question getQuestion(QuestionId... questionIds) {
@@ -98,12 +102,12 @@ public class QuizService {
     }
 
     @Lock(key = "#answerDTO.idempotencyKey")
-    public UserAnswer saveAnswer(AnswerDTO answerDTO) {
+    public UserAnswer saveAnswer(AnswerDTO answerDTO, Long testEntityId) {
         Optional<User> user = userService.findUserWithAuthorities();
         if (user.isEmpty()) {
             throw new RuntimeException("User not found");
         }
-        TestEntity testEntity = testEntityService.getLast();
+        TestEntity testEntity = testEntityService.getById(testEntityId);
         UserAnswer userAnswer = userAnswerRepository
             .findFirstByTestEntityIdAndQuestionIdOrderByCreatedAtDesc(testEntity.getId(), answerDTO.getQuestionId())
             .orElse(new UserAnswer());
@@ -120,7 +124,7 @@ public class QuizService {
             .toList();
     }
 
-    public List<OrientationToPlaceQuestionDTO> saveOrientationToPlaceAnswers(Long patientProfileId, List<OrientationToPlaceQuestionDTO> answers) {
+    public TestEntityDTO saveOrientationToPlaceAnswers(Long patientProfileId, List<OrientationToPlaceQuestionDTO> answers) {
         PatientProfile patientProfile = patientProfileService.findById(patientProfileId)
             .orElseThrow(() -> new RuntimeException("Patient profile not found"));
         Set<OrientationToPlaceAnswer> orientationToPlaceAnswers = answers.stream()
@@ -135,11 +139,9 @@ public class QuizService {
                 return orientationToPlaceAnswer;
             })
             .collect(toSet());
-        testEntityService.createTestEntity(patientProfile);
-        return orientationToPlaceAnswerService.saveAll(orientationToPlaceAnswers)
-            .stream()
-            .map(this::toOrientationToPlaceQuestionDTO)
-            .toList();
+        orientationToPlaceAnswerService.saveAll(orientationToPlaceAnswers);
+        TestEntity testEntity = testEntityService.createTestEntity(patientProfile);
+        return testEntityMapper.toDto(testEntity);
     }
 
     private OrientationToPlaceQuestionDTO toOrientationToPlaceQuestionDTO(OrientationToPlaceAnswer answer) {
