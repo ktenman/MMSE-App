@@ -157,6 +157,7 @@ public class QuizService {
 
 
     public TestEntityDTO saveOrientationToPlaceAnswerOptions(Long patientProfileId, List<OrientationToPlaceQuestionDTO> answers) {
+        validateAnswers(answers);
         PatientProfile patientProfile = patientProfileService.findById(patientProfileId)
             .orElseThrow(() -> new RuntimeException("Patient profile not found"));
         Set<OrientationToPlaceAnswer> orientationToPlaceAnswers = answers.stream()
@@ -174,6 +175,30 @@ public class QuizService {
         orientationToPlaceAnswerService.saveAll(orientationToPlaceAnswers);
         TestEntity testEntity = testEntityService.createTestEntity(patientProfile);
         return testEntityMapper.toDto(testEntity);
+    }
+
+    private void validateAnswers(List<OrientationToPlaceQuestionDTO> answers) {
+        for (OrientationToPlaceQuestionDTO answer : answers) {
+            if (StringUtils.isBlank(answer.getCorrectAnswer())) {
+                throw new IllegalArgumentException("Correct answer is required for question: " + answer.getQuestionId());
+            }
+            if (StringUtils.isBlank(answer.getAnswerOptions())) {
+                throw new IllegalArgumentException("Answer options are required for question: " + answer.getQuestionId());
+            }
+            List<String> answerOptions = answerOptions(answer.getAnswerOptions());
+            if (answerOptions.size() >= 3) {
+                throw new IllegalArgumentException("Answer options should be at least 3 for question: " + answer.getQuestionId());
+            }
+            if (answerOptions.stream().anyMatch(StringUtils::isBlank)) {
+                throw new IllegalArgumentException("Answer options should not be empty for question: " + answer.getQuestionId());
+            }
+            if (answerOptions.stream().anyMatch(option -> option.length() > 50)) {
+                throw new IllegalArgumentException("Answer options should not be longer than 50 characters for question: " + answer.getQuestionId());
+            }
+            if (answerOptions.stream().filter(a -> a.equalsIgnoreCase(answer.getCorrectAnswer())).count() != 1) {
+                throw new IllegalArgumentException("Correct answer should be one of the answer options for question: " + answer.getQuestionId());
+            }
+        }
     }
 
     private OrientationToPlaceQuestionDTO toOrientationToPlaceQuestionDTO(OrientationToPlaceAnswer answer) {
