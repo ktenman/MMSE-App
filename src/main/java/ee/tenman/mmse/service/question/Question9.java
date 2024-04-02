@@ -40,7 +40,8 @@ public class Question9 implements Question {
         return QuestionType.SUBTRACTION_TASK;
     }
 
-    public List<InputField> getAnswerOptions() {
+    @Override
+    public List<InputField> getAnswerOptions(Long testEntityId) {
         return List.of(
             new InputField(InputFieldType.NUMBER, 0, 99, "Result after subtracting 7 from 100"),
             new InputField(InputFieldType.NUMBER, 0, 99, "Result after subtracting 7 from the first result"),

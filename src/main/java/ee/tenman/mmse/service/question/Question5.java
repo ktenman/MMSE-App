@@ -47,7 +47,7 @@ public class Question5 implements Question {
     }
 
     @Override
-    public List<String> getAnswerOptions() {
+    public List<String> getAnswerOptions(Long testEntityId) {
         List<String> answerOptions = Arrays.asList(SPRING, SUMMER, AUTUMN, WINTER);
         Collections.shuffle(answerOptions);
         return answerOptions;

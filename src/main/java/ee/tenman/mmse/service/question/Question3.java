@@ -40,7 +40,7 @@ public class Question3 implements Question {
     }
 
     @Override
-    public List<String> getAnswerOptions() {
+    public List<String> getAnswerOptions(Long testEntityId) {
         Month currentMonth = Month.from(ZonedDateTime.now(clock));
         List<String> answerOptions = IntStream.rangeClosed(0, 3)
             .mapToObj(currentMonth::plus)

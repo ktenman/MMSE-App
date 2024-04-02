@@ -13,6 +13,7 @@ import ee.tenman.mmse.service.TestEntityService;
 import ee.tenman.mmse.service.UserService;
 import ee.tenman.mmse.service.dto.AnswerDTO;
 import ee.tenman.mmse.service.dto.OrientationToPlaceQuestionDTO;
+import ee.tenman.mmse.service.dto.QuestionDTO;
 import ee.tenman.mmse.service.dto.TestEntityDTO;
 import ee.tenman.mmse.service.external.dolphin.DolphinService;
 import ee.tenman.mmse.service.lock.Lock;
@@ -68,9 +69,21 @@ public class QuizService {
         this.dolphinService = dolphinService;
     }
 
-    public Question getQuestion(QuestionId... questionIds) {
-        QuestionId questionId = questionIds.length == 0 ? QuestionId.QUESTION_1 : questionIds[0];
-        return questions.get(questionId);
+    public QuestionDTO getQuestion(QuestionId questionId, Long testEntityId) {
+        Question question = questions.get(questionId);
+        return mapToQuestionDTO(question, testEntityId);
+    }
+
+    public QuestionDTO mapToQuestionDTO(Question question, Long testEntityId) {
+        QuestionDTO questionDTO = new QuestionDTO();
+        questionDTO.setQuestionText(question.getQuestionText());
+        questionDTO.setImage(question.getImage());
+        questionDTO.setQuestionId(question.getQuestionId());
+        questionDTO.setQuestionType(question.getQuestionType());
+        questionDTO.setAnswerOptions(question.getAnswerOptions(testEntityId));
+        questionDTO.setMaximumScore(question.getMaximumScore());
+        questionDTO.setOrientationToPlace(question.isOrientationToPlace());
+        return questionDTO;
     }
 
     public QuizResult calculateScore(Long testEntityId) {

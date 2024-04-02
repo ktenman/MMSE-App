@@ -23,7 +23,7 @@ public interface Question {
 
     QuestionType getQuestionType();
 
-    default Collection<?> getAnswerOptions() {
+    default Collection<?> getAnswerOptions(Long testEntityId) {
         return List.of();
     }
 

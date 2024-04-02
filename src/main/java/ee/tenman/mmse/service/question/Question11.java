@@ -16,7 +16,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
 
-import java.util.List;
 import java.util.Optional;
 import java.util.Set;
 
@@ -104,11 +103,6 @@ public class Question11 implements Question {
     @Override
     public QuestionType getQuestionType() {
         return QuestionType.TEXT_INPUT;
-    }
-
-    @Override
-    public List<String> getAnswerOptions() {
-        return List.of();
     }
 
     @Override

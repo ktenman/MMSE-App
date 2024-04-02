@@ -38,7 +38,7 @@ public class Question4 implements Question {
     }
 
     @Override
-    public List<String> getAnswerOptions() {
+    public List<String> getAnswerOptions(Long testEntityId) {
         int currentYear = ZonedDateTime.now(clock).getYear();
         List<String> answerOptions = IntStream.rangeClosed(currentYear - 1, currentYear + 2)
             .mapToObj(String::valueOf)

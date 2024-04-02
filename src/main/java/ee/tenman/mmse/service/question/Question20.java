@@ -48,7 +48,7 @@ public class Question20 implements Question {
     }
 
     @Override
-    public List<String> getAnswerOptions() {
+    public List<String> getAnswerOptions(Long testEntityId) {
         TestEntity testEntity = testEntityService.getLast();
         PatientProfile patientProfile = patientProfileService.getByTestEntity(testEntity);
         List<String> answerOptions = orientationToPlaceAnswerService

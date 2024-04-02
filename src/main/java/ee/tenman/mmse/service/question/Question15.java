@@ -35,7 +35,7 @@ public class Question15 implements Question {
     }
 
     @Override
-    public List<String> getAnswerOptions() {
+    public List<String> getAnswerOptions(Long testEntityId) {
         // Get the current day of the week
         ZonedDateTime zonedDateTime = ZonedDateTime.now(ZoneId.systemDefault());
         String currentDayOfWeek = DayOfWeek.from(zonedDateTime).name();

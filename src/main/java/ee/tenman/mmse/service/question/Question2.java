@@ -44,7 +44,7 @@ public class Question2 implements Question {
     }
 
     @Override
-    public List<String> getAnswerOptions() {
+    public List<String> getAnswerOptions(Long testEntityId) {
         // Get today's date
         LocalDate today = LocalDate.now(clock);
 

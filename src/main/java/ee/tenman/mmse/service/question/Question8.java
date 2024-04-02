@@ -37,7 +37,7 @@ public class Question8 implements Question {
     }
 
     @Override
-    public List<AnswerOption> getAnswerOptions() {
+    public List<AnswerOption> getAnswerOptions(Long testEntityId) {
         List<AnswerOption> answerOptions = Arrays.asList(AnswerOption.BALL, AnswerOption.CAR, AnswerOption.MAN, AnswerOption.TREE);
         Collections.shuffle(answerOptions);
         return answerOptions;

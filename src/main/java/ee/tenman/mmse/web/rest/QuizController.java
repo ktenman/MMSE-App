@@ -13,10 +13,10 @@ import ee.tenman.mmse.service.dto.AnswerDTO;
 import ee.tenman.mmse.service.dto.OrientationToPlaceQuestionDTO;
 import ee.tenman.mmse.service.dto.PatientProfileDTO;
 import ee.tenman.mmse.service.dto.PatientProfileRequest;
+import ee.tenman.mmse.service.dto.QuestionDTO;
 import ee.tenman.mmse.service.dto.TestEntityDTO;
 import ee.tenman.mmse.service.external.minio.StorageService;
 import ee.tenman.mmse.service.mapper.PatientProfileMapper;
-import ee.tenman.mmse.service.question.Question;
 import ee.tenman.mmse.service.question.QuizResult;
 import ee.tenman.mmse.service.question.QuizService;
 import jakarta.validation.Valid;
@@ -68,7 +68,7 @@ public class QuizController {
     public ResponseEntity<?> getNextQuestion(@PathVariable Long testEntityId) {
         Optional<UserAnswer> latestUserAnswer = userAnswerService.getLatestByTestEntityId(testEntityId);
         if (latestUserAnswer.isEmpty()) {
-            Question firstQuestion = quizService.getQuestion();
+            QuestionDTO firstQuestion = quizService.getQuestion(QuestionId.QUESTION_1, testEntityId);
             return ResponseEntity.ok(firstQuestion);
         }
         Optional<QuestionId> nextQuestionId = getNextQuestionId(latestUserAnswer.get().getQuestionId());
@@ -80,7 +80,7 @@ public class QuizController {
             String result = String.format("Quiz has ended. Your score is %d/%d", quizResult.getScore(), quizResult.getMaxScore());
             return ResponseEntity.ok().body(result);
         }
-        Question nextQuestion = quizService.getQuestion(nextQuestionId.get());
+        QuestionDTO nextQuestion = quizService.getQuestion(nextQuestionId.get(), testEntityId);
         return ResponseEntity.ok(nextQuestion);
     }
 
