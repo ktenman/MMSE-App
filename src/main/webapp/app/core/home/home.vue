@@ -38,10 +38,10 @@
         </div>
 
         <div v-if="quizState === QuizState.ORIENTATION_QUESTIONS">
-          <h2>Orientation to Place Questions</h2>
+          <h2>Examiner Input: Orientation to Place Questions</h2>
           <form @submit.prevent="saveOrientationToPlaceAnswers">
             <div v-for="(question, index) in orientationToPlaceQuestions" :key="index">
-              <h3>{{ question.questionText }}</h3>
+              <h4>{{ question.questionText }}</h4>
               <div class="form-group">
                 <label>Correct Answer:</label>
                 <input v-model="question.correctAnswer" class="form-control" required type="text">
@@ -68,8 +68,7 @@
                   :pressed="selectedAnswer === option"
                   variant="outline-primary"
                   @click="selectedAnswer = option"
-                  class="w-100 p-3 mt-3 large-text capitalize"
-                >
+                  class="w-100 p-3 mt-3 large-text capitalize">
                   {{ option.toLowerCase() }}
                 </b-button>
               </div>

@@ -30,7 +30,7 @@ public class OrientationToPlaceQuestionDTO {
 
     public OrientationToPlaceQuestionDTO(QuestionId questionId, String questionText) {
         this.questionId = questionId;
-        this.questionText = questionText;
+        this.questionText = questionText.replaceFirst("^\\d+\\.\\s*", "");
     }
 
     @JsonCreator

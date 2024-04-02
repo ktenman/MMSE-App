@@ -17,10 +17,10 @@ import java.util.List;
 import java.util.Optional;
 
 @Component
-public class Question17 implements Question {
+public class Question18 implements Question {
 
-    private static final String QUESTION_TEXT = "17. What city are you in?";
-    private static final QuestionId QUESTION_ID = QuestionId.QUESTION_17;
+    private static final String QUESTION_TEXT = "18. What county are you in?";
+    private static final QuestionId QUESTION_ID = QuestionId.QUESTION_18;
 
     @Resource
     private TestEntityService testEntityService;
