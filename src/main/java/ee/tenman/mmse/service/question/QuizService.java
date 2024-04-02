@@ -25,6 +25,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Comparator;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -150,6 +151,7 @@ public class QuizService {
         return orientationToPlaceAnswerService.saveAll(orientationToPlaceAnswers)
             .stream()
             .map(this::toOrientationToPlaceQuestionDTO)
+            .sorted(Comparator.comparing(OrientationToPlaceQuestionDTO::getQuestionId))
             .toList();
     }
 
@@ -194,7 +196,10 @@ public class QuizService {
         PatientProfile patientProfile = patientProfileService.findById(patientProfileId)
             .orElseThrow(() -> new EntityNotFoundException("Patient profile not found with ID: " + patientProfileId));
 
-        List<OrientationToPlaceQuestionDTO> allQuestionsDTO = getOrientationToPlaceQuestions();
+        List<OrientationToPlaceQuestionDTO> allQuestionsDTO = getOrientationToPlaceQuestions()
+            .stream()
+            .sorted(Comparator.comparing(OrientationToPlaceQuestionDTO::getQuestionId))
+            .toList();
 
         Map<QuestionId, OrientationToPlaceQuestionDTO> answeredQuestionsMap = patientProfile.getOrientationToPlaceAnswers().stream()
             .map(this::toOrientationToPlaceQuestionDTO)
