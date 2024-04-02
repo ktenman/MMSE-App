@@ -156,9 +156,18 @@ public class QuizController {
         return ResponseEntity.ok(Map.of("fileName", fileName));
     }
 
-    @PostMapping("/save-orientation-to-place-answers/{patientProfileId}")
+    @PostMapping("/orientation-to-place/correct-answers/{patientProfileId}")
     @ResponseStatus(HttpStatus.CREATED)
-    public TestEntityDTO saveOrientationToPlaceAnswers(
+    public TestEntityDTO saveOrientationToPlaceCorrectAnswers(
+        @PathVariable Long patientProfileId,
+        @RequestBody List<OrientationToPlaceQuestionDTO> answers
+    ) {
+        return quizService.saveOrientationToPlaceAnswers(patientProfileId, answers);
+    }
+
+    @PostMapping("/orientation-to-place/answer-options/{patientProfileId}")
+    @ResponseStatus(HttpStatus.OK)
+    public TestEntityDTO saveOrientationToPlaceAnswerOptions(
         @PathVariable Long patientProfileId,
         @RequestBody List<OrientationToPlaceQuestionDTO> answers
     ) {

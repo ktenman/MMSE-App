@@ -51,4 +51,8 @@ public interface Question {
         return false;
     }
 
+    default String getDolphinPrompt() {
+        return null;
+    }
+
 }

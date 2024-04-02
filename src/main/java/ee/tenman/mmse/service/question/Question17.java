@@ -19,7 +19,8 @@ import java.util.Optional;
 @Component
 public class Question17 implements Question {
 
-    private static final String QUESTION_TEXT = "17. What city are you in?";
+    private static final String QUESTION = "What city are you in?";
+    private static final String QUESTION_TEXT = "17. " + QUESTION;
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_17;
 
     @Resource
@@ -74,5 +75,14 @@ public class Question17 implements Question {
     @Override
     public boolean isOrientationToPlace() {
         return true;
+    }
+
+    @Override
+    public String getDolphinPrompt() {
+        return "%s is the correct answer to the question: '" + QUESTION + "'. Please give me four different answer " +
+            "options to this question. Separate these by commas, and only give me answers, nothing else. These should " +
+            "be one to two-word options, and one of the answers should be '%s'. However, these options shouldn't be " +
+            "similar; they should be quite different because it's part of a mini-mental examination. Don't give me any " +
+            "examples or an explanation. These options should belong to the same country or region";
     }
 }

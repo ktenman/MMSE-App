@@ -103,15 +103,29 @@ export default defineComponent({
       saveQuizProgress();
     };
 
-    const saveOrientationToPlaceAnswers = async () => {
+    const saveOrientationToPlaceCorrectAnswers = async () => {
       try {
-        const response = await questionService.saveOrientationToPlaceAnswers(patientProfile.value.id, orientationToPlaceQuestions.value);
+        const response = await questionService.saveOrientationToPlaceCorrectAnswers(
+          patientProfile.value.id, orientationToPlaceQuestions.value);
         testEntity.value = response;
-        console.log('Orientation to place answers saved successfully');
+        console.log('Orientation to place correct answers saved successfully');
+        quizState.value = QuizState.ORIENTATION_ANSWERS;
+      } catch (error) {
+        console.error('Error saving orientation to place correct answers:', error);
+      }
+      saveQuizProgress();
+    };
+
+    const saveOrientationToPlaceAnswerOptions = async () => {
+      try {
+        const response = await questionService.saveOrientationToPlaceAnswerOptions(
+          patientProfile.value.id, orientationToPlaceQuestions.value);
+        testEntity.value = response;
+        console.log('Orientation to place answer options saved successfully');
         quizState.value = QuizState.QUIZ;
         await loadQuestion();
       } catch (error) {
-        console.error('Error saving orientation to place answers:', error);
+        console.error('Error saving orientation to place answer options:', error);
       }
       saveQuizProgress();
     };
@@ -401,7 +415,8 @@ export default defineComponent({
       patientProfile,
       startQuiz,
       orientationToPlaceQuestions,
-      saveOrientationToPlaceAnswers,
+      saveOrientationToPlaceCorrectAnswers,
+      saveOrientationToPlaceAnswerOptions,
       quizState,
       retakeQuiz
     };

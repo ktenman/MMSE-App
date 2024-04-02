@@ -57,8 +57,12 @@ export default class QuestionService {
       .then(res => res.data);
   }
 
-  public saveOrientationToPlaceAnswers(patientProfileId: number, answers: IOrientationToPlaceQuestion[]): Promise<ITestEntity> {
-    return axios.post(`/api/save-orientation-to-place-answers/${patientProfileId}`, answers).then(res => res.data);
+  public saveOrientationToPlaceCorrectAnswers(patientProfileId: number, answers: IOrientationToPlaceQuestion[]): Promise<ITestEntity> {
+    return axios.post<ITestEntity>(`/api/orientation-to-place/correct-answers/${patientProfileId}`, answers).then(res => res.data);
+  }
+
+  public saveOrientationToPlaceAnswerOptions(patientProfileId: number, answers: IOrientationToPlaceQuestion[]): Promise<ITestEntity> {
+    return axios.post<ITestEntity>(`/api/orientation-to-place/answer-options/${patientProfileId}`, answers).then(res => res.data);
   }
 
 }

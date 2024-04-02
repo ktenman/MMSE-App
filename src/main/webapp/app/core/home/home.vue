@@ -39,19 +39,33 @@
 
         <div v-if="quizState === QuizState.ORIENTATION_QUESTIONS">
           <h2>Examiner Input: Orientation to Place Questions</h2>
-          <form @submit.prevent="saveOrientationToPlaceAnswers">
+          <form @submit.prevent="saveOrientationToPlaceCorrectAnswers">
             <div v-for="(question, index) in orientationToPlaceQuestions" :key="index">
               <h4>{{ question.questionText }}</h4>
               <div class="form-group">
                 <label>Correct Answer:</label>
                 <input v-model="question.correctAnswer" class="form-control" required type="text">
               </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Save Correct Answers</button>
+          </form>
+        </div>
+
+        <div v-if="quizState === QuizState.ORIENTATION_ANSWERS">
+          <h2>Examiner Input: Answer Options</h2>
+          <form @submit.prevent="saveOrientationToPlaceAnswerOptions">
+            <div v-for="(question, index) in orientationToPlaceQuestions" :key="index">
+              <h4>{{ question.questionText }}</h4>
+              <div class="form-group">
+                <label>Correct Answer:</label>
+                <input v-model="question.correctAnswer" class="form-control" disabled type="text">
+              </div>
               <div class="form-group">
                 <label>Answer Options (comma-separated):</label>
                 <input v-model="question.answerOptions" class="form-control" required type="text">
               </div>
             </div>
-            <button class="btn btn-primary" type="submit">Save Answers</button>
+            <button class="btn btn-primary" type="submit">Save Answer Options</button>
           </form>
         </div>
 
