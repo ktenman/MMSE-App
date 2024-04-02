@@ -11,6 +11,8 @@ import { IOrientationToPlaceQuestion } from '@/shared/model/orientation-to-place
 import { QuizState } from '@/shared/model/enumerations/quiz-state.mode';
 import { ITestEntity, TestEntity } from '@/shared/model/test-entity.model';
 
+const QUIZ_PROGRESS: string = 'quizProgress';
+
 export default defineComponent({
   computed: {
     QuestionType() {
@@ -91,6 +93,7 @@ export default defineComponent({
     };
 
     const retakeQuiz = () => {
+      localStorage.removeItem(QUIZ_PROGRESS);
       quizState.value = QuizState.PATIENT_INFO;
       patientProfile.value = new PatientProfile();
       question.value = null;
@@ -100,7 +103,6 @@ export default defineComponent({
       isPaperFolded.value = false;
       isPaperOnFloor.value = false;
       isPaperPickedUp.value = false;
-      saveQuizProgress();
     };
 
     const saveOrientationToPlaceCorrectAnswers = async () => {
@@ -342,11 +344,11 @@ export default defineComponent({
         quizEndMessage: quizEndMessage.value,
         testEntity: testEntity.value
       };
-      localStorage.setItem('quizProgress', JSON.stringify(quizProgress));
+      localStorage.setItem(QUIZ_PROGRESS, JSON.stringify(quizProgress));
     };
 
     const loadQuizProgress = () => {
-      const savedProgress = localStorage.getItem('quizProgress');
+      const savedProgress = localStorage.getItem(QUIZ_PROGRESS);
       if (savedProgress) {
         const quizProgress = JSON.parse(savedProgress);
         quizState.value = quizProgress.quizState;
