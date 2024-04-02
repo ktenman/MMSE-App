@@ -135,4 +135,7 @@ public class PatientProfileService {
         return patientProfileRepository.save(patientProfile);
     }
 
+    public Optional<PatientProfile> findById(Long patientProfileId) {
+        return patientProfileRepository.findById(patientProfileId);
+    }
 }

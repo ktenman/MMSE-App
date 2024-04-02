@@ -12,6 +12,7 @@ import ee.tenman.mmse.service.TestEntityService;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -51,7 +52,7 @@ public class Question17 implements Question {
     public List<String> getAnswerOptions() {
         TestEntity testEntity = testEntityService.getLast();
         PatientProfile patientProfile = patientProfileService.getByTestEntity(testEntity);
-        return orientationToPlaceAnswerService
+        List<String> answerOptions = orientationToPlaceAnswerService
             .findByPatientProfileAndQuestionId(patientProfile, QUESTION_ID)
             .or(() -> {
                 OrientationToPlaceAnswer newAnswer = new OrientationToPlaceAnswer();
@@ -64,6 +65,8 @@ public class Question17 implements Question {
             })
             .map(OrientationToPlaceAnswer::getAnswerOptions)
             .orElseThrow(() -> new IllegalStateException("No answer options found"));
+        Collections.shuffle(answerOptions);
+        return answerOptions;
     }
 
     @Override

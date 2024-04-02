@@ -26,12 +26,12 @@
           <h2>Start a New Quiz</h2>
           <form @submit.prevent="startQuiz">
             <div class="form-group">
-              <label for="patientId">Patient ID:</label>
-              <input id="patientId" v-model="patientProfile.patientId" class="form-control" required type="text">
-            </div>
-            <div class="form-group">
               <label for="name">Name:</label>
               <input id="name" v-model="patientProfile.name" class="form-control" required type="text">
+            </div>
+            <div class="form-group">
+              <label for="patientId">Patient ID:</label>
+              <input id="patientId" v-model="patientProfile.patientId" class="form-control" required type="text">
             </div>
             <button class="btn btn-primary" type="submit">Start Quiz</button>
           </form>
@@ -122,7 +122,11 @@
                       <font-awesome-icon icon="stop" />
                       Stop Recording
                     </b-button>
-                    <div v-if="isRecording" class="recording-timer ml-3">{{ recordingDuration }}s</div>
+                  </div>
+                  <div v-if="isRecording" class="recording-timer ml-3">
+                    <br />
+                    Recording: {{ recordingDuration }}s
+                    <br />
                   </div>
                   <div v-if="lastRecordedAudioUrl" class="audio-player mt-3">
                     <p>To listen to your recorded audio, press the play button below:</p>

@@ -3,6 +3,7 @@ import { IQuestion } from '@/shared/model/question.model';
 import { IAnswer } from '@/shared/model/answer.model';
 import { QuestionId } from '@/shared/model/enumerations/question-id.model';
 import { IPatientProfile } from '@/shared/model/patient-profile.model';
+import { IOrientationToPlaceQuestion } from '@/shared/model/orientation-to-place-question.model';
 
 export default class QuestionService {
   public getQuestion(): Promise<IQuestion> {
@@ -45,9 +46,17 @@ export default class QuestionService {
     return axios.post<IPatientProfile>('/api/start', patientProfile).then(res => res.data);
   }
 
-  public getOrientationToPlaceQuestions(): Promise<OrientationToPlaceQuestionDTO[]> {
-    return axios.get<OrientationToPlaceQuestionDTO[]>('/api/orientation-to-place-questions')
+  public getOrientationToPlaceQuestions(): Promise<IOrientationToPlaceQuestion[]> {
+    return axios.get<IOrientationToPlaceQuestion[]>('/api/orientation-to-place-questions')
       .then(res => res.data);
+  }
+
+  public async saveOrientationToPlaceAnswers(patientProfileId: number, answers: IOrientationToPlaceQuestion[]): Promise<void> {
+    try {
+      await axios.post(`/api/save-orientation-to-place-answers/${patientProfileId}`, answers);
+    } catch (error) {
+      throw new Error('Error saving orientation to place answers');
+    }
   }
 
 }

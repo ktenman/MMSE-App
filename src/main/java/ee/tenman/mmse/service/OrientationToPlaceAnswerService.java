@@ -7,6 +7,7 @@ import ee.tenman.mmse.repository.OrientationToPlaceAnswerRepository;
 import jakarta.annotation.Resource;
 import org.springframework.stereotype.Service;
 
+import java.util.List;
 import java.util.Optional;
 
 @Service
@@ -21,5 +22,9 @@ public class OrientationToPlaceAnswerService {
 
     public void save(OrientationToPlaceAnswer newAnswer) {
         orientationToPlaceAnswerRepository.save(newAnswer);
+    }
+
+    public List<OrientationToPlaceAnswer> saveAll(Iterable<OrientationToPlaceAnswer> answers) {
+        return orientationToPlaceAnswerRepository.saveAll(answers);
     }
 }

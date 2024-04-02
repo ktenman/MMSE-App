@@ -100,18 +100,22 @@ export default defineComponent({
 
     const saveOrientationToPlaceAnswers = async () => {
       try {
-        // Implement the logic to save the answers using the `orientationToPlaceAnswerService`
-        // You can access the answers from `orientationToPlaceQuestions.value`
-        // ...
+        await questionService.saveOrientationToPlaceAnswers(patientProfile.value.id, orientationToPlaceQuestions.value);
         console.log('Orientation to place answers saved successfully');
         quizState.value = QuizState.QUIZ;
         await loadQuestion();
       } catch (error) {
         console.error('Error saving orientation to place answers:', error);
       }
+      saveQuizProgress();
     };
 
     const startQuiz = async () => {
+      if (!patientProfile.value.patientId || !patientProfile.value.name) {
+        console.error('Patient ID and name are required to start the quiz');
+        return;
+      }
+
       try {
         const response = await questionService.startQuiz(patientProfile.value);
         patientProfile.value = response;
@@ -268,6 +272,7 @@ export default defineComponent({
         if (typeof response === 'string') {
           quizEndMessage.value = response;
           question.value = null;
+          quizState.value = QuizState.FINISHED;
         } else {
           question.value = response;
           selectedAnswers.value = [];

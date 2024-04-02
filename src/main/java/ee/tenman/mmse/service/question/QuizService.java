@@ -1,11 +1,15 @@
 package ee.tenman.mmse.service.question;
 
+import ee.tenman.mmse.domain.OrientationToPlaceAnswer;
+import ee.tenman.mmse.domain.PatientProfile;
 import ee.tenman.mmse.domain.TestEntity;
 import ee.tenman.mmse.domain.User;
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
-import ee.tenman.mmse.repository.TestEntityRepository;
 import ee.tenman.mmse.repository.UserAnswerRepository;
+import ee.tenman.mmse.service.OrientationToPlaceAnswerService;
+import ee.tenman.mmse.service.PatientProfileService;
+import ee.tenman.mmse.service.TestEntityService;
 import ee.tenman.mmse.service.UserService;
 import ee.tenman.mmse.service.dto.AnswerDTO;
 import ee.tenman.mmse.service.dto.OrientationToPlaceQuestionDTO;
@@ -21,26 +25,34 @@ import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
 
+import static java.util.stream.Collectors.toSet;
+
 @Service
 public class QuizService {
+
+    private final Logger log = LoggerFactory.getLogger(QuizService.class);
 
     private final Map<QuestionId, Question> questions;
     private final UserAnswerRepository userAnswerRepository;
     private final UserService userService;
-    private final TestEntityRepository testEntityRepository;
-    private final Logger log = LoggerFactory.getLogger(QuizService.class);
+    private final TestEntityService testEntityService;
+    private final PatientProfileService patientProfileService;
+    private final OrientationToPlaceAnswerService orientationToPlaceAnswerService;
 
     @Autowired
     public QuizService(
         QuestionsConfig questionsConfig,
         UserAnswerRepository userAnswerRepository,
-        UserService userService,
-        TestEntityRepository testEntityRepository
+        UserService userService, TestEntityService testEntityService,
+        PatientProfileService patientProfileService,
+        OrientationToPlaceAnswerService orientationToPlaceAnswerService
     ) {
         this.questions = questionsConfig.getQuestions();
         this.userAnswerRepository = userAnswerRepository;
         this.userService = userService;
-        this.testEntityRepository = testEntityRepository;
+        this.testEntityService = testEntityService;
+        this.patientProfileService = patientProfileService;
+        this.orientationToPlaceAnswerService = orientationToPlaceAnswerService;
     }
 
     public Question getQuestion(QuestionId... questionIds) {
@@ -87,11 +99,7 @@ public class QuizService {
         if (user.isEmpty()) {
             throw new RuntimeException("User not found");
         }
-        TestEntity testEntity = testEntityRepository.findFirstByUserIdOrderByCreatedAtDesc(user.get().getId()).orElseGet(() -> {
-            TestEntity t = new TestEntity();
-            t.setUser(user.get());
-            return testEntityRepository.save(t);
-        });
+        TestEntity testEntity = testEntityService.getLast();
         UserAnswer userAnswer = userAnswerRepository
             .findFirstByTestEntityIdAndQuestionIdOrderByCreatedAtDesc(testEntity.getId(), answerDTO.getQuestionId())
             .orElse(new UserAnswer());
@@ -107,4 +115,41 @@ public class QuizService {
             .map(entry -> new OrientationToPlaceQuestionDTO(entry.getKey(), entry.getValue().getQuestionText()))
             .toList();
     }
+
+    public List<OrientationToPlaceQuestionDTO> saveOrientationToPlaceAnswers(Long patientProfileId, List<OrientationToPlaceQuestionDTO> answers) {
+        PatientProfile patientProfile = patientProfileService.findById(patientProfileId)
+            .orElseThrow(() -> new RuntimeException("Patient profile not found"));
+        Set<OrientationToPlaceAnswer> orientationToPlaceAnswers = answers.stream()
+            .map(answer -> {
+                OrientationToPlaceAnswer orientationToPlaceAnswer = orientationToPlaceAnswerService
+                    .findByPatientProfileAndQuestionId(patientProfile, answer.getQuestionId())
+                    .orElse(new OrientationToPlaceAnswer());
+                orientationToPlaceAnswer.setQuestionId(answer.getQuestionId());
+                orientationToPlaceAnswer.setCorrectAnswer(answer.getCorrectAnswer());
+                orientationToPlaceAnswer.setAnswerOptions(answerOptions(answer.getAnswerOptions()));
+                orientationToPlaceAnswer.setPatientProfile(patientProfile);
+                return orientationToPlaceAnswer;
+            })
+            .collect(toSet());
+        testEntityService.createTestEntity(patientProfile);
+        return orientationToPlaceAnswerService.saveAll(orientationToPlaceAnswers)
+            .stream()
+            .map(this::toOrientationToPlaceQuestionDTO)
+            .toList();
+    }
+
+    private OrientationToPlaceQuestionDTO toOrientationToPlaceQuestionDTO(OrientationToPlaceAnswer answer) {
+        return new OrientationToPlaceQuestionDTO(
+            answer.getQuestionId(),
+            questions.get(answer.getQuestionId()).getQuestionText(),
+            answer.getCorrectAnswer(),
+            String.join(",", answer.getAnswerOptions())
+        );
+    }
+
+    private List<String> answerOptions(String answerOptions) {
+        if (answerOptions == null || answerOptions.isBlank()) return List.of();
+        return List.of(answerOptions.split(","));
+    }
+
 }
