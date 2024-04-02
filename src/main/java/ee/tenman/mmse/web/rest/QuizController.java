@@ -10,6 +10,7 @@ import ee.tenman.mmse.service.PatientProfileService;
 import ee.tenman.mmse.service.TestEntityService;
 import ee.tenman.mmse.service.UserAnswerService;
 import ee.tenman.mmse.service.dto.AnswerDTO;
+import ee.tenman.mmse.service.dto.OrientationToPlaceQuestionDTO;
 import ee.tenman.mmse.service.dto.PatientProfileDTO;
 import ee.tenman.mmse.service.dto.PatientProfileRequest;
 import ee.tenman.mmse.service.external.minio.StorageService;
@@ -33,8 +34,8 @@ import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
+import java.util.List;
 import java.util.Map;
-import java.util.NoSuchElementException;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -87,6 +88,11 @@ public class QuizController {
         quizService.saveAnswer(answerDTO);
     }
 
+    @GetMapping("/orientation-to-place-questions")
+    public List<OrientationToPlaceQuestionDTO> getOrientationToPlaceQuestions() {
+        return quizService.getOrientationToPlaceQuestions();
+    }
+
     @PostMapping("/start")
     public PatientProfileDTO startQuiz(@RequestBody PatientProfileRequest patientProfileRequest) {
         Optional<TestEntity> uncompletedTest = testEntityService.findByPatientIdUncompleted(patientProfileRequest.getPatientId());
@@ -102,11 +108,14 @@ public class QuizController {
     @GetMapping("/last-recorded-audio")
     public ResponseEntity<byte[]> getLastRecordedAudio(@RequestParam("questionId") QuestionId questionId) {
         TestEntity testEntity = testEntityService.getLast();
-        MediaRecording mediaRecording = mediaRecordingRepository
-            .findFirstByTestEntityIdAndQuestionIdOrderByCreatedAtDesc(testEntity.getId(), questionId)
-            .orElseThrow(() -> new NoSuchElementException("No media recording found"));
+        Optional<MediaRecording> recording = mediaRecordingRepository
+            .findFirstByTestEntityIdAndQuestionIdOrderByCreatedAtDesc(testEntity.getId(), questionId);
 
-        String fileName = mediaRecording.getFileName();
+        if (recording.isEmpty()) {
+            return ResponseEntity.notFound().build();
+        }
+
+        String fileName = recording.get().getFileName();
         byte[] audioData = storageService.downloadFile(fileName);
 
         HttpHeaders headers = new HttpHeaders();

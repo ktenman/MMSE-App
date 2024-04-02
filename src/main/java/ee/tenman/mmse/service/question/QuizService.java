@@ -8,6 +8,7 @@ import ee.tenman.mmse.repository.TestEntityRepository;
 import ee.tenman.mmse.repository.UserAnswerRepository;
 import ee.tenman.mmse.service.UserService;
 import ee.tenman.mmse.service.dto.AnswerDTO;
+import ee.tenman.mmse.service.dto.OrientationToPlaceQuestionDTO;
 import ee.tenman.mmse.service.lock.Lock;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -100,4 +101,10 @@ public class QuizService {
         return userAnswerRepository.save(userAnswer);
     }
 
+    public List<OrientationToPlaceQuestionDTO> getOrientationToPlaceQuestions() {
+        return questions.entrySet().stream()
+            .filter(entry -> entry.getValue().isOrientationToPlace())
+            .map(entry -> new OrientationToPlaceQuestionDTO(entry.getKey(), entry.getValue().getQuestionText()))
+            .toList();
+    }
 }

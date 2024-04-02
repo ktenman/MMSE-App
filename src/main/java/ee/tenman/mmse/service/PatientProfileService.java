@@ -134,4 +134,5 @@ public class PatientProfileService {
         log.info("Creating new PatientProfile: {}", patientProfile);
         return patientProfileRepository.save(patientProfile);
     }
+
 }

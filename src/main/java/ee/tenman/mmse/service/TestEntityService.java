@@ -35,18 +35,15 @@ public class TestEntityService {
 
     private final UserService userService;
 
-    private final PatientProfileService patientProfileService;
-
     public TestEntityService(
         TestEntityRepository testEntityRepository,
         TestEntityMapper testEntityMapper,
-        UserAnswerRepository userAnswerRepository, UserService userService, PatientProfileService patientProfileService
+        UserAnswerRepository userAnswerRepository, UserService userService
     ) {
         this.testEntityRepository = testEntityRepository;
         this.testEntityMapper = testEntityMapper;
         this.userAnswerRepository = userAnswerRepository;
         this.userService = userService;
-        this.patientProfileService = patientProfileService;
     }
 
     /**

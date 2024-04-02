@@ -1,6 +1,6 @@
 package ee.tenman.mmse.service.dto;
 
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.util.Objects;
 
@@ -8,10 +8,10 @@ public class PatientProfileRequest {
 
     private Long id;
 
-    @NotNull
+    @NotEmpty
     private String patientId;
 
-    @NotNull
+    @NotEmpty
     private String name;
 
     public Long getId() {

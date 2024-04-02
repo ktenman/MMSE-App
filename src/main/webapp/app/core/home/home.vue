@@ -7,12 +7,13 @@
       <h1 class="display-4" v-text="t$('home.title')"></h1>
       <p class="lead" v-text="t$('home.subtitle')"></p>
 
-      <div>
+      <div v-if="authenticated">
         <!-- Show quiz end message when quiz ends -->
-        <div v-if="quizEndMessage">
+        <div v-if="quizState === QuizState.FINISHED">
           <div class="alert alert-info">
             {{ quizEndMessage }}
           </div>
+          <button class="btn btn-primary" @click="retakeQuiz">Retake Quiz</button>
         </div>
 
         <!-- Conditionally show multiple choice or input fields based on question type -->
@@ -21,7 +22,7 @@
           <!-- Replace with your actual loader -->
         </div>
 
-        <div v-if="!question && authenticated">
+        <div v-if="quizState === QuizState.PATIENT_INFO">
           <h2>Start a New Quiz</h2>
           <form @submit.prevent="startQuiz">
             <div class="form-group">
@@ -36,7 +37,25 @@
           </form>
         </div>
 
-        <div v-if="question && authenticated && !loading">
+        <div v-if="quizState === QuizState.ORIENTATION_QUESTIONS">
+          <h2>Orientation to Place Questions</h2>
+          <form @submit.prevent="saveOrientationToPlaceAnswers">
+            <div v-for="(question, index) in orientationToPlaceQuestions" :key="index">
+              <h3>{{ question.questionText }}</h3>
+              <div class="form-group">
+                <label>Correct Answer:</label>
+                <input v-model="question.correctAnswer" class="form-control" required type="text">
+              </div>
+              <div class="form-group">
+                <label>Answer Options (comma-separated):</label>
+                <input v-model="question.answerOptions" class="form-control" required type="text">
+              </div>
+            </div>
+            <button class="btn btn-primary" type="submit">Save Answers</button>
+          </form>
+        </div>
+
+        <div v-if="quizState === QuizState.QUIZ && question && !loading">
           <h2>{{ question.questionText }}</h2>
           <div v-if="question.image" class="image-container">
             <img :src="'data:image/png;base64,' + question.image" alt="Question image" class="question-image" />

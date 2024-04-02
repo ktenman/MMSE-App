@@ -5,7 +5,7 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.NotEmpty;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -14,11 +14,11 @@ import java.util.Set;
 @Table(name = "patient_profile")
 public class PatientProfile extends BaseEntity {
 
-    @NotNull
+    @NotEmpty
     @Column(name = "patient_id", nullable = false)
     private String patientId;
 
-    @NotNull
+    @NotEmpty
     @Column(name = "name", nullable = false)
     private String name;
 

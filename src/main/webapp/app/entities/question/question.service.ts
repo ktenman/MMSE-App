@@ -45,4 +45,9 @@ export default class QuestionService {
     return axios.post<IPatientProfile>('/api/start', patientProfile).then(res => res.data);
   }
 
+  public getOrientationToPlaceQuestions(): Promise<OrientationToPlaceQuestionDTO[]> {
+    return axios.get<OrientationToPlaceQuestionDTO[]>('/api/orientation-to-place-questions')
+      .then(res => res.data);
+  }
+
 }

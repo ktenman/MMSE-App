@@ -7,11 +7,16 @@ import { Answer, IAnswer } from '@/shared/model/answer.model';
 import { QuestionId } from '@/shared/model/enumerations/question-id.model';
 import { QuestionType } from '@/shared/model/enumerations/question-type.model';
 import { IPatientProfile, PatientProfile } from '@/shared/model/patient-profile.model';
+import { IOrientationToPlaceQuestion } from '@/shared/model/orientation-to-place-question.model';
+import { QuizState } from '@/shared/model/enumerations/quiz-state.mode';
 
 export default defineComponent({
   computed: {
     QuestionType() {
       return QuestionType;
+    },
+    QuizState() {
+      return QuizState;
     }
   },
   compatConfig: { MODE: 3 },
@@ -38,7 +43,10 @@ export default defineComponent({
       isPaperFolded,
       isPaperOnFloor,
       noAnimation,
-      patientProfile
+      patientProfile,
+      orientationToPlaceQuestions,
+      orientationToPlaceAnswersSaved,
+      quizState
     ] = [
       inject<LoginService>('loginService'),
       inject<ComputedRef<boolean>>('authenticated'),
@@ -61,10 +69,47 @@ export default defineComponent({
       ref(false),
       ref(false),
       ref(false),
-      ref(<IPatientProfile>new PatientProfile())
+      ref(<IPatientProfile>new PatientProfile()),
+      ref<IOrientationToPlaceQuestion[]>([]),
+      ref(false),
+      ref(QuizState.PATIENT_INFO)
     ];
 
     const questionService = new QuestionService();
+
+    const loadOrientationToPlaceQuestions = async () => {
+      try {
+        orientationToPlaceQuestions.value = await questionService.getOrientationToPlaceQuestions();
+      } catch (error) {
+        console.error('Error loading orientation to place questions:', error);
+      }
+    };
+
+    const retakeQuiz = () => {
+      quizState.value = QuizState.PATIENT_INFO;
+      patientProfile.value = new PatientProfile();
+      question.value = null;
+      selectedAnswer.value = null;
+      selectedAnswers.value = [];
+      quizEndMessage.value = null;
+      isPaperFolded.value = false;
+      isPaperOnFloor.value = false;
+      isPaperPickedUp.value = false;
+      saveQuizProgress();
+    };
+
+    const saveOrientationToPlaceAnswers = async () => {
+      try {
+        // Implement the logic to save the answers using the `orientationToPlaceAnswerService`
+        // You can access the answers from `orientationToPlaceQuestions.value`
+        // ...
+        console.log('Orientation to place answers saved successfully');
+        quizState.value = QuizState.QUIZ;
+        await loadQuestion();
+      } catch (error) {
+        console.error('Error saving orientation to place answers:', error);
+      }
+    };
 
     const startQuiz = async () => {
       try {
@@ -72,7 +117,8 @@ export default defineComponent({
         patientProfile.value = response;
         if (patientProfile.value.id) {
           quizEndMessage.value = null; // clear end message
-          await loadQuestion();
+          await loadOrientationToPlaceQuestions();
+          quizState.value = QuizState.ORIENTATION_QUESTIONS;
         }
       } catch (error) {
         console.error('Error starting quiz:', error);
@@ -194,7 +240,15 @@ export default defineComponent({
 
         try {
           await questionService.submitAnswer(answer);
+          if (question.value.questionType === QuestionType.DRAG_AND_DROP) {
+            isPaperFolded.value = false;
+            isPaperOnFloor.value = false;
+            isPaperPickedUp.value = false;
+          }
           await loadQuestion(); // Load the next question after submitting the answer
+          if (quizEndMessage.value) {
+            quizState.value = QuizState.FINISHED;
+          }
         } catch (error) {
           console.error('Error submitting answer:', error);
           // Optionally set an error message to display to the user
@@ -248,11 +302,15 @@ export default defineComponent({
 
     const saveQuizProgress = () => {
       const quizProgress = {
+        quizState: quizState.value,
         patientProfile: patientProfile.value,
         question: question.value,
         selectedAnswer: selectedAnswer.value,
-        selectedAnswers: selectedAnswers.value
-        // Save other relevant data as needed
+        selectedAnswers: selectedAnswers.value,
+        isPaperFolded: isPaperFolded.value,
+        isPaperOnFloor: isPaperOnFloor.value,
+        isPaperPickedUp: isPaperPickedUp.value,
+        quizEndMessage: quizEndMessage.value
       };
       localStorage.setItem('quizProgress', JSON.stringify(quizProgress));
     };
@@ -261,11 +319,15 @@ export default defineComponent({
       const savedProgress = localStorage.getItem('quizProgress');
       if (savedProgress) {
         const quizProgress = JSON.parse(savedProgress);
+        quizState.value = quizProgress.quizState;
         patientProfile.value = quizProgress.patientProfile;
         question.value = quizProgress.question;
         selectedAnswer.value = quizProgress.selectedAnswer;
         selectedAnswers.value = quizProgress.selectedAnswers;
-        // Load other relevant data as needed
+        isPaperFolded.value = quizProgress.isPaperFolded;
+        isPaperOnFloor.value = quizProgress.isPaperOnFloor;
+        isPaperPickedUp.value = quizProgress.isPaperPickedUp;
+        quizEndMessage.value = quizProgress.quizEndMessage;
       }
     };
 
@@ -278,8 +340,12 @@ export default defineComponent({
 
       onMounted(async () => {
         loadQuizProgress();
-        if (authenticated.value && patientProfile.value.id) {
-          await loadQuestion();
+        if (authenticated.value) {
+          if (quizState.value === QuizState.QUIZ) {
+            await loadQuestion();
+          } else if (quizState.value === QuizState.ORIENTATION_QUESTIONS) {
+            await loadOrientationToPlaceQuestions();
+          }
         }
       });
     })();
@@ -316,7 +382,12 @@ export default defineComponent({
       startDragging,
       noAnimation,
       patientProfile,
-      startQuiz
+      startQuiz,
+      orientationToPlaceQuestions,
+      saveOrientationToPlaceAnswers,
+      orientationToPlaceAnswersSaved,
+      quizState,
+      retakeQuiz
     };
   }
 });
