@@ -125,6 +125,7 @@ public class QuizService {
     public List<OrientationToPlaceQuestionDTO> getOrientationToPlaceQuestions() {
         return questions.entrySet().stream()
             .filter(entry -> entry.getValue().isOrientationToPlace())
+            .sorted(Comparator.comparing(entry -> entry.getKey().ordinal()))
             .map(entry -> new OrientationToPlaceQuestionDTO(entry.getKey(), entry.getValue().getQuestionText()))
             .toList();
     }
@@ -186,8 +187,8 @@ public class QuizService {
                 throw new IllegalArgumentException("Answer options are required for question: " + answer.getQuestionId());
             }
             List<String> answerOptions = answerOptions(answer.getAnswerOptions());
-            if (answerOptions.size() >= 3) {
-                throw new IllegalArgumentException("Answer options should be at least 3 for question: " + answer.getQuestionId());
+            if (answerOptions.size() < 3) {
+                throw new IllegalArgumentException("At least 3 answer options are required for question: " + answer.getQuestionId());
             }
             if (answerOptions.stream().anyMatch(StringUtils::isBlank)) {
                 throw new IllegalArgumentException("Answer options should not be empty for question: " + answer.getQuestionId());
@@ -195,7 +196,7 @@ public class QuizService {
             if (answerOptions.stream().anyMatch(option -> option.length() > 50)) {
                 throw new IllegalArgumentException("Answer options should not be longer than 50 characters for question: " + answer.getQuestionId());
             }
-            if (answerOptions.stream().filter(a -> a.equalsIgnoreCase(answer.getCorrectAnswer())).count() != 1) {
+            if (!answer.getAnswerOptions().toLowerCase().contains(answer.getCorrectAnswer().toLowerCase())) {
                 throw new IllegalArgumentException("Correct answer should be one of the answer options for question: " + answer.getQuestionId());
             }
         }
@@ -214,6 +215,10 @@ public class QuizService {
         if (answerOptions == null || answerOptions.isBlank()) return List.of();
         answerOptions = answerOptions.replace(".", "");
         return List.of(answerOptions.split(","));
+//        return Stream.of(answerOptions.split(","))
+//            .filter(StringUtils::isNotBlank)
+//            .map(str -> str.replaceAll("^\\s+|\\s+$", ""))
+//            .toList();
     }
 
     @Transactional(readOnly = true)

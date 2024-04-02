@@ -83,6 +83,7 @@ export default defineComponent({
     const loadOrientationToPlaceQuestions = async () => {
       try {
         if (patientProfile.value.id && patientProfile.value.id > 0) {
+          console.log('Loading orientation to place questions for patient profile:', patientProfile.value);
           orientationToPlaceQuestions.value = await questionService.getOrientationToPlaceQuestionsByPatientProfileId(
             patientProfile.value.id
           );
@@ -150,16 +151,12 @@ export default defineComponent({
       try {
         const response = await questionService.startQuiz(patientProfile.value);
         patientProfile.value = response;
-        if (patientProfile.value.id) {
-          quizEndMessage.value = null; // clear end message
-          await loadOrientationToPlaceQuestions();
+        loadOrientationToPlaceQuestions().then(response => {
           quizState.value = QuizState.ORIENTATION_QUESTIONS;
-        }
+          saveQuizProgress();
+        });
       } catch (error) {
         console.error('Error starting quiz:', error);
-        // Handle error
-      } finally {
-        saveQuizProgress();
       }
     };
 
@@ -382,13 +379,10 @@ export default defineComponent({
 
       onMounted(async () => {
         loadQuizProgress();
-        if (authenticated.value) {
-          if (quizState.value === QuizState.QUIZ) {
-            await loadQuestion();
-          } else if (quizState.value === QuizState.ORIENTATION_QUESTIONS || quizState.value === QuizState.ORIENTATION_ANSWERS) {
-            await loadOrientationToPlaceQuestions();
-          }
+        if (authenticated.value && quizState.value === QuizState.QUIZ) {
+          await loadQuestion();
         }
+        await loadOrientationToPlaceQuestions();
       });
     })();
 

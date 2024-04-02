@@ -68,7 +68,8 @@ public class Question21 implements Question {
             .stream()
             .filter(answer -> answer.getQuestionId().equals(QUESTION_ID))
             .findFirst()
-            .filter(answer -> answer.getCorrectAnswer().equalsIgnoreCase(userAnswer.getAnswerText()));
+            .filter(answer -> userAnswer.getAnswerText().toLowerCase()
+                .contains(answer.getCorrectAnswer().toLowerCase()));
         return correctAnswer.isPresent() ? 1 : 0;
     }
 

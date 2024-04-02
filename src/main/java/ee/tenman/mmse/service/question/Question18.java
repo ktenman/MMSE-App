@@ -19,7 +19,7 @@ import java.util.Optional;
 @Component
 public class Question18 implements Question {
 
-    private static final String QUESTION = "What county are you in?";
+    private static final String QUESTION = "What floor of the building are you on?";
     private static final String QUESTION_TEXT = "18. " + QUESTION;
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_18;
 
@@ -68,7 +68,8 @@ public class Question18 implements Question {
             .stream()
             .filter(answer -> answer.getQuestionId().equals(QUESTION_ID))
             .findFirst()
-            .filter(answer -> answer.getCorrectAnswer().equalsIgnoreCase(userAnswer.getAnswerText()));
+            .filter(answer -> userAnswer.getAnswerText().toLowerCase()
+                .contains(answer.getCorrectAnswer().toLowerCase()));
         return correctAnswer.isPresent() ? 1 : 0;
     }
 
@@ -83,6 +84,6 @@ public class Question18 implements Question {
             "options to this question. Separate these by commas, and only give me answers, nothing else. These should " +
             "be one to two-word options, and one of the answers should be '%s'. However, these options shouldn't be " +
             "similar; they should be quite different because it's part of a mini-mental examination. Don't give me any " +
-            "examples or an explanation. These options should belong to the same country or region", input, input);
+            "examples or an explanation.", input, input);
     }
 }
