@@ -2,6 +2,7 @@ package ee.tenman.mmse.repository;
 
 import ee.tenman.mmse.domain.PatientProfile;
 import ee.tenman.mmse.domain.TestEntity;
+import org.springframework.data.jpa.repository.EntityGraph;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
@@ -21,4 +22,7 @@ public interface PatientProfileRepository extends JpaRepository<PatientProfile, 
     Optional<PatientProfile> findByPatientIdAndName(@Param("patientId") String patientId, @Param("name") String name);
 
     Optional<PatientProfile> findByPatientId(String patientId);
+
+    @EntityGraph(attributePaths = {"orientationToPlaceAnswers"}, type = EntityGraph.EntityGraphType.LOAD)
+    Optional<PatientProfile> findById(Long id);
 }

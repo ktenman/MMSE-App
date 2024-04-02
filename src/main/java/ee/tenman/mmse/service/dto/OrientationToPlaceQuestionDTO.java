@@ -4,6 +4,8 @@ import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
 
+import java.util.Objects;
+
 public class OrientationToPlaceQuestionDTO {
     private QuestionId questionId;
     private String questionText;
@@ -58,5 +60,18 @@ public class OrientationToPlaceQuestionDTO {
 
     public void setAnswerOptions(String answerOptions) {
         this.answerOptions = answerOptions;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        OrientationToPlaceQuestionDTO that = (OrientationToPlaceQuestionDTO) o;
+        return questionId == that.questionId;
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(questionId);
     }
 }

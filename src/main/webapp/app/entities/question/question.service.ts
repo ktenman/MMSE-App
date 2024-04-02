@@ -51,6 +51,11 @@ export default class QuestionService {
       .then(res => res.data);
   }
 
+  public getOrientationToPlaceQuestionsByPatientProfileId(patientProfileId: number): Promise<IOrientationToPlaceQuestion[]> {
+    return axios.get<IOrientationToPlaceQuestion[]>(`/api/orientation-to-place-questions/${patientProfileId}`)
+      .then(res => res.data);
+  }
+
   public async saveOrientationToPlaceAnswers(patientProfileId: number, answers: IOrientationToPlaceQuestion[]): Promise<void> {
     try {
       await axios.post(`/api/save-orientation-to-place-answers/${patientProfileId}`, answers);

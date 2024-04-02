@@ -14,16 +14,20 @@ import ee.tenman.mmse.service.UserService;
 import ee.tenman.mmse.service.dto.AnswerDTO;
 import ee.tenman.mmse.service.dto.OrientationToPlaceQuestionDTO;
 import ee.tenman.mmse.service.lock.Lock;
+import jakarta.persistence.EntityNotFoundException;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.function.Function;
+import java.util.stream.Collectors;
 
 import static java.util.stream.Collectors.toSet;
 
@@ -152,4 +156,25 @@ public class QuizService {
         return List.of(answerOptions.split(","));
     }
 
+    @Transactional(readOnly = true)
+    public List<OrientationToPlaceQuestionDTO> getOrientationToPlaceQuestions(Long patientProfileId) {
+        PatientProfile patientProfile = patientProfileService.findById(patientProfileId)
+            .orElseThrow(() -> new EntityNotFoundException("Patient profile not found with ID: " + patientProfileId));
+
+        List<OrientationToPlaceQuestionDTO> allQuestionsDTO = getOrientationToPlaceQuestions();
+
+        Map<QuestionId, OrientationToPlaceQuestionDTO> answeredQuestionsMap = patientProfile.getOrientationToPlaceAnswers().stream()
+            .map(this::toOrientationToPlaceQuestionDTO)
+            .collect(Collectors.toMap(OrientationToPlaceQuestionDTO::getQuestionId, Function.identity()));
+
+        allQuestionsDTO.forEach(questionDTO -> {
+            OrientationToPlaceQuestionDTO answeredQuestion = answeredQuestionsMap.get(questionDTO.getQuestionId());
+            if (answeredQuestion != null) {
+                questionDTO.setCorrectAnswer(answeredQuestion.getCorrectAnswer());
+                questionDTO.setAnswerOptions(answeredQuestion.getAnswerOptions());
+            }
+        });
+
+        return allQuestionsDTO;
+    }
 }

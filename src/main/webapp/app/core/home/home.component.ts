@@ -45,7 +45,6 @@ export default defineComponent({
       noAnimation,
       patientProfile,
       orientationToPlaceQuestions,
-      orientationToPlaceAnswersSaved,
       quizState
     ] = [
       inject<LoginService>('loginService'),
@@ -71,7 +70,6 @@ export default defineComponent({
       ref(false),
       ref(<IPatientProfile>new PatientProfile()),
       ref<IOrientationToPlaceQuestion[]>([]),
-      ref(false),
       ref(QuizState.PATIENT_INFO)
     ];
 
@@ -79,7 +77,12 @@ export default defineComponent({
 
     const loadOrientationToPlaceQuestions = async () => {
       try {
-        orientationToPlaceQuestions.value = await questionService.getOrientationToPlaceQuestions();
+        if (patientProfile.value.id && patientProfile.value.id > 0) {
+          console.log('Loading orientation to place questions for patient profile:', patientProfile.value.id);
+          orientationToPlaceQuestions.value = await questionService.getOrientationToPlaceQuestionsByPatientProfileId(patientProfile.value.id);
+        } else {
+          orientationToPlaceQuestions.value = await questionService.getOrientationToPlaceQuestions();
+        }
       } catch (error) {
         console.error('Error loading orientation to place questions:', error);
       }
@@ -390,7 +393,6 @@ export default defineComponent({
       startQuiz,
       orientationToPlaceQuestions,
       saveOrientationToPlaceAnswers,
-      orientationToPlaceAnswersSaved,
       quizState,
       retakeQuiz
     };

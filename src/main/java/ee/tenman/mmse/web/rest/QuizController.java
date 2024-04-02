@@ -94,6 +94,11 @@ public class QuizController {
         return quizService.getOrientationToPlaceQuestions();
     }
 
+    @GetMapping("/orientation-to-place-questions/{patientProfileId}")
+    public List<OrientationToPlaceQuestionDTO> getOrientationToPlaceQuestionsByPatientProfileId(@PathVariable Long patientProfileId) {
+        return quizService.getOrientationToPlaceQuestions(patientProfileId);
+    }
+
     @PostMapping("/start")
     public PatientProfileDTO startQuiz(@RequestBody PatientProfileRequest patientProfileRequest) {
         Optional<TestEntity> uncompletedTest = testEntityService.findByPatientIdUncompleted(patientProfileRequest.getPatientId());
