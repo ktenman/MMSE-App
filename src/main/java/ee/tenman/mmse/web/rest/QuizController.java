@@ -87,11 +87,6 @@ public class QuizController {
         quizService.saveAnswer(answerDTO);
     }
 
-    @PostMapping("/retake")
-    public Question retakeTest() {
-        return quizService.retakeTest();
-    }
-
     @PostMapping("/start")
     public PatientProfileDTO startQuiz(@RequestBody PatientProfileRequest patientProfileRequest) {
         Optional<TestEntity> uncompletedTest = testEntityService.findByPatientIdUncompleted(patientProfileRequest.getPatientId());

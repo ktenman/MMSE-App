@@ -100,15 +100,4 @@ public class QuizService {
         return userAnswerRepository.save(userAnswer);
     }
 
-    public Question retakeTest() {
-        Optional<User> user = userService.findUserWithAuthorities();
-        if (user.isEmpty()) {
-            throw new RuntimeException("User not found");
-        }
-        TestEntity testEntity = new TestEntity();
-        testEntity.setUser(user.get());
-        testEntityRepository.save(testEntity);
-        return getQuestion();
-    }
-
 }

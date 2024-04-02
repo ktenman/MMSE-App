@@ -42,7 +42,6 @@
             <img :src="'data:image/png;base64,' + question.image" alt="Question image" class="question-image" />
           </div>
 
-          <!-- Render this div if question type is multiple choice -->
           <div v-if="question.questionType === QuestionType.MULTIPLE_CHOICE">
             <div class="row">
               <div class="col-md-6" v-for="(option, index) in question.answerOptions" :key="index">
@@ -58,7 +57,6 @@
             </div>
           </div>
 
-          <!-- Render this div if question type is subtraction task -->
           <div v-if="question.questionType === QuestionType.SUBTRACTION_TASK">
             <div class="row">
               <div class="col-md-6" v-for="(option, index) in question.answerOptions" :key="index">
