@@ -25,4 +25,8 @@ public class DolphinQuestionService {
         return dolphinQuestionRepository.save(dolphinQuestion);
     }
 
+    public Optional<DolphinQuestion> findByQuestion(String question) {
+        return dolphinQuestionRepository.findByQuestion(question);
+    }
+
 }

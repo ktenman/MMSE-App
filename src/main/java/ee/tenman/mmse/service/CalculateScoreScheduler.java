@@ -29,7 +29,7 @@ public class CalculateScoreScheduler {
         this.userAnswerRepository = userAnswerRepository;
     }
 
-    @Scheduled(fixedDelay = 5000)
+    @Scheduled(fixedDelay = 10_000)
     @Lock(key = "'calculateUnscored'", retry = false)
     public void calculateUnscored() {
         List<UserAnswer> answers;

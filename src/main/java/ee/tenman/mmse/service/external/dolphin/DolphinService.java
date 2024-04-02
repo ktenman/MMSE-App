@@ -40,7 +40,8 @@ public class DolphinService {
 
         response.ifPresent(r -> {
             log.info("Dolphin Response: {}", r.toLowerCase());
-            DolphinQuestion dolphinQuestion = new DolphinQuestion();
+            DolphinQuestion dolphinQuestion = dolphinQuestionService.findByQuestion(prompt)
+                .orElse(new DolphinQuestion());
             dolphinQuestion.setQuestion(prompt);
             dolphinQuestion.setAnswer(r);
             DolphinQuestion savedDolphinQuestion = dolphinQuestionService.save(dolphinQuestion);
