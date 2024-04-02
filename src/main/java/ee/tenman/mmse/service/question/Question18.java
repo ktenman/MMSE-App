@@ -10,6 +10,7 @@ import ee.tenman.mmse.service.OrientationToPlaceAnswerService;
 import ee.tenman.mmse.service.PatientProfileService;
 import ee.tenman.mmse.service.TestEntityService;
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.Collections;
@@ -68,8 +69,7 @@ public class Question18 implements Question {
             .stream()
             .filter(answer -> answer.getQuestionId().equals(QUESTION_ID))
             .findFirst()
-            .filter(answer -> userAnswer.getAnswerText().toLowerCase()
-                .contains(answer.getCorrectAnswer().toLowerCase()));
+            .filter(answer -> StringUtils.containsIgnoreCase(userAnswer.getAnswerText(), answer.getCorrectAnswer()));
         return correctAnswer.isPresent() ? 1 : 0;
     }
 

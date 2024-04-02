@@ -89,7 +89,7 @@ class Question9Test {
 
     @Test
     void testGetAnswerOptions() {
-        List<InputField> answerOptions = question9.getAnswerOptions();
+        List<InputField> answerOptions = question9.getAnswerOptions(null);
 
         assertThat(answerOptions).hasSize(5)
             .allSatisfy(inputField -> {

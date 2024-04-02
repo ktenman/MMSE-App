@@ -68,7 +68,7 @@ class Question3Test {
         Mockito.when(clock.instant()).thenReturn(Instant.parse("2023-07-25T00:00:00Z"));
         Mockito.when(clock.getZone()).thenReturn(ZoneId.systemDefault());
 
-        List<String> answerOptions = question3.getAnswerOptions();
+        List<String> answerOptions = question3.getAnswerOptions(null);
 
         assertThat(answerOptions).hasSize(4);
     }
@@ -78,7 +78,7 @@ class Question3Test {
         Mockito.when(clock.instant()).thenReturn(Instant.parse("2023-07-25T00:00:00Z"));
         Mockito.when(clock.getZone()).thenReturn(ZoneId.systemDefault());
 
-        List<String> answerOptions = question3.getAnswerOptions();
+        List<String> answerOptions = question3.getAnswerOptions(null);
 
         assertThat(answerOptions).containsExactlyInAnyOrder("JULY", "AUGUST", "SEPTEMBER", "OCTOBER");
     }
@@ -88,11 +88,11 @@ class Question3Test {
         Mockito.when(clock.instant()).thenReturn(Instant.parse("2023-07-25T00:00:00Z"));
         Mockito.when(clock.getZone()).thenReturn(ZoneId.systemDefault());
 
-        List<String> previousOrder = question3.getAnswerOptions();
+        List<String> previousOrder = question3.getAnswerOptions(null);
         boolean isDifferent = false;
 
         for (int i = 0; i < 100; i++) {
-            List<String> currentOrder = question3.getAnswerOptions();
+            List<String> currentOrder = question3.getAnswerOptions(null);
             if (!currentOrder.equals(previousOrder)) {
                 isDifferent = true;
                 break;

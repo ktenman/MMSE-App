@@ -75,7 +75,7 @@ class Question4Test {
         when(clock.instant()).thenReturn(Instant.parse("2023-07-25T00:00:00Z"));
         when(clock.getZone()).thenReturn(ZoneId.systemDefault());
 
-        List<String> answerOptions = question4.getAnswerOptions();
+        List<String> answerOptions = question4.getAnswerOptions(null);
 
         assertThat(answerOptions).hasSize(4);
     }
@@ -85,7 +85,7 @@ class Question4Test {
         when(clock.instant()).thenReturn(Instant.parse("2023-07-25T00:00:00Z"));
         when(clock.getZone()).thenReturn(ZoneId.systemDefault());
 
-        List<String> answerOptions = question4.getAnswerOptions();
+        List<String> answerOptions = question4.getAnswerOptions(null);
 
         assertThat(answerOptions).containsExactlyInAnyOrder("2022", "2023", "2024", "2025");
     }
@@ -98,7 +98,7 @@ class Question4Test {
         Set<List<String>> distinctOrders = new HashSet<>();
 
         for (int i = 0; i < 50; i++) {
-            distinctOrders.add(question4.getAnswerOptions());
+            distinctOrders.add(question4.getAnswerOptions(null));
         }
 
         assertThat(distinctOrders).hasSizeGreaterThan(1);

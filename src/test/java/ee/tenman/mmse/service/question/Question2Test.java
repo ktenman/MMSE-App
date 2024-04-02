@@ -68,7 +68,7 @@ class Question2Test {
             .toInstant(UTC));
         when(clock.getZone()).thenReturn(UTC);
 
-        List<String> answerOptions = question2.getAnswerOptions();
+        List<String> answerOptions = question2.getAnswerOptions(null);
         assertThat(answerOptions).hasSize(4).contains("1st January 2023");
     }
 

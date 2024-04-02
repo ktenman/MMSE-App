@@ -88,7 +88,7 @@ class Question5Test {
     @Test
     void testGetAnswerOptions() {
         Set<String> expectedSeasons = new HashSet<>(Arrays.asList("SPRING", "SUMMER", "AUTUMN", "WINTER"));
-        List<String> answerOptions = question5.getAnswerOptions();
+        List<String> answerOptions = question5.getAnswerOptions(null);
         Set<String> actualSeasons = new HashSet<>(answerOptions);
         assertThat(actualSeasons).isEqualTo(expectedSeasons);
     }

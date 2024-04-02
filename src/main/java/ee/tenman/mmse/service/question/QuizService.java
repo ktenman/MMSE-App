@@ -209,7 +209,7 @@ public class QuizService {
             if (answerOptions.stream().anyMatch(option -> option.length() > 50)) {
                 throw new IllegalArgumentException("Answer options should not be longer than 50 characters for question: " + answer.getQuestionId());
             }
-            if (!answer.getAnswerOptions().toLowerCase().contains(answer.getCorrectAnswer().toLowerCase())) {
+            if (!StringUtils.containsIgnoreCase(answer.getAnswerOptions(), answer.getCorrectAnswer())) {
                 throw new IllegalArgumentException("Correct answer should be one of the answer options for question: " + answer.getQuestionId());
             }
         }

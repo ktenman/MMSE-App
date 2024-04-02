@@ -60,7 +60,7 @@ class Question15Test {
 
     @Test
     void testGetAnswerOptionsSize() {
-        List<String> answerOptions = question15.getAnswerOptions();
+        List<String> answerOptions = question15.getAnswerOptions(null);
         assertThat(answerOptions).hasSize(4);
     }
 
@@ -68,14 +68,14 @@ class Question15Test {
     void testGetAnswerOptionsContainsCorrectDay() {
         String currentDayOfWeek = ZonedDateTime.now(ZoneId.systemDefault()).getDayOfWeek().name();
 
-        List<String> answerOptions = question15.getAnswerOptions();
+        List<String> answerOptions = question15.getAnswerOptions(null);
 
         assertThat(answerOptions).contains(currentDayOfWeek);
     }
 
     @Test
     void testGetAnswerOptionsNoDuplicates() {
-        List<String> answerOptions = question15.getAnswerOptions();
+        List<String> answerOptions = question15.getAnswerOptions(null);
         assertThat(answerOptions.stream().distinct().count()).isEqualTo(answerOptions.size());
     }
 }

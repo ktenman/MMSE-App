@@ -57,6 +57,6 @@ class Question6Test {
             AnswerOption.MAN,
             AnswerOption.TREE);
 
-        assertThat(question6.getAnswerOptions()).containsExactlyInAnyOrderElementsOf(expectedAnswerOptions);
+        assertThat(question6.getAnswerOptions(null)).containsExactlyInAnyOrderElementsOf(expectedAnswerOptions);
     }
 }

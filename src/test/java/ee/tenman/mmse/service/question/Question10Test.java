@@ -30,7 +30,9 @@ class Question10Test {
         "car ball man, 3",
         "man dog ball, 2",
         "dog cat bird, 0",
-        "MaN cAr bALL, 3"
+        "MaN cAr bALL, 3",
+        "MaNcArbALL, 3",
+        "MaN;cAr;bALL, 3",
     })
     void testGetScore(String answerText, int expectedScore) {
         userAnswer.setAnswerText(answerText);
@@ -55,6 +57,6 @@ class Question10Test {
 
     @Test
     void testGetAnswerOptions() {
-        assertThat(question10.getAnswerOptions()).isEqualTo(Collections.emptyList());
+        assertThat(question10.getAnswerOptions(null)).isEqualTo(Collections.emptyList());
     }
 }
