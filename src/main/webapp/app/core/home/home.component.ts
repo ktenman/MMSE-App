@@ -11,7 +11,7 @@ import { IOrientationToPlaceQuestion } from '@/shared/model/orientation-to-place
 import { QuizState } from '@/shared/model/enumerations/quiz-state.mode';
 import { ITestEntity, TestEntity } from '@/shared/model/test-entity.model';
 
-const QUIZ_PROGRESS: string = 'quizProgress';
+const QUIZ_PROGRESS = 'quizProgress';
 
 export default defineComponent({
   computed: {
