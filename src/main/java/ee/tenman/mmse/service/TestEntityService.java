@@ -142,16 +142,8 @@ public class TestEntityService {
 
     public TestEntity getLast() {
         User user = userService.getUserWithAuthorities();
-        return testEntityRepository.findFirstByUserIdOrderByCreatedAtDesc(user.getId()).orElseGet(() -> {
-            PatientProfile patientProfile = new PatientProfile();
-            patientProfile.setPatientId("123");
-            patientProfile.setName("John Doe");
-            PatientProfile savePatientProfile = patientProfileService.save(patientProfile);
-            TestEntity t = new TestEntity();
-            t.setUser(user);
-            t.setPatientProfile(savePatientProfile);
-            return testEntityRepository.save(t);
-        });
+        return testEntityRepository.findFirstByUserIdOrderByCreatedAtDesc(user.getId())
+            .orElseThrow(() -> new IllegalStateException(String.format("No test entity found for user %s", user.getLogin())));
     }
 
     public void save(TestEntity testEntity) {
@@ -160,5 +152,20 @@ public class TestEntityService {
 
     public TestEntity getByUserAnswer(UserAnswer userAnswer) {
         return testEntityRepository.findByUserAnswersContains(userAnswer);
+    }
+
+    public Optional<TestEntity> findByPatientIdUncompleted(String patientId) {
+        if (patientId == null) {
+            return Optional.empty();
+        }
+        return testEntityRepository.findByPatientProfileIdAndScoreIsNull(patientId);
+    }
+
+    public void createTestEntity(PatientProfile patientProfile) {
+        User user = userService.getUserWithAuthorities();
+        TestEntity testEntity = new TestEntity();
+        testEntity.setUser(user);
+        testEntity.setPatientProfile(patientProfile);
+        testEntityRepository.save(testEntity);
     }
 }

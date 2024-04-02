@@ -1,14 +1,19 @@
 package ee.tenman.mmse.web.rest;
 
 import ee.tenman.mmse.domain.MediaRecording;
+import ee.tenman.mmse.domain.PatientProfile;
 import ee.tenman.mmse.domain.TestEntity;
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
 import ee.tenman.mmse.repository.MediaRecordingRepository;
+import ee.tenman.mmse.service.PatientProfileService;
 import ee.tenman.mmse.service.TestEntityService;
 import ee.tenman.mmse.service.UserAnswerService;
 import ee.tenman.mmse.service.dto.AnswerDTO;
+import ee.tenman.mmse.service.dto.PatientProfileDTO;
+import ee.tenman.mmse.service.dto.PatientProfileRequest;
 import ee.tenman.mmse.service.external.minio.StorageService;
+import ee.tenman.mmse.service.mapper.PatientProfileMapper;
 import ee.tenman.mmse.service.question.Question;
 import ee.tenman.mmse.service.question.QuizResult;
 import ee.tenman.mmse.service.question.QuizService;
@@ -42,14 +47,18 @@ public class QuizController {
     private final TestEntityService testEntityService;
     private final StorageService storageService;
     private final MediaRecordingRepository mediaRecordingRepository;
+    private final PatientProfileService patientProfileService;
+    private final PatientProfileMapper patientProfileMapper;
 
     @Autowired
-    public QuizController(QuizService quizService, UserAnswerService userAnswerService, TestEntityService testEntityService, StorageService storageService, MediaRecordingRepository mediaRecordingRepository) {
+    public QuizController(QuizService quizService, UserAnswerService userAnswerService, TestEntityService testEntityService, StorageService storageService, MediaRecordingRepository mediaRecordingRepository, PatientProfileService patientProfileService, PatientProfileMapper patientProfileMapper) {
         this.quizService = quizService;
         this.userAnswerService = userAnswerService;
         this.testEntityService = testEntityService;
         this.storageService = storageService;
         this.mediaRecordingRepository = mediaRecordingRepository;
+        this.patientProfileService = patientProfileService;
+        this.patientProfileMapper = patientProfileMapper;
     }
 
     @GetMapping("/question")
@@ -81,6 +90,18 @@ public class QuizController {
     @PostMapping("/retake")
     public Question retakeTest() {
         return quizService.retakeTest();
+    }
+
+    @PostMapping("/start")
+    public PatientProfileDTO startQuiz(@RequestBody PatientProfileRequest patientProfileRequest) {
+        Optional<TestEntity> uncompletedTest = testEntityService.findByPatientIdUncompleted(patientProfileRequest.getPatientId());
+        if (uncompletedTest.isPresent()) {
+            PatientProfile existingPatientProfile = uncompletedTest.get().getPatientProfile();
+            return patientProfileMapper.toDto(existingPatientProfile);
+        }
+        PatientProfile patientProfile = patientProfileService.createPatientProfile(patientProfileRequest);
+        testEntityService.createTestEntity(patientProfile);
+        return patientProfileMapper.toDto(patientProfile);
     }
 
     @GetMapping("/last-recorded-audio")

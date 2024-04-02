@@ -6,6 +6,7 @@ import QuestionService from '@/entities/question/question.service';
 import { Answer, IAnswer } from '@/shared/model/answer.model';
 import { QuestionId } from '@/shared/model/enumerations/question-id.model';
 import { QuestionType } from '@/shared/model/enumerations/question-type.model';
+import { IPatientProfile, PatientProfile } from '@/shared/model/patient-profile.model';
 
 export default defineComponent({
   computed: {
@@ -36,7 +37,8 @@ export default defineComponent({
       isPaperPickedUp,
       isPaperFolded,
       isPaperOnFloor,
-      noAnimation
+      noAnimation,
+      patientProfile
     ] = [
       inject<LoginService>('loginService'),
       inject<ComputedRef<boolean>>('authenticated'),
@@ -58,10 +60,26 @@ export default defineComponent({
       ref(false),
       ref(false),
       ref(false),
-      ref(false)
+      ref(false),
+      ref(<IPatientProfile>new PatientProfile())
     ];
 
     const questionService = new QuestionService();
+
+    const startQuiz = async () => {
+      try {
+        const response = await questionService.startQuiz(patientProfile.value);
+        patientProfile.value = response;
+        if (patientProfile.value.id) {
+          quizEndMessage.value = null; // clear end message
+          await loadQuestion();
+        }
+      } catch (error) {
+        console.error('Error starting quiz:', error);
+        // Handle error
+      }
+      saveQuizProgress();
+    };
 
     const openLogin = () => loginService.openLogin();
 
@@ -187,36 +205,24 @@ export default defineComponent({
         // If there's no question, stop loading
         loading.value = false;
       }
-    };
-
-    const retakeTest = async () => {
-      isPaperPickedUp.value = false;
-      isPaperFolded.value = false;
-      isPaperOnFloor.value = false;
-      const response = await questionService.retakeTest();
-
-      if (typeof response === 'string') {
-        quizEndMessage.value = response;
-      } else {
-        question.value = response;
-        quizEndMessage.value = null; // clear end message
-        selectedAnswers.value = []; // clear selected answer, initialize to empty array instead of null
-      }
+      saveQuizProgress();
     };
 
     const loadQuestion = async () => {
-      const response = await questionService.getQuestion();
-      if (typeof response === 'string') {
-        quizEndMessage.value = response;
-        question.value = null;
-      } else {
-        question.value = response;
-        selectedAnswers.value = [];
-        selectedAnswer.value = null;
-        if (question.value.questionType === QuestionType.VOICE_INPUT) {
-          await loadLastRecordedAudio();
+      if (patientProfile.value.id) {
+        const response = await questionService.getQuestion();
+        if (typeof response === 'string') {
+          quizEndMessage.value = response;
+          question.value = null;
         } else {
-          lastRecordedAudioUrl.value = null;
+          question.value = response;
+          selectedAnswers.value = [];
+          selectedAnswer.value = null;
+          if (question.value.questionType === QuestionType.VOICE_INPUT) {
+            await loadLastRecordedAudio();
+          } else {
+            lastRecordedAudioUrl.value = null;
+          }
         }
       }
     };
@@ -240,15 +246,39 @@ export default defineComponent({
       return true; // Disabled if there's no question
     };
 
+    const saveQuizProgress = () => {
+      const quizProgress = {
+        patientProfile: patientProfile.value,
+        question: question.value,
+        selectedAnswer: selectedAnswer.value,
+        selectedAnswers: selectedAnswers.value
+        // Save other relevant data as needed
+      };
+      localStorage.setItem('quizProgress', JSON.stringify(quizProgress));
+    };
+
+    const loadQuizProgress = () => {
+      const savedProgress = localStorage.getItem('quizProgress');
+      if (savedProgress) {
+        const quizProgress = JSON.parse(savedProgress);
+        patientProfile.value = quizProgress.patientProfile;
+        question.value = quizProgress.question;
+        selectedAnswer.value = quizProgress.selectedAnswer;
+        selectedAnswers.value = quizProgress.selectedAnswers;
+        // Load other relevant data as needed
+      }
+    };
+
     (async () => {
       watch(authenticated, async newVal => {
-        if (newVal === true) {
+        if (newVal === true && patientProfile.value.id) {
           await loadQuestion();
         }
       });
 
       onMounted(async () => {
-        if (authenticated.value) {
+        loadQuizProgress();
+        if (authenticated.value && patientProfile.value.id) {
           await loadQuestion();
         }
       });
@@ -264,7 +294,6 @@ export default defineComponent({
       selectedAnswers,
       submitAnswer,
       quizEndMessage,
-      retakeTest,
       isNextButtonDisabled,
       loading,
       audioContext,
@@ -285,7 +314,9 @@ export default defineComponent({
       isPaperOnFloor,
       isPaperPickedUp,
       startDragging,
-      noAnimation
+      noAnimation,
+      patientProfile,
+      startQuiz
     };
   }
 });

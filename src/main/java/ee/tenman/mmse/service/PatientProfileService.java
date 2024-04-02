@@ -4,6 +4,7 @@ import ee.tenman.mmse.domain.PatientProfile;
 import ee.tenman.mmse.domain.TestEntity;
 import ee.tenman.mmse.repository.PatientProfileRepository;
 import ee.tenman.mmse.service.dto.PatientProfileDTO;
+import ee.tenman.mmse.service.dto.PatientProfileRequest;
 import ee.tenman.mmse.service.mapper.PatientProfileMapper;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -118,5 +119,19 @@ public class PatientProfileService {
 
     public PatientProfile getByTestEntity(TestEntity testEntity) {
         return patientProfileRepository.findByTestEntitiesContains(testEntity);
+    }
+
+    public PatientProfile createPatientProfile(PatientProfileRequest patientProfileRequest) {
+        Optional<PatientProfile> existingPatientProfile = patientProfileRepository
+            .findByPatientIdAndName(patientProfileRequest.getPatientId(), patientProfileRequest.getName());
+        if (existingPatientProfile.isPresent()) {
+            log.info("PatientProfile already exists: {}", existingPatientProfile.get());
+            return existingPatientProfile.get();
+        }
+        PatientProfile patientProfile = new PatientProfile();
+        patientProfile.setName(patientProfileRequest.getName());
+        patientProfile.setPatientId(patientProfileRequest.getPatientId());
+        log.info("Creating new PatientProfile: {}", patientProfile);
+        return patientProfileRepository.save(patientProfile);
     }
 }

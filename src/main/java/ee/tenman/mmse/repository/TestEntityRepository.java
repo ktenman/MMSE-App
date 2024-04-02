@@ -51,4 +51,7 @@ public interface TestEntityRepository extends JpaRepository<TestEntity, Long> {
 
     TestEntity findByUserAnswersContains(UserAnswer userAnswer);
 
+    @Query("SELECT DISTINCT t FROM TestEntity t JOIN FETCH t.patientProfile WHERE t.patientProfile.id = :patientId AND t.score IS NULL ORDER BY t.createdAt DESC")
+    Optional<TestEntity> findByPatientProfileIdAndScoreIsNull(@Param("patientId") String patientId);
+
 }

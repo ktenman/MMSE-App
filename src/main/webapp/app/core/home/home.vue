@@ -9,20 +9,31 @@
 
       <div>
         <!-- Show quiz end message when quiz ends -->
-
-        <div>
-          <div v-if="quizEndMessage" class="alert alert-info">
+        <div v-if="quizEndMessage">
+          <div class="alert alert-info">
             {{ quizEndMessage }}
           </div>
-          <b-button v-if="!question && authenticated" class="mt-3" variant="primary" @click="retakeTest"> Retake Test
-          </b-button>
         </div>
 
         <!-- Conditionally show multiple choice or input fields based on question type -->
-
         <div v-if="loading" class="loader-container">
           <span>Loading...</span>
           <!-- Replace with your actual loader -->
+        </div>
+
+        <div v-if="!question && authenticated">
+          <h2>Start a New Quiz</h2>
+          <form @submit.prevent="startQuiz">
+            <div class="form-group">
+              <label for="patientId">Patient ID:</label>
+              <input id="patientId" v-model="patientProfile.patientId" class="form-control" required type="text">
+            </div>
+            <div class="form-group">
+              <label for="name">Name:</label>
+              <input id="name" v-model="patientProfile.name" class="form-control" required type="text">
+            </div>
+            <button class="btn btn-primary" type="submit">Start Quiz</button>
+          </form>
         </div>
 
         <div v-if="question && authenticated && !loading">
@@ -133,7 +144,7 @@
           </div>
 
           <b-button :disabled="isNextButtonDisabled() || loading" class="mt-3" variant="primary" @click="submitAnswer">
-            Next
+            Next Question
           </b-button>
         </div>
 
