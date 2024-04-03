@@ -59,7 +59,14 @@
                        type="text" @blur="persistAnswer(question)">
               </div>
             </div>
-            <button class="btn btn-primary" type="submit">Save Correct Answers</button>
+            <b-button class="mt-6 mr-2" variant="info" @click="navigateBack">
+              <font-awesome-icon icon="arrow-left" />
+              Back
+            </b-button>
+            <b-button class="mt-6" type="submit" variant="primary">
+              <font-awesome-icon icon="save" />
+              Save Correct Answers
+            </b-button>
           </form>
         </div>
 
@@ -83,7 +90,14 @@
                 <span aria-hidden="true">&times;</span>
               </button>
             </div>
-            <button class="btn btn-primary" type="submit">Save Answer Options</button>
+            <b-button class="mt-6 mr-2" variant="info" @click="navigateBack">
+              <font-awesome-icon icon="arrow-left" />
+              Back
+            </b-button>
+            <b-button class="mt-6" type="submit" variant="primary">
+              <font-awesome-icon icon="save" />
+              Save Answer Options
+            </b-button>
           </form>
         </div>
 

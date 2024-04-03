@@ -1,9 +1,10 @@
 <template>
   <div class="canvas-container">
-    <canvas ref="canvas" :height="height" :width="width" @mousemove="updateCursorPosition"></canvas>
+    <canvas v-if="!isDrawingSaved" ref="canvas" :height="height" :width="width"
+            @mousemove="updateCursorPosition"></canvas>
     <div v-if="isErasing" ref="eraserCursor" class="eraser-cursor"></div>
     <div class="mt-3">
-      <b-button
+      <b-button v-if="!isDrawingSaved"
         :disabled="isDrawingSaved"
         variant="primary"
         @click="toggleEraser"
@@ -47,7 +48,8 @@
 }
 
 canvas {
-  border: 1px solid #000;
+  border: 1px dotted #858585;
+  background: #f3f3f3;
 }
 
 button {
@@ -65,3 +67,4 @@ button {
   transform: translate(-50%, -50%);
 }
 </style>
+

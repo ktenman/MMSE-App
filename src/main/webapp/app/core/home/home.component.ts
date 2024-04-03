@@ -66,6 +66,19 @@ export default defineComponent({
       drawingFileName.value = fileName;
     };
 
+    const navigateBack = () => {
+      switch (quizState.value) {
+        case QuizState.ORIENTATION_ANSWERS:
+          quizState.value = QuizState.ORIENTATION_QUESTIONS;
+          break;
+        case QuizState.ORIENTATION_QUESTIONS:
+          quizState.value = QuizState.PATIENT_INFO;
+          break;
+        default:
+          break;
+      }
+      saveQuizProgress();
+    };
 
     const loadOrientationToPlaceQuestions = async () => {
       try {
@@ -419,7 +432,8 @@ export default defineComponent({
       closeErrorMessage,
       testEntity,
       drawingFileName,
-      updateDrawingFileName
+      updateDrawingFileName,
+      navigateBack
     };
   }
 });

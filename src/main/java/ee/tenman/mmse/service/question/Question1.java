@@ -31,7 +31,8 @@ public class Question1 implements Question {
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_1;
 
     private static final String SENTENCE = "No ifs, ands, or buts";
-    private static final String QUESTION_TEXT = String.format("1. Press the record button and repeat the following phrase: '%s'", SENTENCE);
+    private static final String QUESTION_TEXT = String.format("1. Press the 'Start Recording' button and repeat the " +
+        "following phrase: \"%s\". Tap 'Stop Recording' when done.", SENTENCE);
 
     private static final Set<String> CORRECT_INDICATORS = Set.of(
         "yes",
