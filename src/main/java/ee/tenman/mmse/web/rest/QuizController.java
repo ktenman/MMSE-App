@@ -10,6 +10,7 @@ import ee.tenman.mmse.service.PatientProfileService;
 import ee.tenman.mmse.service.TestEntityService;
 import ee.tenman.mmse.service.UserAnswerService;
 import ee.tenman.mmse.service.dto.AnswerDTO;
+import ee.tenman.mmse.service.dto.FileDTO;
 import ee.tenman.mmse.service.dto.OrientationToPlaceQuestionDTO;
 import ee.tenman.mmse.service.dto.PatientProfileDTO;
 import ee.tenman.mmse.service.dto.PatientProfileRequest;
@@ -37,7 +38,6 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.UUID;
 
@@ -111,8 +111,8 @@ public class QuizController {
         return patientProfileMapper.toDto(patientProfile);
     }
 
-    @GetMapping("/last-recorded-audio/{testEntityId}")
-    public ResponseEntity<byte[]> getLastRecordedAudio(
+    @GetMapping("/file/{testEntityId}")
+    public ResponseEntity<byte[]> getFile(
         @RequestParam("questionId") QuestionId questionId,
         @PathVariable Long testEntityId
     ) {
@@ -134,8 +134,8 @@ public class QuizController {
         return new ResponseEntity<>(audioData, headers, HttpStatus.OK);
     }
 
-    @PostMapping("/upload-audio/{testEntityId}")
-    public ResponseEntity<?> uploadAudio(
+    @PostMapping("/file/{testEntityId}")
+    public FileDTO uploadFile(
         @RequestParam("audio") MultipartFile audioFile,
         @RequestParam("questionId") QuestionId questionId,
         @PathVariable Long testEntityId
@@ -153,7 +153,7 @@ public class QuizController {
         mediaRecording.setQuestionId(questionId);
         mediaRecordingRepository.save(mediaRecording);
 
-        return ResponseEntity.ok(Map.of("fileName", fileName));
+        return new FileDTO(fileName);
     }
 
     @PostMapping("/orientation-to-place/correct-answers/{patientProfileId}")

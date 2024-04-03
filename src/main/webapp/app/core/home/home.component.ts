@@ -30,59 +30,30 @@ export default defineComponent({
   setup() {
     const errorMessage = ref<string | null>(null);
     const orientationToPlaceQuestions = ref<IOrientationToPlaceQuestion[]>([]);
-
-    const [
-      loginService,
-      authenticated,
-      username,
-      question,
-      selectedAnswer,
-      selectedAnswers,
-      quizEndMessage,
-      loading,
-      isRecording,
-      audioContext,
-      recorder,
-      stream,
-      lastRecordedAudioUrl,
-      lastRecordedAudioFileName,
-      audioPlayer,
-      recordingDuration,
-      recordingTimer,
-      isPaperPickedUp,
-      isPaperFolded,
-      isPaperOnFloor,
-      noAnimation,
-      patientProfile,
-      quizState,
-      testEntity
-    ] = [
-      inject<LoginService>('loginService'),
-      inject<ComputedRef<boolean>>('authenticated'),
-      inject<ComputedRef<string>>('currentUsername'),
-      ref<IQuestion | null>(null),
-      ref<string | null>(null),
-      ref<Array<number | null>>([]),
-      ref<string | null>(null),
-      ref(false),
-      ref(false),
-      ref(null),
-      ref(null),
-      ref(null),
-      ref<string | null>(null),
-      ref<string | null>(null),
-      ref<HTMLAudioElement | null>(null),
-      ref(0),
-      ref(null),
-      ref(false),
-      ref(false),
-      ref(false),
-      ref(false),
-      ref(<IPatientProfile>new PatientProfile()),
-      ref(QuizState.PATIENT_INFO),
-      ref(<ITestEntity>new TestEntity())
-    ];
-
+    const loginService = inject<LoginService>('loginService');
+    const authenticated = inject<ComputedRef<boolean>>('authenticated');
+    const username = inject<ComputedRef<string>>('currentUsername');
+    const question = ref<IQuestion | null>(null);
+    const selectedAnswer = ref<string | null>(null);
+    const selectedAnswers = ref<Array<number | null>>([]);
+    const quizEndMessage = ref<string | null>(null);
+    const loading = ref(false);
+    const isRecording = ref(false);
+    const audioContext = ref(null);
+    const recorder = ref(null);
+    const stream = ref(null);
+    const lastRecordedAudioUrl = ref<string | null>(null);
+    const lastRecordedAudioFileName = ref<string | null>(null);
+    const audioPlayer = ref<HTMLAudioElement | null>(null);
+    const recordingDuration = ref(0);
+    const recordingTimer = ref(null);
+    const isPaperPickedUp = ref(false);
+    const isPaperFolded = ref(false);
+    const isPaperOnFloor = ref(false);
+    const noAnimation = ref(false);
+    const patientProfile = ref<IPatientProfile>(new PatientProfile());
+    const quizState = ref(QuizState.PATIENT_INFO);
+    const testEntity = ref<ITestEntity>(new TestEntity());
     const questionService = new QuestionService();
 
     const closeErrorMessage = () => {
@@ -202,9 +173,12 @@ export default defineComponent({
 
           recorder.value.onstop = async () => {
             const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-            await questionService.sendAudioToServer(audioBlob, question.value?.questionId, testEntity.value.id);
-            audioChunks.length = 0;
-            await loadLastRecordedAudio();
+            questionService.sendAudioToServer(audioBlob, question.value?.questionId, testEntity.value.id)
+              .then((fileName: string) => {
+                audioChunks.length = 0;
+                lastRecordedAudioFileName.value = fileName;
+                loadLastRecordedAudio();
+              });
           };
 
           recorder.value.start();

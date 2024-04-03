@@ -5,6 +5,7 @@ import { QuestionId } from '@/shared/model/enumerations/question-id.model';
 import { IPatientProfile } from '@/shared/model/patient-profile.model';
 import { IOrientationToPlaceQuestion } from '@/shared/model/orientation-to-place-question.model';
 import { ITestEntity } from '@/shared/model/test-entity.model';
+import { IFile } from '@/shared/model/file.model';
 
 export default class QuestionService {
   public getQuestion(testEntityId: number): Promise<IQuestion> {
@@ -15,24 +16,15 @@ export default class QuestionService {
     return axios.post<void>(`/api/answer/${testEntityId}`, answer);
   }
 
-  public sendAudioToServer(audioBlob: Blob, questionId: QuestionId | undefined, testEntityId: number): Promise<void> {
+  public sendAudioToServer(audioBlob: Blob, questionId: QuestionId | undefined, testEntityId: number): Promise<string> {
     const formData = new FormData();
     formData.append('audio', audioBlob, 'recording.webm');
     formData.append('questionId', questionId as string);
-
-    return axios
-      .post(`/api/upload-audio/${testEntityId}`, formData)
-      .then(() => {
-        console.log('Audio uploaded successfully');
-      })
-      .catch(error => {
-        console.error('Error uploading audio:', error);
-      });
+    return axios.post<IFile>(`/api/file/${testEntityId}`, formData).then(res => res.data.fileName);
   }
-
   public getLastRecordedAudio(questionId: QuestionId, testEntityId: number): Promise<{ data: Blob; fileName: string }> {
     return axios
-      .get(`/api/last-recorded-audio/${testEntityId}`, {
+      .get(`/api/file/${testEntityId}`, {
         params: { questionId },
         responseType: 'blob'
       })

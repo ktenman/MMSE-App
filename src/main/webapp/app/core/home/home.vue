@@ -10,6 +10,8 @@
       <div v-if="authenticated">
         <!-- Show quiz end message when quiz ends -->
 
+        <drawing-canvas :height="500" :width="750"></drawing-canvas>
+
         <div v-if="quizState === QuizState.FINISHED">
           <div class="alert alert-info">
             {{ quizEndMessage }}
@@ -24,8 +26,6 @@
         </div>
 
         <div v-if="quizState === QuizState.PATIENT_INFO">
-
-          <!--          <drawing-canvas :width="800" :height="600"></drawing-canvas>-->
 
           <h2>Start a New Quiz</h2>
           <form @submit.prevent="startQuiz">
