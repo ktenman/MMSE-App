@@ -77,6 +77,17 @@ export default defineComponent({
       }
     };
 
+    const eraserCursor = ref<HTMLElement | null>(null);
+
+    const updateCursorPosition = (event: MouseEvent) => {
+      if (eraserCursor.value) {
+        eraserCursor.value.style.setProperty('--cursor-x', `${event.offsetX}px`);
+        eraserCursor.value.style.setProperty('--cursor-y', `${event.offsetY}px`);
+        eraserCursor.value.style.left = `var(--cursor-x)`;
+        eraserCursor.value.style.top = `var(--cursor-y)`;
+      }
+    };
+
     onMounted(() => {
       const context = canvas.value?.getContext('2d');
       if (context) {
@@ -99,7 +110,9 @@ export default defineComponent({
       cursorX,
       cursorY,
       toggleEraser,
-      clearCanvas
+      clearCanvas,
+      eraserCursor,
+      updateCursorPosition
     };
   }
 });
