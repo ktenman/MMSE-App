@@ -2,12 +2,15 @@ package ee.tenman.mmse.service;
 
 import ee.tenman.mmse.domain.PatientProfile;
 import ee.tenman.mmse.domain.TestEntity;
+import ee.tenman.mmse.domain.TestEntityHash;
 import ee.tenman.mmse.domain.User;
 import ee.tenman.mmse.domain.UserAnswer;
+import ee.tenman.mmse.repository.TestEntityHashRepository;
 import ee.tenman.mmse.repository.TestEntityRepository;
 import ee.tenman.mmse.repository.UserAnswerRepository;
 import ee.tenman.mmse.service.dto.TestEntityDTO;
 import ee.tenman.mmse.service.mapper.TestEntityMapper;
+import org.apache.commons.lang3.RandomStringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -25,22 +28,21 @@ import java.util.Optional;
 @Transactional
 public class TestEntityService {
 
+    private final static int HASH_LENGTH = 6;
     private final Logger log = LoggerFactory.getLogger(TestEntityService.class);
-
     private final TestEntityRepository testEntityRepository;
-
+    private final TestEntityHashRepository testEntityHashRepository;
     private final UserAnswerRepository userAnswerRepository;
-
     private final TestEntityMapper testEntityMapper;
-
     private final UserService userService;
 
     public TestEntityService(
-        TestEntityRepository testEntityRepository,
+        TestEntityRepository testEntityRepository, TestEntityHashRepository testEntityHashRepository,
         TestEntityMapper testEntityMapper,
         UserAnswerRepository userAnswerRepository, UserService userService
     ) {
         this.testEntityRepository = testEntityRepository;
+        this.testEntityHashRepository = testEntityHashRepository;
         this.testEntityMapper = testEntityMapper;
         this.userAnswerRepository = userAnswerRepository;
         this.userService = userService;
@@ -55,6 +57,7 @@ public class TestEntityService {
     public TestEntityDTO save(TestEntityDTO testEntityDTO) {
         log.debug("Request to save TestEntity : {}", testEntityDTO);
         TestEntity testEntity = testEntityMapper.toEntity(testEntityDTO);
+        createTestEntityHash(testEntity);
         testEntity = testEntityRepository.save(testEntity);
         return testEntityMapper.toDto(testEntity);
     }
@@ -170,6 +173,20 @@ public class TestEntityService {
         TestEntity testEntity = new TestEntity();
         testEntity.setUser(user);
         testEntity.setPatientProfile(patientProfile);
+
+        createTestEntityHash(testEntity);
+
         return testEntityRepository.save(testEntity);
+    }
+
+    private void createTestEntityHash(TestEntity testEntity) {
+        String hash;
+        do {
+            hash = RandomStringUtils.randomAlphanumeric(HASH_LENGTH);
+        } while (testEntityHashRepository.existsByHash(hash));
+        TestEntityHash testEntityHash = new TestEntityHash();
+        testEntityHash.setHash(hash);
+        testEntityHash.setTestEntity(testEntity);
+        testEntity.setTestEntityHash(testEntityHash);
     }
 }

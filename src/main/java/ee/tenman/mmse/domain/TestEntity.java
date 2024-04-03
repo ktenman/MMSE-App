@@ -1,11 +1,13 @@
 package ee.tenman.mmse.domain;
 
 import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.FetchType;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.OneToMany;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.Table;
 import jakarta.validation.constraints.NotNull;
 
@@ -34,6 +36,9 @@ public class TestEntity extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     @JsonIgnoreProperties(value = {"testEntities"}, allowSetters = true)
     private PatientProfile patientProfile;
+
+    @OneToOne(mappedBy = "testEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private TestEntityHash testEntityHash;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -69,6 +74,13 @@ public class TestEntity extends BaseEntity {
         this.patientProfile = patientProfile;
     }
 
+    public TestEntityHash getTestEntityHash() {
+        return testEntityHash;
+    }
+
+    public void setTestEntityHash(TestEntityHash testEntityHash) {
+        this.testEntityHash = testEntityHash;
+    }
 
     // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
@@ -97,6 +109,7 @@ public class TestEntity extends BaseEntity {
             ", createdAt='" + getCreatedAt() + "'" +
             ", updatedAt='" + getUpdatedAt() + "'" +
             ", score=" + getScore() +
+            ", testEntityHash='" + getTestEntityHash().getHash() + "'" +
             "}";
     }
 }
