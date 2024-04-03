@@ -1,6 +1,17 @@
-import { defineComponent, onMounted, ref } from 'vue';
+import { defineComponent, onMounted, PropType, ref } from 'vue';
+import QuestionService from '@/entities/question/question.service';
+import { IQuestion } from '@/shared/model/question.model';
+import { ITestEntity } from '@/shared/model/test-entity.model';
+
+interface Props {
+  width: number;
+  height: number;
+  question: IQuestion | null;
+  testEntity: ITestEntity;
+}
 
 export default defineComponent({
+  name: 'DrawingCanvas',
   props: {
     width: {
       type: Number,
@@ -9,9 +20,18 @@ export default defineComponent({
     height: {
       type: Number,
       default: 600
+    },
+    question: {
+      type: Object as PropType<IQuestion | null>,
+      required: true
+    },
+    testEntity: {
+      type: Object as PropType<ITestEntity>,
+      required: true
     }
   },
-  setup(props) {
+  emits: ['drawing-saved'],
+  setup(props: Props, { emit }) {
     const canvas = ref<HTMLCanvasElement | null>(null);
     const isDrawing = ref(false);
     const isErasing = ref(false);
@@ -22,6 +42,43 @@ export default defineComponent({
     const height = ref(600);
     const cursorX = ref(0);
     const cursorY = ref(0);
+    const questionService = new QuestionService();
+    const isDrawingSaved = ref(false);
+
+    const saveDrawing = async () => {
+      if (canvas.value) {
+
+        // const dataURL = canvas.value.toDataURL('image/png');
+        // const binaryData = atob(dataURL.split(',')[1]);
+        // const arrayBuffer = new ArrayBuffer(binaryData.length);
+        // const uint8Array = new Uint8Array(arrayBuffer);
+        // for (let i = 0; i < binaryData.length; i++) {
+        //   uint8Array[i] = binaryData.charCodeAt(i);
+        // }
+        // const blob = new Blob([uint8Array], { type: 'image/png' });
+
+        const tempCanvas = document.createElement('canvas');
+        tempCanvas.width = canvas.value.width;
+        tempCanvas.height = canvas.value.height;
+        const tempContext = tempCanvas.getContext('2d');
+        if (tempContext) {
+          tempContext.fillStyle = '#ffffff'; // White background
+          tempContext.fillRect(0, 0, tempCanvas.width, tempCanvas.height);
+          tempContext.drawImage(canvas.value, 0, 0);
+          const dataURL = tempCanvas.toDataURL('image/png');
+          const binaryData = atob(dataURL.split(',')[1]);
+          const arrayBuffer = new ArrayBuffer(binaryData.length);
+          const uint8Array = new Uint8Array(arrayBuffer);
+          for (let i = 0; i < binaryData.length; i++) {
+            uint8Array[i] = binaryData.charCodeAt(i);
+          }
+          const blob = new Blob([uint8Array], { type: 'image/png' });
+          const fileName = await questionService.sendImageToServer(blob, props.question?.questionId, props.testEntity.id);
+          emit('drawing-saved', fileName);
+          isDrawingSaved.value = true;
+        }
+      }
+    };
 
     const startDrawing = (event: MouseEvent) => {
       isDrawing.value = true;
@@ -112,7 +169,9 @@ export default defineComponent({
       toggleEraser,
       clearCanvas,
       eraserCursor,
-      updateCursorPosition
+      updateCursorPosition,
+      isDrawingSaved,
+      saveDrawing
     };
   }
 });

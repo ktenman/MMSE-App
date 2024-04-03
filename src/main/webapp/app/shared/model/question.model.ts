@@ -1,5 +1,7 @@
+import { QuestionId } from '@/shared/model/enumerations/question-id.model';
+
 export interface IQuestion {
-  questionId?: string;
+  questionId?: QuestionId | null;
   questionText?: string;
   answerOptions?: string[] | null;
   image?: string | null;
@@ -7,7 +9,7 @@ export interface IQuestion {
 
 export class Question implements IQuestion {
   constructor(
-    public questionId?: string,
+    public questionId?: QuestionId | null,
     public questionText?: string,
     public answerOptions?: string[] | null,
     public image?: string | null

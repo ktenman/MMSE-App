@@ -1,4 +1,4 @@
-import { ComputedRef, defineComponent, inject, onMounted, ref, watch } from 'vue';
+import { ComputedRef, defineComponent, inject, onBeforeMount, onMounted, ref, watch } from 'vue';
 import { useI18n } from 'vue-i18n';
 import LoginService from '@/account/login.service';
 import { IQuestion } from '@/shared/model/question.model';
@@ -15,6 +15,7 @@ import DrawingCanvas from '@/core/home/drawing-canvas.vue';
 const QUIZ_PROGRESS = 'quizProgress';
 
 export default defineComponent({
+  name: 'Home',
   components: {
     DrawingCanvas
   },
@@ -55,15 +56,20 @@ export default defineComponent({
     const quizState = ref(QuizState.PATIENT_INFO);
     const testEntity = ref<ITestEntity>(new TestEntity());
     const questionService = new QuestionService();
+    const drawingFileName = ref<string | null>(null);
 
     const closeErrorMessage = () => {
       errorMessage.value = null;
     };
 
+    const updateDrawingFileName = (fileName: string) => {
+      drawingFileName.value = fileName;
+    };
+
+
     const loadOrientationToPlaceQuestions = async () => {
       try {
         if (patientProfile.value.id && patientProfile.value.id > 0) {
-          console.log('Loading orientation to place questions for patient profile:', patientProfile.value);
           orientationToPlaceQuestions.value = await questionService.getOrientationToPlaceQuestionsByPatientProfileId(
             patientProfile.value.id
           );
@@ -358,8 +364,11 @@ export default defineComponent({
         }
       });
 
-      onMounted(async () => {
+      onBeforeMount(() => {
         loadQuizProgress();
+      });
+
+      onMounted(async () => {
         if (authenticated.value && quizState.value === QuizState.QUIZ) {
           await loadQuestion();
         }
@@ -407,7 +416,10 @@ export default defineComponent({
       retakeQuiz,
       persistAnswer,
       errorMessage,
-      closeErrorMessage
+      closeErrorMessage,
+      testEntity,
+      drawingFileName,
+      updateDrawingFileName
     };
   }
 });

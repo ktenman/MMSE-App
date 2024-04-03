@@ -18,10 +18,18 @@ export default class QuestionService {
 
   public sendAudioToServer(audioBlob: Blob, questionId: QuestionId | undefined, testEntityId: number): Promise<string> {
     const formData = new FormData();
-    formData.append('audio', audioBlob, 'recording.webm');
+    formData.append('file', audioBlob, 'recording.webm');
     formData.append('questionId', questionId as string);
     return axios.post<IFile>(`/api/file/${testEntityId}`, formData).then(res => res.data.fileName);
   }
+
+  public sendImageToServer(imageBlob: Blob, questionId: QuestionId, testEntityId: number): Promise<string> {
+    const formData = new FormData();
+    formData.append('file', imageBlob, 'drawing.png');
+    formData.append('questionId', questionId as string);
+    return axios.post<IFile>(`/api/file/${testEntityId}`, formData).then(res => res.data.fileName);
+  }
+
   public getLastRecordedAudio(questionId: QuestionId, testEntityId: number): Promise<{ data: Blob; fileName: string }> {
     return axios
       .get(`/api/file/${testEntityId}`, {

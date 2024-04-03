@@ -10,7 +10,14 @@
       <div v-if="authenticated">
         <!-- Show quiz end message when quiz ends -->
 
-        <drawing-canvas :height="500" :width="750"></drawing-canvas>
+        <!--        <drawing-canvas-->
+        <!--          ref="drawingCanvas"-->
+        <!--          :height="500"-->
+        <!--          :width="750"-->
+        <!--          :question="question"-->
+        <!--          :testEntity="testEntity"-->
+        <!--          @drawing-saved="updateDrawingFileName"-->
+        <!--        ></drawing-canvas>-->
 
         <div v-if="quizState === QuizState.FINISHED">
           <div class="alert alert-info">

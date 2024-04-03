@@ -136,16 +136,16 @@ public class QuizController {
 
     @PostMapping("/file/{testEntityId}")
     public FileDTO uploadFile(
-        @RequestParam("audio") MultipartFile audioFile,
+        @RequestParam("file") MultipartFile multipartFile,
         @RequestParam("questionId") QuestionId questionId,
         @PathVariable Long testEntityId
     ) {
         TestEntity testEntity = testEntityService.getById(testEntityId);
 
         UUID fileUuid = UUID.randomUUID();
-        String fileName = fileUuid + "." + getFileExtension(audioFile.getOriginalFilename());
+        String fileName = fileUuid + "." + getFileExtension(multipartFile.getOriginalFilename());
 
-        storageService.uploadFile(audioFile, fileName);
+        storageService.uploadFile(multipartFile, fileName);
 
         MediaRecording mediaRecording = new MediaRecording();
         mediaRecording.setFileName(fileName);
