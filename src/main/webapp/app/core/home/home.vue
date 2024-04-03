@@ -23,6 +23,9 @@
         </div>
 
         <div v-if="quizState === QuizState.PATIENT_INFO">
+
+          <!--          <drawing-canvas :width="800" :height="600"></drawing-canvas>-->
+
           <h2>Start a New Quiz</h2>
           <form @submit.prevent="startQuiz">
             <div class="form-group">
@@ -45,7 +48,7 @@
               <div class="form-group">
                 <label>Correct Answer:</label>
                 <input v-model="question.correctAnswer" class="form-control" required
-                       type="text" @blur="validateCorrectAnswer(question)">
+                       type="text" @blur="persistAnswer(question)">
               </div>
             </div>
             <button class="btn btn-primary" type="submit">Save Correct Answers</button>

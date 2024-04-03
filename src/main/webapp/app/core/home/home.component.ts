@@ -10,10 +10,14 @@ import { IPatientProfile, PatientProfile } from '@/shared/model/patient-profile.
 import { IOrientationToPlaceQuestion } from '@/shared/model/orientation-to-place-question.model';
 import { QuizState } from '@/shared/model/enumerations/quiz-state.mode';
 import { ITestEntity, TestEntity } from '@/shared/model/test-entity.model';
+import DrawingCanvas from '@/core/home/drawing-canvas.vue';
 
 const QUIZ_PROGRESS = 'quizProgress';
 
 export default defineComponent({
+  components: {
+    DrawingCanvas
+  },
   computed: {
     QuestionType() {
       return QuestionType;
@@ -108,9 +112,8 @@ export default defineComponent({
       isPaperPickedUp.value = false;
     };
 
-    const validateCorrectAnswer = (question: IOrientationToPlaceQuestion) => {
+    const persistAnswer = (question: IOrientationToPlaceQuestion) => {
       if (question.correctAnswer && question.correctAnswer.length >= 3) {
-        console.log('Correct answer:', question.correctAnswer);
         questionService.saveOrientationToPlaceCorrectAnswers(patientProfile.value.id, orientationToPlaceQuestions.value);
       }
     };
@@ -424,7 +427,7 @@ export default defineComponent({
       saveOrientationToPlaceAnswerOptions,
       quizState,
       retakeQuiz,
-      validateCorrectAnswer
+      persistAnswer
     };
   }
 });
