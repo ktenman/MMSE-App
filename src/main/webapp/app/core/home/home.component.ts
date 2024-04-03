@@ -28,6 +28,9 @@ export default defineComponent({
   },
   compatConfig: { MODE: 3 },
   setup() {
+    const errorMessage = ref<string | null>(null);
+    const orientationToPlaceQuestions = ref<IOrientationToPlaceQuestion[]>([]);
+
     const [
       loginService,
       authenticated,
@@ -51,7 +54,6 @@ export default defineComponent({
       isPaperOnFloor,
       noAnimation,
       patientProfile,
-      orientationToPlaceQuestions,
       quizState,
       testEntity
     ] = [
@@ -77,12 +79,15 @@ export default defineComponent({
       ref(false),
       ref(false),
       ref(<IPatientProfile>new PatientProfile()),
-      ref<IOrientationToPlaceQuestion[]>([]),
       ref(QuizState.PATIENT_INFO),
       ref(<ITestEntity>new TestEntity())
     ];
 
     const questionService = new QuestionService();
+
+    const closeErrorMessage = () => {
+      errorMessage.value = null;
+    };
 
     const loadOrientationToPlaceQuestions = async () => {
       try {
@@ -141,7 +146,7 @@ export default defineComponent({
         await loadQuestion();
         saveQuizProgress();
       } catch (error) {
-        console.error('Error saving orientation to place answer options:', error);
+        errorMessage.value = error?.response?.data ? error.response.data.detail : 'An unexpected error occurred.';
       }
     };
 
@@ -289,8 +294,7 @@ export default defineComponent({
             quizState.value = QuizState.FINISHED;
           }
         } catch (error) {
-          console.error('Error submitting answer:', error);
-          // Optionally set an error message to display to the user
+          errorMessage.value = error?.response?.data ? error.response.data.detail : 'An unexpected error occurred.';
         } finally {
           loading.value = false;
         }
@@ -427,7 +431,9 @@ export default defineComponent({
       saveOrientationToPlaceAnswerOptions,
       quizState,
       retakeQuiz,
-      persistAnswer
+      persistAnswer,
+      errorMessage,
+      closeErrorMessage
     };
   }
 });

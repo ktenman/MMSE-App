@@ -9,6 +9,7 @@
 
       <div v-if="authenticated">
         <!-- Show quiz end message when quiz ends -->
+
         <div v-if="quizState === QuizState.FINISHED">
           <div class="alert alert-info">
             {{ quizEndMessage }}
@@ -68,6 +69,12 @@
                 <label>Answer Options (comma-separated):</label>
                 <input v-model="question.answerOptions" class="form-control" required type="text">
               </div>
+            </div>
+            <div v-if="errorMessage" class="alert alert-danger" role="alert">
+              {{ errorMessage }}
+              <button aria-label="Close" class="close" type="button" @click="closeErrorMessage">
+                <span aria-hidden="true">&times;</span>
+              </button>
             </div>
             <button class="btn btn-primary" type="submit">Save Answer Options</button>
           </form>
@@ -181,9 +188,20 @@
             </div>
           </div>
 
+          <div v-if="errorMessage">
+            <p />
+            <div class="alert alert-danger" role="alert">
+              {{ errorMessage }}
+              <button aria-label="Close" class="close" type="button" @click="closeErrorMessage">
+                <span aria-hidden="true">&times;</span>
+              </button>
+            </div>
+          </div>
+
           <b-button :disabled="isNextButtonDisabled() || loading" class="mt-3" variant="primary" @click="submitAnswer">
             Next Question
           </b-button>
+
         </div>
 
         <div class="alert alert-warning" v-if="!authenticated">

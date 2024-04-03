@@ -16,7 +16,11 @@
       "livenessState": "Elusolek",
       "readinessState": "Valmisolek",
       "ping": "Rakendus",
-      "db": "Andmebaas"
+      "db": "Andmebaas",
+      "redis": "Redis",
+      "refreshScope": "Refresh Scope",
+      "reactiveDiscoveryClients": "Reactive Discovery Clients",
+      "discoveryComposite": "Discovery Composite"
     },
     "table": {
       "service": "Teenuse nimi",

@@ -16,7 +16,11 @@
       "livenessState": "Liveness state",
       "readinessState": "Readiness state",
       "ping": "Application",
-      "db": "Database"
+      "db": "Database",
+      "redis": "Redis",
+      "refreshScope": "Refresh scope",
+      "reactiveDiscoveryClients": "Reactive discovery clients",
+      "discoveryComposite": "Discovery Composite"
     },
     "table": {
       "service": "Service name",
