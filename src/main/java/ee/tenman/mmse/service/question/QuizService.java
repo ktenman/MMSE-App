@@ -194,23 +194,29 @@ public class QuizService {
     private void validateAnswers(List<OrientationToPlaceQuestionDTO> answers) {
         for (OrientationToPlaceQuestionDTO answer : answers) {
             if (StringUtils.isBlank(answer.getCorrectAnswer())) {
-                throw new IllegalArgumentException("Correct answer is required for question: " + answer.getQuestionId());
+                throw new IllegalArgumentException("Correct answer is required for question: '" + answer.getQuestionText() + "'");
             }
             if (StringUtils.isBlank(answer.getAnswerOptions())) {
-                throw new IllegalArgumentException("Answer options are required for question: " + answer.getQuestionId());
+                throw new IllegalArgumentException("Answer options are required for question: '" + answer.getQuestionText() + "'");
             }
             List<String> answerOptions = answerOptions(answer.getAnswerOptions());
             if (answerOptions.size() < 3) {
-                throw new IllegalArgumentException("At least 3 answer options are required for question: " + answer.getQuestionId());
+                throw new IllegalArgumentException("At least 3 answer options are required for question: '" + answer.getQuestionText() + "'");
             }
             if (answerOptions.stream().anyMatch(StringUtils::isBlank)) {
-                throw new IllegalArgumentException("Answer options should not be empty for question: " + answer.getQuestionId());
+                throw new IllegalArgumentException("Answer options should not be empty for question: '" + answer.getQuestionText() + "'");
             }
             if (answerOptions.stream().anyMatch(option -> option.length() > 50)) {
-                throw new IllegalArgumentException("Answer options should not be longer than 50 characters for question: " + answer.getQuestionId());
+                throw new IllegalArgumentException("Answer options should not be longer than 50 characters for question: '" + answer.getQuestionText() + "'");
             }
             if (!StringUtils.containsIgnoreCase(answer.getAnswerOptions(), answer.getCorrectAnswer())) {
-                throw new IllegalArgumentException("Correct answer should be one of the answer options for question: " + answer.getQuestionId());
+                throw new IllegalArgumentException("Correct answer should be one of the answer options for question: " + answer.getQuestionText());
+            }
+            for (OrientationToPlaceQuestionDTO orientationToPlaceQuestion : getOrientationToPlaceQuestions()) {
+                boolean found = answers.stream().anyMatch(placeQuestionDTO -> orientationToPlaceQuestion.getQuestionId().equals(placeQuestionDTO.getQuestionId()));
+                if (!found) {
+                    throw new IllegalArgumentException("Question not found: '" + orientationToPlaceQuestion.getQuestionText() + "'. Please try again.");
+                }
             }
         }
     }
@@ -228,10 +234,6 @@ public class QuizService {
         if (answerOptions == null || answerOptions.isBlank()) return List.of();
         answerOptions = answerOptions.replace(".", "");
         return List.of(answerOptions.split(","));
-//        return Stream.of(answerOptions.split(","))
-//            .filter(StringUtils::isNotBlank)
-//            .map(str -> str.replaceAll("^\\s+|\\s+$", ""))
-//            .toList();
     }
 
     @Transactional(readOnly = true)
