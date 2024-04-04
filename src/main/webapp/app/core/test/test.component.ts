@@ -19,7 +19,7 @@ export default defineComponent({
   computed: {
     QuestionType() {
       return QuestionType;
-    },
+    }
   },
   setup() {
     const route = useRoute();
@@ -66,6 +66,8 @@ export default defineComponent({
         } else if (question.value.questionType === QuestionType.DRAG_AND_DROP) {
           const actions = [isPaperPickedUp.value, isPaperFolded.value, isPaperOnFloor.value];
           answer = new Answer(actions.join(','), question.value.questionId);
+        } else if (question.value.questionType === QuestionType.DRAWING && drawingFileName.value) {
+          answer = new Answer(drawingFileName.value, question.value.questionId);
         } else {
           loading.value = false;
           return;
@@ -134,6 +136,8 @@ export default defineComponent({
             return !lastRecordedAudioUrl.value;
           case QuestionType.DRAG_AND_DROP:
             return false;
+          case QuestionType.DRAWING:
+            return !drawingFileName.value;
           default:
             return true;
         }
@@ -285,5 +289,5 @@ export default defineComponent({
       testEntity,
       updateDrawingFileName
     };
-  },
+  }
 });
