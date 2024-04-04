@@ -1,6 +1,6 @@
 import { defineComponent, onMounted, ref, watch } from 'vue';
 import { useRoute } from 'vue-router';
-import { IQuestion } from '@/shared/model/question.model';
+import { IQuestion, Question } from '@/shared/model/question.model';
 import { Answer, IAnswer } from '@/shared/model/answer.model';
 import { QuestionType } from '@/shared/model/enumerations/question-type.model';
 import { ITestEntity, TestEntity } from '@/shared/model/test-entity.model';
@@ -13,13 +13,13 @@ export default defineComponent({
   computed: {
     QuestionType() {
       return QuestionType;
-    }
+    },
   },
   setup() {
     const route = useRoute();
     const testEntityHash = route.params.testEntityHash as string;
     const testService = new TestService();
-    const question = ref<IQuestion | null>(null);
+    const question = ref<IQuestion>(new Question());
     const selectedAnswer = ref<string | null>(null);
     const selectedAnswers = ref<Array<number | null>>([]);
     const quizEndMessage = ref<string | null>(null);
@@ -30,7 +30,6 @@ export default defineComponent({
     const lastRecordedAudioUrl = ref<string | null>(null);
     const lastRecordedAudioFileName = ref<string | null>(null);
     const recordingDuration = ref(0);
-    const recordingTimer = ref<number | null>(null);
     const isPaperPickedUp = ref(false);
     const isPaperFolded = ref(false);
     const isPaperOnFloor = ref(false);
@@ -48,43 +47,17 @@ export default defineComponent({
       if (question.value) {
         let answer: IAnswer;
 
-        if (
-          question.value.questionType === QuestionType.MULTIPLE_CHOICE &&
-          selectedAnswer.value
-        ) {
+        if (question.value.questionType === QuestionType.MULTIPLE_CHOICE && selectedAnswer.value) {
           answer = new Answer(selectedAnswer.value, question.value.questionId);
-        } else if (
-          question.value.questionType === QuestionType.SUBTRACTION_TASK &&
-          selectedAnswers.value
-        ) {
-          const filteredAnswerText = selectedAnswers.value.filter(
-            item => item !== null
-          );
-          answer = new Answer(
-            filteredAnswerText.join(','),
-            question.value.questionId
-          );
-        } else if (
-          question.value.questionType === QuestionType.TEXT_INPUT &&
-          selectedAnswer.value
-        ) {
+        } else if (question.value.questionType === QuestionType.SUBTRACTION_TASK && selectedAnswers.value) {
+          const filteredAnswerText = selectedAnswers.value.filter(item => item !== null);
+          answer = new Answer(filteredAnswerText.join(','), question.value.questionId);
+        } else if (question.value.questionType === QuestionType.TEXT_INPUT && selectedAnswer.value) {
           answer = new Answer(selectedAnswer.value, question.value.questionId);
-        } else if (
-          question.value.questionType === QuestionType.VOICE_INPUT &&
-          lastRecordedAudioFileName.value
-        ) {
-          answer = new Answer(
-            lastRecordedAudioFileName.value,
-            question.value.questionId
-          );
-        } else if (
-          question.value.questionType === QuestionType.DRAG_AND_DROP
-        ) {
-          const actions = [
-            isPaperPickedUp.value,
-            isPaperFolded.value,
-            isPaperOnFloor.value
-          ];
+        } else if (question.value.questionType === QuestionType.VOICE_INPUT && lastRecordedAudioFileName.value) {
+          answer = new Answer(lastRecordedAudioFileName.value, question.value.questionId);
+        } else if (question.value.questionType === QuestionType.DRAG_AND_DROP) {
+          const actions = [isPaperPickedUp.value, isPaperFolded.value, isPaperOnFloor.value];
           answer = new Answer(actions.join(','), question.value.questionId);
         } else {
           loading.value = false;
@@ -103,8 +76,7 @@ export default defineComponent({
             // Handle end of quiz
           }
         } catch (error) {
-          errorMessage.value =
-            error?.response?.data?.detail || 'An unexpected error occurred.';
+          errorMessage.value = error?.response?.data?.detail || 'An unexpected error occurred.';
         } finally {
           loading.value = false;
         }
@@ -117,11 +89,9 @@ export default defineComponent({
     const loadQuestion = async () => {
       try {
         if (!testEntity.value.id) {
-          await testService.getTestByTestEntityHash(testEntityHash).then(res => testEntity.value = res);
+          await testService.getTestByTestEntityHash(testEntityHash).then(res => (testEntity.value = res));
         }
-        const response = await testService.getQuestionByTestEntityHash(
-          testEntityHash
-        );
+        const response = await testService.getQuestionByTestEntityHash(testEntityHash);
         if (typeof response === 'string') {
           quizEndMessage.value = response;
           question.value = null;
@@ -136,8 +106,7 @@ export default defineComponent({
           }
         }
       } catch (error) {
-        errorMessage.value =
-          error?.response?.data?.detail || 'An unexpected error occurred.';
+        errorMessage.value = error?.response?.data?.detail || 'An unexpected error occurred.';
       }
     };
 
@@ -148,9 +117,12 @@ export default defineComponent({
           case QuestionType.TEXT_INPUT:
             return !selectedAnswer.value;
           case QuestionType.SUBTRACTION_TASK:
-            return selectedAnswers.value.some(
-              answer => answer === null || answer === ''
-            );
+            return selectedAnswers.value.some(answer => {
+              if (typeof answer === 'string') {
+                return answer === '';
+              }
+              return answer === null;
+            });
           case QuestionType.VOICE_INPUT:
             return !lastRecordedAudioUrl.value;
           case QuestionType.DRAG_AND_DROP:
@@ -205,22 +177,19 @@ export default defineComponent({
 
           recorder.value.onstop = async () => {
             const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-            testService.sendAudioToServer(audioBlob, question.value?.questionId, testEntity.value.id)
-              .then((fileName: string) => {
-                audioChunks.length = 0;
-                lastRecordedAudioFileName.value = fileName;
-                loadLastRecordedAudio();
-              });
+            testService.sendAudioToServer(audioBlob, question.value?.questionId, testEntity.value.id).then((fileName: string) => {
+              audioChunks.length = 0;
+              lastRecordedAudioFileName.value = fileName;
+              loadLastRecordedAudio();
+            });
           };
 
           recorder.value.start();
           isRecording.value = true;
 
-          const timer = setInterval(() => {
+          setInterval(() => {
             recordingDuration.value++;
           }, 1000);
-
-          recordingTimer.value = timer;
         } catch (error) {
           console.error('Error starting recording:', error);
         }
@@ -232,7 +201,7 @@ export default defineComponent({
         recorder.value.stop();
         stream.value?.getTracks().forEach(track => track.stop());
         isRecording.value = false;
-        clearInterval(recordingTimer.value);
+        clearInterval(recordingDuration.value);
         recordingDuration.value = 0;
       }
     };
@@ -240,10 +209,10 @@ export default defineComponent({
     const loadLastRecordedAudio = async () => {
       if (question.value?.questionId) {
         try {
-          const { data, fileName } = await testService.getLastRecordedAudio(
-            question.value.questionId,
-            testEntity.value.id
-          );
+          const {
+            data,
+            fileName
+          } = await testService.getLastRecordedAudio(question.value.questionId, testEntity.value.id);
           lastRecordedAudioUrl.value = URL.createObjectURL(data);
           lastRecordedAudioFileName.value = fileName;
         } catch (error) {
@@ -303,5 +272,5 @@ export default defineComponent({
       startDragging,
       noAnimation
     };
-  }
+  },
 });

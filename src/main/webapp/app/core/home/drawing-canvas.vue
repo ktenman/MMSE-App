@@ -4,35 +4,17 @@
             @mousemove="updateCursorPosition"></canvas>
     <div v-if="isErasing" ref="eraserCursor" class="eraser-cursor"></div>
     <div class="mt-3">
-      <b-button v-if="!isDrawingSaved"
-        :disabled="isDrawingSaved"
-        variant="primary"
-        @click="toggleEraser"
-      >
+      <b-button v-if="!isDrawingSaved" :disabled="isDrawingSaved" variant="primary" @click="toggleEraser">
         <font-awesome-icon :icon="isErasing ? 'pencil-alt' : 'eraser'" />
         {{ isErasing ? 'Draw' : 'Erase' }}
       </b-button>
-      <b-button
-        :disabled="isDrawingSaved"
-        variant="danger"
-        @click="clearCanvas"
-      >
+      <b-button :disabled="isDrawingSaved" variant="danger" @click="clearCanvas">
         <font-awesome-icon icon="trash" />
         Clear
       </b-button>
-      <b-button
-        :disabled="isDrawingSaved"
-        variant="success"
-        @click="saveDrawing"
-      >
-        <font-awesome-icon
-          v-if="!isDrawingSaved"
-          icon="save"
-        />
-        <font-awesome-icon
-          v-else
-          icon="check"
-        />
+      <b-button :disabled="isDrawingSaved" variant="success" @click="saveDrawing">
+        <font-awesome-icon v-if="!isDrawingSaved" icon="save" />
+        <font-awesome-icon v-else icon="check" />
         {{ isDrawingSaved ? 'Saved' : 'Save Drawing' }}
       </b-button>
     </div>
@@ -67,4 +49,3 @@ button {
   transform: translate(-50%, -50%);
 }
 </style>
-

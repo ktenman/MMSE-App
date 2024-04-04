@@ -8,24 +8,6 @@
       <p class="lead" v-text="t$('home.subtitle')"></p>
 
       <div v-if="authenticated">
-        <!-- Show quiz end message when quiz ends -->
-
-        <!--        <drawing-canvas-->
-        <!--          ref="drawingCanvas"-->
-        <!--          :height="500"-->
-        <!--          :width="750"-->
-        <!--          :question="question"-->
-        <!--          :testEntity="testEntity"-->
-        <!--          @drawing-saved="updateDrawingFileName"-->
-        <!--        ></drawing-canvas>-->
-
-        <div v-if="quizState === QuizState.FINISHED">
-          <div class="alert alert-info">
-            {{ quizEndMessage }}
-          </div>
-          <button class="btn btn-primary" @click="retakeQuiz">Retake Quiz</button>
-        </div>
-
         <!-- Conditionally show multiple choice or input fields based on question type -->
         <div v-if="loading" class="loader-container">
           <span>Loading...</span>
@@ -33,16 +15,15 @@
         </div>
 
         <div v-if="quizState === QuizState.PATIENT_INFO">
-
           <h2>Create a New Quiz</h2>
           <form @submit.prevent="startQuiz">
             <div class="form-group">
               <label for="name">Name:</label>
-              <input id="name" v-model="patientProfile.name" class="form-control" required type="text">
+              <input id="name" v-model="patientProfile.name" class="form-control" required type="text" />
             </div>
             <div class="form-group">
               <label for="patientId">Patient ID:</label>
-              <input id="patientId" v-model="patientProfile.patientId" class="form-control" required type="text">
+              <input id="patientId" v-model="patientProfile.patientId" class="form-control" required type="text" />
             </div>
             <b-button type="submit" variant="primary">
               <font-awesome-icon icon="save" />
@@ -58,8 +39,8 @@
               <h4>{{ question.questionText }}</h4>
               <div class="form-group">
                 <label>Correct Answer:</label>
-                <input v-model="question.correctAnswer" class="form-control" required
-                       type="text" @blur="persistAnswer(question)">
+                <input v-model="question.correctAnswer" class="form-control" required type="text"
+                       @blur="persistAnswer(question)" />
               </div>
             </div>
             <b-button class="mt-6 mr-2" variant="info" @click="navigateBack">
@@ -80,11 +61,11 @@
               <h4>{{ question.questionText }}</h4>
               <div class="form-group">
                 <label>Correct Answer:</label>
-                <input v-model="question.correctAnswer" class="form-control" disabled type="text">
+                <input v-model="question.correctAnswer" class="form-control" disabled type="text" />
               </div>
               <div class="form-group">
                 <label>Answer Options (comma-separated):</label>
-                <input v-model="question.answerOptions" class="form-control" required type="text">
+                <input v-model="question.answerOptions" class="form-control" required type="text" />
               </div>
             </div>
             <div v-if="errorMessage" class="alert alert-danger" role="alert">
@@ -107,9 +88,12 @@
         <div v-if="quizState === QuizState.SHOW_TEST_LINK">
           <p>Please click the following link to continue the test:</p>
           <div class="button-group d-flex align-items-center">
-            <router-link id="testLinkInput"
-                         :to="{ name: 'TestView', params: { testEntityHash: testEntity.hash } }" class="mt-6 mr-2"
-                         target="_blank">
+            <router-link
+              id="testLinkInput"
+              :to="{ name: 'TestView', params: { testEntityHash: testEntity.hash } }"
+              class="mt-6 mr-2"
+              target="_blank"
+            >
               {{ testLink }}
             </router-link>
             <b-button class="mt-6 mr-2" variant="outline-secondary" @click="copyTestLink">
@@ -122,130 +106,6 @@
             <font-awesome-icon icon="plus"></font-awesome-icon>
             Create new Quiz
           </b-button>
-        </div>
-
-        <div v-if="quizState === QuizState.QUIZ && question && !loading">
-          <h2>{{ question.questionText }}</h2>
-          <div v-if="question.image" class="image-container">
-            <img :src="'data:image/png;base64,' + question.image" alt="Question image" class="question-image" />
-          </div>
-
-          <div v-if="question.questionType === QuestionType.MULTIPLE_CHOICE">
-            <div class="row">
-              <div class="col-md-6" v-for="(option, index) in question.answerOptions" :key="index">
-                <b-button
-                  :pressed="selectedAnswer === option"
-                  variant="outline-primary"
-                  @click="selectedAnswer = option"
-                  class="w-100 p-3 mt-3 large-text capitalize">
-                  {{ option.toLowerCase() }}
-                </b-button>
-              </div>
-            </div>
-          </div>
-
-          <div v-if="question.questionType === QuestionType.SUBTRACTION_TASK">
-            <div class="row">
-              <div class="col-md-6" v-for="(option, index) in question.answerOptions" :key="index">
-                <input
-                  v-model="selectedAnswers[index]"
-                  v-focus="index === 0"
-                  :max="option.max"
-                  :min="option.min"
-                  :placeholder="option.placeholder"
-                  class="form-control"
-                  type="number"
-                />
-              </div>
-            </div>
-          </div>
-
-          <div v-if="question.questionType === QuestionType.TEXT_INPUT">
-            <div class="row">
-              <div class="col-md-6">
-                <input
-                  v-model="selectedAnswer"
-                  v-focus="true"
-                  :min="1"
-                  class="form-control"
-                  required
-                  type="text"
-                  @keyup.enter="submitAnswer"
-                />
-                <!-- Always focus this input when it's rendered -->
-              </div>
-            </div>
-          </div>
-
-          <div v-if="question.questionType === QuestionType.VOICE_INPUT">
-            <div class="row">
-              <div class="col-md-12">
-                <div class="voice-recorder">
-                  <div class="button-group d-flex align-items-center">
-                    <b-button :disabled="isRecording" class="mt-6 mr-2" variant="primary" @click="startRecording">
-                      <font-awesome-icon icon="microphone" />
-                      Start Recording
-                    </b-button>
-                    <b-button :disabled="!isRecording" class="mt-6" variant="danger" @click="stopRecording">
-                      <font-awesome-icon icon="stop" />
-                      Stop Recording
-                    </b-button>
-                  </div>
-                  <div v-if="isRecording" class="recording-timer ml-3">
-                    <br />
-                    Recording: {{ recordingDuration }}s
-                    <br />
-                  </div>
-                  <div v-if="lastRecordedAudioUrl" class="audio-player mt-3">
-                    <p>To listen to your recorded audio, press the play button below:</p>
-                    <audio ref="audioPlayer" :src="lastRecordedAudioUrl" controls></audio>
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-
-          <div v-if="question.questionType === QuestionType.DRAG_AND_DROP">
-            <div v-if="!isPaperPickedUp" :class="{ 'picked-up': isPaperPickedUp, 'folded': isPaperFolded }" class="paper"
-                 @click="pickUpPaper">
-              <span>Paper</span>
-            </div>
-            <div
-              v-if="isPaperPickedUp && !isPaperOnFloor"
-              :class="{ 'picked-up': isPaperPickedUp, 'folded': isPaperFolded }"
-              class="paper"
-              draggable="true"
-              @dragstart="startDragging">
-              <div class="paper-content">
-                <span v-if="!isPaperFolded">Paper picked</span>
-                <span v-else>Folded Paper</span>
-              </div>
-            </div>
-            <b-button v-if="!isPaperFolded" :disabled="!isPaperPickedUp" class="mt-6 mr-2" variant="dark"
-                      @click="foldPaper">Fold Paper in Half
-            </b-button>
-            <div v-if="isPaperFolded" class="floor" @drop="putPaperOnFloor" @dragover.prevent>
-              <span>Floor</span>
-              <div v-if="isPaperOnFloor" :class="{ 'no-animation': noAnimation }" class="paper folded">
-                <span>Folded Paper</span>
-              </div>
-            </div>
-          </div>
-
-          <div v-if="errorMessage">
-            <p />
-            <div class="alert alert-danger" role="alert">
-              {{ errorMessage }}
-              <button aria-label="Close" class="close" type="button" @click="closeErrorMessage">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div>
-          </div>
-
-          <b-button :disabled="isNextButtonDisabled() || loading" class="mt-3" variant="primary" @click="submitAnswer">
-            Next Question
-          </b-button>
-
         </div>
 
         <div class="alert alert-warning" v-if="!authenticated">
@@ -265,63 +125,9 @@
 
 <script lang="ts" src="./home.component.ts"></script>
 <style scoped>
-.large-text {
-  font-size: 1.25em;
-}
-
-.capitalize {
-  text-transform: capitalize;
-}
-
-.image-container {
-  display: flex;
-  justify-content: left;
-  align-items: center;
-  height: 100%; /* Adjust as needed */
-}
-
-.question-image {
-  max-width: 65%;
-  height: auto;
-}
-
-.paper {
-  width: 300px;
-  height: 210px;
-  background-color: #fcfcf1;
-  border: 1px solid gray;
-  cursor: pointer;
-  margin-bottom: 20px;
-  transition: width 1.5s, height 1s;
-}
-
 .paper span {
   font-size: 16px;
   text-align: center;
-}
-
-.paper.picked-up {
-  animation: pick-up 1s;
-}
-
-.paper.folded {
-  width: 150px;
-  height: 210px;
-  animation: fold 1.5s;
-}
-
-.paper.folded.no-animation {
-  animation: none;
-}
-
-.floor {
-  width: 600px;
-  height: 300px;
-  border: 1px dashed black;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-  align-items: center;
 }
 
 .floor span {

@@ -10,24 +10,25 @@
       <span>Loading...</span>
     </div>
 
+    <!--        <drawing-canvas-->
+    <!--          ref="drawingCanvas"-->
+    <!--          :height="500"-->
+    <!--          :width="750"-->
+    <!--          :question="question"-->
+    <!--          :testEntity="testEntity"-->
+    <!--          @drawing-saved="updateDrawingFileName"-->
+    <!--        ></drawing-canvas>-->
+
     <div v-if="question && !loading">
       <h2>{{ question.questionText }}</h2>
 
       <div v-if="question.image" class="image-container">
-        <img
-          :src="'data:image/png;base64,' + question.image"
-          alt="Question image"
-          class="question-image"
-        />
+        <img :src="'data:image/png;base64,' + question.image" alt="Question image" class="question-image" />
       </div>
 
       <div v-if="question.questionType === QuestionType.MULTIPLE_CHOICE">
         <div class="row">
-          <div
-            v-for="(option, index) in question.answerOptions"
-            :key="index"
-            class="col-md-6"
-          >
+          <div v-for="(option, index) in question.answerOptions" :key="index" class="col-md-6">
             <b-button
               :pressed="selectedAnswer === option"
               class="w-100 p-3 mt-3 large-text capitalize"
@@ -42,11 +43,7 @@
 
       <div v-if="question.questionType === QuestionType.SUBTRACTION_TASK">
         <div class="row">
-          <div
-            v-for="(option, index) in question.answerOptions"
-            :key="index"
-            class="col-md-6"
-          >
+          <div v-for="(option, index) in question.answerOptions" :key="index" class="col-md-6">
             <input
               v-model="selectedAnswers[index]"
               :max="option.max"
@@ -62,15 +59,8 @@
       <div v-if="question.questionType === QuestionType.TEXT_INPUT">
         <div class="row">
           <div class="col-md-6">
-            <input
-              v-model="selectedAnswer"
-              v-focus="true"
-              :min="1"
-              class="form-control"
-              required
-              type="text"
-              @keyup.enter="submitAnswer"
-            />
+            <input v-model="selectedAnswer" v-focus="true" :min="1" class="form-control" required type="text"
+                   @keyup.enter="submitAnswer" />
           </div>
         </div>
       </div>
@@ -80,21 +70,11 @@
           <div class="col-md-12">
             <div class="voice-recorder">
               <div class="button-group d-flex align-items-center">
-                <b-button
-                  :disabled="isRecording"
-                  class="mt-6 mr-2"
-                  variant="primary"
-                  @click="startRecording"
-                >
+                <b-button :disabled="isRecording" class="mt-6 mr-2" variant="primary" @click="startRecording">
                   <font-awesome-icon icon="microphone" />
                   Start Recording
                 </b-button>
-                <b-button
-                  :disabled="!isRecording"
-                  class="mt-6"
-                  variant="danger"
-                  @click="stopRecording"
-                >
+                <b-button :disabled="!isRecording" class="mt-6" variant="danger" @click="stopRecording">
                   <font-awesome-icon icon="stop" />
                   Stop Recording
                 </b-button>
@@ -114,17 +94,13 @@
       </div>
 
       <div v-if="question.questionType === QuestionType.DRAG_AND_DROP">
-        <div
-          v-if="!isPaperPickedUp"
-          :class="{ 'picked-up': isPaperPickedUp, 'folded': isPaperFolded }"
-          class="paper"
-          @click="pickUpPaper"
-        >
+        <div v-if="!isPaperPickedUp" :class="{ 'picked-up': isPaperPickedUp, folded: isPaperFolded }" class="paper"
+             @click="pickUpPaper">
           <span>Paper</span>
         </div>
         <div
           v-if="isPaperPickedUp && !isPaperOnFloor"
-          :class="{ 'picked-up': isPaperPickedUp, 'folded': isPaperFolded }"
+          :class="{ 'picked-up': isPaperPickedUp, folded: isPaperFolded }"
           class="paper"
           draggable="true"
           @dragstart="startDragging"
@@ -134,23 +110,15 @@
             <span v-else>Folded Paper</span>
           </div>
         </div>
-        <b-button
-          v-if="!isPaperFolded"
-          :disabled="!isPaperPickedUp"
-          class="mt-6 mr-2"
-          variant="dark"
-          @click="foldPaper"
-        >
+        <b-button v-if="!isPaperFolded" :disabled="!isPaperPickedUp" class="mt-6 mr-2" variant="dark"
+                  @click="foldPaper">
           Fold Paper in Half
         </b-button>
         <div v-if="isPaperFolded" class="floor" @drop="putPaperOnFloor" @dragover.prevent>
           <span>Floor</span>
-          <div
-            v-if="isPaperOnFloor"
-            :class="{ 'no-animation': noAnimation }"
-            class="paper folded"
-          >
-            <span>Folded Paper</span></div>
+          <div v-if="isPaperOnFloor" :class="{ 'no-animation': noAnimation }" class="paper folded">
+            <span>Folded Paper</span>
+          </div>
         </div>
       </div>
       <div v-if="errorMessage">
@@ -163,19 +131,15 @@
         </div>
       </div>
 
-      <b-button
-        :disabled="isNextButtonDisabled() || loading"
-        class="mt-3"
-        variant="primary"
-        @click="submitAnswer"
-      >
+      <b-button :disabled="isNextButtonDisabled() || loading" class="mt-3" variant="primary" @click="submitAnswer">
         Next Question
       </b-button>
     </div>
   </div>
 </template>
 <script lang="ts" src="./test.component.ts"></script>
-<style scoped> .large-text {
+<style scoped>
+.large-text {
   font-size: 1.25em;
 }
 
@@ -261,4 +225,5 @@
   100% {
     transform: scale(1) rotate(0deg);
   }
-} </style>
+}
+</style>

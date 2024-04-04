@@ -1,5 +1,5 @@
 import { defineComponent, onMounted, PropType, ref } from 'vue';
-import QuestionService from '@/entities/question/question.service';
+import HomeService from '@/core/home/home.service';
 import { IQuestion } from '@/shared/model/question.model';
 import { ITestEntity } from '@/shared/model/test-entity.model';
 
@@ -28,7 +28,7 @@ export default defineComponent({
     testEntity: {
       type: Object as PropType<ITestEntity>,
       required: true
-    }
+    },
   },
   emits: ['drawing-saved'],
   setup(props: Props, { emit }) {
@@ -42,12 +42,11 @@ export default defineComponent({
     const height = ref(600);
     const cursorX = ref(0);
     const cursorY = ref(0);
-    const questionService = new QuestionService();
+    const questionService = new HomeService();
     const isDrawingSaved = ref(false);
 
     const saveDrawing = async () => {
       if (canvas.value) {
-
         // const dataURL = canvas.value.toDataURL('image/png');
         // const binaryData = atob(dataURL.split(',')[1]);
         // const arrayBuffer = new ArrayBuffer(binaryData.length);
@@ -173,5 +172,5 @@ export default defineComponent({
       isDrawingSaved,
       saveDrawing
     };
-  }
+  },
 });

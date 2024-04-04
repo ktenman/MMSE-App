@@ -11,7 +11,9 @@ export default class TestService {
   }
 
   public submitAnswer(answer: IAnswer, testEntityId: number): Promise<void> {
-    return axios.post<void>(`/api/test/answer/${testEntityId}`, answer);
+    return axios.post<void>(`/api/test/answer/${testEntityId}`, answer).then(() => {
+    }).catch(() => {
+    });
   }
 
   public sendAudioToServer(audioBlob: Blob, questionId: QuestionId | undefined, testEntityId: number): Promise<string> {
@@ -48,5 +50,4 @@ export default class TestService {
   public getTestByTestEntityHash(testEntityHash: string): Promise<ITestEntity> {
     return axios.get<ITestEntity>(`/api/test/test-entity/${testEntityHash}`).then(res => res.data);
   }
-
 }
