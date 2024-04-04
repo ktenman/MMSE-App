@@ -1,10 +1,10 @@
 <template>
   <div class="home row">
-    <div class="col-md-3">
+    <div class="col-md-2">
       <span class="hipster img-fluid rounded"></span>
     </div>
-    <div class="col-md-9">
-      <h1 class="display-4" v-text="t$('home.title')"></h1>
+    <div class="col-md-10">
+      <h2 class="display-4" v-text="t$('home.title')"></h2>
       <p class="lead" v-text="t$('home.subtitle')"></p>
 
       <div v-if="authenticated">
@@ -34,7 +34,7 @@
 
         <div v-if="quizState === QuizState.PATIENT_INFO">
 
-          <h2>Start a New Quiz</h2>
+          <h2>Create a New Quiz</h2>
           <form @submit.prevent="startQuiz">
             <div class="form-group">
               <label for="name">Name:</label>
@@ -44,7 +44,10 @@
               <label for="patientId">Patient ID:</label>
               <input id="patientId" v-model="patientProfile.patientId" class="form-control" required type="text">
             </div>
-            <button class="btn btn-primary" type="submit">Start Quiz</button>
+            <b-button type="submit" variant="primary">
+              <font-awesome-icon icon="save" />
+              Save and Continue
+            </b-button>
           </form>
         </div>
 
@@ -99,6 +102,26 @@
               Save Answer Options
             </b-button>
           </form>
+        </div>
+
+        <div v-if="quizState === QuizState.SHOW_TEST_LINK">
+          <p>Please click the following link to continue the test:</p>
+          <div class="button-group d-flex align-items-center">
+            <router-link id="testLinkInput"
+                         :to="{ name: 'TestView', params: { testEntityHash: testEntity.hash } }" class="mt-6 mr-2"
+                         target="_blank">
+              {{ testLink }}
+            </router-link>
+            <b-button class="mt-6 mr-2" variant="outline-secondary" @click="copyTestLink">
+              <font-awesome-icon icon="copy"></font-awesome-icon>
+              Copy
+            </b-button>
+          </div>
+          <p />
+          <b-button class="mt-6" variant="primary" @click="retakeQuiz">
+            <font-awesome-icon icon="plus"></font-awesome-icon>
+            Create new Quiz
+          </b-button>
         </div>
 
         <div v-if="quizState === QuizState.QUIZ && question && !loading">

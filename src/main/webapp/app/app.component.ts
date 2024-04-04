@@ -25,7 +25,13 @@ export default defineComponent({
 
     const isTest = computed(() => {
       const testRoutes = ['/test'];
-      return testRoutes.includes(router.currentRoute.value.path);
+      for (const testRoute of testRoutes) {
+        const path = router.currentRoute.value.path;
+        if (path.includes(testRoute)) {
+          return true;
+        }
+      }
+      return false;
     });
 
     return {

@@ -11,12 +11,15 @@ import { IOrientationToPlaceQuestion } from '@/shared/model/orientation-to-place
 import { QuizState } from '@/shared/model/enumerations/quiz-state.mode';
 import { ITestEntity, TestEntity } from '@/shared/model/test-entity.model';
 import DrawingCanvas from '@/core/home/drawing-canvas.vue';
+import { useRouter } from 'vue-router';
+import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
 
 const QUIZ_PROGRESS = 'quizProgress';
 
 export default defineComponent({
   name: 'Home',
   components: {
+    FontAwesomeIcon,
     DrawingCanvas
   },
   computed: {
@@ -57,6 +60,8 @@ export default defineComponent({
     const testEntity = ref<ITestEntity>(new TestEntity());
     const questionService = new QuestionService();
     const drawingFileName = ref<string | null>(null);
+    const router = useRouter();
+    const testLink = ref('');
 
     const closeErrorMessage = () => {
       errorMessage.value = null;
@@ -78,6 +83,16 @@ export default defineComponent({
           break;
       }
       saveQuizProgress();
+    };
+
+    const copyTestLink = () => {
+      navigator.clipboard.writeText(testLink.value)
+        .then(() => {
+          console.log('Test link copied to clipboard');
+        })
+        .catch((error) => {
+          console.error('Failed to copy test link:', error);
+        });
     };
 
     const loadOrientationToPlaceQuestions = async () => {
@@ -132,7 +147,12 @@ export default defineComponent({
           patientProfile.value.id, orientationToPlaceQuestions.value);
         testEntity.value = response;
         console.log('Orientation to place answer options saved successfully');
-        quizState.value = QuizState.QUIZ;
+        quizState.value = QuizState.SHOW_TEST_LINK;
+        const baseUrl = window.location.origin;
+        testLink.value = baseUrl + router.resolve({
+          name: 'TestView',
+          params: { testEntityHash: testEntity.value.hash }
+        }).href;
         await loadQuestion();
         saveQuizProgress();
       } catch (error) {
@@ -367,6 +387,13 @@ export default defineComponent({
         isPaperPickedUp.value = quizProgress.isPaperPickedUp;
         quizEndMessage.value = quizProgress.quizEndMessage;
         testEntity.value = quizProgress.testEntity;
+        if (!testLink.value) {
+          const baseUrl = window.location.origin;
+          testLink.value = baseUrl + router.resolve({
+            name: 'TestView',
+            params: { testEntityHash: testEntity.value.hash }
+          }).href;
+        }
       }
     };
 
@@ -433,7 +460,9 @@ export default defineComponent({
       testEntity,
       drawingFileName,
       updateDrawingFileName,
-      navigateBack
+      navigateBack,
+      testLink,
+      copyTestLink
     };
   }
 });

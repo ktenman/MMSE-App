@@ -18,7 +18,7 @@ import java.util.Optional;
 public interface PatientProfileRepository extends JpaRepository<PatientProfile, Long> {
     PatientProfile findByTestEntitiesContains(TestEntity testEntity);
 
-    @Query("SELECT p FROM PatientProfile p WHERE p.patientId = :patientId AND p.name = :name")
+    @Query("SELECT p FROM PatientProfile p WHERE p.patientId = :patientId AND UPPER(p.name) = UPPER(:name)")
     Optional<PatientProfile> findByPatientIdAndName(@Param("patientId") String patientId, @Param("name") String name);
 
     Optional<PatientProfile> findByPatientId(String patientId);

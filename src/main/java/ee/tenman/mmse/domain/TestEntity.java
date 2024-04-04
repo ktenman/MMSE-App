@@ -37,7 +37,7 @@ public class TestEntity extends BaseEntity {
     @JsonIgnoreProperties(value = {"testEntities"}, allowSetters = true)
     private PatientProfile patientProfile;
 
-    @OneToOne(mappedBy = "testEntity", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @OneToOne(mappedBy = "testEntity", cascade = CascadeType.ALL, fetch = FetchType.EAGER)
     private TestEntityHash testEntityHash;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here

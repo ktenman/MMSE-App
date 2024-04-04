@@ -16,9 +16,11 @@ import org.mapstruct.Named;
  */
 @Mapper(componentModel = "spring")
 public interface TestEntityMapper extends EntityMapper<TestEntityDTO, TestEntity> {
+
     @Mapping(target = "user", source = "user", qualifiedByName = "userLogin")
     @Mapping(target = "patientProfile", source = "patientProfile", qualifiedByName = "patientProfileId")
-    TestEntityDTO toDto(TestEntity s);
+    @Mapping(target = "hash", source = "testEntityHash.hash")
+    TestEntityDTO toDto(TestEntity testEntity);
 
     @Named("userLogin")
     @BeanMapping(ignoreByDefault = true)

@@ -1,8 +1,10 @@
 package ee.tenman.mmse.service.dto;
 
 import jakarta.validation.constraints.NotEmpty;
+import org.apache.commons.lang3.StringUtils;
 
 import java.util.Objects;
+import java.util.Optional;
 
 public class PatientProfileRequest {
 
@@ -23,7 +25,9 @@ public class PatientProfileRequest {
     }
 
     public String getPatientId() {
-        return patientId;
+        return Optional.ofNullable(patientId)
+            .map(String::toUpperCase)
+            .orElse(null);
     }
 
     public void setPatientId(String patientId) {
@@ -31,7 +35,9 @@ public class PatientProfileRequest {
     }
 
     public String getName() {
-        return name;
+        return Optional.ofNullable(name)
+            .map(StringUtils::strip)
+            .orElse(null);
     }
 
     public void setName(String name) {

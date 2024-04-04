@@ -22,6 +22,8 @@ public class TestEntityDTO implements Serializable {
 
     private PatientProfileDTO patientProfile;
 
+    private String hash;
+
     public Long getId() {
         return id;
     }
@@ -68,6 +70,14 @@ public class TestEntityDTO implements Serializable {
 
     public void setPatientProfile(PatientProfileDTO patientProfile) {
         this.patientProfile = patientProfile;
+    }
+
+    public String getHash() {
+        return hash;
+    }
+
+    public void setHash(String hash) {
+        this.hash = hash;
     }
 
     @Override

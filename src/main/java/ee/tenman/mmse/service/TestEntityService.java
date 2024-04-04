@@ -11,6 +11,7 @@ import ee.tenman.mmse.repository.UserAnswerRepository;
 import ee.tenman.mmse.service.dto.TestEntityDTO;
 import ee.tenman.mmse.service.mapper.TestEntityMapper;
 import org.apache.commons.lang3.RandomStringUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.data.domain.Page;
@@ -28,7 +29,7 @@ import java.util.Optional;
 @Transactional
 public class TestEntityService {
 
-    private final static int HASH_LENGTH = 6;
+    private final static int HASH_LENGTH = 4;
     private final Logger log = LoggerFactory.getLogger(TestEntityService.class);
     private final TestEntityRepository testEntityRepository;
     private final TestEntityHashRepository testEntityHashRepository;
@@ -147,9 +148,7 @@ public class TestEntityService {
     }
 
     public TestEntity getById(Long id) {
-        User user = userService.getUserWithAuthorities();
         return testEntityRepository.findById(id)
-            .filter(testEntity -> testEntity.getUser().equals(user))
             .orElseThrow(() -> new IllegalStateException(String.format("No test entity found for id %s", id)));
     }
 
@@ -159,6 +158,13 @@ public class TestEntityService {
 
     public TestEntity getByUserAnswer(UserAnswer userAnswer) {
         return testEntityRepository.findByUserAnswersContains(userAnswer);
+    }
+
+    public Optional<TestEntity> findByHash(String hash) {
+        if (StringUtils.isBlank(hash)) {
+            return Optional.empty();
+        }
+        return testEntityHashRepository.findByHash(hash).map(TestEntityHash::getTestEntity);
     }
 
     public Optional<TestEntity> findByPatientIdUncompleted(String patientId) {
@@ -182,7 +188,7 @@ public class TestEntityService {
     private void createTestEntityHash(TestEntity testEntity) {
         String hash;
         do {
-            hash = RandomStringUtils.randomAlphanumeric(HASH_LENGTH);
+            hash = RandomStringUtils.randomAlphabetic(HASH_LENGTH);
         } while (testEntityHashRepository.existsByHash(hash));
         TestEntityHash testEntityHash = new TestEntityHash();
         testEntityHash.setHash(hash);

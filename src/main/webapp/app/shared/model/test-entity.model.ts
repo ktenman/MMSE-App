@@ -10,6 +10,7 @@ export interface ITestEntity {
   user?: IUser;
   userAnswers?: IUserAnswer[] | null;
   patientProfile?: IPatientProfile | null;
+  hash?: string;
 }
 
 export class TestEntity implements ITestEntity {
@@ -20,7 +21,8 @@ export class TestEntity implements ITestEntity {
     public score?: number | null,
     public user?: IUser,
     public userAnswers?: IUserAnswer[] | null,
-    public patientProfile?: IPatientProfile | null
+    public patientProfile?: IPatientProfile | null,
+    public hash?: string
   ) {
   }
 }

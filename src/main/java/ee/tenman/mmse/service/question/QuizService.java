@@ -14,10 +14,8 @@ import ee.tenman.mmse.service.UserService;
 import ee.tenman.mmse.service.dto.AnswerDTO;
 import ee.tenman.mmse.service.dto.OrientationToPlaceQuestionDTO;
 import ee.tenman.mmse.service.dto.QuestionDTO;
-import ee.tenman.mmse.service.dto.TestEntityDTO;
 import ee.tenman.mmse.service.external.dolphin.DolphinService;
 import ee.tenman.mmse.service.lock.Lock;
-import ee.tenman.mmse.service.mapper.TestEntityMapper;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -48,7 +46,6 @@ public class QuizService {
     private final TestEntityService testEntityService;
     private final PatientProfileService patientProfileService;
     private final OrientationToPlaceAnswerService orientationToPlaceAnswerService;
-    private final TestEntityMapper testEntityMapper;
     private final DolphinService dolphinService;
 
     @Autowired
@@ -57,7 +54,8 @@ public class QuizService {
         UserAnswerRepository userAnswerRepository,
         UserService userService, TestEntityService testEntityService,
         PatientProfileService patientProfileService,
-        OrientationToPlaceAnswerService orientationToPlaceAnswerService, TestEntityMapper testEntityMapper, DolphinService dolphinService
+        OrientationToPlaceAnswerService orientationToPlaceAnswerService,
+        DolphinService dolphinService
     ) {
         this.questions = questionsConfig.getQuestions();
         this.userAnswerRepository = userAnswerRepository;
@@ -65,7 +63,6 @@ public class QuizService {
         this.testEntityService = testEntityService;
         this.patientProfileService = patientProfileService;
         this.orientationToPlaceAnswerService = orientationToPlaceAnswerService;
-        this.testEntityMapper = testEntityMapper;
         this.dolphinService = dolphinService;
     }
 
@@ -170,7 +167,7 @@ public class QuizService {
     }
 
 
-    public TestEntityDTO saveOrientationToPlaceAnswerOptions(Long patientProfileId, List<OrientationToPlaceQuestionDTO> answers) {
+    public TestEntity saveOrientationToPlaceAnswerOptions(Long patientProfileId, List<OrientationToPlaceQuestionDTO> answers) {
         validateAnswers(answers);
         PatientProfile patientProfile = patientProfileService.findById(patientProfileId)
             .orElseThrow(() -> new RuntimeException("Patient profile not found"));
@@ -187,8 +184,7 @@ public class QuizService {
             })
             .collect(toSet());
         orientationToPlaceAnswerService.saveAll(orientationToPlaceAnswers);
-        TestEntity testEntity = testEntityService.createTestEntity(patientProfile);
-        return testEntityMapper.toDto(testEntity);
+        return testEntityService.createTestEntity(patientProfile);
     }
 
     private void validateAnswers(List<OrientationToPlaceQuestionDTO> answers) {
