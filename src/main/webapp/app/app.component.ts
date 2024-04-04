@@ -24,14 +24,9 @@ export default defineComponent({
     const router = useRouter();
 
     const isTest = computed(() => {
-      const testRoutes = ['/test'];
-      for (const testRoute of testRoutes) {
-        const path = router.currentRoute.value.path;
-        if (path.includes(testRoute)) {
-          return true;
-        }
-      }
-      return false;
+      const path = router.currentRoute.value.path;
+      const pattern = /^\/q\/[a-zA-Z]{4,8}$/; // This is the pattern for the test-quiz route. For example, /q/abcde or /q/aBcdefg
+      return pattern.test(path);
     });
 
     return {

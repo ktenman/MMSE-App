@@ -95,7 +95,7 @@ export default {
       meta: { authorities: [Authority.USER] }
     },
     {
-      path: 'test/:testEntityHash',
+      path: 'q/:testEntityHash',
       name: 'TestView',
       component: TestComponent
     },
