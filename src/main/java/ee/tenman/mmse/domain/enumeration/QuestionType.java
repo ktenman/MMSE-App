@@ -7,5 +7,6 @@ public enum QuestionType {
     NUMERIC_INPUT,   // For numeric input questions
     SUBTRACTION_TASK, // For subtraction tasks
     VOICE_INPUT, // For voice input questions
-    DRAG_AND_DROP // For drag and drop questions
+    DRAG_AND_DROP, // For drag and drop questions
+    DRAWING, // For drawing questions
 }

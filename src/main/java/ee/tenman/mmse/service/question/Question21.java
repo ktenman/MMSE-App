@@ -20,7 +20,7 @@ import java.util.Optional;
 @Component
 public class Question21 implements Question {
 
-    private static final String QUESTION = "What state are you in?";
+    private static final String QUESTION = "What country are you in?";
     private static final String QUESTION_TEXT = "21. " + QUESTION;
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_21;
 

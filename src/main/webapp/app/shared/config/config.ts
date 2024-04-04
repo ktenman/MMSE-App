@@ -44,6 +44,8 @@ import { faStop } from '@fortawesome/free-solid-svg-icons/faStop';
 import { faEraser } from '@fortawesome/free-solid-svg-icons/faEraser';
 import { faCheck } from '@fortawesome/free-solid-svg-icons/faCheck';
 import { faCopy } from '@fortawesome/free-solid-svg-icons/faCopy';
+import { faArrowRight } from '@fortawesome/free-solid-svg-icons/faArrowRight';
+import { faBookOpen } from '@fortawesome/free-solid-svg-icons/faBookOpen';
 
 const datetimeFormats: IntlDateTimeFormats = {
   en: {
@@ -144,7 +146,9 @@ export function initFortAwesome(vue) {
     faStop,
     faEraser,
     faCheck,
-    faCopy
+    faCopy,
+    faArrowRight,
+    faBookOpen
   );
 }
 

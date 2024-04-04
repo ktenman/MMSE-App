@@ -14,7 +14,7 @@ const UserAnswerDetails = () => import('@/entities/user-answer/user-answer-detai
 const PatientProfile = () => import('@/entities/patient-profile/patient-profile.vue');
 const PatientProfileUpdate = () => import('@/entities/patient-profile/patient-profile-update.vue');
 const PatientProfileDetails = () => import('@/entities/patient-profile/patient-profile-details.vue');
-const TestComponent = () => import('@/core/home/test.vue');
+const TestComponent = () => import('@/core/test/test.vue');
 
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 

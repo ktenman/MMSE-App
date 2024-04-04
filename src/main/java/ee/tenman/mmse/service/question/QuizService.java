@@ -80,6 +80,7 @@ public class QuizService {
         questionDTO.setAnswerOptions(question.getAnswerOptions(testEntityId));
         questionDTO.setMaximumScore(question.getMaximumScore());
         questionDTO.setOrientationToPlace(question.isOrientationToPlace());
+        questionDTO.setInstructions(question.getInstructions());
         return questionDTO;
     }
 

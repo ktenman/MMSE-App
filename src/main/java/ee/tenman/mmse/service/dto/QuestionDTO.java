@@ -4,6 +4,7 @@ import ee.tenman.mmse.domain.enumeration.QuestionId;
 import ee.tenman.mmse.domain.enumeration.QuestionType;
 
 import java.util.Collection;
+import java.util.List;
 
 public class QuestionDTO {
     private String questionText;
@@ -13,6 +14,7 @@ public class QuestionDTO {
     private Collection<?> answerOptions;
     private int maximumScore;
     private boolean orientationToPlace;
+    private List<String> instructions;
 
     // Default constructor
     public QuestionDTO() {
@@ -26,7 +28,8 @@ public class QuestionDTO {
         QuestionType questionType,
         Collection<?> answerOptions,
         int maximumScore,
-        boolean orientationToPlace
+        boolean orientationToPlace,
+        List<String> instructions
     ) {
         this.questionText = questionText;
         this.image = image;
@@ -35,6 +38,7 @@ public class QuestionDTO {
         this.answerOptions = answerOptions;
         this.maximumScore = maximumScore;
         this.orientationToPlace = orientationToPlace;
+        this.instructions = instructions;
     }
 
 
@@ -92,5 +96,13 @@ public class QuestionDTO {
 
     public void setOrientationToPlace(boolean orientationToPlace) {
         this.orientationToPlace = orientationToPlace;
+    }
+
+    public List<String> getInstructions() {
+        return instructions;
+    }
+
+    public void setInstructions(List<String> instructions) {
+        this.instructions = instructions;
     }
 }

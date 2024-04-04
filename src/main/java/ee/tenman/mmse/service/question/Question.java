@@ -55,4 +55,8 @@ public interface Question {
         return null;
     }
 
+    default List<String> getInstructions() {
+        return List.of();
+    }
+
 }

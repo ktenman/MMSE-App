@@ -7,6 +7,7 @@ export interface IQuestion {
   answerOptions?: string[] | null;
   image?: string | null;
   questionType?: QuestionType | null;
+  instructions?: string[] | null;
 }
 
 export class Question implements IQuestion {
@@ -15,7 +16,8 @@ export class Question implements IQuestion {
     public questionText?: string,
     public answerOptions?: string[] | null,
     public image?: string | null,
-    public questionType?: QuestionType | null
+    public questionType?: QuestionType | null,
+    public instructions?: string[] | null
   ) {
   }
 }

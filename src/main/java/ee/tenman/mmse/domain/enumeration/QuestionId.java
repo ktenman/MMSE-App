@@ -26,4 +26,5 @@ public enum QuestionId {
     QUESTION_19,
     QUESTION_20,
     QUESTION_21,
+    QUESTION_22,
 }

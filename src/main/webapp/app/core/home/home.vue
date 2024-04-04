@@ -8,10 +8,8 @@
       <p class="lead" v-text="t$('home.subtitle')"></p>
 
       <div v-if="authenticated">
-        <!-- Conditionally show multiple choice or input fields based on question type -->
         <div v-if="loading" class="loader-container">
           <span>Loading...</span>
-          <!-- Replace with your actual loader -->
         </div>
 
         <div v-if="quizState === QuizState.PATIENT_INFO">
@@ -102,7 +100,7 @@
             </b-button>
           </div>
           <p />
-          <b-button class="mt-6" variant="primary" @click="retakeQuiz">
+          <b-button class="mt-6" variant="primary" @click="createNewQuiz">
             <font-awesome-icon icon="plus"></font-awesome-icon>
             Create new Quiz
           </b-button>
