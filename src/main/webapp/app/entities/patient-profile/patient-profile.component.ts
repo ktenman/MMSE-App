@@ -159,5 +159,5 @@ export default defineComponent({
       t$,
       ...dataUtils
     };
-  }
+  },
 });

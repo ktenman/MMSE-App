@@ -48,13 +48,8 @@
           <div v-for="(option, index) in question.answerOptions" :key="index" class="col-md-6">
             <!-- label for input value written in bootstrap -->
             <label class="col-form-label">{{ option.placeholder }}:</label>
-            <input
-              v-model="selectedAnswers[index]"
-              :max="option.max"
-              :min="option.min"
-              class="form-control col-md-11"
-              type="number"
-            />
+            <input v-model="selectedAnswers[index]" :max="option.max" :min="option.min" class="form-control col-md-11"
+                   type="number" />
           </div>
         </div>
       </div>

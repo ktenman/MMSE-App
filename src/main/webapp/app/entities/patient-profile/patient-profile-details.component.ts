@@ -42,5 +42,5 @@ export default defineComponent({
       previousState,
       t$: useI18n().t
     };
-  }
+  },
 });

@@ -12,8 +12,8 @@ const error = {
     status: null,
     data: {
       type: null
-    }
-  }
+    },
+  },
 };
 
 const axiosStub = {

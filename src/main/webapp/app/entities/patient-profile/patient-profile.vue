@@ -57,9 +57,8 @@
         <tbody>
         <tr v-for="patientProfile in patientProfiles" :key="patientProfile.id" data-cy="entityTable">
           <td>
-            <router-link :to="{ name: 'PatientProfileView', params: { patientProfileId: patientProfile.id } }">{{
-                patientProfile.id
-              }}
+            <router-link :to="{ name: 'PatientProfileView', params: { patientProfileId: patientProfile.id } }"
+            >{{ patientProfile.id }}
             </router-link>
           </td>
           <td>{{ patientProfile.patientId }}</td>

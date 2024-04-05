@@ -76,7 +76,7 @@ public class Question2 implements Question {
             String userAnswerText = userAnswer.getAnswerText().replaceAll("(st|nd|rd|th)", "");
             userAnswerDate = LocalDate.parse(userAnswerText, DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.ENGLISH));
         } catch (DateTimeParseException e) {
-            return 0;
+            throw new IllegalArgumentException(String.format("Invalid date format: %s", userAnswer.getAnswerText()));
         }
         return localDate.equals(userAnswerDate) ? 1 : 0;
     }

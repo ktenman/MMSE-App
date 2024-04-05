@@ -107,6 +107,6 @@ export default defineComponent({
             this.alertService.showHttpError(error.response);
           });
       }
-    }
-  }
+    },
+  },
 });

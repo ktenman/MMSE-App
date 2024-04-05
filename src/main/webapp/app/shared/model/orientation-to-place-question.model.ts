@@ -8,11 +8,6 @@ export interface IOrientationToPlaceQuestion {
 }
 
 export class OrientationToPlaceQuestion implements IOrientationToPlaceQuestion {
-  constructor(
-    public questionId?: QuestionId,
-    public questionText?: string,
-    public correctAnswer?: string,
-    public answerOptions?: string
-  ) {
+  constructor(public questionId?: QuestionId, public questionText?: string, public correctAnswer?: string, public answerOptions?: string) {
   }
 }

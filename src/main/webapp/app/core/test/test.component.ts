@@ -19,7 +19,7 @@ export default defineComponent({
   computed: {
     QuestionType() {
       return QuestionType;
-    }
+    },
   },
   setup() {
     const route = useRoute();
@@ -284,5 +284,5 @@ export default defineComponent({
       testEntity,
       updateDrawingFileName
     };
-  }
+  },
 });

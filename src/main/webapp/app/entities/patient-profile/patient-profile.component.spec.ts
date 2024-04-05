@@ -17,7 +17,7 @@ const bModalStub = {
     },
     show: () => {
     }
-  }
+  },
 };
 
 describe('Component Tests', () => {
@@ -35,7 +35,7 @@ describe('Component Tests', () => {
         i18n: { t: vitest.fn() } as any,
         bvToast: {
           toast: vitest.fn()
-        } as any
+        } as any,
       });
 
       mountOptions = {
@@ -55,7 +55,7 @@ describe('Component Tests', () => {
         provide: {
           alertService,
           patientProfileService: () => patientProfileServiceStub
-        }
+        },
       };
     });
 

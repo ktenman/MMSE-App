@@ -36,9 +36,8 @@
           <dd>
             <div v-if="testEntity.patientProfile">
               <router-link
-                :to="{ name: 'PatientProfileView', params: { patientProfileId: testEntity.patientProfile.id } }">{{
-                  testEntity.patientProfile.id
-                }}
+                :to="{ name: 'PatientProfileView', params: { patientProfileId: testEntity.patientProfile.id } }"
+              >{{ testEntity.patientProfile.id }}
               </router-link>
             </div>
           </dd>

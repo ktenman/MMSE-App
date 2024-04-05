@@ -39,7 +39,7 @@ describe('Component Tests', () => {
         i18n: { t: vitest.fn() } as any,
         bvToast: {
           toast: vitest.fn()
-        } as any
+        } as any,
       });
 
       mountOptions = {
@@ -50,7 +50,7 @@ describe('Component Tests', () => {
         provide: {
           alertService,
           userAnswerService: () => userAnswerServiceStub
-        }
+        },
       };
     });
 
@@ -61,7 +61,7 @@ describe('Component Tests', () => {
         route = {
           params: {
             userAnswerId: '' + 123
-          }
+          },
         };
         const wrapper = shallowMount(UserAnswerDetails, { global: mountOptions });
         const comp = wrapper.vm;

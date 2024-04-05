@@ -139,8 +139,8 @@ export default defineComponent({
       if (eraserCursor.value) {
         eraserCursor.value.style.setProperty('--cursor-x', `${event.offsetX}px`);
         eraserCursor.value.style.setProperty('--cursor-y', `${event.offsetY}px`);
-        eraserCursor.value.style.left = `var(--cursor-x)`;
-        eraserCursor.value.style.top = `var(--cursor-y)`;
+        eraserCursor.value.style.left = 'var(--cursor-x)';
+        eraserCursor.value.style.top = 'var(--cursor-y)';
       }
     };
 
