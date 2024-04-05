@@ -2,6 +2,7 @@ package ee.tenman.mmse.service.question;
 
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.service.external.dolphin.DolphinService;
+import ee.tenman.mmse.service.external.dolphin.PromptWrapper;
 import ee.tenman.mmse.service.external.openai.NoDolphinResponseException;
 import ee.tenman.mmse.service.external.openai.OpenAiService;
 import ee.tenman.mmse.service.external.similarity.SimilarityService;
@@ -189,8 +190,9 @@ class Question11Test {
             return Optional.of(question.contains("pen") ? "no" : "yes");
         });
 
-        lenient().when(dolphinService.find(any())).thenAnswer(invocation -> {
-            String question = invocation.getArgument(0);
+        lenient().when(dolphinService.find(any(PromptWrapper.class))).thenAnswer(invocation -> {
+            PromptWrapper promptWrapper = invocation.getArgument(0);
+            String question = promptWrapper.prompt();
             return question.contains("pen") ? "no" : "yes";
         });
 
