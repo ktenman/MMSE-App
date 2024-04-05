@@ -36,22 +36,22 @@ public interface Question {
             }
             byte[] imageBytes = IOUtils.toByteArray(inputStream);
             return Base64.getEncoder().encodeToString(imageBytes);
-        } catch (IOException ignored) {
+        } catch (IOException e) {
+            throw new IllegalArgumentException(String.format("Could not convert image with path %s to base64", imagePath));
         }
-        return null;
     }
 
     int getScore(UserAnswer userAnswer);
 
     default int getMaximumScore() {
         return 1;
-    };
+    }
 
     default boolean isOrientationToPlace() {
         return false;
     }
 
-    default String getDolphinPrompt(String input) {
+    default String getLLMPrompt(String input) {
         return null;
     }
 

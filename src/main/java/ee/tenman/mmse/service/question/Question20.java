@@ -79,7 +79,7 @@ public class Question20 implements Question {
     }
 
     @Override
-    public String getDolphinPrompt(String input) {
+    public String getLLMPrompt(String input) {
         return String.format("%s is the correct answer to the question: '" + QUESTION + "'. Please give me four different answer " +
             "options to this question. Separate these by commas, and only give me answers, nothing else. These should " +
             "be one to two-word options, and one of the answers should be '%s'. However, these options shouldn't be " +

@@ -4,6 +4,7 @@ import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
 import ee.tenman.mmse.domain.enumeration.QuestionType;
 import ee.tenman.mmse.service.external.dolphin.DolphinService;
+import ee.tenman.mmse.service.external.dolphin.PromptWrapper;
 import ee.tenman.mmse.service.external.minio.StorageService;
 import ee.tenman.mmse.service.external.similarity.SimilarityRequest;
 import ee.tenman.mmse.service.external.similarity.SimilarityService;
@@ -55,7 +56,6 @@ public class Question1 implements Question {
     private StorageService storageService;
     @Resource
     private TranscriptionService transcriptionService;
-
 
     @Override
     public String getQuestionText() {
@@ -115,7 +115,7 @@ public class Question1 implements Question {
 
     private boolean isDolphinSimilar(String answerText) {
         String prompt = prepareAiPrompt(answerText);
-        String response = dolphinService.find(prompt).toLowerCase();
+        String response = dolphinService.find(new PromptWrapper(prompt)).toLowerCase();
         log.debug("DolphinAI Service Response: '{}'", response);
         if (CORRECT_INDICATORS.stream().anyMatch(response::contains)) {
             log.debug("DolphinAI Service deemed answer '{}' as correct. Response: '{}'", answerText, response);

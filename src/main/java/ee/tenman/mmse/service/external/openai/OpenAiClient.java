@@ -14,7 +14,7 @@ public interface OpenAiClient {
     String CLIENT_URL = "https://api.openai.com";
 
     @PostMapping("/v1/chat/completions")
-    OpenAiResponse askQuestion(@RequestBody OpenAiRequest request);
+    OpenAiResponse createCompletion(@RequestBody OpenAiRequest request);
 
     class Configuration {
         @Value("${openai.token}")

@@ -15,6 +15,7 @@ import ee.tenman.mmse.service.dto.AnswerDTO;
 import ee.tenman.mmse.service.dto.OrientationToPlaceQuestionDTO;
 import ee.tenman.mmse.service.dto.QuestionDTO;
 import ee.tenman.mmse.service.external.dolphin.DolphinService;
+import ee.tenman.mmse.service.external.dolphin.PromptWrapper;
 import ee.tenman.mmse.service.lock.Lock;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.commons.lang3.StringUtils;
@@ -148,7 +149,8 @@ public class QuizService {
             .filter(answer -> StringUtils.isNotBlank(answer.getCorrectAnswer()))
             .map(answer -> {
                 Question question = questions.get(answer.getQuestionId());
-                String found = dolphinService.find(question.getDolphinPrompt(answer.getCorrectAnswer()));
+                PromptWrapper promptWrapper = new PromptWrapper(question.getLLMPrompt(answer.getCorrectAnswer()));
+                String found = dolphinService.find(promptWrapper);
                 OrientationToPlaceAnswer orientationToPlaceAnswer = orientationToPlaceAnswerService
                     .findByPatientProfileAndQuestionId(patientProfile, answer.getQuestionId())
                     .orElse(new OrientationToPlaceAnswer());

@@ -24,8 +24,9 @@ public class DolphinService {
     @Resource
     private DolphinQuestionService dolphinQuestionService;
 
-    @Cacheable(value = RedisConfiguration.DOLPHIN_CACHE, key = "#prompt")
-    public String find(String prompt) {
+    @Cacheable(value = RedisConfiguration.DOLPHIN_CACHE, key = "#promptWrapper.getPromptAsSha256()")
+    public String find(PromptWrapper promptWrapper) {
+        String prompt = promptWrapper.prompt();
         Optional<String> answer = dolphinQuestionService.findAnswer(prompt);
         if (answer.isPresent()) {
             log.info("Dolphin Question Service Answer: {}", answer.get());

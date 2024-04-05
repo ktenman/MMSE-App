@@ -72,9 +72,7 @@ export default defineComponent({
     const loadOrientationToPlaceQuestions = async () => {
       try {
         if (patientProfile.value.id && patientProfile.value.id > 0) {
-          orientationToPlaceQuestions.value = await homeService.getOrientationToPlaceQuestionsByPatientProfileId(
-            patientProfile.value.id
-          );
+          orientationToPlaceQuestions.value = await homeService.getOrientationToPlaceQuestionsByPatientProfileId(patientProfile.value.id);
         } else {
           orientationToPlaceQuestions.value = await homeService.getOrientationToPlaceQuestions();
         }
@@ -97,10 +95,7 @@ export default defineComponent({
 
     const saveOrientationToPlaceCorrectAnswers = async () => {
       try {
-        const response = await homeService.saveOrientationToPlaceCorrectAnswers(
-          patientProfile.value.id,
-          orientationToPlaceQuestions.value
-        );
+        const response = await homeService.saveOrientationToPlaceCorrectAnswers(patientProfile.value.id, orientationToPlaceQuestions.value);
         orientationToPlaceQuestions.value = response;
         console.log('Orientation to place correct answers saved successfully');
         quizState.value = QuizState.ORIENTATION_ANSWERS;
@@ -112,20 +107,19 @@ export default defineComponent({
 
     const saveOrientationToPlaceAnswerOptions = async () => {
       try {
-        const response = await homeService.saveOrientationToPlaceAnswerOptions(
-          patientProfile.value.id,
-          orientationToPlaceQuestions.value
-        );
+        const response = await homeService.saveOrientationToPlaceAnswerOptions(patientProfile.value.id, orientationToPlaceQuestions.value);
         testEntity.value = response;
         console.log('Orientation to place answer options saved successfully');
         quizState.value = QuizState.SHOW_TEST_LINK;
-        const baseUrl = window.location.origin;
-        testLink.value =
-          baseUrl +
-          router.resolve({
-            name: 'TestView',
-            params: { testEntityHash: testEntity.value.hash }
-          }).href;
+        if (testEntity?.value?.hash) {
+          const baseUrl = window.location.origin;
+          testLink.value =
+            baseUrl +
+            router.resolve({
+              name: 'TestView',
+              params: { testEntityHash: testEntity.value.hash }
+            }).href;
+        }
         saveQuizProgress();
       } catch (error) {
         errorMessage.value = error?.response?.data ? error.response.data.detail : 'An unexpected error occurred.';
@@ -172,7 +166,7 @@ export default defineComponent({
         quizState.value = quizProgress.quizState;
         patientProfile.value = quizProgress.patientProfile;
         testEntity.value = quizProgress.testEntity;
-        if (!testLink.value) {
+        if (testEntity?.value?.hash) {
           const baseUrl = window.location.origin;
           testLink.value =
             baseUrl +

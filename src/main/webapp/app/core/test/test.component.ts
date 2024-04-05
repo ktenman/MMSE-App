@@ -126,12 +126,7 @@ export default defineComponent({
           case QuestionType.TEXT_INPUT:
             return !selectedAnswer.value;
           case QuestionType.SUBTRACTION_TASK:
-            return selectedAnswers.value.some(answer => {
-              if (typeof answer === 'string') {
-                return answer === '';
-              }
-              return answer === null;
-            });
+            return !selectedAnswers.value.some(item => typeof item === 'number');
           case QuestionType.VOICE_INPUT:
             return !lastRecordedAudioUrl.value;
           case QuestionType.DRAG_AND_DROP:

@@ -11,9 +11,12 @@ export default class TestService {
   }
 
   public submitAnswer(answer: IAnswer, testEntityId: number): Promise<void> {
-    return axios.post<void>(`/api/test/answer/${testEntityId}`, answer).then(() => {
-    }).catch(() => {
-    });
+    return axios
+      .post<void>(`/api/test/answer/${testEntityId}`, answer)
+      .then(() => {
+      })
+      .catch(() => {
+      });
   }
 
   public sendAudioToServer(audioBlob: Blob, questionId: QuestionId | undefined, testEntityId: number): Promise<string> {

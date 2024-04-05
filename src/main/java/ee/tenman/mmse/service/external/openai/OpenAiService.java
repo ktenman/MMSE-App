@@ -24,10 +24,20 @@ public class OpenAiService {
 
         try {
             OpenAiRequest request = OpenAiRequest.createWithUserMessage(question);
-            OpenAiResponse openAiResponse = openAiClient.askQuestion(request);
+            OpenAiResponse openAiResponse = openAiClient.createCompletion(request);
             return openAiResponse.getAnswer();
         } catch (Exception e) {
             log.error("Failed to ask question: {}", question, e);
+            return Optional.empty();
+        }
+    }
+
+    public Optional<String> createCompletion(OpenAiRequest openAiRequest) {
+        try {
+            OpenAiResponse openAiResponse = openAiClient.createCompletion(openAiRequest);
+            return openAiResponse.getAnswer();
+        } catch (Exception e) {
+            log.error("Failed to create completion: {}", openAiRequest, e);
             return Optional.empty();
         }
     }

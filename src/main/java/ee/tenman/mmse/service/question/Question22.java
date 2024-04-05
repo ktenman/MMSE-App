@@ -3,15 +3,26 @@ package ee.tenman.mmse.service.question;
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
 import ee.tenman.mmse.domain.enumeration.QuestionType;
+import ee.tenman.mmse.service.external.minio.StorageService;
+import ee.tenman.mmse.service.external.openai.OpenAiRequest;
+import ee.tenman.mmse.service.external.openai.OpenAiService;
+import jakarta.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Component;
 
 import java.util.List;
+import java.util.Optional;
 
 @Component
 public class Question22 implements Question {
 
     private static final String QUESTION_TEXT = "22. Copy the drawing in the gray area below";
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_22;
+
+    @Resource
+    private StorageService storageService;
+    @Resource
+    private OpenAiService openAiService;
 
     @Override
     public String getQuestionText() {
@@ -35,11 +46,17 @@ public class Question22 implements Question {
 
     @Override
     public int getScore(UserAnswer userAnswer) {
-        return 0;
+        byte[] bytes = storageService.downloadFile(userAnswer.getAnswerText());
+        OpenAiRequest openAiRequest = OpenAiRequest.createWithMessageAndImage(getLLMPrompt(null), bytes);
+        Optional<String> completion = openAiService.createCompletion(openAiRequest);
+        if (completion.isPresent()) {
+            return StringUtils.containsIgnoreCase(completion.get(), "yes") ? 1 : 0;
+        }
+        throw new IllegalStateException("OpenAI completion failed");
     }
 
     @Override
-    public String getDolphinPrompt(String input) {
+    public String getLLMPrompt(String input) {
         return "Answer only yes/no if this image has: All 10 angles are present. Two 5-sided figures intersect. The " +
             "intersection forms a 4-sided figure. The 4-sided figure at the intersection is roughly a rhombus or " +
             "diamond shape (it does not have to be perfect).";

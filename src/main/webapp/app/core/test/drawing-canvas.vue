@@ -6,7 +6,7 @@
     <div class="mt-3">
       <b-button v-if="!isDrawingSaved" variant="primary" @click="toggleEraser">
         <font-awesome-icon :icon="isErasing ? 'pencil-alt' : 'eraser'" />
-        {{ isErasing ? 'Draw' : 'Erase' }}
+        {{ isErasing ? 'Draw' : 'Eraser' }}
       </b-button>
       <b-button v-if="!isDrawingSaved" variant="danger" @click="clearCanvas">
         <font-awesome-icon icon="trash" />

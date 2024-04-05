@@ -22,6 +22,7 @@ import java.util.stream.Stream;
 
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyString;
 import static org.mockito.Mockito.lenient;
 import static org.mockito.Mockito.when;
@@ -188,7 +189,7 @@ class Question11Test {
             return Optional.of(question.contains("pen") ? "no" : "yes");
         });
 
-        lenient().when(dolphinService.find(anyString())).thenAnswer(invocation -> {
+        lenient().when(dolphinService.find(any())).thenAnswer(invocation -> {
             String question = invocation.getArgument(0);
             return question.contains("pen") ? "no" : "yes";
         });
@@ -215,7 +216,7 @@ class Question11Test {
     void getScoreWithExpectedException() {
         UserAnswer userAnswer = new UserAnswer();
         userAnswer.setAnswerText("zzz");
-        when(dolphinService.find(anyString())).thenThrow(new NoDolphinResponseException("No response from DolphinAI."));
+        when(dolphinService.find(any())).thenThrow(new NoDolphinResponseException("No response from DolphinAI."));
 
         Throwable thrown = catchThrowable(() -> question11.getScore(userAnswer));
 
