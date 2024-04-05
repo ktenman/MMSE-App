@@ -20,8 +20,10 @@
       <div v-if="question?.instructions?.length > 0" class="instructions">
         <strong>Instructions:</strong>
         <div class="markdown-instructions">
-          <ul>
-            <li v-for="instruction in question.instructions" v-html="instruction"></li>
+          <ul v-for="(instruction, index) in question.instructions" :key="index">
+            <li>
+              {{ instruction }}
+            </li>
           </ul>
         </div>
       </div>
@@ -44,12 +46,13 @@
       <div v-if="question.questionType === QuestionType.SUBTRACTION_TASK">
         <div class="row">
           <div v-for="(option, index) in question.answerOptions" :key="index" class="col-md-6">
+            <!-- label for input value written in bootstrap -->
+            <label class="col-form-label">{{ option.placeholder }}:</label>
             <input
               v-model="selectedAnswers[index]"
               :max="option.max"
               :min="option.min"
-              :placeholder="option.placeholder"
-              class="form-control"
+              class="form-control col-md-11"
               type="number"
             />
           </div>
@@ -147,10 +150,14 @@
         </div>
       </div>
 
-      <b-button :disabled="isNextButtonDisabled() || loading" class="mt-3" variant="primary" @click="submitAnswer">
-        Next Task
-        <font-awesome-icon icon="arrow-right" />
-      </b-button>
+      <div class="row">
+        <div class="col-md-12">
+          <b-button :disabled="isNextButtonDisabled() || loading" class="mt-3" variant="primary" @click="submitAnswer">
+            Next Task
+            <font-awesome-icon icon="arrow-right" />
+          </b-button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -192,7 +199,11 @@
 }
 
 .paper.picked-up {
+  width: 315px;
+  height: 221px;
+  background-color: #eeeee3;
   animation: pick-up 1s;
+  border: 2px solid gray;
 }
 
 .paper.folded {
@@ -224,11 +235,8 @@
   0% {
     transform: translate3d(0, 0, 0);
   }
-  50% {
-    transform: translate3d(20px, -40px, 20px);
-  }
   100% {
-    transform: translate3d(0, 0, 0);
+    transform: translate3d(0, 0, 0) scale(1.02);
   }
 }
 
@@ -248,7 +256,7 @@
   padding-top: 0.5rem;
   list-style-type: disc;
   padding-left: 1.3rem;
-  line-height: 0.9;
+  line-height: 0.4rem;
 }
 
 .markdown-instructions li {
