@@ -126,7 +126,7 @@ public class Question1 implements Question {
     }
 
     private String prepareAiPrompt(String answerText) {
-        return String.format("Is the phrase \"%s\" close to or misspelled in meaning to this: %s? Answer only yes/no",
+        return String.format("Is the phrase \"%s\" same as: %s? Answer only yes/no",
             answerText, SENTENCE);
     }
 
