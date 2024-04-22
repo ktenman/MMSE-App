@@ -1,306 +1,79 @@
-# MMSE-App
+# AI-Powered MMSE Web Application
 
-This application was generated using JHipster 8.0.0-beta.1, you can find documentation and help
-at [https://www.jhipster.tech/documentation-archive/v8.0.0-beta.1](https://www.jhipster.tech/documentation-archive/v8.0.0-beta.1).
+This repository contains the source code for an AI-powered web application that implements the Mini-Mental State
+Examination (MMSE) for cognitive assessment. The application leverages various artificial intelligence models and
+technologies to provide an enhanced user experience. It is built using Java 17 and TypeScript, with a PostgreSQL
+database for data storage and Vue.js for the frontend. The project is powered by Spring Boot 3.2.2 and utilizes Docker
+and Docker Compose for containerization and easy deployment.
 
-## Project Structure
+## Features
 
-Node is required for generation and recommended for development. `package.json` is always generated for a better
-development experience with prettier, commit hooks, scripts and so on.
+- Integration of AI models:
+- BERT (Bidirectional Encoder Representations from Transformers): Pre-trained deep learning model for natural language
+  processing tasks
+- GPT-3 (Generative Pre-trained Transformer 3): Large language model for text generation and understanding
+- ResNet-50: Deep learning model for image recognition and classification
+- Automated scoring and validation mechanisms for the MMSE
+- Containerization with Docker and Docker Compose for simplified deployment and scalability
+- Backend implemented in Java 17 with Spring Boot 3.2.2 for robust and efficient server-side processing
+- Frontend built with Vue.js for a responsive and interactive user interface
+- PostgreSQL database for reliable data storage and retrieval
+- Liquibase for database schema management and versioning
+- Comprehensive testing suite:
+- Unit testing to ensure individual components function as expected
+- Integration testing with Testcontainers for realistic end-to-end testing
 
-In the project root, JHipster generates configuration files for tools like git, prettier, eslint, husky, and others that
-are well known and you can find references in the web.
+## Prerequisites
 
-`/src/*` structure follows default Java structure.
+To run this application locally, you need to have the following installed:
 
-- `.yo-rc.json` - Yeoman configuration file
-  JHipster configuration is stored in this file at `generator-jhipster` key. You may find `generator-jhipster-*` for
-  specific blueprints configuration.
-- `.yo-resolve` (optional) - Yeoman conflict resolver
-  Allows to use a specific action when conflicts are found skipping prompts for files that matches a pattern. Each line
-  should match `[pattern] [action]` with pattern been a [Minimatch](https://github.com/isaacs/minimatch#minimatch)
-  pattern and action been one of skip (default if ommited) or force. Lines starting with `#` are considered comments and
-  are ignored.
-- `.jhipster/*.json` - JHipster entity configuration files
+- Docker
+- Docker Compose
+- Java Development Kit (JDK) 17
+- Node.js v18.16.1
+- npm 9.8.0
+- Maven 3.2.5
 
-- `npmw` - wrapper to use locally installed npm.
-  JHipster installs Node and npm locally using the build tool by default. This wrapper makes sure npm is installed
-  locally and uses it avoiding some differences different versions can cause. By using `./npmw` instead of the
-  traditional `npm` you can configure a Node-less environment to develop or test your application.
-- `/src/main/docker` - Docker configurations for the application and services that the application depends on
+## Getting Started
 
-## Development
+1. Clone the repository:
+    ```
+    git clone https://github.com/ktenman/MMSE-App.git
+    ```
 
-Before you can build this project, you must install and configure the following dependencies on your machine:
+2. Navigate to the project directory:
+    ```
+    cd MMSE-App
+    ```
 
-1. [Node.js][]: We use Node to run a development web server and build the project.
-   Depending on your system, you can install Node either from source or as a pre-packaged bundle.
+3. Build and start the application using Docker Compose:
+    ```
+    sh start-all-containers.sh
+    docker-compose up --build
+    ```
 
-After installing Node, you should be able to run the following command to install development tools.
-You will only need to run this command when dependencies change in [package.json](package.json).
-
-```
-npm install
-```
-
-We use npm scripts and [Webpack][] as our build system.
-
-Run the following commands in two separate terminals to create a blissful development experience where your browser
-auto-refreshes when files change on your hard drive.
-
-```
-./mvnw
-npm start
-```
-
-Npm is also used to manage CSS and JavaScript dependencies used in this application. You can upgrade dependencies by
-specifying a newer version in [package.json](package.json). You can also run `npm update` and `npm install` to manage
-dependencies.
-Add the `help` flag on any command to see how you can use it. For example, `npm help update`.
-
-The `npm run` command will list all of the scripts available to run for this project.
-
-### PWA Support
-
-JHipster ships with PWA (Progressive Web App) support, and it's turned off by default. One of the main components of a
-PWA is a service worker.
-
-The service worker initialization code is commented out by default. To enable it, uncomment the following code
-in `src/main/webapp/index.html`:
-
-```html
-<script>
-  if ('serviceWorker' in navigator) {
-    navigator.serviceWorker.register('./service-worker.js').then(function () {
-      console.log('Service Worker Registered');
-    });
-  }
-</script>
-```
-
-Note: [Workbox](https://developers.google.com/web/tools/workbox/) powers JHipster's service worker. It dynamically
-generates the `service-worker.js` file.
-
-### Managing dependencies
-
-For example, to add [Leaflet][] library as a runtime dependency of your application, you would run following command:
-
-```
-npm install --save --save-exact leaflet
-```
-
-To benefit from TypeScript type definitions from [DefinitelyTyped][] repository in development, you would run following
-command:
-
-```
-npm install --save-dev --save-exact @types/leaflet
-```
-
-Then you would import the JS and CSS files specified in library's installation instructions so that [Webpack][] knows
-about them:
-Note: There are still a few other things remaining to do for Leaflet that we won't detail here.
-
-For further instructions on how to develop with JHipster, have a look at [Using JHipster in development][].
-
-### JHipster Control Center
-
-JHipster Control Center can help you manage and control your application(s). You can start a local control center
-server (accessible on http://localhost:7419) with:
-
-```
-docker compose -f src/main/docker/jhipster-control-center.yml up
-```
-
-## Building for production
-
-### Packaging as jar
-
-To build the final jar and optimize the MMSE-App application for production, run:
-
-```
-./mvnw -Pprod clean verify
-```
-
-This will concatenate and minify the client CSS and JavaScript files. It will also modify `index.html` so it references
-these new files.
-To ensure everything worked, run:
-
-```
-java -jar target/*.jar
-```
-
-Then navigate to [http://localhost:8080](http://localhost:8080) in your browser.
-
-Refer to [Using JHipster in production][] for more details.
-
-### Packaging as war
-
-To package your application as a war in order to deploy it to an application server, run:
-
-```
-./mvnw -Pprod,war clean verify
-```
+4. Access the application in your web browser at http://localhost:8080.
 
 ## Testing
 
-To launch your application's tests, run:
+To run the test suite, execute the following command:
 
 ```
 ./mvnw verify
 ```
 
-### Client tests
+This will run both unit tests and integration tests using Testcontainers.
 
-Unit tests are run by [Jest][]. They're located in [src/test/javascript/](src/test/javascript/) and can be run with:
+## Contributing
 
-```
-npm test
-```
+Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a
+pull request.
 
-UI end-to-end tests are powered by [Cypress][]. They're located
-in [src/test/javascript/cypress](src/test/javascript/cypress)
-and can be run by starting Spring Boot in one terminal (`./mvnw spring-boot:run`) and running the tests (`npm run e2e`)
-in a second one.
+## Tools Used
 
-#### Lighthouse audits
+This project made use of the following AI-assisted tools:
 
-You can execute
-automated [lighthouse audits][https://developers.google.com/web/tools/lighthouse/] with [cypress audits][https://github.com/mfrachet/cypress-audit] by
-running `npm run e2e:cypress:audits`.
-You should only run the audits when your application is packaged with the production profile.
-The lighthouse report is created in `target/cypress/lhreport.html`
+- Claude AI: Used for generating and refining content, providing suggestions, and assisting with the writing process.
+- GitHub Copilot: Used for code generation, autocompletion, and providing code suggestions throughout the development
+  process.
 
-### Other tests
-
-Performance tests are run by [Gatling][] and written in Scala. They're located
-in [src/test/java/gatling/simulations](src/test/java/gatling/simulations).
-
-You can execute all Gatling tests with
-
-```
-./mvnw gatling:test
-```
-
-For more information, refer to the [Running tests page][].
-
-### Code quality
-
-Sonar is used to analyse code quality. You can start a local Sonar server (accessible on http://localhost:9001) with:
-
-```
-docker compose -f src/main/docker/sonar.yml up -d
-```
-
-Note: we have turned off forced authentication redirect for UI in [src/main/docker/sonar.yml](src/main/docker/sonar.yml)
-for out of the box experience while trying out SonarQube, for real use cases turn it back on.
-
-You can run a Sonar analysis with using
-the [sonar-scanner](https://docs.sonarqube.org/display/SCAN/Analyzing+with+SonarQube+Scanner) or by using the maven
-plugin.
-
-Then, run a Sonar analysis:
-
-```
-./mvnw -Pprod clean verify sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
-```
-
-If you need to re-run the Sonar phase, please be sure to specify at least the `initialize` phase since Sonar properties
-are loaded from the sonar-project.properties file.
-
-```
-./mvnw initialize sonar:sonar -Dsonar.login=admin -Dsonar.password=admin
-```
-
-Additionally, Instead of passing `sonar.password` and `sonar.login` as CLI arguments, these parameters can be configured
-from [sonar-project.properties](sonar-project.properties) as shown below:
-
-```
-sonar.login=admin
-sonar.password=admin
-```
-
-For more information, refer to the [Code quality page][].
-
-## Using Docker to simplify development (optional)
-
-You can use Docker to improve your JHipster development experience. A number of docker-compose configuration are
-available in the [src/main/docker](src/main/docker) folder to launch required third party services.
-
-For example, to start a postgresql database in a docker container, run:
-
-```
-docker compose -f src/main/docker/postgresql.yml up -d
-```
-
-To stop it and remove the container, run:
-
-```
-docker compose -f src/main/docker/postgresql.yml down
-```
-
-You can also fully dockerize your application and all the services that it depends on.
-To achieve this, first build a docker image of your app by running:
-
-```
-npm run java:docker
-```
-
-Or build a arm64 docker image when using an arm64 processor os like MacOS with M1 processor family running:
-
-```
-npm run java:docker:arm64
-```
-
-Then run:
-
-```
-docker compose -f src/main/docker/app.yml up -d
-```
-
-When running Docker Desktop on MacOS Big Sur or later, consider enabling
-experimental `Use the new Virtualization framework` for better processing
-performance ([disk access performance is worse](https://github.com/docker/roadmap/issues/7)).
-
-For more information refer to [Using Docker and Docker-Compose][], this page also contains information on the
-docker-compose sub-generator (`jhipster docker-compose`), which is able to generate docker configurations for one or
-several JHipster applications.
-
-## Continuous Integration (optional)
-
-To configure CI for your project, run the ci-cd sub-generator (`jhipster ci-cd`), this will let you generate
-configuration files for a number of Continuous Integration systems. Consult the [Setting up Continuous Integration][]
-page for more information.
-
-[JHipster Homepage and latest documentation]: https://www.jhipster.tech
-
-[JHipster 8.0.0-beta.1 archive]: https://www.jhipster.tech/documentation-archive/v8.0.0-beta.1
-
-[Using JHipster in development]: https://www.jhipster.tech/documentation-archive/v8.0.0-beta.1/development/
-
-[Using Docker and Docker-Compose]: https://www.jhipster.tech/documentation-archive/v8.0.0-beta.1/docker-compose
-
-[Using JHipster in production]: https://www.jhipster.tech/documentation-archive/v8.0.0-beta.1/production/
-
-[Running tests page]: https://www.jhipster.tech/documentation-archive/v8.0.0-beta.1/running-tests/
-
-[Code quality page]: https://www.jhipster.tech/documentation-archive/v8.0.0-beta.1/code-quality/
-
-[Setting up Continuous Integration]: https://www.jhipster.tech/documentation-archive/v8.0.0-beta.1/setting-up-ci/
-
-[Node.js]: https://nodejs.org/
-
-[NPM]: https://www.npmjs.com/
-
-[Webpack]: https://webpack.github.io/
-
-[BrowserSync]: https://www.browsersync.io/
-
-[Jest]: https://facebook.github.io/jest/
-
-[Cypress]: https://www.cypress.io/
-
-[Leaflet]: https://leafletjs.com/
-
-[DefinitelyTyped]: https://definitelytyped.org/
-
-[Gatling]: https://gatling.io/
