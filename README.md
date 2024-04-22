@@ -9,10 +9,11 @@ and Docker Compose for containerization and easy deployment.
 ## Features
 
 - Integration of AI models:
-- BERT (Bidirectional Encoder Representations from Transformers): Pre-trained deep learning model for natural language
-  processing tasks
-- GPT-3 (Generative Pre-trained Transformer 3): Large language model for text generation and understanding
-- ResNet-50: Deep learning model for image recognition and classification
+    - BERT (Bidirectional Encoder Representations from Transformers): Pre-trained deep learning model for natural
+      language
+      processing tasks
+    - GPT-3 (Generative Pre-trained Transformer 3): Large language model for text generation and understanding
+    - ResNet-50: Deep learning model for image recognition and classification
 - Automated scoring and validation mechanisms for the MMSE
 - Containerization with Docker and Docker Compose for simplified deployment and scalability
 - Backend implemented in Java 17 with Spring Boot 3.2.2 for robust and efficient server-side processing
