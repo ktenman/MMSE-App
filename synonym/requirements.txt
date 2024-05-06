@@ -1,6 +1,6 @@
 Flask==3.0.1
 Werkzeug==3.0.1
-torch==1.13.1
+torch==2.3.0
 sentence-transformers==2.2.0
 huggingface_hub==0.4.0  # Or use a different specific version
 fuzzywuzzy==0.18.0
