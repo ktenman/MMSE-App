@@ -169,7 +169,6 @@ public class QuizService {
             .toList();
     }
 
-
     public TestEntity saveOrientationToPlaceAnswerOptions(Long patientProfileId, List<OrientationToPlaceQuestionDTO> answers) {
         validateAnswers(answers);
         PatientProfile patientProfile = patientProfileService.findById(patientProfileId)
