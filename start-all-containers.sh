@@ -14,7 +14,7 @@ docker-compose -f transcribe2/docker-compose.yml up -d
 ollama run dolphin-mixtral:latest &
 
 curl http://localhost:11434/api/generate -d '{
-  "model": "dolphin-mixtral",
+  "model": "gemma2:9b",
   "prompt": "2+2", "stream" : false
 }'
 

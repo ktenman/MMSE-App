@@ -18,7 +18,7 @@ docker-compose -f transcribe2/docker-compose.yml down
 
 # Kill the background process started with 'ollama run'
 # Note: Replace 'dolphin-mixtral' with the actual process name if different
-pkill -f "ollama run dolphin-mixtral:latest"
+pkill -f "ollama run gemma2:9b"
 
 echo "All services stopped."
 
