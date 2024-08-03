@@ -1,6 +1,7 @@
 {
   "mmseApp": {
     "testEntity": {
+      "hash": "Hash",
       "home": {
         "title": "Test Entities",
         "refreshListLabel": "Refresh list",

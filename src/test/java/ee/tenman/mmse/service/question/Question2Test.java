@@ -38,17 +38,28 @@ class Question2Test {
         userAnswer.setQuestionId(QuestionId.QUESTION_2);
         LocalDateTime localDateTime = LocalDateTime.of(2023, 1, 1, 0, 0);
         userAnswer.setCreatedAt(localDateTime.toInstant(UTC));
+
     }
 
     @Test
     void testGetScore_whenCorrect() {
+        when(clock.instant()).thenReturn(LocalDateTime.of(2023, 1, 1, 0, 0)
+            .toInstant(UTC));
+        when(clock.getZone()).thenReturn(UTC);
+        question2.getAnswerOptions(null);
         userAnswer.setAnswerText("1st January 2023");
+
         assertThat(question2.getScore(userAnswer)).isOne();
     }
 
     @Test
     void testGetScore_whenWrong() {
+        when(clock.instant()).thenReturn(LocalDateTime.of(2023, 1, 1, 0, 0)
+            .toInstant(UTC));
+        when(clock.getZone()).thenReturn(UTC);
+        question2.getAnswerOptions(null);
         userAnswer.setAnswerText("2nd January 2023");
+
         assertThat(question2.getScore(userAnswer)).isZero();
     }
 
@@ -67,7 +78,6 @@ class Question2Test {
         when(clock.instant()).thenReturn(LocalDateTime.of(2023, 1, 1, 0, 0)
             .toInstant(UTC));
         when(clock.getZone()).thenReturn(UTC);
-
         List<String> answerOptions = question2.getAnswerOptions(null);
         assertThat(answerOptions).hasSize(4).contains("1st January 2023");
     }

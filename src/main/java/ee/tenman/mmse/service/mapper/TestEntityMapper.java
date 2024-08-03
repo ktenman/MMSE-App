@@ -31,5 +31,7 @@ public interface TestEntityMapper extends EntityMapper<TestEntityDTO, TestEntity
     @Named("patientProfileId")
     @BeanMapping(ignoreByDefault = true)
     @Mapping(target = "id", source = "id")
+    @Mapping(target = "patientId", source = "patientId")
+    @Mapping(target = "name", source = "name")
     PatientProfileDTO toDtoPatientProfileId(PatientProfile patientProfile);
 }

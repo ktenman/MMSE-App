@@ -37,10 +37,8 @@
             <jhi-sort-indicator :current-order="propOrder" :reverse="reverse"
                                 :field-name="'createdAt'"></jhi-sort-indicator>
           </th>
-          <th scope="row" v-on:click="changeOrder('updatedAt')">
-            <span v-text="t$('mmseApp.testEntity.updatedAt')"></span>
-            <jhi-sort-indicator :current-order="propOrder" :reverse="reverse"
-                                :field-name="'updatedAt'"></jhi-sort-indicator>
+          <th scope="row">
+            <span v-text="t$('mmseApp.testEntity.hash')"></span>
           </th>
           <th scope="row" v-on:click="changeOrder('score')">
             <span v-text="t$('mmseApp.testEntity.score')"></span>
@@ -67,16 +65,18 @@
             </router-link>
           </td>
           <td>{{ formatDateShort(testEntity.createdAt) || '' }}</td>
-          <td>{{ formatDateShort(testEntity.updatedAt) || '' }}</td>
-          <td>{{ testEntity.score }}</td>
           <td>
-            {{ testEntity.user ? testEntity.user.login : '' }}
+            <router-link :to="{ name: 'TestView', params: { testEntityHash: testEntity.hash } }">
+              {{ testEntity.hash }}
+            </router-link>
           </td>
+          <td>{{ testEntity.score }}</td>
+          <td>{{ testEntity.user ? testEntity.user.login : '' }}</td>
           <td>
             <div v-if="testEntity.patientProfile">
               <router-link
-                :to="{ name: 'PatientProfileView', params: { patientProfileId: testEntity.patientProfile.id } }"
-              >{{ testEntity.patientProfile.id }}
+                :to="{ name: 'PatientProfileView', params: { patientProfileId: testEntity.patientProfile.id } }">
+                {{ testEntity.patientProfile.name + ': ' + testEntity.patientProfile.patientId }}
               </router-link>
             </div>
           </td>

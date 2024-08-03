@@ -4,9 +4,14 @@ import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
+import org.mockito.InjectMocks;
+import org.mockito.Mock;
+import org.mockito.junit.jupiter.MockitoExtension;
 
+import java.time.Clock;
 import java.time.DateTimeException;
 import java.time.LocalDateTime;
 import java.time.Month;
@@ -16,17 +21,24 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static java.time.ZoneOffset.UTC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.assertj.core.api.Assertions.catchThrowable;
+import static org.mockito.Mockito.when;
 
+@ExtendWith(MockitoExtension.class)
 class Question5Test {
 
+    @Mock
+    private Clock clock;
+
+    @InjectMocks
     private Question5 question5;
+
     private UserAnswer userAnswer;
 
     @BeforeEach
     void setUp() {
-        question5 = new Question5();
         userAnswer = new UserAnswer();
         userAnswer.setQuestionId(QuestionId.QUESTION_5);
     }
@@ -34,6 +46,10 @@ class Question5Test {
     @ParameterizedTest
     @ValueSource(ints = {1, 2, 12})
     void testIsAnswerCorrect_whenWinter(int month) {
+        when(clock.instant()).thenReturn(LocalDateTime.of(2023, month, 1, 0, 0)
+            .toInstant(UTC));
+        when(clock.getZone()).thenReturn(UTC);
+        question5.getAnswerOptions(null);
         LocalDateTime localDateTime = LocalDateTime.of(2023, month, 1, 0, 0);
         userAnswer.setCreatedAt(localDateTime.toInstant(ZoneOffset.UTC));
         userAnswer.setAnswerText("WINTER");
@@ -43,6 +59,10 @@ class Question5Test {
     @ParameterizedTest
     @ValueSource(ints = {3, 4, 5})
     void testIsAnswerCorrect_whenSpring(int month) {
+        when(clock.instant()).thenReturn(LocalDateTime.of(2023, month, 1, 0, 0)
+            .toInstant(UTC));
+        when(clock.getZone()).thenReturn(UTC);
+        question5.getAnswerOptions(null);
         LocalDateTime localDateTime = LocalDateTime.of(2023, month, 1, 0, 0);
         userAnswer.setCreatedAt(localDateTime.toInstant(ZoneOffset.UTC));
         userAnswer.setAnswerText("SPRING");
@@ -52,6 +72,10 @@ class Question5Test {
     @ParameterizedTest
     @ValueSource(ints = {6, 7, 8})
     void testIsAnswerCorrect_whenSummer(int month) {
+        when(clock.instant()).thenReturn(LocalDateTime.of(2023, month, 1, 0, 0)
+            .toInstant(UTC));
+        when(clock.getZone()).thenReturn(UTC);
+        question5.getAnswerOptions(null);
         LocalDateTime localDateTime = LocalDateTime.of(2023, month, 1, 0, 0);
         userAnswer.setCreatedAt(localDateTime.toInstant(ZoneOffset.UTC));
         userAnswer.setAnswerText("SUMMER");
@@ -61,6 +85,10 @@ class Question5Test {
     @ParameterizedTest
     @ValueSource(ints = {9, 10, 11})
     void testIsAnswerCorrect_whenAutumn(int month) {
+        when(clock.instant()).thenReturn(LocalDateTime.of(2023, month, 1, 0, 0)
+            .toInstant(UTC));
+        when(clock.getZone()).thenReturn(UTC);
+        question5.getAnswerOptions(null);
         LocalDateTime localDateTime = LocalDateTime.of(2023, month, 1, 0, 0);
         userAnswer.setCreatedAt(localDateTime.toInstant(ZoneOffset.UTC));
         userAnswer.setAnswerText("AUTUMN");
@@ -69,6 +97,10 @@ class Question5Test {
 
     @Test
     void testIsAnswerCorrect_whenIncorrect() {
+        when(clock.instant()).thenReturn(LocalDateTime.of(2023, 6, 1, 0, 0)
+            .toInstant(UTC));
+        when(clock.getZone()).thenReturn(UTC);
+        question5.getAnswerOptions(null);
         LocalDateTime localDateTime = LocalDateTime.of(2023, 10, 1, 0, 0);
         userAnswer.setCreatedAt(localDateTime.toInstant(ZoneOffset.UTC));
         userAnswer.setAnswerText("WINTER");
@@ -87,6 +119,10 @@ class Question5Test {
 
     @Test
     void testGetAnswerOptions() {
+        when(clock.instant()).thenReturn(LocalDateTime.of(2023, 6, 1, 0, 0)
+            .toInstant(UTC));
+        when(clock.getZone()).thenReturn(UTC);
+        question5.getAnswerOptions(null);
         Set<String> expectedSeasons = new HashSet<>(Arrays.asList("SPRING", "SUMMER", "AUTUMN", "WINTER"));
         List<String> answerOptions = question5.getAnswerOptions(null);
         Set<String> actualSeasons = new HashSet<>(answerOptions);

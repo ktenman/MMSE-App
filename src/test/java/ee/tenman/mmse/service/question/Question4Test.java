@@ -21,6 +21,7 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+import static java.time.ZoneOffset.UTC;
 import static org.assertj.core.api.Assertions.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -43,6 +44,10 @@ class Question4Test {
 
     @Test
     void testIsAnswerCorrect_whenTrue() {
+        when(clock.instant()).thenReturn(LocalDateTime.of(2023, 1, 1, 0, 0)
+            .toInstant(UTC));
+        when(clock.getZone()).thenReturn(UTC);
+        question4.getAnswerOptions(null);
         userAnswer.setAnswerText("2023");
         assertThat(question4.getScore(userAnswer)).isOne();
     }

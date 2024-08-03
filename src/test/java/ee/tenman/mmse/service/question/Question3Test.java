@@ -20,7 +20,9 @@ import java.time.ZoneId;
 import java.time.ZoneOffset;
 import java.util.List;
 
+import static java.time.ZoneOffset.UTC;
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
 class Question3Test {
@@ -42,14 +44,24 @@ class Question3Test {
     @ParameterizedTest
     @EnumSource(value = Month.class, mode = EnumSource.Mode.INCLUDE, names = {"JANUARY"})
     void testGetScore_whenCorrect(Month month) {
+        when(clock.instant()).thenReturn(LocalDateTime.of(2023, 1, 1, 0, 0)
+            .toInstant(UTC));
+        when(clock.getZone()).thenReturn(UTC);
+        question3.getAnswerOptions(null);
         userAnswer.setAnswerText(month.name());
+
         assertThat(question3.getScore(userAnswer)).isOne();
     }
 
     @ParameterizedTest
     @EnumSource(value = Month.class, mode = EnumSource.Mode.EXCLUDE, names = {"JANUARY"})
     void testGetScore_whenWrong(Month month) {
+        when(clock.instant()).thenReturn(LocalDateTime.of(2023, 1, 1, 0, 0)
+            .toInstant(UTC));
+        when(clock.getZone()).thenReturn(UTC);
+        question3.getAnswerOptions(null);
         userAnswer.setAnswerText(month.name());
+
         assertThat(question3.getScore(userAnswer)).isZero();
     }
 
