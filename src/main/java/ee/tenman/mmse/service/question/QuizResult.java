@@ -42,7 +42,7 @@ public class QuizResult {
             return userAnswer;
         }
 
-        public String getCorrectAnswer() {
+        public String getCorrectAnswer(Long testEntityId) {
             return correctAnswer;
         }
 

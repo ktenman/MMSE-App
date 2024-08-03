@@ -50,7 +50,7 @@ public class Question20 implements Question {
 
     @Override
     public List<String> getAnswerOptions(Long testEntityId) {
-        TestEntity testEntity = testEntityService.getLast();
+        TestEntity testEntity = testEntityService.getById(testEntityId);
         PatientProfile patientProfile = patientProfileService.getByTestEntity(testEntity);
         List<String> answerOptions = orientationToPlaceAnswerService
             .findByPatientProfileAndQuestionId(patientProfile, QUESTION_ID)
@@ -88,8 +88,8 @@ public class Question20 implements Question {
     }
 
     @Override
-    public String getCorrectAnswer() {
-        TestEntity testEntity = testEntityService.getLast();
+    public String getCorrectAnswer(Long testEntityId) {
+        TestEntity testEntity = testEntityService.getById(testEntityId);
         PatientProfile patientProfile = patientProfileService.getByTestEntity(testEntity);
         return orientationToPlaceAnswerService
             .findByPatientProfileAndQuestionId(patientProfile, QUESTION_ID)

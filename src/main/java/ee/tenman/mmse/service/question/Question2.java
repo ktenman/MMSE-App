@@ -102,7 +102,7 @@ public class Question2 implements Question {
     }
 
     @Override
-    public String getCorrectAnswer() {
+    public String getCorrectAnswer(Long testEntityId) {
         if (this.questionDate == null) {
             throw new IllegalStateException("Question date has not been set. Ensure getAnswerOptions is called before getCorrectAnswer.");
         }

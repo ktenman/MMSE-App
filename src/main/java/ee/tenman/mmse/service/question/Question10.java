@@ -53,7 +53,7 @@ public class Question10 implements Question {
     }
 
     @Override
-    public String getCorrectAnswer() {
+    public String getCorrectAnswer(Long testEntityId) {
         return String.join(", ", CORRECT_ANSWERS);
     }
 }

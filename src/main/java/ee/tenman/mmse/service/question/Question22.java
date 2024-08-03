@@ -72,7 +72,7 @@ public class Question22 implements Question {
     }
 
     @Override
-    public String getCorrectAnswer() {
+    public String getCorrectAnswer(Long testEntityId) {
         return "The drawing should have all 10 angles present, two 5-sided figures intersecting, " +
             "and the intersection forming a 4-sided figure that is roughly a rhombus or diamond shape.";
     }

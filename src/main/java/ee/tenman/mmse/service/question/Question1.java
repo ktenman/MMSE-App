@@ -98,7 +98,7 @@ public class Question1 implements Question {
     }
 
     @Override
-    public String getCorrectAnswer() {
+    public String getCorrectAnswer(Long testEntityId) {
         return SENTENCE;
     }
 

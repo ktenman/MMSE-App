@@ -61,7 +61,7 @@ public class Question3 implements Question {
     }
 
     @Override
-    public String getCorrectAnswer() {
+    public String getCorrectAnswer(Long testEntityId) {
         if (this.questionMonth == null) {
             throw new IllegalStateException("Question month has not been set. Ensure getAnswerOptions is called before getCorrectAnswer.");
         }

@@ -59,7 +59,7 @@ public class Question16 implements Question {
     }
 
     @Override
-    public String getCorrectAnswer() {
+    public String getCorrectAnswer(Long testEntityId) {
         return CORRECT_ANSWER;
     }
 }

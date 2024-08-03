@@ -70,7 +70,7 @@ public class Question5 implements Question {
     }
 
     @Override
-    public String getCorrectAnswer() {
+    public String getCorrectAnswer(Long testEntityId) {
         if (this.questionSeason == null) {
             throw new IllegalStateException("Question season has not been set. Ensure getAnswerOptions is called before getCorrectAnswer.");
         }

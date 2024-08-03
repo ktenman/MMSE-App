@@ -60,7 +60,7 @@ public class Question13 implements Question {
     }
 
     @Override
-    public String getCorrectAnswer() {
+    public String getCorrectAnswer(Long testEntityId) {
         return EXPECTED_CONFIRMATION;
     }
 

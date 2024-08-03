@@ -141,12 +141,6 @@ public class TestEntityService {
         testEntityRepository.deleteById(id);
     }
 
-    public TestEntity getLast() {
-        User user = userService.getUserWithAuthorities();
-        return testEntityRepository.findFirstByUserIdOrderByCreatedAtDesc(user.getId())
-            .orElseThrow(() -> new IllegalStateException(String.format("No test entity found for user %s", user.getLogin())));
-    }
-
     public TestEntity getById(Long id) {
         return testEntityRepository.findById(id)
             .orElseThrow(() -> new IllegalStateException(String.format("No test entity found for id %s", id)));

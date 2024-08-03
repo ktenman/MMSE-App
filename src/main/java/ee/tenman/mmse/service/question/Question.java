@@ -59,6 +59,6 @@ public interface Question {
         return List.of();
     }
 
-    String getCorrectAnswer();
+    String getCorrectAnswer(Long testEntityId);
 
 }

@@ -63,7 +63,7 @@ public class Question15 implements Question {
     }
 
     @Override
-    public String getCorrectAnswer() {
+    public String getCorrectAnswer(Long testEntityId) {
         if (this.questionDayOfWeek == null) {
             throw new IllegalStateException("Question day of the week has not been set. Ensure getAnswerOptions is called before getCorrectAnswer.");
         }

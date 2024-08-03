@@ -52,7 +52,7 @@ public class Question14 implements Question {
     }
 
     @Override
-    public String getCorrectAnswer() {
+    public String getCorrectAnswer(Long testEntityId) {
         return "The correct answer should be a grammatically correct sentence about something the user does every day.";
     }
 }

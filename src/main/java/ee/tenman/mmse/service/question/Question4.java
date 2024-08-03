@@ -59,7 +59,7 @@ public class Question4 implements Question {
     }
 
     @Override
-    public String getCorrectAnswer() {
+    public String getCorrectAnswer(Long testEntityId) {
         if (this.questionYear == null) {
             throw new IllegalStateException("Question year has not been set. Ensure getAnswerOptions is called before getCorrectAnswer.");
         }

@@ -104,7 +104,7 @@ public class QuizService {
             int score = question.getScore(userAnswer);
             totalScore += score;
 
-            String correctAnswer = question.getCorrectAnswer(); // You'd need to add this method to your Question interface
+            String correctAnswer = question.getCorrectAnswer(testEntityId); // You'd need to add this method to your Question interface
             boolean correct = (score == question.getMaximumScore());
 
             questionResults.put(userAnswer.getQuestionId(),
@@ -137,7 +137,7 @@ public class QuizService {
         userAnswer.setAnswerText(answerDTO.getAnswerText());
         userAnswer.setQuestionId(answerDTO.getQuestionId());
         userAnswer.setTestEntity(testEntity);
-        userAnswer.setCorrectAnswer(question.getCorrectAnswer());
+        userAnswer.setCorrectAnswer(question.getCorrectAnswer(testEntityId));
 
         return userAnswerRepository.save(userAnswer);
     }

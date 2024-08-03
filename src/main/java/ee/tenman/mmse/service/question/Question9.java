@@ -65,7 +65,7 @@ public class Question9 implements Question {
     }
 
     @Override
-    public String getCorrectAnswer() {
+    public String getCorrectAnswer(Long testEntityId) {
         return CORRECT_ANSWERS.stream()
             .map(Object::toString)
             .collect(Collectors.joining(", "));

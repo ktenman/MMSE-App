@@ -157,7 +157,7 @@ public class Question12 implements Question {
     }
 
     @Override
-    public String getCorrectAnswer() {
+    public String getCorrectAnswer(Long testEntityId) {
         return "watch";
     }
 
