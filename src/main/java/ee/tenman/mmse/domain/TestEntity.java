@@ -33,7 +33,7 @@ public class TestEntity extends BaseEntity {
     @JsonIgnoreProperties(value = {"testEntity"}, allowSetters = true)
     private Set<UserAnswer> userAnswers = new HashSet<>();
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.EAGER)
     @JsonIgnoreProperties(value = {"testEntities"}, allowSetters = true)
     private PatientProfile patientProfile;
 
