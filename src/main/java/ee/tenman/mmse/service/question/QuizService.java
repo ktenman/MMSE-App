@@ -1,5 +1,6 @@
 package ee.tenman.mmse.service.question;
 
+import ee.tenman.mmse.config.RedisConfiguration;
 import ee.tenman.mmse.domain.OrientationToPlaceAnswer;
 import ee.tenman.mmse.domain.PatientProfile;
 import ee.tenman.mmse.domain.TestEntity;
@@ -23,9 +24,12 @@ import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.cache.annotation.Cacheable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.time.Duration;
+import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
@@ -86,6 +90,7 @@ public class QuizService {
         return questionDTO;
     }
 
+    @Cacheable(value = RedisConfiguration.ONE_MONTH_CACHE, key = "#testEntityId")
     public QuizResult calculateScore(Long testEntityId) {
         List<UserAnswer> answers = userAnswerRepository.findByTestEntityIdOrderByCreatedAtDesc(testEntityId);
         int totalScore = 0;
@@ -122,9 +127,19 @@ public class QuizService {
         }
 
         userAnswerRepository.saveAll(answers);
-        return new QuizResult(totalScore, maxScore, questionResults);
+
+        long duration = calculateDuration(answers);
+
+        return new QuizResult(totalScore, maxScore, questionResults, duration);
     }
 
+    private long calculateDuration(List<UserAnswer> answers) {
+        Instant minTime = answers.stream().map(UserAnswer::getCreatedAt).min(Instant::compareTo)
+            .orElseThrow(() -> new RuntimeException("No answers found"));
+        Instant maxTime = answers.stream().map(UserAnswer::getCreatedAt).max(Instant::compareTo)
+            .orElseThrow(() -> new RuntimeException("No answers found"));
+        return Duration.between(minTime, maxTime).getSeconds();
+    }
     @Lock(key = "#answerDTO.idempotencyKey")
     public UserAnswer saveAnswer(AnswerDTO answerDTO, Long testEntityId) {
         Optional<User> user = userService.findUserWithAuthorities();

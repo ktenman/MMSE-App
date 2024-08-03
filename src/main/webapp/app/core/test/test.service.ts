@@ -4,6 +4,7 @@ import { IAnswer } from '@/shared/model/answer.model';
 import { QuestionId } from '@/shared/model/enumerations/question-id.model';
 import { ITestEntity } from '@/shared/model/test-entity.model';
 import { IFile } from '@/shared/model/file.model';
+import { IQuestionResultDTO, IQuizResultDTO, QuestionResultDTO, QuizResultDTO } from '@/shared/model/quiz-result.dto';
 
 export default class TestService {
   public getQuestion(testEntityId: number): Promise<IQuestion> {
@@ -54,7 +55,26 @@ export default class TestService {
     return axios.get<ITestEntity>(`/api/test/test-entity/${testEntityHash}`).then(res => res.data);
   }
 
-  public getResults(testEntityId: number): Promise<any> {
-    return axios.get(`/api/results/${testEntityId}`).then(res => res.data);
+  public getResults(testEntityId: number): Promise<IQuizResultDTO> {
+    return axios.get(`/api/results/${testEntityId}`).then(res => {
+      const data = res.data as IQuizResultDTO;
+      const questionResults: { [key: string]: IQuestionResultDTO } = {};
+
+      for (const key in data.questionResults) {
+        if (data.questionResults.hasOwnProperty(key)) {
+          const value = data.questionResults[key];
+          questionResults[key] = new QuestionResultDTO(
+            value.questionText,
+            value.userAnswer,
+            value.correctAnswer,
+            value.correct,
+            value.score,
+            value.maxScore
+          );
+        }
+      }
+
+      return new QuizResultDTO(data.score, data.maxScore, questionResults, data.duration);
+    });
   }
 }

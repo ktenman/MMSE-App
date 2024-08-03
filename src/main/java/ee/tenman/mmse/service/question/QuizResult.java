@@ -2,18 +2,21 @@ package ee.tenman.mmse.service.question;
 
 import ee.tenman.mmse.domain.enumeration.QuestionId;
 
+import java.io.Serializable;
 import java.util.Map;
 import java.util.TreeMap;
 
-public class QuizResult {
+public class QuizResult implements Serializable {
     private int score;
     private int maxScore;
     private Map<QuestionId, QuestionResult> questionResults;
+    private long duration; // Duration in seconds
 
-    public QuizResult(int score, int maxScore, Map<QuestionId, QuestionResult> questionResults) {
+    public QuizResult(int score, int maxScore, Map<QuestionId, QuestionResult> questionResults, long duration) {
         this.score = score;
         this.maxScore = maxScore;
         this.questionResults = new TreeMap<>(questionResults);
+        this.duration = duration;
     }
 
     public int getScore() {
@@ -24,11 +27,15 @@ public class QuizResult {
         return maxScore;
     }
 
+    public long getDuration() {
+        return duration;
+    }
+
     public Map<QuestionId, QuestionResult> getQuestionResults() {
         return questionResults;
     }
 
-    public static class QuestionResult {
+    public static class QuestionResult implements Serializable {
         private String questionText;
         private String userAnswer;
         private String correctAnswer;

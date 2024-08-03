@@ -29,7 +29,7 @@ public class TestEntity extends BaseEntity {
     @NotNull
     private User user;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "testEntity")
+    @OneToMany(fetch = FetchType.EAGER, mappedBy = "testEntity")
     @JsonIgnoreProperties(value = {"testEntity"}, allowSetters = true)
     private Set<UserAnswer> userAnswers = new HashSet<>();
 

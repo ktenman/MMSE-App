@@ -5,13 +5,17 @@
         {{ quizEndMessage }}
       </div>
       <div v-if="quizResults">
-        <h3>Quiz Results</h3>
+        <h4>Quiz Results (Incorrect Answers)</h4>
+        <p>Below are the questions you answered incorrectly. Review the correct answers and your responses to understand
+          your mistakes.</p>
+        <p>Total time taken: {{ formatDuration(quizResults.duration) }}</p>
         <ul>
-          <li v-for="(result, questionId) in quizResults.questionResults" :key="questionId">
+          <li v-for="(result, questionId) in incorrectAnswers" :key="questionId">
             <strong>{{ result.questionText }}</strong><br />
             Your answer: {{ result.userAnswer }}<br />
             Correct answer: {{ result.correctAnswer }}<br />
-            Correct: {{ result.correct ? 'Yes' : 'No' }}
+            <!--            Correct: {{ result.correct ? 'Yes' : 'No' }}<br />-->
+            Points: {{ result.score }}/{{ result.maxScore }}
           </li>
         </ul>
       </div>

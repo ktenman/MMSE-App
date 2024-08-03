@@ -902,13 +902,13 @@
                 <liquibase-plugin.username>MMSE-App</liquibase-plugin.username>
                 <liquibase-plugin.password/>
             </properties>
-            <dependencies>
-                <dependency>
-                    <groupId>org.springframework.boot</groupId>
-                    <artifactId>spring-boot-devtools</artifactId>
-                    <optional>true</optional>
-                </dependency>
-            </dependencies>
+            <!--            <dependencies>-->
+            <!--                <dependency>-->
+            <!--                    <groupId>org.springframework.boot</groupId>-->
+            <!--                    <artifactId>spring-boot-devtools</artifactId>-->
+            <!--                    <optional>false</optional>-->
+            <!--                </dependency>-->
+            <!--            </dependencies>-->
         </profile>
         <profile>
             <id>e2e</id>

@@ -7,6 +7,7 @@ import { ITestEntity, TestEntity } from '@/shared/model/test-entity.model';
 import TestService from '@/core/test/test.service';
 import DrawingCanvas from '@/core/test/drawing-canvas.vue';
 import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
+import { IQuestionResultDTO, IQuizResultDTO } from '@/shared/model/quiz-result.dto';
 
 const TEST_PROGRESS = 'testProgress';
 
@@ -44,7 +45,8 @@ export default defineComponent({
     const audioContext = ref(null);
     const stream = ref(null);
     const drawingFileName = ref<string | null>(null);
-    const quizResults = ref(null);
+    const quizResults = ref<IQuizResultDTO | null>(null);
+    const incorrectAnswers = ref<IQuestionResultDTO[]>([]);
 
     const closeErrorMessage = () => {
       errorMessage.value = null;
@@ -99,11 +101,26 @@ export default defineComponent({
 
     const fetchResults = async () => {
       try {
-        quizResults.value = await testService.getResults(testEntity.value.id);
+        const result = await testService.getResults(testEntity.value.id);
+        quizResults.value = result;
+
+        // Filter and map incorrect answers
+        incorrectAnswers.value = Object.entries(result.questionResults)
+          .filter(([_, questionResult]) => !questionResult.correct)
+          .map(([key, questionResult]) => ({
+            questionId: key,
+            questionText: questionResult.questionText,
+            userAnswer: questionResult.userAnswer,
+            correctAnswer: questionResult.correctAnswer,
+            correct: questionResult.correct,
+            score: questionResult.score,
+            maxScore: questionResult.maxScore
+          }));
       } catch (error) {
         errorMessage.value = error?.response?.data?.detail || 'An unexpected error occurred.';
       }
     };
+
 
     const loadQuestion = async () => {
       try {
@@ -269,6 +286,16 @@ export default defineComponent({
       saveTestProgress();
     });
 
+    const formatDuration = (seconds: number): string => {
+      if (seconds < 60) {
+        return seconds + ' seconds';
+      }
+      const h = Math.floor(seconds / 3600).toString().padStart(2, '0');
+      const m = Math.floor((seconds % 3600) / 60).toString().padStart(2, '0');
+      const s = (seconds % 60).toString().padStart(2, '0');
+      return `${h}:${m}:${s}`;
+    };
+
     return {
       question,
       selectedAnswer,
@@ -294,7 +321,9 @@ export default defineComponent({
       noAnimation,
       testEntity,
       updateDrawingFileName,
-      quizResults
+      quizResults,
+      incorrectAnswers,
+      formatDuration
     };
   },
 });
