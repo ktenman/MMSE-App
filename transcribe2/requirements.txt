@@ -1,5 +1,5 @@
 Flask==3.0.1
-transformers==4.36.0
+transformers==4.38.0
 soundfile==0.12.1
 librosa
 numpy==1.23.0
