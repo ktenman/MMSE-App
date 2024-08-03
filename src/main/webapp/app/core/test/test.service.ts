@@ -53,4 +53,8 @@ export default class TestService {
   public getTestByTestEntityHash(testEntityHash: string): Promise<ITestEntity> {
     return axios.get<ITestEntity>(`/api/test/test-entity/${testEntityHash}`).then(res => res.data);
   }
+
+  public getResults(testEntityId: number): Promise<any> {
+    return axios.get(`/api/results/${testEntityId}`).then(res => res.data);
+  }
 }

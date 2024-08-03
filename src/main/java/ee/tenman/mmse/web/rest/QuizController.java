@@ -85,8 +85,7 @@ public class QuizController {
         QuizResult quizResult = quizService.calculateScore(testEntity.getId());
         testEntity.setScore(quizResult.getScore());
         testEntityService.save(testEntity);
-        String result = String.format("Quiz has ended. Your score is %d/%d", quizResult.getScore(), quizResult.getMaxScore());
-        return ResponseEntity.ok().body(result);
+        return ResponseEntity.ok().body(quizResult);
     }
 
     @PostMapping("/answer/{testEntityId}")

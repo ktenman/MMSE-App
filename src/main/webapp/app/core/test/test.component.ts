@@ -44,6 +44,7 @@ export default defineComponent({
     const audioContext = ref(null);
     const stream = ref(null);
     const drawingFileName = ref<string | null>(null);
+    const quizResults = ref(null);
 
     const closeErrorMessage = () => {
       errorMessage.value = null;
@@ -80,9 +81,10 @@ export default defineComponent({
             isPaperOnFloor.value = false;
             isPaperPickedUp.value = false;
           }
-          await loadQuestion();
           if (quizEndMessage.value) {
-            // Handle end of quiz
+            await fetchResults();
+          } else {
+            await loadQuestion();
           }
         } catch (error) {
           errorMessage.value = error?.response?.data?.detail || 'An unexpected error occurred.';
@@ -95,6 +97,14 @@ export default defineComponent({
       saveTestProgress();
     };
 
+    const fetchResults = async () => {
+      try {
+        quizResults.value = await testService.getResults(testEntity.value.id);
+      } catch (error) {
+        errorMessage.value = error?.response?.data?.detail || 'An unexpected error occurred.';
+      }
+    };
+
     const loadQuestion = async () => {
       try {
         if (!testEntity.value.id) {
@@ -104,6 +114,7 @@ export default defineComponent({
         if (typeof response === 'string') {
           quizEndMessage.value = response;
           question.value = null;
+          await fetchResults();
         } else {
           question.value = response;
           selectedAnswers.value = [];
@@ -282,7 +293,8 @@ export default defineComponent({
       startDragging,
       noAnimation,
       testEntity,
-      updateDrawingFileName
+      updateDrawingFileName,
+      quizResults
     };
   },
 });

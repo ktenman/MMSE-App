@@ -17,6 +17,7 @@ import ee.tenman.mmse.service.dto.QuestionDTO;
 import ee.tenman.mmse.service.external.dolphin.DolphinService;
 import ee.tenman.mmse.service.external.dolphin.PromptWrapper;
 import ee.tenman.mmse.service.lock.Lock;
+import ee.tenman.mmse.service.question.QuizResult.QuestionResult;
 import jakarta.persistence.EntityNotFoundException;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
@@ -26,11 +27,11 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.Set;
+import java.util.TreeMap;
 import java.util.function.Function;
 import java.util.stream.Collectors;
 
@@ -89,32 +90,35 @@ public class QuizService {
         List<UserAnswer> answers = userAnswerRepository.findByTestEntityIdOrderByCreatedAtDesc(testEntityId);
         int totalScore = 0;
         int maxScore = 0;
-        Map<QuestionId, QuizResult.QuestionResult> questionResults = new HashMap<>();
+        Map<QuestionId, QuestionResult> questionResults = new TreeMap<>();
 
         for (UserAnswer userAnswer : answers) {
             Question question = questions.get(userAnswer.getQuestionId());
-            question.getAnswerOptions(testEntityId); // This is a hack to set the correct answer for the question
             if (question == null) {
                 log.warn("No Question found for ID: {}", userAnswer.getQuestionId());
                 continue;
             }
+            question.getAnswerOptions(testEntityId); // This is a hack to set the correct answer for the question
 
             maxScore += question.getMaximumScore();
-
             int score = question.getScore(userAnswer);
             totalScore += score;
-
-            String correctAnswer = question.getCorrectAnswer(testEntityId); // You'd need to add this method to your Question interface
             boolean correct = (score == question.getMaximumScore());
-
             questionResults.put(userAnswer.getQuestionId(),
-                new QuizResult.QuestionResult(userAnswer.getAnswerText(), correctAnswer, correct));
+                new QuestionResult(
+                    question.getQuestionText(),
+                    userAnswer.getAnswerText(),
+                    question.getCorrectAnswer(testEntityId),
+                    correct,
+                    score,
+                    question.getMaximumScore()
+                )
+            );
 
             userAnswer.setScore(score);
             userAnswer.setMaximumScore(question.getMaximumScore());
-
             log.info("Question: {}, User Answer: {}, Correct Answer: {}, Score: {}/{}",
-                question.getQuestionId(), userAnswer.getAnswerText(), correctAnswer, score, question.getMaximumScore());
+                question.getQuestionId(), userAnswer.getAnswerText(), question.getCorrectAnswer(testEntityId), score, question.getMaximumScore());
         }
 
         userAnswerRepository.saveAll(answers);

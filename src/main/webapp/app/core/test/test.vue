@@ -4,6 +4,17 @@
       <div class="alert alert-info">
         {{ quizEndMessage }}
       </div>
+      <div v-if="quizResults">
+        <h3>Quiz Results</h3>
+        <ul>
+          <li v-for="(result, questionId) in quizResults.questionResults" :key="questionId">
+            <strong>{{ result.questionText }}</strong><br />
+            Your answer: {{ result.userAnswer }}<br />
+            Correct answer: {{ result.correctAnswer }}<br />
+            Correct: {{ result.correct ? 'Yes' : 'No' }}
+          </li>
+        </ul>
+      </div>
     </div>
 
     <div v-if="loading" class="loader-container">
@@ -46,7 +57,6 @@
       <div v-if="question.questionType === QuestionType.SUBTRACTION_TASK">
         <div class="row">
           <div v-for="(option, index) in question.answerOptions" :key="index" class="col-md-6">
-            <!-- label for input value written in bootstrap -->
             <label class="col-form-label">{{ option.placeholder }}:</label>
             <input v-model="selectedAnswers[index]" :max="option.max" :min="option.min" class="form-control col-md-11"
                    type="number" />
@@ -156,7 +166,9 @@
     </div>
   </div>
 </template>
+
 <script lang="ts" src="./test.component.ts"></script>
+
 <style scoped>
 .large-text {
   font-size: 1.25em;
@@ -170,7 +182,7 @@
   display: flex;
   justify-content: left;
   align-items: center;
-  height: 100%; /* Adjust as needed */
+  height: 100%;
 }
 
 .question-image {
