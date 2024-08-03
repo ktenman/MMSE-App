@@ -156,6 +156,11 @@ public class Question12 implements Question {
         return evaluateOpenAiResponse(answerText);
     }
 
+    @Override
+    public String getCorrectAnswer() {
+        return "watch";
+    }
+
     private int evaluateOpenAiResponse(String answerText) {
         Optional<String> openAiResponse = checkWithOpenAiService(answerText);
         if (openAiResponse.isEmpty()) {

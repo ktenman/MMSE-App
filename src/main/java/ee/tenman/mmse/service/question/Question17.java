@@ -86,4 +86,14 @@ public class Question17 implements Question {
             "similar; they should be quite different because it's part of a mini-mental examination. Don't give me any " +
             "examples or an explanation.", input, input);
     }
+
+    @Override
+    public String getCorrectAnswer() {
+        TestEntity testEntity = testEntityService.getLast();
+        PatientProfile patientProfile = patientProfileService.getByTestEntity(testEntity);
+        return orientationToPlaceAnswerService
+            .findByPatientProfileAndQuestionId(patientProfile, QUESTION_ID)
+            .map(OrientationToPlaceAnswer::getCorrectAnswer)
+            .orElseThrow(() -> new IllegalStateException("No correct answer found"));
+    }
 }

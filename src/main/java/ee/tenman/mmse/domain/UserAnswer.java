@@ -28,6 +28,9 @@ public class UserAnswer extends BaseEntity {
     @Column(name = "question_id", nullable = false)
     private QuestionId questionId;
 
+    @Column(name = "correct_answer")
+    private String correctAnswer;
+
     @ManyToOne(optional = false)
     @NotNull
     @JsonIgnoreProperties(value = {"user"}, allowSetters = true)
@@ -73,6 +76,14 @@ public class UserAnswer extends BaseEntity {
         this.testEntity = testEntity;
     }
 
+    public String getCorrectAnswer() {
+        return correctAnswer;
+    }
+
+    public void setCorrectAnswer(String correctAnswer) {
+        this.correctAnswer = correctAnswer;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) {
@@ -102,6 +113,7 @@ public class UserAnswer extends BaseEntity {
             ", score=" + score +
             ", maximumScore=" + maximumScore +
             ", questionId=" + questionId +
+            ", correctAnswer='" + correctAnswer + '\'' +
             '}';
     }
 }

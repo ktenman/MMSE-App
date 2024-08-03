@@ -150,6 +150,11 @@ public class Question11 implements Question {
         return evaluateOpenAiResponse(answerText, openAiResponse);
     }
 
+    @Override
+    public String getCorrectAnswer() {
+        return PENCIL;
+    }
+
     private boolean isDolphinSimilar(String answerText) {
         String prompt = prepareAiPrompt(answerText);
         String response = dolphinService.find(new PromptWrapper(prompt)).toLowerCase();

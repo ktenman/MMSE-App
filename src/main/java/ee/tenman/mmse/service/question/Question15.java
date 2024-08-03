@@ -19,6 +19,8 @@ public class Question15 implements Question {
     private static final String QUESTION_TEXT = "15. What is the current day of the week?";
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_15;
 
+    private String questionDayOfWeek;
+
     @Override
     public String getQuestionText() {
         return QUESTION_TEXT;
@@ -38,16 +40,16 @@ public class Question15 implements Question {
     public List<String> getAnswerOptions(Long testEntityId) {
         // Get the current day of the week
         ZonedDateTime zonedDateTime = ZonedDateTime.now(ZoneId.systemDefault());
-        String currentDayOfWeek = DayOfWeek.from(zonedDateTime).name();
+        this.questionDayOfWeek = DayOfWeek.from(zonedDateTime).name();
 
         // Prepare a list of three random days excluding the current day
         List<String> daysOfWeek = Stream.of(DayOfWeek.values()).map(DayOfWeek::name).collect(Collectors.toList());
-        daysOfWeek.remove(currentDayOfWeek);
+        daysOfWeek.remove(this.questionDayOfWeek);
         Collections.shuffle(daysOfWeek);
         List<String> answerOptions = daysOfWeek.subList(0, 3);
 
         // Add the current day to the list and shuffle again
-        answerOptions.add(currentDayOfWeek);
+        answerOptions.add(this.questionDayOfWeek);
         Collections.shuffle(answerOptions);
 
         return answerOptions;
@@ -58,5 +60,13 @@ public class Question15 implements Question {
         ZonedDateTime zonedDateTime = userAnswer.getCreatedAt().atZone(ZoneId.systemDefault());
         String dayOfWeek = DayOfWeek.from(zonedDateTime).name();
         return dayOfWeek.equalsIgnoreCase(userAnswer.getAnswerText()) ? 1 : 0;
+    }
+
+    @Override
+    public String getCorrectAnswer() {
+        if (this.questionDayOfWeek == null) {
+            throw new IllegalStateException("Question day of the week has not been set. Ensure getAnswerOptions is called before getCorrectAnswer.");
+        }
+        return this.questionDayOfWeek;
     }
 }

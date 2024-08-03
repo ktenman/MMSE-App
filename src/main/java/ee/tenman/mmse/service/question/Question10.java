@@ -51,4 +51,9 @@ public class Question10 implements Question {
     public int getMaximumScore() {
         return 3;
     }
+
+    @Override
+    public String getCorrectAnswer() {
+        return String.join(", ", CORRECT_ANSWERS);
+    }
 }

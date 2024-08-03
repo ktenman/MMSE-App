@@ -97,6 +97,11 @@ public class Question1 implements Question {
         }
     }
 
+    @Override
+    public String getCorrectAnswer() {
+        return SENTENCE;
+    }
+
     private String processVoiceInput(String fileName) {
         byte[] bytes = storageService.downloadFile(fileName);
         MultipartFile multipartFile = new ByteArrayMultipartFile(fileName, bytes);

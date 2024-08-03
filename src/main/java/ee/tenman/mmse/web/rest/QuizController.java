@@ -70,13 +70,23 @@ public class QuizController {
         if (nextQuestionId.isEmpty()) {
             TestEntity testEntity = testEntityService.getById(testEntityId);
             QuizResult quizResult = quizService.calculateScore(testEntity.getId());
-            testEntity.setScore(quizResult.score());
+            testEntity.setScore(quizResult.getScore());
             testEntityService.save(testEntity);
-            String result = String.format("Quiz has ended. Your score is %d/%d", quizResult.score(), quizResult.maxScore());
+            String result = String.format("Quiz has ended. Your score is %d/%d", quizResult.getScore(), quizResult.getMaxScore());
             return ResponseEntity.ok().body(result);
         }
         QuestionDTO nextQuestion = quizService.getQuestion(nextQuestionId.get(), testEntityId);
         return ResponseEntity.ok(nextQuestion);
+    }
+
+    @GetMapping("/results/{testEntityId}")
+    public ResponseEntity<?> getResults(@PathVariable Long testEntityId) {
+        TestEntity testEntity = testEntityService.getById(testEntityId);
+        QuizResult quizResult = quizService.calculateScore(testEntity.getId());
+        testEntity.setScore(quizResult.getScore());
+        testEntityService.save(testEntity);
+        String result = String.format("Quiz has ended. Your score is %d/%d", quizResult.getScore(), quizResult.getMaxScore());
+        return ResponseEntity.ok().body(result);
     }
 
     @PostMapping("/answer/{testEntityId}")

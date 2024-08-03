@@ -26,7 +26,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Comparator;
-import java.util.HashSet;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -88,34 +88,37 @@ public class QuizService {
     public QuizResult calculateScore(Long testEntityId) {
         List<UserAnswer> answers = userAnswerRepository.findByTestEntityIdOrderByCreatedAtDesc(testEntityId);
         int totalScore = 0;
-        Set<QuestionId> answeredQuestions = new HashSet<>();
-
         int maxScore = 0;
+        Map<QuestionId, QuizResult.QuestionResult> questionResults = new HashMap<>();
 
         for (UserAnswer userAnswer : answers) {
             Question question = questions.get(userAnswer.getQuestionId());
-            maxScore += question.getMaximumScore();
-
+            question.getAnswerOptions(testEntityId); // This is a hack to set the correct answer for the question
             if (question == null) {
                 log.warn("No Question found for ID: {}", userAnswer.getQuestionId());
                 continue;
             }
 
-            if (answeredQuestions.contains(question.getQuestionId())) {
-                continue;
-            }
+            maxScore += question.getMaximumScore();
 
-            int score = userAnswer.getScore() == null ? question.getScore(userAnswer) : userAnswer.getScore();
-            userAnswer.setScore(score);
-            userAnswer.setMaximumScore(question.getMaximumScore());
+            int score = question.getScore(userAnswer);
             totalScore += score;
 
-            log.info("Total score: {}, Question: {}, Score: {}", totalScore, question.getQuestionId(), score);
-            answeredQuestions.add(question.getQuestionId());
+            String correctAnswer = question.getCorrectAnswer(); // You'd need to add this method to your Question interface
+            boolean correct = (score == question.getMaximumScore());
+
+            questionResults.put(userAnswer.getQuestionId(),
+                new QuizResult.QuestionResult(userAnswer.getAnswerText(), correctAnswer, correct));
+
+            userAnswer.setScore(score);
+            userAnswer.setMaximumScore(question.getMaximumScore());
+
+            log.info("Question: {}, User Answer: {}, Correct Answer: {}, Score: {}/{}",
+                question.getQuestionId(), userAnswer.getAnswerText(), correctAnswer, score, question.getMaximumScore());
         }
 
         userAnswerRepository.saveAll(answers);
-        return new QuizResult(totalScore, maxScore);
+        return new QuizResult(totalScore, maxScore, questionResults);
     }
 
     @Lock(key = "#answerDTO.idempotencyKey")
@@ -128,9 +131,14 @@ public class QuizService {
         UserAnswer userAnswer = userAnswerRepository
             .findFirstByTestEntityIdAndQuestionIdOrderByCreatedAtDesc(testEntity.getId(), answerDTO.getQuestionId())
             .orElse(new UserAnswer());
+
+        Question question = questions.get(answerDTO.getQuestionId());
+
         userAnswer.setAnswerText(answerDTO.getAnswerText());
         userAnswer.setQuestionId(answerDTO.getQuestionId());
         userAnswer.setTestEntity(testEntity);
+        userAnswer.setCorrectAnswer(question.getCorrectAnswer());
+
         return userAnswerRepository.save(userAnswer);
     }
 

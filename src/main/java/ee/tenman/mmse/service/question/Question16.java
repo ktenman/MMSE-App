@@ -12,6 +12,7 @@ public class Question16 implements Question {
 
     private static final String QUESTION_TEXT = "16. Fold and Drop Paper Task";
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_16;
+    private static final String CORRECT_ANSWER = "true,true,true"; // The correct sequence of actions
 
     @Override
     public String getQuestionText() {
@@ -39,19 +40,7 @@ public class Question16 implements Question {
             return 0;
         }
 
-        String[] actions = userAnswer.getAnswerText().split(",");
-        if (actions.length != 3) {
-            return 0;
-        }
-
-        int score = 0;
-        for (String action : actions) {
-            if (Boolean.parseBoolean(action)) {
-                score++;
-            }
-        }
-
-        return score;
+        return userAnswer.getAnswerText().equals(CORRECT_ANSWER) ? getMaximumScore() : 0;
     }
 
     @Override
@@ -67,5 +56,10 @@ public class Question16 implements Question {
             "With your mouse/finger, drag and drop the folded paper into the 'Floor' area",
             "When finished, use the 'Next Task' button to proceed"
         );
+    }
+
+    @Override
+    public String getCorrectAnswer() {
+        return CORRECT_ANSWER;
     }
 }

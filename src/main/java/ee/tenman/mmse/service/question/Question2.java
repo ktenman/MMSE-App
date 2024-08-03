@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.Clock;
 import java.time.LocalDate;
-import java.time.ZoneId;
 import java.time.format.DateTimeFormatter;
 import java.time.format.DateTimeParseException;
 import java.time.format.TextStyle;
@@ -18,15 +17,19 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 import java.util.Locale;
+import java.util.regex.Pattern;
 
 @Component
 public class Question2 implements Question {
 
     private static final String QUESTION_TEXT = "2. What is the current date?";
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_2;
+    private static final Pattern ORDINAL_SUFFIX_PATTERN = Pattern.compile("(\\d+)(st|nd|rd|th)");
 
     @Resource
     private Clock clock;
+
+    private LocalDate questionDate;
 
     @Override
     public String getQuestionText() {
@@ -45,17 +48,17 @@ public class Question2 implements Question {
 
     @Override
     public List<String> getAnswerOptions(Long testEntityId) {
-        // Get today's date
-        LocalDate today = LocalDate.now(clock);
+        // Set today's date
+        this.questionDate = LocalDate.now(clock);
 
         // Format it as a string in the format '25th May 2023'
-        String formattedToday = formatToOrdinalDate(today);
+        String formattedToday = formatToOrdinalDate(this.questionDate);
 
         // Generate three incorrect dates
         List<String> incorrectDates = Arrays.asList(
-            formatToOrdinalDate(today.minus(1, ChronoUnit.MONTHS)),
-            formatToOrdinalDate(today.plus(1, ChronoUnit.MONTHS)),
-            formatToOrdinalDate(today.minus(1, ChronoUnit.MONTHS).plus(1, ChronoUnit.DAYS))
+            formatToOrdinalDate(this.questionDate.minus(1, ChronoUnit.MONTHS)),
+            formatToOrdinalDate(this.questionDate.plus(1, ChronoUnit.MONTHS)),
+            formatToOrdinalDate(this.questionDate.minus(1, ChronoUnit.MONTHS).plus(1, ChronoUnit.DAYS))
         );
 
         // Combine correct and incorrect dates into one list
@@ -70,15 +73,15 @@ public class Question2 implements Question {
 
     @Override
     public int getScore(UserAnswer userAnswer) {
-        LocalDate localDate = userAnswer.getCreatedAt().atZone(ZoneId.systemDefault()).toLocalDate();
         LocalDate userAnswerDate;
         try {
-            String userAnswerText = userAnswer.getAnswerText().replaceAll("(st|nd|rd|th)", "");
+            // Remove ordinal suffixes before parsing the date
+            String userAnswerText = ORDINAL_SUFFIX_PATTERN.matcher(userAnswer.getAnswerText()).replaceAll("$1");
             userAnswerDate = LocalDate.parse(userAnswerText, DateTimeFormatter.ofPattern("d MMMM yyyy", Locale.ENGLISH));
         } catch (DateTimeParseException e) {
-            throw new IllegalArgumentException(String.format("Invalid date format: %s", userAnswer.getAnswerText()));
+            throw new IllegalArgumentException(String.format("Invalid date format: %s", userAnswer.getAnswerText()), e);
         }
-        return localDate.equals(userAnswerDate) ? 1 : 0;
+        return questionDate.equals(userAnswerDate) ? 1 : 0;
     }
 
     private String formatToOrdinalDate(LocalDate date) {
@@ -96,5 +99,13 @@ public class Question2 implements Question {
             case 3 -> "rd";
             default -> "th";
         };
+    }
+
+    @Override
+    public String getCorrectAnswer() {
+        if (this.questionDate == null) {
+            throw new IllegalStateException("Question date has not been set. Ensure getAnswerOptions is called before getCorrectAnswer.");
+        }
+        return formatToOrdinalDate(this.questionDate);
     }
 }

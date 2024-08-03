@@ -59,4 +59,9 @@ public class Question13 implements Question {
         }
     }
 
+    @Override
+    public String getCorrectAnswer() {
+        return EXPECTED_CONFIRMATION;
+    }
+
 }

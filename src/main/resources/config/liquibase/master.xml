@@ -38,6 +38,7 @@
              relativeToChangelogFile="false"/>
     <include file="/config/liquibase/changelog/20240403174656_add_test_entity_hash.sql"
              relativeToChangelogFile="false"/>
+    <include file="/config/liquibase/changelog/20240803180100_add_correct_answer.sql" relativeToChangelogFile="false"/>
     <!-- jhipster-needle-liquibase-add-constraints-changelog - JHipster will add liquibase constraints changelogs here -->
     <!-- jhipster-needle-liquibase-add-incremental-changelog - JHipster will add incremental liquibase changelogs here -->
 </databaseChangeLog>

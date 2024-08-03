@@ -15,6 +15,7 @@ public class Question8 implements Question {
 
     private static final String QUESTION_TEXT = "8. What is the name of the third object?";
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_8;
+    private static final AnswerOption CORRECT_ANSWER = AnswerOption.MAN;
 
     @Override
     public String getQuestionText() {
@@ -45,6 +46,11 @@ public class Question8 implements Question {
 
     @Override
     public int getScore(UserAnswer userAnswer) {
-        return AnswerOption.valueOf(userAnswer.getAnswerText()) == AnswerOption.MAN ? 1 : 0;
+        return AnswerOption.valueOf(userAnswer.getAnswerText()) == CORRECT_ANSWER ? 1 : 0;
+    }
+
+    @Override
+    public String getCorrectAnswer() {
+        return CORRECT_ANSWER.name();
     }
 }

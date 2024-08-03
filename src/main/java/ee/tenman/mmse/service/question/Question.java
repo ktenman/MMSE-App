@@ -59,4 +59,6 @@ public interface Question {
         return List.of();
     }
 
+    String getCorrectAnswer();
+
 }

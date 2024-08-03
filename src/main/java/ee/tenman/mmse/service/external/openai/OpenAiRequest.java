@@ -58,7 +58,7 @@ public class OpenAiRequest {
             )
         );
 
-        return new OpenAiRequest(Model.GPT_4_VISION_PREVIEW.getValue(), messages);
+        return new OpenAiRequest(Model.GPT_4_O.getValue(), messages);
     }
 
     public List<Map<String, Object>> getMessages() {
@@ -76,7 +76,7 @@ public class OpenAiRequest {
 
     public enum Model {
         GPT_4(DEFAULT_MODEL),
-        GPT_4_VISION_PREVIEW("gpt-4-vision-preview");
+        GPT_4_O("gpt-4o");
 
         private final String value;
 

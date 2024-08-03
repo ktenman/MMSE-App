@@ -2,7 +2,7 @@ package ee.tenman.mmse.service.external.dolphin;
 
 public class DolphinRequest {
 
-    private final String model = "dolphin-mixtral";
+    private final String model = "gemma2:9b";
     private final boolean stream = false;
     private String prompt;
 

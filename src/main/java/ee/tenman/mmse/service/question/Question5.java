@@ -3,10 +3,11 @@ package ee.tenman.mmse.service.question;
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
 import ee.tenman.mmse.domain.enumeration.QuestionType;
+import jakarta.annotation.Resource;
 import org.springframework.stereotype.Component;
 
+import java.time.Clock;
 import java.time.Month;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Arrays;
 import java.util.Collections;
@@ -31,6 +32,11 @@ public class Question5 implements Question {
 
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_5;
 
+    @Resource
+    private Clock clock;
+
+    private String questionSeason;
+
     @Override
     public String getQuestionText() {
         return QUESTION_TEXT;
@@ -48,6 +54,11 @@ public class Question5 implements Question {
 
     @Override
     public List<String> getAnswerOptions(Long testEntityId) {
+        // Set the question season when generating options
+        ZonedDateTime now = ZonedDateTime.now(clock);
+        Month currentMonth = now.getMonth();
+        this.questionSeason = getSeasonFromMonth(currentMonth);
+
         List<String> answerOptions = Arrays.asList(SPRING, SUMMER, AUTUMN, WINTER);
         Collections.shuffle(answerOptions);
         return answerOptions;
@@ -55,11 +66,15 @@ public class Question5 implements Question {
 
     @Override
     public int getScore(UserAnswer userAnswer) {
-        ZonedDateTime zonedDateTime = userAnswer.getCreatedAt().atZone(ZoneId.systemDefault());
-        Month month = Month.from(zonedDateTime);
-        String season = getSeasonFromMonth(month);
+        return this.questionSeason.equalsIgnoreCase(userAnswer.getAnswerText()) ? 1 : 0;
+    }
 
-        return season.equalsIgnoreCase(userAnswer.getAnswerText()) ? 1 : 0;
+    @Override
+    public String getCorrectAnswer() {
+        if (this.questionSeason == null) {
+            throw new IllegalStateException("Question season has not been set. Ensure getAnswerOptions is called before getCorrectAnswer.");
+        }
+        return this.questionSeason;
     }
 
     String getSeasonFromMonth(Month month) {

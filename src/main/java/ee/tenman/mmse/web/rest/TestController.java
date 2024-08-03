@@ -75,9 +75,9 @@ public class TestController {
         Optional<QuestionId> nextQuestionId = getNextQuestionId(latestUserAnswer.get().getQuestionId());
         if (nextQuestionId.isEmpty()) {
             QuizResult quizResult = quizService.calculateScore(testEntity.getId());
-            testEntity.setScore(quizResult.score());
+            testEntity.setScore(quizResult.getScore());
             testEntityService.save(testEntity);
-            String result = String.format("Quiz has ended. Your score is %d/%d", quizResult.score(), quizResult.maxScore());
+            String result = String.format("Quiz has ended. Your score is %d/%d", quizResult.getScore(), quizResult.getMaxScore());
             return ResponseEntity.ok().body(result);
         }
         QuestionDTO nextQuestion = quizService.getQuestion(nextQuestionId.get(), testEntity.getId());

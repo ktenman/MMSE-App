@@ -8,7 +8,6 @@ import org.springframework.stereotype.Component;
 
 import java.time.Clock;
 import java.time.Month;
-import java.time.ZoneId;
 import java.time.ZonedDateTime;
 import java.util.Collections;
 import java.util.List;
@@ -23,6 +22,8 @@ public class Question3 implements Question {
 
     @Resource
     private Clock clock;
+
+    private Month questionMonth;
 
     @Override
     public String getQuestionText() {
@@ -41,9 +42,11 @@ public class Question3 implements Question {
 
     @Override
     public List<String> getAnswerOptions(Long testEntityId) {
-        Month currentMonth = Month.from(ZonedDateTime.now(clock));
+        // Set the question month when generating options
+        this.questionMonth = Month.from(ZonedDateTime.now(clock));
+
         List<String> answerOptions = IntStream.rangeClosed(0, 3)
-            .mapToObj(currentMonth::plus)
+            .mapToObj(this.questionMonth::plus)
             .map(Month::name)
             .collect(Collectors.toList());
 
@@ -54,9 +57,14 @@ public class Question3 implements Question {
 
     @Override
     public int getScore(UserAnswer userAnswer) {
-        ZonedDateTime zonedDateTime = userAnswer.getCreatedAt().atZone(ZoneId.systemDefault());
-        String month = Month.from(zonedDateTime).name();
-        return month.equalsIgnoreCase(userAnswer.getAnswerText()) ? 1 : 0;
+        return this.questionMonth.name().equalsIgnoreCase(userAnswer.getAnswerText()) ? 1 : 0;
     }
 
+    @Override
+    public String getCorrectAnswer() {
+        if (this.questionMonth == null) {
+            throw new IllegalStateException("Question month has not been set. Ensure getAnswerOptions is called before getCorrectAnswer.");
+        }
+        return this.questionMonth.name();
+    }
 }

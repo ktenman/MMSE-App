@@ -51,4 +51,8 @@ public class Question14 implements Question {
         return predictionService.isGrammaticallyCorrect(userAnswer.getAnswerText()) ? 1 : 0;
     }
 
+    @Override
+    public String getCorrectAnswer() {
+        return "The correct answer should be a grammatically correct sentence about something the user does every day.";
+    }
 }
