@@ -4,7 +4,6 @@ import ee.tenman.mmse.config.RedisConfiguration;
 import ee.tenman.mmse.domain.OrientationToPlaceAnswer;
 import ee.tenman.mmse.domain.PatientProfile;
 import ee.tenman.mmse.domain.TestEntity;
-import ee.tenman.mmse.domain.User;
 import ee.tenman.mmse.domain.UserAnswer;
 import ee.tenman.mmse.domain.enumeration.QuestionId;
 import ee.tenman.mmse.repository.UserAnswerRepository;
@@ -15,6 +14,7 @@ import ee.tenman.mmse.service.UserService;
 import ee.tenman.mmse.service.dto.AnswerDTO;
 import ee.tenman.mmse.service.dto.OrientationToPlaceQuestionDTO;
 import ee.tenman.mmse.service.dto.QuestionDTO;
+import ee.tenman.mmse.service.external.dolphin.DolphinRequest;
 import ee.tenman.mmse.service.external.dolphin.DolphinService;
 import ee.tenman.mmse.service.external.dolphin.PromptWrapper;
 import ee.tenman.mmse.service.lock.Lock;
@@ -33,7 +33,6 @@ import java.time.Instant;
 import java.util.Comparator;
 import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 import java.util.Set;
 import java.util.TreeMap;
 import java.util.function.Function;
@@ -142,10 +141,6 @@ public class QuizService {
     }
     @Lock(key = "#answerDTO.idempotencyKey")
     public UserAnswer saveAnswer(AnswerDTO answerDTO, Long testEntityId) {
-        Optional<User> user = userService.findUserWithAuthorities();
-        if (user.isEmpty()) {
-            throw new RuntimeException("User not found");
-        }
         TestEntity testEntity = testEntityService.getById(testEntityId);
         UserAnswer userAnswer = userAnswerRepository
             .findFirstByTestEntityIdAndQuestionIdOrderByCreatedAtDesc(testEntity.getId(), answerDTO.getQuestionId())
@@ -176,7 +171,7 @@ public class QuizService {
             .filter(answer -> StringUtils.isNotBlank(answer.getCorrectAnswer()))
             .map(answer -> {
                 Question question = questions.get(answer.getQuestionId());
-                PromptWrapper promptWrapper = new PromptWrapper(question.getLLMPrompt(answer.getCorrectAnswer()));
+                PromptWrapper promptWrapper = new PromptWrapper(question.getLLMPrompt(answer.getCorrectAnswer()), DolphinRequest.Model.GEMMA_2_9B);
                 String found = dolphinService.find(promptWrapper);
                 OrientationToPlaceAnswer orientationToPlaceAnswer = orientationToPlaceAnswerService
                     .findByPatientProfileAndQuestionId(patientProfile, answer.getQuestionId())

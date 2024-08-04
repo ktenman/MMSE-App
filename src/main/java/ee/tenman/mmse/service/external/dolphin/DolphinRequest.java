@@ -1,13 +1,39 @@
 package ee.tenman.mmse.service.external.dolphin;
 
+import org.apache.commons.lang3.StringUtils;
+
 public class DolphinRequest {
 
-    private final String model = "gemma2:9b";
+    public static final String DEFAULT_MODEL = Model.GEMMA_2_9B.value();
+    private String model = DEFAULT_MODEL;
     private final boolean stream = false;
     private String prompt;
 
+    public DolphinRequest(String prompt, Model model) {
+        this.prompt = prompt;
+        if (model != null && StringUtils.isNotBlank(model.value())) {
+            this.model = model.value();
+        }
+    }
+
     public DolphinRequest(String prompt) {
         this.prompt = prompt;
+    }
+
+    public enum Model {
+        GEMMA_2_9B("gemma2:9b"),
+        DOLPHIN_MIXTRAL("dolphin-mixtral"),
+        LLAMA_31_70B("llama3.1:70b");
+
+        private final String value;
+
+        Model(String value) {
+            this.value = value;
+        }
+
+        public String value() {
+            return this.value;
+        }
     }
 
     public String getModel() {

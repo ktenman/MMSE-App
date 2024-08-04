@@ -15,7 +15,6 @@ import org.springframework.stereotype.Component;
 
 import java.util.Collections;
 import java.util.List;
-import java.util.Optional;
 
 @Component
 public class Question21 implements Question {
@@ -62,15 +61,7 @@ public class Question21 implements Question {
 
     @Override
     public int getScore(UserAnswer userAnswer) {
-        TestEntity testEntity = testEntityService.getByUserAnswer(userAnswer);
-        PatientProfile patientProfile = patientProfileService.getByTestEntity(testEntity);
-        Optional<OrientationToPlaceAnswer> correctAnswer = orientationToPlaceAnswerService
-            .findByPatientProfileAndQuestionId(patientProfile, QUESTION_ID)
-            .stream()
-            .filter(answer -> answer.getQuestionId().equals(QUESTION_ID))
-            .findFirst()
-            .filter(answer -> StringUtils.containsIgnoreCase(userAnswer.getAnswerText(), answer.getCorrectAnswer()));
-        return correctAnswer.isPresent() ? 1 : 0;
+        return StringUtils.equalsIgnoreCase(userAnswer.getAnswerText().strip(), userAnswer.getCorrectAnswer()) ? 1 : 0;
     }
 
     @Override

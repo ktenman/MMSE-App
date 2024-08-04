@@ -33,7 +33,7 @@ public class DolphinService {
             return answer.get();
         }
 
-        Optional<String> response = askQuestion(prompt);
+        Optional<String> response = askQuestion(promptWrapper);
         if (response.isEmpty()) {
             log.debug("Answer '{}' was not recognized as correct by Dolphin Service.", prompt);
             throw new NoDolphinResponseException("Dolphin Service returned no response");
@@ -51,14 +51,15 @@ public class DolphinService {
         return response.get();
     }
 
-    private Optional<String> askQuestion(String question) {
+    private Optional<String> askQuestion(PromptWrapper promptWrapper) {
+        String question = promptWrapper.prompt();
         if (StringUtils.isBlank(question)) {
             log.warn("Received blank question, returning empty response");
             return Optional.empty();
         }
 
         try {
-            DolphinRequest request = new DolphinRequest(question);
+            DolphinRequest request = new DolphinRequest(question, promptWrapper.model());
             log.info("Generating: {}", request);
             DolphinResponse response = dolphinClient.generate(request);
             log.info("Dolphin response: {}", response);
