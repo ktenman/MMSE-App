@@ -4,7 +4,7 @@ import org.apache.commons.lang3.StringUtils;
 
 public class DolphinRequest {
 
-    public static final String DEFAULT_MODEL = Model.GEMMA_2_9B.value();
+    public static final String DEFAULT_MODEL = Model.LLAMA_31_70B.value();
     private String model = DEFAULT_MODEL;
     private final boolean stream = false;
     private String prompt;

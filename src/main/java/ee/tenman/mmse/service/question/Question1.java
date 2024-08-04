@@ -16,6 +16,7 @@ import ee.tenman.mmse.service.external.transcription.TranscriptionRequest;
 import ee.tenman.mmse.service.external.transcription.TranscriptionResponse;
 import ee.tenman.mmse.service.external.transcription.TranscriptionService;
 import jakarta.annotation.Resource;
+import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.stereotype.Component;
@@ -81,6 +82,16 @@ public class Question1 implements Question {
     @Override
     public int getScore(UserAnswer userAnswer) {
         String answerText = processVoiceInput(userAnswer.getAnswerText());
+        if (StringUtils.isBlank(answerText)) {
+            log.debug("Received blank answer.");
+            return 0;
+        }
+
+        if (!containsWordWithTwoLetters(answerText)) {
+            log.debug("Answer '{}' does not contain any word with at least two letters.", answerText);
+            return 0;
+        }
+
         if (isSynonym(answerText)) {
             log.debug("Answer '{}' is a synonym to one of the accepted answers.", answerText);
             return 1;
@@ -134,6 +145,17 @@ public class Question1 implements Question {
     private String prepareAiPrompt(String answerText) {
         return String.format("Is the phrase \"%s\" same as: %s? Answer only yes/no",
             answerText, SENTENCE);
+    }
+
+    private boolean containsWordWithTwoLetters(String answerText) {
+        answerText = StringUtils.trim(answerText).replaceAll("[^a-zA-Z0-9\\s]", "").toLowerCase();
+        String[] words = answerText.split("\\s+");
+        for (String word : words) {
+            if (word.length() >= 2) {
+                return true;
+            }
+        }
+        return false;
     }
 
 }
