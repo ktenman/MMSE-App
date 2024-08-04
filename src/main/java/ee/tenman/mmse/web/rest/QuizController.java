@@ -130,7 +130,7 @@ public class QuizController {
         @PathVariable Long patientProfileId,
         @RequestBody List<OrientationToPlaceQuestionDTO> answers
     ) {
-        TestEntity testEntity = quizService.saveOrientationToPlaceAnswerOptions(patientProfileId, answers);
+        TestEntity testEntity = quizService.saveOrientationToPlaceAnswerOptionsV2(patientProfileId, answers);
         return testEntityMapper.toDto(testEntity);
     }
 

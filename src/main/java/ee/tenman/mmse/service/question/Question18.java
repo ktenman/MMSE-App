@@ -34,7 +34,7 @@ public class Question18 implements Question {
 
     private static final Logger log = LoggerFactory.getLogger(Question18.class);
 
-    private static final String QUESTION = "What floor of the building are you on?";
+    private static final String QUESTION = "What floor of the building are you on? (first, second, ground, etc)";
     private static final String QUESTION_TEXT = "18. " + QUESTION;
     private static final QuestionId QUESTION_ID = QuestionId.QUESTION_18;
     private static final Set<String> CORRECT_INDICATORS = Set.of(

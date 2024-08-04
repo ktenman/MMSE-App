@@ -208,6 +208,25 @@ public class QuizService {
         return testEntityService.createTestEntity(patientProfile);
     }
 
+    public TestEntity saveOrientationToPlaceAnswerOptionsV2(Long patientProfileId, List<OrientationToPlaceQuestionDTO> answers) {
+        PatientProfile patientProfile = patientProfileService.findById(patientProfileId)
+            .orElseThrow(() -> new RuntimeException("Patient profile not found"));
+        Set<OrientationToPlaceAnswer> orientationToPlaceAnswers = answers.stream()
+            .map(answer -> {
+                OrientationToPlaceAnswer orientationToPlaceAnswer = orientationToPlaceAnswerService
+                    .findByPatientProfileAndQuestionId(patientProfile, answer.getQuestionId())
+                    .orElse(new OrientationToPlaceAnswer());
+                orientationToPlaceAnswer.setQuestionId(answer.getQuestionId());
+                orientationToPlaceAnswer.setCorrectAnswer(answer.getCorrectAnswer());
+                orientationToPlaceAnswer.setAnswerOptions(answerOptions(answer.getAnswerOptions()));
+                orientationToPlaceAnswer.setPatientProfile(patientProfile);
+                return orientationToPlaceAnswer;
+            })
+            .collect(toSet());
+        orientationToPlaceAnswerService.saveAll(orientationToPlaceAnswers);
+        return testEntityService.createTestEntity(patientProfile);
+    }
+
     private void validateAnswers(List<OrientationToPlaceQuestionDTO> answers) {
         for (OrientationToPlaceQuestionDTO answer : answers) {
             if (StringUtils.isBlank(answer.getCorrectAnswer())) {

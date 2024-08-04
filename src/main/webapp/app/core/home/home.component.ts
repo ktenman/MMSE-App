@@ -101,26 +101,31 @@ export default defineComponent({
           orientationToPlaceQuestions.value
         );
 
-        testEntity.value = response;
-        console.log('Orientation to place correct answers saved successfully');
+        // Ensure the response contains a hash
+        if (response && response.hash) {
+          testEntity.value = response;
+          console.log('Orientation to place correct answers saved successfully');
 
-        // Update the test link with the new hash
-        if (testEntity.value?.hash) {
+          // Update the test link with the new hash
           const baseUrl = window.location.origin;
-          testLink.value = baseUrl + router.resolve({
+          const newTestLink = router.resolve({
             name: 'TestView',
-            params: { testEntityHash: testEntity.value.hash }
+            params: { testEntityHash: response.hash }
           }).href;
-        }
 
-        quizState.value = QuizState.SHOW_TEST_LINK;
-        saveQuizProgress();
+          testLink.value = `${baseUrl}${newTestLink}`;
+          console.log('Updated test link:', testLink.value);
+
+          quizState.value = QuizState.SHOW_TEST_LINK;
+          saveQuizProgress();
+        } else {
+          throw new Error('Response does not contain a hash');
+        }
       } catch (error) {
         console.error('Error saving orientation to place correct answers:', error);
-      } finally {
-        quizState.value = QuizState.SHOW_TEST_LINK;
       }
     };
+
 
     const saveOrientationToPlaceAnswerOptions = async () => {
       try {
