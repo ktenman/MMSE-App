@@ -25,6 +25,15 @@ export default class HomeService {
       .then(res => res.data);
   }
 
+  public saveOrientationToPlaceCorrectAnswersV2(
+    patientProfileId: number,
+    answers: IOrientationToPlaceQuestion[]
+  ): Promise<ITestEntity> {
+    return axios
+      .post<ITestEntity>(`/api/orientation-to-place/correct-answers/v2/${patientProfileId}`, answers)
+      .then(res => res.data);
+  }
+
   public saveOrientationToPlaceAnswerOptions(patientProfileId: number, answers: IOrientationToPlaceQuestion[]): Promise<ITestEntity> {
     return axios.post<ITestEntity>(`/api/orientation-to-place/answer-options/${patientProfileId}`, answers).then(res => res.data);
   }

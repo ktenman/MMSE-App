@@ -15,4 +15,6 @@ import java.util.Optional;
 @Repository
 public interface OrientationToPlaceAnswerRepository extends JpaRepository<OrientationToPlaceAnswer, Long> {
     Optional<OrientationToPlaceAnswer> findByPatientProfileAndQuestionId(PatientProfile patientProfile, QuestionId questionId);
+
+    Optional<OrientationToPlaceAnswer> findByQuestionIdAndPatientProfileId(QuestionId questionId, Long id);
 }

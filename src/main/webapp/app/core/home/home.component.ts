@@ -46,9 +46,9 @@ export default defineComponent({
 
     const navigateBack = () => {
       switch (quizState.value) {
-        case QuizState.ORIENTATION_ANSWERS:
-          quizState.value = QuizState.ORIENTATION_QUESTIONS;
-          break;
+        // case QuizState.ORIENTATION_ANSWERS:
+        //   quizState.value = QuizState.ORIENTATION_QUESTIONS;
+        //   break;
         case QuizState.ORIENTATION_QUESTIONS:
           quizState.value = QuizState.PATIENT_INFO;
           break;
@@ -85,23 +85,40 @@ export default defineComponent({
       localStorage.removeItem(QUIZ_PROGRESS);
       quizState.value = QuizState.PATIENT_INFO;
       patientProfile.value = new PatientProfile();
+      testEntity.value = new TestEntity();
     };
 
     const persistAnswer = (question: IOrientationToPlaceQuestion) => {
       if (question.correctAnswer && question.correctAnswer.length >= 3) {
-        homeService.saveOrientationToPlaceCorrectAnswers(patientProfile.value.id, orientationToPlaceQuestions.value);
+        // homeService.saveOrientationToPlaceCorrectAnswers(patientProfile.value.id, orientationToPlaceQuestions.value);
       }
     };
 
     const saveOrientationToPlaceCorrectAnswers = async () => {
       try {
-        const response = await homeService.saveOrientationToPlaceCorrectAnswers(patientProfile.value.id, orientationToPlaceQuestions.value);
-        orientationToPlaceQuestions.value = response;
+        const response = await homeService.saveOrientationToPlaceCorrectAnswersV2(
+          patientProfile.value.id,
+          orientationToPlaceQuestions.value
+        );
+
+        testEntity.value = response;
         console.log('Orientation to place correct answers saved successfully');
-        quizState.value = QuizState.ORIENTATION_ANSWERS;
+
+        // Update the test link with the new hash
+        if (testEntity.value?.hash) {
+          const baseUrl = window.location.origin;
+          testLink.value = baseUrl + router.resolve({
+            name: 'TestView',
+            params: { testEntityHash: testEntity.value.hash }
+          }).href;
+        }
+
+        quizState.value = QuizState.SHOW_TEST_LINK;
         saveQuizProgress();
       } catch (error) {
         console.error('Error saving orientation to place correct answers:', error);
+      } finally {
+        quizState.value = QuizState.SHOW_TEST_LINK;
       }
     };
 

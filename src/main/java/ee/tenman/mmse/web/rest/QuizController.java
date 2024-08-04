@@ -124,6 +124,16 @@ public class QuizController {
         return quizService.saveOrientationToPlaceCorrectAnswers(patientProfileId, answers);
     }
 
+    @PostMapping("/orientation-to-place/correct-answers/v2/{patientProfileId}")
+    @ResponseStatus(HttpStatus.OK)
+    public TestEntityDTO saveOrientationToPlaceCorrectAnswersV2(
+        @PathVariable Long patientProfileId,
+        @RequestBody List<OrientationToPlaceQuestionDTO> answers
+    ) {
+        TestEntity testEntity = quizService.saveOrientationToPlaceAnswerOptions(patientProfileId, answers);
+        return testEntityMapper.toDto(testEntity);
+    }
+
     @PostMapping("/orientation-to-place/answer-options/{patientProfileId}")
     @ResponseStatus(HttpStatus.OK)
     public TestEntityDTO saveOrientationToPlaceAnswerOptions(
