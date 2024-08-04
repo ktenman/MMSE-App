@@ -10,7 +10,6 @@ import ee.tenman.mmse.repository.UserAnswerRepository;
 import ee.tenman.mmse.service.OrientationToPlaceAnswerService;
 import ee.tenman.mmse.service.PatientProfileService;
 import ee.tenman.mmse.service.TestEntityService;
-import ee.tenman.mmse.service.UserService;
 import ee.tenman.mmse.service.dto.AnswerDTO;
 import ee.tenman.mmse.service.dto.OrientationToPlaceQuestionDTO;
 import ee.tenman.mmse.service.dto.QuestionDTO;
@@ -47,7 +46,6 @@ public class QuizService {
 
     private final Map<QuestionId, Question> questions;
     private final UserAnswerRepository userAnswerRepository;
-    private final UserService userService;
     private final TestEntityService testEntityService;
     private final PatientProfileService patientProfileService;
     private final OrientationToPlaceAnswerService orientationToPlaceAnswerService;
@@ -57,14 +55,13 @@ public class QuizService {
     public QuizService(
         QuestionsConfig questionsConfig,
         UserAnswerRepository userAnswerRepository,
-        UserService userService, TestEntityService testEntityService,
+        TestEntityService testEntityService,
         PatientProfileService patientProfileService,
         OrientationToPlaceAnswerService orientationToPlaceAnswerService,
         DolphinService dolphinService
     ) {
         this.questions = questionsConfig.getQuestions();
         this.userAnswerRepository = userAnswerRepository;
-        this.userService = userService;
         this.testEntityService = testEntityService;
         this.patientProfileService = patientProfileService;
         this.orientationToPlaceAnswerService = orientationToPlaceAnswerService;

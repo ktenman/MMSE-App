@@ -22,7 +22,8 @@ public class QuestionsConfig {
 
     @PostConstruct
     public void init() {
-        questions = questionBeans.stream().collect(Collectors.toMap(Question::getQuestionId, Function.identity()));
+        questions = questionBeans.stream()
+            .collect(Collectors.toMap(Question::getQuestionId, Function.identity()));
     }
 
     public Map<QuestionId, Question> getQuestions() {
