@@ -134,11 +134,6 @@ public class Question18 implements Question {
 
         answerText = StringUtils.trim(answerText).replaceAll("[^a-zA-Z0-9\\s]", "").toLowerCase();
 
-        if (!containsWordWithThreeLetters(answerText)) {
-            log.debug("Answer '{}' does not contain any word with at least three letters.", answerText);
-            return 0;
-        }
-
         if (isSynonym(answerText, correctAnswer)) {
             log.debug("Answer '{}' is a synonym to one of the accepted answers.", answerText);
             return 1;
