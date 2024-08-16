@@ -1,80 +1,120 @@
-# AI-Powered MMSE Web Application
+# AI-Powered MMSE Application
 
-This repository contains the source code for an AI-powered web application that implements the Mini-Mental State
-Examination (MMSE) for cognitive assessment. The application leverages various artificial intelligence models and
-technologies to provide an enhanced user experience. It is built using Java 17 and TypeScript, with a PostgreSQL
-database for data storage and Vue.js for the frontend. The project is powered by Spring Boot 3.2.2 and utilizes Docker
-and Docker Compose for containerization and easy deployment.
+## Introduction
 
-## Features
+The AI-Powered MMSE Application is a cutting-edge web-based tool that leverages artificial intelligence to enhance the
+traditional Mini-Mental State Examination (MMSE). It offers healthcare providers an efficient and accurate way to assess
+cognitive health through real-time AI analysis.
 
-- Integration of AI models:
-    - BERT (Bidirectional Encoder Representations from Transformers): Pre-trained deep learning model for natural
-      language
-      processing tasks
-    - GPT-3 (Generative Pre-trained Transformer 3): Large language model for text generation and understanding
-    - ResNet-50: Deep learning model for image recognition and classification
-- Automated scoring and validation mechanisms for the MMSE
-- Containerization with Docker and Docker Compose for simplified deployment and scalability
-- Backend implemented in Java 17 with Spring Boot 3.2.2 for robust and efficient server-side processing
-- Frontend built with Vue.js for a responsive and interactive user interface
-- PostgreSQL database for reliable data storage and retrieval
-- Liquibase for database schema management and versioning
-- Comprehensive testing suite:
-- Unit testing to ensure individual components function as expected
-- Integration testing with Testcontainers for realistic end-to-end testing
+![AI-Powered MMSE Interface](screenshots/mmse_app.png)
 
-## Prerequisites
+## Key Features
 
-To run this application locally, you need to have the following installed:
+- **AI-Enhanced Cognitive Assessment**: Conducts MMSE tests with integrated AI-driven analysis.
+- **User Management**: Handles secure management of patient profiles, test results, and sessions.
+- **Real-Time Data Processing**: Supports dynamic question rendering and real-time response evaluation.
+- **Data Security**: Implements robust encryption and role-based access control (RBAC) to protect sensitive data.
+- **Responsive User Interface**: Developed with Vue.js to provide a smooth experience across devices.
 
-- Docker
-- Docker Compose
-- Java Development Kit (JDK) 17
-- Node.js v18.16.1
-- npm 9.8.0
-- Maven 3.2.5
+## Technical Stack
 
-## Getting Started
+### Backend
 
-1. Clone the repository:
+- **Spring Boot v3.2**
+- **Java v17**
+- **PostgreSQL** for database management
+- **Redis** for caching
+
+### Frontend
+
+- **Vue.js v3.4**
+- **TypeScript**
+- **Bootstrap v5.3**
+
+### Storage & Caching
+
+- **MinIO** for secure media file storage
+- **Redis** for caching frequently accessed data
+
+### AI Integration
+
+- **Ollama**: Runs `ollama run llama3.1:70b` for AI-driven analysis
+- **OpenAI API**: Integration with GPT-4 for enhanced cognitive assessment
+
+### Testing
+
+- **JUnit**, **Mockito**, and **Cypress** for comprehensive testing
+
+### CI/CD & Containerization
+
+- **GitHub Actions** for continuous integration and deployment
+- **Docker** and **Docker Compose** for containerization
+
+## Architecture 🏗️
+
+![System Architecture](./screenshots/architecture.svg)
+
+The architecture includes:
+
+- **Vue.js frontend**: Manages user interactions and UI components.
+- **Spring Boot backend**: Handles business logic, data processing, and AI operations.
+- **PostgreSQL database**: Manages patient data and MMSE results.
+- **Redis cache**: Improves performance by storing frequently accessed data.
+- **MinIO storage**: Manages media files securely.
+
+### Prerequisites
+
+- **Java v17**
+- **Node.js v18.16.1**
+- **npm v9.8.0**
+- **Docker v25.0.2**
+- **Docker Compose v2.24.3**
+- **Ollama**: Required to run the AI model (`ollama run llama3.1:70b`)
+- **OpenAI API Key**: Required for GPT-4 integration
+
+### Local Development Setup
+
+1. **Install Docker and Docker Compose**: Ensure Docker and Docker Compose are installed and configured.
+2. **Start All Containers**: Use the provided script to start all required Docker containers:
+   ```bash
+   sh start-all-containers.sh
+3. Install Frontend Dependencies:
+    ```bash
+    npm install
     ```
-    git clone https://github.com/ktenman/MMSE-App.git
-    ```
 
-2. Navigate to the project directory:
-    ```
-    cd MMSE-App
-    ```
+### Backend Setup
 
-3. Build and start the application using Docker Compose:
-    ```
-    sh start-all-containers.sh
-    docker-compose up --build
-    ```
+Compile and start the backend using Maven:
 
-4. Access the application in your web browser at http://localhost:8080.
+```maven
+mvn clean install
+mvn spring-boot:run
+```
 
-## Testing
+### Frontend Setup
 
-To run the test suite, execute the following command:
+Start the frontend server:
 
 ```
-./mvnw verify
+npm start
 ```
 
-This will run both unit tests and integration tests using Testcontainers.
+Access the application at http://localhost:8080.
 
-## Contributing
+### API Key Setup
 
-Contributions are welcome! If you find any issues or have suggestions for improvements, please open an issue or submit a
-pull request.
+Ensure that your environment includes the OpenAI API key:
 
-## Tools Used
+```bash
+export OPENAI_API_KEY="your_openai_api_key"
+```
 
-This project made use of the following AI-assisted tools:
+### Continuous Integration and Deployment
 
-- Claude AI: Used for generating and refining content, providing suggestions, and assisting with the writing process.
-- GitHub Copilot: Used for code generation, autocompletion, and providing code suggestions throughout the development
-  process.
+- CI Pipeline: Configured with GitHub Actions for automated testing and deployment.
+- Dependabot: Manages dependency updates and applies security patches
 
+---
+
+Deployment
