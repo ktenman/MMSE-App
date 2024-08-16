@@ -117,4 +117,6 @@ export OPENAI_API_KEY="your_openai_api_key"
 
 ---
 
-Deployment
+This README provides a comprehensive guide for developers to set up, run, and understand the core functionalities and
+technical aspects of the AI-powered MMSE application. It includes essential prerequisites and environment configuration
+details, such as the necessary Docker setup, Ollama, and OpenAI API integration.
