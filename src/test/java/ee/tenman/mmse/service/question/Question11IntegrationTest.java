@@ -3,6 +3,7 @@ package ee.tenman.mmse.service.question;
 import ee.tenman.mmse.IntegrationTest;
 import ee.tenman.mmse.domain.UserAnswer;
 import jakarta.annotation.Resource;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Timeout;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.Arguments;
@@ -152,7 +153,7 @@ class Question11IntegrationTest {
 
     @ParameterizedTest
     @MethodSource("provideAnswersWithSubstrings")
-//    @Disabled("This test is disabled because it makes a call to OpenAI API and costs money.")
+    @Disabled("This test is disabled because it makes a call to OpenAI API and costs money.")
     void getScoreWithSubstrings(String answerText, int expectedScore) {
         UserAnswer userAnswer = new UserAnswer();
         userAnswer.setAnswerText(answerText);
@@ -165,7 +166,7 @@ class Question11IntegrationTest {
     @ParameterizedTest
     @Timeout(value = 60)
     @MethodSource("provideAnswersForScoring")
-//    @Disabled("This test is disabled because it makes a call to OpenAI API and costs money.")
+    @Disabled("This test is disabled because it makes a call to OpenAI API and costs money.")
     void getScoreWithExpectedScore(String answerText, int expectedScore) {
         UserAnswer userAnswer = new UserAnswer();
         userAnswer.setAnswerText(answerText);
