@@ -40,7 +40,19 @@ public class Question16 implements Question {
             return 0;
         }
 
-        return userAnswer.getAnswerText().equals(CORRECT_ANSWER) ? getMaximumScore() : 0;
+        String[] userAnswers = userAnswer.getAnswerText().split(",");
+        String[] correctAnswers = CORRECT_ANSWER.split(",");
+
+        int score = 0;
+
+        // Compare each part of the answer and assign a point if it's correct
+        for (int i = 0; i < correctAnswers.length && i < userAnswers.length; i++) {
+            if (userAnswers[i].equals(correctAnswers[i])) {
+                score++;
+            }
+        }
+
+        return score;
     }
 
     @Override
